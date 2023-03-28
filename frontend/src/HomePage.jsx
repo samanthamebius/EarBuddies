@@ -2,7 +2,6 @@ import React from "react";
 import useAuth from "./useAuth";
 
 function HomePage({ code }) {
-  console.log("calling useAuth");
   const accessToken = useAuth(code);
   return (
     <div>

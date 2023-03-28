@@ -36,16 +36,12 @@ router.post("/refresh", (req, res) => {
 })
 
 router.post("/login", (req, res) => {
-  console.log("login")
   const code = req.body.code
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
   })
-  console.log(process.env.REDIRECT_URI)
-  console.log(process.env.CLIENT_ID)
-  console.log(process.env.CLIENT_SECRET)
   spotifyApi
     .authorizationCodeGrant(code)
     .then(data => {
