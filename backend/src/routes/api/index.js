@@ -2,7 +2,8 @@ import express from 'express';
 
 const router = express.Router();
 
-// here will import the files for our api
+import login from './login';
+router.use('/login', login);
 
 //tester api call
 router.get('/hello', (req, res) => {
