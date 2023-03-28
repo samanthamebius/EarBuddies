@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '../../.env' });
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -13,9 +13,6 @@ router.use(bodyParser.urlencoded({ extended: true }))
 
 //refresh token every hour so that user does not have to re-login
 router.post("/refresh", (req, res) => {
-    //print out the refresh token
-    console.log(req.body.refreshToken)
-    
   const refreshToken = req.body.refreshToken
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
@@ -38,22 +35,17 @@ router.post("/refresh", (req, res) => {
     })
 })
 
-router.get("/test", (req, res) => {
-  res.send("Hello, World");
-})
-
 router.post("/login", (req, res) => {
-  console.log(req.body.code)
-  //print url of post request
-  console.log(req.url)
-
+  console.log("login")
   const code = req.body.code
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
   })
-
+  console.log(process.env.REDIRECT_URI)
+  console.log(process.env.CLIENT_ID)
+  console.log(process.env.CLIENT_SECRET)
   spotifyApi
     .authorizationCodeGrant(code)
     .then(data => {
@@ -64,6 +56,7 @@ router.post("/login", (req, res) => {
       })
     })
     .catch(err => {
+      console.log(err)
       res.sendStatus(400)
     })
 })
