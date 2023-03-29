@@ -1,9 +1,9 @@
-// import * as dotenv from 'dotenv';
-// dotenv.config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import express from 'express';
 import path from 'path';
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import * as url from 'url';
 import cors from 'cors';
 
@@ -38,4 +38,5 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-app.listen(port, () => console.log(`App server listening on port ${port}!`));
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true })
+    .then(() => app.listen(port, () => console.log(`App server listening on port ${port}!`)));
