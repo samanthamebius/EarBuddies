@@ -11,21 +11,23 @@ router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
+//refresh token every hour so that user does not have to re-login
 router.post("/", (req, res) => {
-  console.log("logging in")
-  const code = req.body.code
+  console.log("refreshing token")
+  const refreshToken = req.body.refreshToken
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
+    refreshToken,
   })
+
   spotifyApi
-    .authorizationCodeGrant(code)
+    .refreshAccessToken()
     .then(data => {
       res.json({
-        accessToken: data.body.access_token,
-        refreshToken: data.body.refresh_token,
-        expiresIn: data.body.expires_in,
+        accessToken: data.body.accessToken,
+        expiresIn: data.body.expiresIn,
       })
     })
     .catch(err => {
@@ -33,5 +35,6 @@ router.post("/", (req, res) => {
       res.sendStatus(400)
     })
 })
+
 
 export default router;
