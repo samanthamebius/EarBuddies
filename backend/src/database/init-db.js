@@ -8,21 +8,14 @@ main();
 async function main() {
     await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
     console.log('Connected to database!');
-    console.log();
 
-    await clearDatabase();
-    console.log();
+    //TODO functions for clearing database and adding schema data to database
+    
 
-    //TODO add scema to db??
 
-    console.log();
 
     // Disconnect when complete
     await mongoose.disconnect();
     console.log('Disconnected from database!');
 }
 
-async function clearDatabase() {
-    // const articlesDeleted = await Article.deleteMany({});
-    console.log(`Cleared database (removed ${articlesDeleted.deletedCount} articles).`);
-}
