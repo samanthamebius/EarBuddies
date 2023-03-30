@@ -1,5 +1,6 @@
 import React from "react";
 import styles from './PageLayout.module.css';
+import logo from './assets/earBuddiesLogoWithName.png';
 import { NavLink, Outlet } from "react-router-dom";
 
 export default function PageLayout() {
@@ -16,7 +17,7 @@ export default function PageLayout() {
 function NavMenu() {
     return (
         <header className={styles.navmenu}>
-            <NavLink to="." >Home</NavLink>
+            <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
         </header>
     );
 }
