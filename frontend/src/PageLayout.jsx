@@ -89,6 +89,7 @@ export function CustomizedMenus() {
   return (
     <div className={styles.dropdown}>
       <Button
+        className={styles.button}
         id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-haspopup="true"
@@ -113,7 +114,6 @@ export function CustomizedMenus() {
         <MenuItem onClick={handleClose} disableRipple>
             <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
-            <NavLink to="./profile" >View Profile</NavLink>
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
             <img src={darkmodeIcon} className={styles.icon} />
