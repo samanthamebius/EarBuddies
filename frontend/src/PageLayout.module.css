@@ -16,8 +16,7 @@
 .dropdown {
     flex-direction: row;
     display: flex;
-    justify-content: space-evenly;
-    width: 200px; /* TODO: CHANGE THIS TO BE RESPONSIVE SOMEHOW */
+    justify-content: space-between;
     border-radius: 10px;
     padding: 0 20px;
     align-items: center;
@@ -25,11 +24,15 @@
 }
 
 .icon {
-    height: 40px;
-    
+    height: 40px; 
 }
 
 .arrow {
     height: 20px;
-    
+}
+
+.username {
+    padding: 0 15px;
+    color: #FFFFFF;
+    font-weight: bold;
 }

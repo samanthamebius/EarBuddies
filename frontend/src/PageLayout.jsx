@@ -29,7 +29,7 @@ function AccountDropdown() {
     return (
         <div className={styles.dropdown}>
             <img src={icon} className={styles.icon}/>
-            <p>Name</p>
+            <p className={styles.username}>username</p>
             <img src={arrow} className={styles.arrow}/>
         </div>
     )
