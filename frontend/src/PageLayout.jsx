@@ -2,14 +2,14 @@ import React from "react";
 import styles from './PageLayout.module.css';
 import profilePicture from './assets/accountIconPLACEHOLDER.png';
 import logo from './assets/earBuddiesLogoWithName.png';
-import arrow from './assets/dropdownDownArrow.png';
+import upArrow from './assets/dropdownUpArrow.png';
+import downArrow from './assets/dropdownDownArrow.png';
 import { NavLink, Outlet } from "react-router-dom";
 
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
 
 import profileIcon from './assets/profileIcon.png'
 import logoutIcon from './assets/logoutIcon.png'
@@ -50,7 +50,7 @@ const StyledMenu = styled((props) => (
   />
 ))(({ theme }) => ({
   '& .MuiPaper-root': {
-    borderRadius: 6,
+    borderRadius: 10,
     marginTop: theme.spacing(1),
     minWidth: 180,
     color:
@@ -62,7 +62,7 @@ const StyledMenu = styled((props) => (
     },
     '& .MuiMenuItem-root': {
       '& .MuiSvgIcon-root': {
-        fontSize: 18,
+        fontSize: 14,
         color: theme.palette.text.secondary,
         marginRight: theme.spacing(1.5),
       },
@@ -89,18 +89,17 @@ export function CustomizedMenus() {
   return (
     <div className={styles.dropdown}>
       <Button
-        className={styles.button}
-        id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         variant="contained"
-        disableElevation
+        border-radius="10px"
         onClick={handleClick}
+        className={styles.button}
       >
         <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
-        <img src={arrow} className={styles.arrow} />
+        {anchorEl ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
       </Button>
       <StyledMenu
         id="demo-customized-menu"
@@ -114,16 +113,15 @@ export function CustomizedMenus() {
         <MenuItem onClick={handleClose} disableRipple>
             <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
-            <NavLink to="./profile">View Profile</NavLink>
+            <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
             <img src={darkmodeIcon} className={styles.icon} />
-          Dark Mode
+          <p className={styles.menu_item}>Dark Mode</p>
         </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
             <img src={logoutIcon} className={styles.icon}/>
-            Log Out
+            <NavLink to="./login" className={styles.menu_item}>Log Out</NavLink>
         </MenuItem>
       </StyledMenu>
     </div>

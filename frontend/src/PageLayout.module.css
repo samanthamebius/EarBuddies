@@ -14,21 +14,23 @@
 }
 
 .button {
+    border-radius: 10px;
+    height:45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
-    border-radius: 10px;
+    
     padding: 0 20px;
     align-items: center;
     background-image: linear-gradient(180deg,#B03EEE, #E640F8);
 }
 
 .profile_picture {
-    height: 40px; 
+    height: 30px; 
 }
 
 .arrow {
-    height: 13px;
+    height: 15px;
 }
 
 .username {
@@ -40,4 +42,12 @@
 .icon {
     height: 30px; 
     padding-right: 15px;
+}
+
+.menu_item {
+    color:#606060;
+}
+
+.menu_item:hover {
+    color: #B03EEE;
 }
