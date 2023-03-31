@@ -114,6 +114,7 @@ export function CustomizedMenus() {
         <MenuItem onClick={handleClose} disableRipple>
             <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
+            <NavLink to="./profile">View Profile</NavLink>
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
             <img src={darkmodeIcon} className={styles.icon} />
