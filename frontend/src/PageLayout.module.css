@@ -23,8 +23,13 @@
     background-image: linear-gradient(180deg,#B03EEE, #E640F8);
 }
 
-.icon {
+.profile_picture {
     height: 40px; 
+}
+
+.icon {
+    height: 30px; 
+    padding-right: 15px;
 }
 
 .arrow {
@@ -32,7 +37,7 @@
 }
 
 .username {
-    padding: 0 15px;
     color: #FFFFFF;
     font-weight: bold;
+    padding: 0 15px;
 }

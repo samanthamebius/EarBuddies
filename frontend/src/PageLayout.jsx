@@ -1,6 +1,6 @@
 import React from "react";
 import styles from './PageLayout.module.css';
-import icon from './assets/accountIconPLACEHOLDER.png';
+import profilePicture from './assets/accountIconPLACEHOLDER.png';
 import logo from './assets/earBuddiesLogoWithName.png';
 import arrow from './assets/dropdownDownArrow.png';
 import { NavLink, Outlet } from "react-router-dom";
@@ -30,20 +30,9 @@ function NavMenu() {
     return (
         <header className={styles.navmenu}>
             <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
-            <AccountDropdown/>
             <CustomizedMenus/>
         </header>
     );
-}
-
-function AccountDropdown() {
-    return (
-        <div className={styles.dropdown}>
-            <img src={icon} className={styles.icon}/>
-            <p className={styles.username}>username</p>
-            <img src={arrow} className={styles.arrow}/>
-        </div>
-    )
 }
 
 const StyledMenu = styled((props) => (
@@ -98,7 +87,7 @@ export function CustomizedMenus() {
   };
 
   return (
-    <div>
+    <div className={styles.dropdown}>
       <Button
         id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
@@ -108,7 +97,9 @@ export function CustomizedMenus() {
         disableElevation
         onClick={handleClick}
       >
-        Username
+        <img src={profilePicture} className={styles.profile_picture} />
+        <p className={styles.username}>Username </p>
+        <img src={arrow} className={styles.arrow} />
       </Button>
       <StyledMenu
         id="demo-customized-menu"
@@ -120,17 +111,17 @@ export function CustomizedMenus() {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose} disableRipple>
-            <img src={profileIcon}/>
+            <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
             <NavLink to="./profile" >View Profile</NavLink>
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
-            <img src={darkmodeIcon}/>
+            <img src={darkmodeIcon} className={styles.icon} />
           Dark Mode
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
-            <img src={logoutIcon}/>
+            <img src={logoutIcon} className={styles.icon}/>
             Log Out
         </MenuItem>
       </StyledMenu>
