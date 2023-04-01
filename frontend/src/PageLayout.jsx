@@ -1,9 +1,9 @@
 import React from "react";
 import styles from './PageLayout.module.css';
-import profilePicture from './assets/accountIconPLACEHOLDER.png';
-import logo from './assets/earBuddiesLogoWithName.png';
-import upArrow from './assets/dropdownUpArrow.png';
-import downArrow from './assets/dropdownDownArrow.png';
+import profilePicture from './assets/nav_menu/accountIconPLACEHOLDER.png';
+import logo from './assets/nav_menu/earBuddiesLogoWithName.png';
+import upArrow from './assets/nav_menu/dropdownUpArrow.png';
+import downArrow from './assets/nav_menu/dropdownDownArrow.png';
 import { NavLink, Outlet } from "react-router-dom";
 
 import { styled, alpha } from '@mui/material/styles';
@@ -11,9 +11,9 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import profileIcon from './assets/profileIcon.png'
-import logoutIcon from './assets/logoutIcon.png'
-import darkmodeIcon from './assets/darkmodeIcon.png'
+import profileIcon from './assets/nav_menu/profileIcon.png'
+import logoutIcon from './assets/nav_menu/logoutIcon.png'
+import darkmodeIcon from './assets/nav_menu/darkmodeIcon.png'
 
 export default function PageLayout() {
     return (
@@ -103,6 +103,7 @@ export function CustomizedMenus() {
       </Button>
       <StyledMenu
         id="demo-customized-menu"
+        border-radius="10px"
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
