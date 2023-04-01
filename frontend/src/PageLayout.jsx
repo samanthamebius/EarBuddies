@@ -2,7 +2,6 @@ import React from "react";
 import styles from './PageLayout.module.css';
 import { NavLink, Outlet } from "react-router-dom";
 
-import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -51,11 +50,9 @@ export function DropdownMenu() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-
         <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
         {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
-
       </Button>
 
       <Menu
