@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import profilePicture from './assets/nav_menu/accountIconPLACEHOLDER.png';
 import logo from './assets/nav_menu/earBuddiesLogoWithName.png';
 
 import profileIcon from './assets/nav_menu/profileIcon.png'
@@ -50,7 +49,7 @@ export function DropdownMenu() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        <img src={profilePicture} className={styles.profile_picture} />
+        <img src={profileIcon} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
         {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
       </Button>
