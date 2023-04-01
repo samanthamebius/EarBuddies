@@ -1,0 +1,60 @@
+.studioCard {
+    margin: 20px 0px 20px 0px;
+    width: 40%;
+    height: 100%;
+    border-radius: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: 5px 5px 10px grey;
+}
+
+.darkLayer {
+    background-color: rgba(0,0,0,0.4);
+    width: 100%;
+    border-radius: 20px;
+    margin: 0px;
+}
+
+.darkLayer:hover {
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.cardContent {
+    padding: 20px 25px 20px 25px;
+}
+
+.studioName {
+    font-family: 'Open Sans';
+    color: white;
+    font-weight: bold;
+    margin: 0px;
+    font-size: 32px;
+    padding-bottom: 5px;
+}
+
+.genreTags {
+    display: flex;
+    height: fit-content;
+}
+
+.listenersImages {
+    padding-top: 25px;
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.listenerImage {
+    height: 25px;
+    position: absolute;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.hostImage {
+    height: 25px;
+    float: right;
+}
