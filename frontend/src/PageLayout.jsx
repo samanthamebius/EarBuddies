@@ -30,7 +30,7 @@ function NavMenu() {
     return (
         <header className={styles.navmenu}>
             <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
-            <CustomizedMenus/>
+            <DropdownMenu/>
         </header>
     );
 }
@@ -76,7 +76,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export function CustomizedMenus() {
+export function DropdownMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
