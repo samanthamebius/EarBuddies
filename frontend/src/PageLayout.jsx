@@ -77,53 +77,47 @@ const StyledMenu = styled((props) => (
 }));
 
 export function DropdownMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [isOpen, setOpen] = React.useState(null);
+  const open = Boolean(isOpen);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setOpen(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setOpen(null);
   };
 
   return (
     <div className={styles.dropdown}>
-      <Button
-        aria-controls={open ? 'demo-customized-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        variant="contained"
-        border-radius="10px"
-        onClick={handleClick}
-        className={styles.button}
-      >
+
+      <Button onClick={handleClick} className={styles.button}>
+
         <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
-        {anchorEl ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
+        {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
+
       </Button>
+
       <StyledMenu
-        id="demo-customized-menu"
-        border-radius="10px"
-        MenuListProps={{
-          'aria-labelledby': 'demo-customized-button',
-        }}
-        anchorEl={anchorEl}
+        anchorEl={isOpen}
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleClose}>
             <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
             <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+
+        <MenuItem onClick={handleClose}>
             <img src={darkmodeIcon} className={styles.icon} />
-          <p className={styles.menu_item}>Dark Mode</p>
+            <p className={styles.menu_item}>Dark Mode</p>
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+
+        <MenuItem onClick={handleClose}>
             <img src={logoutIcon} className={styles.icon}/>
             <NavLink to="./login" className={styles.menu_item}>Log Out</NavLink>
         </MenuItem>
+
       </StyledMenu>
     </div>
   );
