@@ -18,6 +18,23 @@ const hostImage = ProfilePicImg1;
 const isListening = true;
 const listenersActive = [true, true, false, false, true, false];
 
+const setListenerImageStyles = (i) => {
+    let baseStyle = {transform: `translate(${70*i}%)`};
+    let greyStyle = {WebkitFilter: 'brightness(30%)'};
+    let listenerStyles = {}
+    if(isListening) {
+        if (listenersActive[i]) {
+            listenerStyles = {... baseStyle};
+        } else {
+            listenerStyles = {... baseStyle, ...greyStyle};
+        }
+        
+    } else {
+        listenerStyles = {... baseStyle};
+    }
+    return listenerStyles;
+}
+
 export default function StudioCard() {
     return (
         <div className={styles.studioCard} style={backgroundImage ? {backgroundImage: `url(${backgroundImage})`} : {backgroundColor: '#797979'}}>
@@ -32,7 +49,7 @@ export default function StudioCard() {
                     </div>
                     <div className={styles.listenersImages}>
                         {listenersImages.map((listenerImage, i) => (
-                                <img className={styles.listenerImage} src={listenerImage} style={listenersActive[i] ? {transform: `translate(${70*i}%)`} : {transform: `translate(${70*i}%)`, WebkitFilter: 'brightness(30%)'}}/>
+                                <img className={styles.listenerImage} src={listenerImage} style={setListenerImageStyles(i)}/>
                         ))}
                         <img className={styles.hostImage} src={hostImage}/>
                     </div>
