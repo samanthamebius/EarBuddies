@@ -11,7 +11,7 @@ function App() {
       <Routes>
         {console.log("code" + code)}
         {/* check if user is already logged in, if not redirect to login page */}
-        <Route path="/" element={ code ? <HomePage code={code}/> : <LogInPage/> } />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   )

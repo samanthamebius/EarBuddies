@@ -20,7 +20,7 @@ function LogInPage() {
     return (
         <div className={styles.page}>
             <img src={logos} className={styles.logo}/>
-            <h1>EAR BUDDIES</h1>            
+            <h1 className={styles.brandName}>EAR BUDDIES</h1>            
             <Button variant="contained" size="large" className={styles.button}>
                  <a href={AUTH_URL}>Log In Using Spotify</a>
             </Button>

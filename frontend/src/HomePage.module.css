@@ -1,0 +1,15 @@
+.column {
+    display: inline-block;
+}
+  
+.row {
+    column-count: 2;
+    column-gap: 40px;
+    padding: 0px 20px 0px 20px;
+}
+
+.headings {
+    font-weight: 800;
+    color: #606060;
+    font-size: 32px;
+}
