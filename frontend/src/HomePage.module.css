@@ -1,15 +1,38 @@
-.column {
-    display: inline-block;
+.containerChild {  
+    flex: 1;
 }
   
-.row {
-    column-count: 2;
-    column-gap: 40px;
-    padding: 0px 20px 0px 20px;
+.container {
+    display: flex;
+    padding: 0px 25px 0px 25px;
 }
 
 .headings {
     font-weight: 800;
     color: #606060;
     font-size: 32px;
+    position: relative;
+}
+
+.button {
+    background: linear-gradient(#B03EEE, #E640F8);
+    height: fit-content;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+}
+
+.headerChild {
+    display: flex;
+    align-items: center;
+    float: right;
+    margin-left: auto;
+}
+
+.soundWaves {
+    height: 45px;
 }
