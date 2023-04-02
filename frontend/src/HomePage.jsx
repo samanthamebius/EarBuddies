@@ -22,9 +22,13 @@ function HomePage({ code }) {
         <SearchBar />
         <StudioCard />
         <StudioCard />
+        <StudioCard />
+        <StudioCard />
+        <StudioCard />
+        <StudioCard />
       </div>
       <div className={styles.containerChild}>
-        <div className={styles.header}>
+        <div className={styles.listeningHeader}>
           <h1 className={styles.headings}>Listening Now</h1>
           <div className={styles.headerChild}>
             <img src={SoundWavesGradient} className={styles.soundWaves}></img>

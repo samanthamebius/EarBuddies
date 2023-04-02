@@ -26,6 +26,11 @@
     display: flex;
 }
 
+.listeningHeader {
+    display: flex;
+    padding-bottom: 59px;
+}
+
 .headerChild {
     display: flex;
     align-items: center;
