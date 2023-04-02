@@ -12,7 +12,6 @@ router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
 router.post("/", (req, res) => {
-  console.log("logging in")
   const code = req.body.code
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,

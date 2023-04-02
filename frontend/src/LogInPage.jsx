@@ -9,10 +9,7 @@ const CLIENT_ID = "37e7ffef26fd406abcbe2eb521d1f749"
 const REDIRECT_URI = "http://127.0.0.1:5173/"
 //declare what permissions you want to request from the user
 const SCOPE = encodeURIComponent("user-read-playback-state user-modify-playback-state user-read-currently-playing streaming playlist-read-private playlist-read-collaborative user-read-playback-position user-read-email user-read-private")
-// const AUTH_URL = `${AUTH_BASE_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`
-
-const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=37e7ffef26fd406abcbe2eb521d1f749&response_type=code&redirect_uri=http://127.0.0.1:5173/&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state"
+const AUTH_URL = `${AUTH_BASE_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`
 
 
 function LogInPage() {
