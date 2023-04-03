@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import styles from './SearchBar.module.css';
 import { sizing } from '@mui/system';
 
-function SearchBar() {
+function SearchBar({label}) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleChange = (event) => {
@@ -18,7 +18,7 @@ function SearchBar() {
       <TextField
         id="search"
         type="search"
-        label="Search Studios ..."
+        label={label}
         value={searchTerm}
         onChange={handleChange}
         fullWidth
