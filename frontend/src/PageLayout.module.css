@@ -1,0 +1,55 @@
+.navmenu {
+    font-size: 10;
+    background-color: #E9DCF1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 82px;
+    padding: 0 20px;
+}
+
+.logo {
+    height: 60px;
+    pointer-events: none;
+}
+
+.button {
+    border-radius: 10px !important;
+    height:45px;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    align-items: center;
+    background-image: linear-gradient(180deg,#B03EEE, #E640F8);
+}
+
+.profile_picture {
+    height: 30px;
+    pointer-events: none; 
+}
+
+.arrow {
+    height: 15px;
+}
+
+.username {
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+.icon {
+    height: 30px; 
+    padding-right: 15px;
+    pointer-events: none;
+}
+
+.menu_item {
+    color:#606060;
+}
+
+.menu_item:hover {
+    color: #B03EEE;
+}
