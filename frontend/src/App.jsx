@@ -12,7 +12,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* check if user is already logged in, if not redirect to login page */}
-        {/* <Route path="/" element={ code ? <HomePage code={code}/> : <LogInPage/> } /> */}
         <Route path='login' element={<LogInPage/>}/>
         <Route path='/' element={<PageLayout/>}>
           <Route index element={<HomePage />} />

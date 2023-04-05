@@ -4,6 +4,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { style } from '@mui/system';
 
+//declare the base url for the spotify authorization endpoint
 const AUTH_BASE_URL = "https://accounts.spotify.com/authorize"
 const CLIENT_ID = "37e7ffef26fd406abcbe2eb521d1f749"
 const REDIRECT_URI = "http://localhost:5173/"

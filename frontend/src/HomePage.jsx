@@ -1,9 +1,11 @@
 import React from "react";
 import useAuth from "./useAuth";
 
+/**
+ * Checks if user is logged in, if not, redirects to login page
+ */
 function login() {
   const accessToken = localStorage.getItem('accessToken');
-  console.log(accessToken);
   if (accessToken == null) {
     //check for code
     const code = new URLSearchParams(window.location.search).get("code");

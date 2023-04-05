@@ -6,14 +6,18 @@ import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 
 const router = express.Router();
-
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
-//refresh token every hour so that user does not have to re-login
+/**
+ * @route POST api/refresh
+ * @desc Refresh the access token
+ * @access Public
+ * @param {string} refreshToken - The refresh token
+ * @returns {object} - The access token and expiration time
+ */
 router.post("/", (req, res) => {
-  console.log("refreshing token")
   const refreshToken = req.body.refreshToken
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
