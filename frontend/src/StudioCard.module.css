@@ -50,6 +50,11 @@
     height: fit-content;
 }
 
+.listeners {
+    display: flex;    
+    align-items: end;
+}
+
 .listenersImages {
     padding-top: 25px;
     position: relative;
@@ -61,11 +66,12 @@
     position: absolute;
     -webkit-user-drag: none;
     -webkit-user-select: none;
+    float: left;
 }
 
 .hostImage {
     height: 25px;
-    float: right;
+    margin-left: auto;
 }
 
 .greyOutImage {

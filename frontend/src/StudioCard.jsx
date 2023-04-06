@@ -47,11 +47,13 @@ export default function StudioCard() {
                     <div className={styles.genreTags}>
                         {genres.map((genre, i) => <GenreTag genre={genre}/>)}
                     </div>
-                    <div className={styles.listenersImages}>
-                        {listenersImages.map((listenerImage, i) => (
-                                <img className={styles.listenerImage} src={listenerImage} style={setListenerImageStyles(i)}/>
-                        ))}
-                        <img className={styles.hostImage} src={hostImage}/>
+                    <div className={styles.listeners}>
+                        <div className={styles.listenersImages}>
+                            {listenersImages.map((listenerImage, i) => (
+                                    <img className={styles.listenerImage} src={listenerImage} style={setListenerImageStyles(i)}/>
+                            ))}
+                        </div>
+                        <img className={styles.hostImage} src={hostImage}/>                        
                     </div>
                 </div>
             </div>
