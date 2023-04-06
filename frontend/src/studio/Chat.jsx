@@ -5,7 +5,7 @@ export default function Chat() {
   
   return (
     <div className={styles.chat}>
-      <h1>Chat</h1>
+      <label className={styles.greyheading}>Chat</label>
     </div>
   );
 }

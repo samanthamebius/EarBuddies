@@ -5,7 +5,7 @@ export default function Banner() {
   
   return (
     <div className={styles.banner}>
-      <h1>Banner</h1>
+      <label className={styles.greyheading}>Banner</label>
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function SongSelection() {
 function SongSearch() {
   return (
     <div>
-      <h1>What's Next?</h1>
+      <label className={styles.greyheading}>What's Next?</label>
       <SearchBar label={"Search Spotify"}></SearchBar>
     </div>
   );
@@ -24,7 +24,7 @@ function SongSearch() {
 function Queue() {
   return (
     <div>
-    <h1>Coming Up:</h1>
+    <label className={styles.greyheading}>Coming Up:</label>
   </div>
   )
 }

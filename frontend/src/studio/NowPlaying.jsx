@@ -5,7 +5,7 @@ export default function NowPlaying() {
   
   return (
     <div className={styles.nowplaying}>
-      <h1>Now Playing</h1>
+      <label className={styles.greyheading}>Now Playing</label>
     </div>
   );
 }
