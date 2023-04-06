@@ -4,6 +4,7 @@ import LogInPage from './LogInPage';
 import HomePage from './HomePage';
 import PageLayout from './PageLayout';
 import ProfilePage from './ProfilePage';
+import StudioPage from './StudioPage';
 
 const code = new URLSearchParams(window.location.search).get("code")
 
@@ -16,6 +17,7 @@ function App() {
         <Route path='/' element={<PageLayout/>}>
           <Route index element={<HomePage />} />
           <Route path='profile' element={<ProfilePage/>}/>
+          <Route path='studio' element={<StudioPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
