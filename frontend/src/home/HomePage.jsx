@@ -5,7 +5,7 @@ import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
 import { style } from "@mui/system";
 import SoundWavesGradient from "../assets/soundwavesgradient.png";
-import SearchBar from "./SearchBar";
+import SearchBar from "../shared/SearchBar";
 
 /**
  * Checks if user is logged in, if not, redirects to login page
