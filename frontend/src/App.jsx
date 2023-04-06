@@ -7,6 +7,8 @@ import ProfilePage from './ProfilePage';
 
 const code = new URLSearchParams(window.location.search).get("code")
 
+document.body.style.overflow = "hidden";
+
 function App() {
   return (
     <BrowserRouter>
