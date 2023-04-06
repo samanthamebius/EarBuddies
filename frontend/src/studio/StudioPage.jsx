@@ -1,11 +1,11 @@
 import React from "react";
 
-import styles from './studio/StudioPage.module.css';
+import styles from './StudioPage.module.css';
 
-import Banner from "./studio/Banner";
-import Chat from "./studio/Chat";
-import NowPlaying from "./studio/NowPlaying";
-import Queue from "./studio/Queue";
+import Banner from "./Banner";
+import Chat from "./Chat";
+import NowPlaying from "./NowPlaying";
+import Queue from "./Queue";
 
 
 function StudioPage() {

@@ -4,7 +4,7 @@ import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
 import { style } from "@mui/system";
-import SoundWavesGradient from "./assets/soundwavesgradient.png";
+import SoundWavesGradient from "../assets/soundwavesgradient.png";
 import SearchBar from "./SearchBar";
 
 /**
