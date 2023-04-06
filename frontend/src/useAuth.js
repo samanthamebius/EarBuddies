@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import axios from "axios"
+import { useLocalStorage } from "./useLocalStorage"
 
+/**
+ * Login to Spotify and get access token
+ * @param {*} code
+ * @returns {string} - The access token
+ */
 export default function useAuth(code) {
-  const [accessToken, setAccessToken] = useState()
-  const [refreshToken, setRefreshToken] = useState()
-  const [expiresIn, setExpiresIn] = useState()
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken', '')
+  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken', '')
+  const [expiresIn, setExpiresIn] = useLocalStorage('expiresIn', '')
 
   useEffect(() => {
     axios

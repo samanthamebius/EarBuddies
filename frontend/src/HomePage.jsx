@@ -7,8 +7,27 @@ import { style } from "@mui/system";
 import SoundWavesGradient from "./assets/soundwavesgradient.png";
 import SearchBar from "./SearchBar";
 
-function HomePage({ code }) {
-	// const accessToken = useAuth(code);
+/**
+ * Checks if user is logged in, if not, redirects to login page
+ */
+function login() {
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken == null) {
+    //check for code
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (code == null) {
+      //reroute to login page
+      window.location.href = "/login";
+    } else {
+      //use code to get access token
+      useAuth(code);
+    }
+  }
+}
+
+function HomePage() {
+	login();
+  
 	return (
 		<div className={styles.container}>
 			<div className={styles.containerChild} style={{ marginRight: "45px" }}>
@@ -45,6 +64,4 @@ function HomePage({ code }) {
 			</div>
 		</div>
 	);
-}
-
-export default HomePage;
+} export default HomePage;

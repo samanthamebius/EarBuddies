@@ -6,13 +6,19 @@ import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 
 const router = express.Router();
-
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
+/**
+ * @route POST api/login
+ * @desc Login to Spotify
+ * @access Public
+ * @param {string} code - The code returned from Spotify's auth server
+ * @returns {object} - The access token, refresh token, and expiration time
+ */
+
 router.post("/", (req, res) => {
-  console.log("logging in")
   const code = req.body.code
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
