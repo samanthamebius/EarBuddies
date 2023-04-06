@@ -5,7 +5,7 @@ import SearchBar from "../shared/SearchBar";
 export default function SongSelection() {
   
   return (
-    <div className={styles.queue}>
+    <div className={styles.songselection}>
       <SongSearch />
       <Queue />
     </div>
