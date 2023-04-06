@@ -5,7 +5,7 @@ import styles from './StudioPage.module.css';
 import Banner from "./Banner";
 import Chat from "./Chat";
 import NowPlaying from "./NowPlaying";
-import Queue from "./Queue";
+import SongSelection from "./SongSelection";
 
 
 function StudioPage() {
@@ -14,7 +14,7 @@ function StudioPage() {
     <div className={styles.studio}>
       <Banner/>
       <NowPlaying/>
-      <Queue/>
+      <SongSelection/>
       <Chat/>
     </div>
   );
