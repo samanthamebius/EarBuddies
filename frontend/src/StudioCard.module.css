@@ -55,20 +55,6 @@
     align-items: end;
 }
 
-.listenersImages {
-    padding-top: 25px;
-    position: relative;
-    padding-bottom: 25px;
-}
-
-.listenerImage {
-    height: 25px;
-    position: absolute;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    float: left;
-}
-
 .hostImage {
     height: 25px;
     margin-left: auto;
