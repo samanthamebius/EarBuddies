@@ -15,8 +15,17 @@
 
 .MuiTextField-root {
   background: white;
+  border-radius: 10px;
 }
 
 .MuiInputBase-input  {
   background: white;
+}
+
+.MuiButtonBase-root {
+  color: white;
+}
+
+.MuiButton-root {
+  color: white;
 }

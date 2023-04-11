@@ -1,8 +1,26 @@
-.headings {
+.heading {
     font-weight: 800;
 	color: #606060;
 	font-size: 32px;
 	position: relative;
     margin: 0px;
-    padding: 20px 24px 20px 24px
+    padding: 20px 24px 0px 24px
+}
+
+.sectionHeading {
+    font-weight: 800;
+	color: #606060;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 10px 0px 10px 0px
+}
+
+.focusText {
+    font-weight: 800;
+	color: #CA3FF3;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 10px 0px 10px 0px
 }
