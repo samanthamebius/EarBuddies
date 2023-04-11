@@ -18,19 +18,22 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
-          <TextField
+            <TextField
             //autoFocus
-            required
-            margin="dense"
-            id="name"
-            label="Studio Name"
-            type="email"
-            fullWidth
-            variant="outlined"
-            className={styles.textfield}
-          />
-          <h2 className={styles.sectionHeading}>Cover Photo</h2>
-          <FileDropZone />
+                required
+                margin="dense"
+                id="name"
+                label="Studio Name"
+                type="email"
+                fullWidth
+                variant="outlined"
+                className={styles.textfield}
+            />
+            <h2 className={styles.sectionHeading}>Cover Photo</h2>
+            <FileDropZone />
+            <h2 className={styles.sectionHeading}>Genres</h2>
+            <h2 className={styles.sectionHeading}>Only I Have Control</h2>
+            <h2 className={styles.sectionHeading}>Add Listeners</h2>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
