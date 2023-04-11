@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -13,6 +13,22 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
+    const [selectedGenres, setSelectedGenres] = useState([]);
+    const [unselectedGenres, setUnselectedGenres] = useState(["Rap", "Rock", "K-Pop", "Country", "Classical"]);
+    
+    selectedGenres.sort();
+    unselectedGenres.sort();
+
+    function selectGenre(genre) {
+      setSelectedGenres(selectedGenres => [...selectedGenres, genre]);
+      setUnselectedGenres(unselectedGenres => unselectedGenres.filter(unselected => unselected !== genre));
+    }
+
+    function unselectGenre(genre) {
+      setUnselectedGenres(unselectedGenres => [...unselectedGenres, genre]);
+      setSelectedGenres(selectedGenres => selectedGenres.filter(selected => selected !== genre));
+    }
+    
     const handleClose = () => { handleCloseDialog(false) };
 
     return (
@@ -36,8 +52,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <FileDropZone />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
-            <SelectedGenreTag genre={"Country"}/>
-            <UnselectedGenreTag genre={"Country"}/>
+            {selectedGenres.map((genre, i) => <SelectedGenreTag genre={genre} handleClick={() => unselectGenre(genre)}/>)}
+            {unselectedGenres.map((genre, i) => <UnselectedGenreTag genre={genre} handleClick={() => selectGenre(genre)}/>)}
             <TextField 
                 margin="dense"
                 id="name"
