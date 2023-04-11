@@ -33,3 +33,8 @@
 .MuiButton-contained {
   text-transform: capitalize !important;
 }
+
+.MuiDialogActions-root {
+  display: flex;
+  justify-content: center;
+}
