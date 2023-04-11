@@ -29,3 +29,7 @@
 .MuiButton-root {
   color: white;
 }
+
+.MuiButton-contained {
+  text-transform: capitalize !important;
+}

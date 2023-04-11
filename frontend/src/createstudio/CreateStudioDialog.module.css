@@ -32,3 +32,19 @@
 .switchContainer {
     padding: 0px 20px 0px 20px;
 }
+
+.createButton {
+    background: linear-gradient(#B03EEE, #E640F8);
+    font-weight: 700;
+}
+
+.cancelButton {
+    background: linear-gradient(#BEBEBE, #EDEDED);
+    font-weight: 700;
+}
+
+.buttons {
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+}
