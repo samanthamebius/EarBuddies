@@ -12,3 +12,11 @@
 .card {
   padding: 2em;
 }
+
+.MuiTextField-root {
+  background: white;
+}
+
+.MuiInputBase-input  {
+  background: white;
+}

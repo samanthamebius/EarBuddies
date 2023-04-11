@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,32 +6,27 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import styles from './CreateStudio.module.css';
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-    const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth] = React.useState("sm");
-
     const handleClose = () => { handleCloseDialog(false) };
 
-    const handleFullWidthChange = (event) => { setFullWidth(event.target.checked) };
-  
     return (
     <div>
-      <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={isDialogOpened} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+        <h1 className={styles.headings}>Create Studio</h1>
+        {/* <DialogTitle className={styles.headings}>Create Studio</DialogTitle> */}
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
           <TextField
-            autoFocus
+            //autoFocus
+            required
             margin="dense"
             id="name"
-            label="Email Address"
+            label="Studio Name"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            className={styles.textfield}
           />
         </DialogContent>
         <DialogActions>
