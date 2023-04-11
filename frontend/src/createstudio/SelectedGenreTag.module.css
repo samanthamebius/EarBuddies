@@ -1,12 +1,6 @@
 .genreButton {
     background: linear-gradient(#B03EEE, #E640F8);
-    /* border-radius: 4px;
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    box-shadow: 3px 3px 10px grey; */
-
+    margin-right: 10px;
 }
 
 .genreLabel {

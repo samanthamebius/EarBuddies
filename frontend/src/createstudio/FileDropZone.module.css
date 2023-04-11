@@ -29,6 +29,7 @@
 
 .dropBox:hover {
     cursor: pointer;
+    border-color: #212121;
 }
 
 .focusText {

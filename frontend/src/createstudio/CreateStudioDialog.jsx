@@ -38,7 +38,15 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Genres</h2>
             <SelectedGenreTag genre={"Country"}/>
             <UnselectedGenreTag genre={"Country"}/>
-
+            <TextField 
+                margin="dense"
+                id="name"
+                label="Add your own genres ..."
+                type="email"
+                fullWidth
+                variant="outlined"
+                className={styles.textfield}
+            />
             
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>

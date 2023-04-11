@@ -20,7 +20,7 @@ export default function FileDropZone(props) {
                 <input {...getInputProps()} />
                 <img src={photoIcon} className={styles.photoIcon}></img>
                 <p><span className={styles.focusText}>Upload a file</span> or drag and drop</p>
-                <p>(Only 1 *.jpeg or *.png image will be accepted)</p>
+                <p style={{margin: '0px'}}>(Only 1 *.jpeg or *.png image will be accepted)</p>
             </div>
             <div style={{ display: acceptedFiles.length == 0 ? 'none' : ''}} className={styles.uploadedView}>
                 <input {...getInputProps()} />
