@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    userId: {type: String, unique: true},
     username: String,
     profilePic: String,
     userIsActive: Boolean,
@@ -11,7 +10,6 @@ const userSchema = new Schema({
 });
 
 const studioSchema = new Schema({
-    studioID: {type: Integer, unique: true},
     studioName: String,
     studioIsActive: Boolean,
     studioUsers: [{type: Schema.Types.ObjectId, ref: 'User', required: true}],
