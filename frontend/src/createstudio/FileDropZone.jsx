@@ -7,8 +7,6 @@ import closeIcon from '../assets/create_studio/closeicon.png';
 
 export default function FileDropZone(props) {
   const { acceptedFiles, getRootProps, getInputProps} = useDropzone({ maxFiles: 1, accept: { 'image/jpeg': [], 'image/png': []}});
-
-  console.log(acceptedFiles);
   
   const acceptedFileItems = acceptedFiles.map(file => ( 
     <p className={styles.uploadedfileText}>{file.path}</p>

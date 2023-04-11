@@ -4,10 +4,9 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
 import styles from './CreateStudio.module.css';
 import FileDropZone from "./FileDropZone";
+import ControlSwitch from "./ControlSwitch";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
     const handleClose = () => { handleCloseDialog(false) };
@@ -32,7 +31,12 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
             <FileDropZone />
             <h2 className={styles.sectionHeading}>Genres</h2>
-            <h2 className={styles.sectionHeading}>Only I Have Control</h2>
+            <div className={styles.controlSection}>
+                <h2 className={styles.sectionHeading}>Only I Have Control</h2>
+                <div className={styles.switchContainer}>
+                    <ControlSwitch/>
+                </div>
+            </div>
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
         </DialogContent>
         <DialogActions>
