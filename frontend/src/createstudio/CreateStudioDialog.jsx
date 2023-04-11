@@ -10,6 +10,7 @@ import ControlSwitch from "./ControlSwitch";
 import Tooltip from '@mui/material/Tooltip';
 import SearchBar from "../shared/SearchBar";
 import SelectedGenreTag from "./SelectedGenreTag";
+import UnselectedGenreTag from "./UnselectedGenreTag";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
     const handleClose = () => { handleCloseDialog(false) };
@@ -20,7 +21,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
-            <TextField
+            <TextField 
                 required
                 margin="dense"
                 id="name"
@@ -30,10 +31,15 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 variant="outlined"
                 className={styles.textfield}
             />
+            
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
             <FileDropZone />
+            
             <h2 className={styles.sectionHeading}>Genres</h2>
             <SelectedGenreTag genre={"Country"}/>
+            <UnselectedGenreTag genre={"Country"}/>
+
+            
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
                 <Tooltip title="Only you will be able to queue, skip and pause songs." placement="right" arrow>
@@ -42,6 +48,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                     </div>
                 </Tooltip>
             </div>
+            
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
             <SearchBar label={"Search using Spotify username ..."}/>
         </DialogContent>
