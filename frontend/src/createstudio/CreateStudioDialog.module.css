@@ -40,6 +40,10 @@
     font-weight: 700;
 }
 
+.addButton {
+    background: linear-gradient(#B03EEE, #E640F8);
+}
+
 .cancelButton {
     background: linear-gradient(#BEBEBE, #EDEDED);
     font-weight: 700;
@@ -53,4 +57,8 @@
 
 .addGenreSection {
     display: flex;
+    align-items: center;
+}
+.spacing {
+    width: 10px;
 }

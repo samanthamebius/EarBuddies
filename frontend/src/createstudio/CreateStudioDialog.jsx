@@ -13,8 +13,9 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
+    const [genreInput, setGenreInput] = useState('');
     const [selectedGenres, setSelectedGenres] = useState([]);
-    const [unselectedGenres, setUnselectedGenres] = useState(["Rap", "Rock", "K-Pop", "Country", "Classical"]);
+    const [unselectedGenres, setUnselectedGenres] = useState(["Rap", "Rock", "K-Pop", "Country", "Classical", "R&B", "Jazz", "Pop"]);
     
     selectedGenres.sort();
     unselectedGenres.sort();
@@ -28,8 +29,17 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       setUnselectedGenres(unselectedGenres => [...unselectedGenres, genre]);
       setSelectedGenres(selectedGenres => selectedGenres.filter(selected => selected !== genre));
     }
+
+    function addGenre(genre) {
+      setSelectedGenres(selectedGenres => [...selectedGenres, genre]);
+      setGenreInput('');
+    }
     
     const handleClose = () => { handleCloseDialog(false) };
+
+    const handleChange = event => {
+      setGenreInput(event.target.value);
+    };
 
     return (
     <div>
@@ -54,16 +64,22 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Genres</h2>
             {selectedGenres.map((genre, i) => <SelectedGenreTag genre={genre} handleClick={() => unselectGenre(genre)}/>)}
             {unselectedGenres.map((genre, i) => <UnselectedGenreTag genre={genre} handleClick={() => selectGenre(genre)}/>)}
-            <TextField 
-                margin="dense"
-                id="name"
-                label="Add your own genres ..."
-                type="email"
-                fullWidth
-                variant="outlined"
-                className={styles.textfield}
-            />
-            
+            <div className={styles.addGenreSection}>
+              <TextField 
+                  margin="dense"
+                  id="name"
+                  label="Add your own genres ..."
+                  type="email"
+                  fullWidth
+                  variant="outlined"
+                  value={genreInput}
+                  onChange={handleChange}
+                  className={styles.textfield}
+              />
+              <span className={styles.spacing}></span>
+              <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
+            </div>
+
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
                 <Tooltip title="Only you will be able to queue, skip and pause songs." placement="right" arrow>
