@@ -1,4 +1,4 @@
-import logos from './assets/login/logos.png';
+import logos from '../assets/login/logos.png';
 import styles from './LogInPage.module.css'
 import * as React from 'react';
 import Button from '@mui/material/Button';
