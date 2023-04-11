@@ -11,23 +11,24 @@ import SearchBar from "./SearchBar";
  * Checks if user is logged in, if not, redirects to login page
  */
 function login() {
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken == null) {
-    //check for code
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (code == null) {
-      //reroute to login page
-      window.location.href = "/login";
-    } else {
-      //use code to get access token
-      useAuth(code);
-    }
-  }
+	const accessToken = localStorage.getItem("accessToken");
+	if (accessToken == null) {
+		//check for code
+		const code = new URLSearchParams(window.location.search).get("code");
+		if (code == null) {
+			//reroute to login page
+			window.location.href = "/login";
+		} else {
+			//use code to get access token
+			useAuth(code);
+		}
+	}
 }
 
-function HomePage() {
+function HomePage(props) {
+	const { socket } = props;
 	login();
-  
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.containerChild} style={{ marginRight: "45px" }}>
@@ -41,7 +42,7 @@ function HomePage() {
 				</div>
 				<SearchBar label={"Search My Studios ..."} />
 				<div className={styles.cardContainer}>
-					<StudioCard />
+					<StudioCard socket={socket} />
 					<StudioCard />
 					<StudioCard />
 					<StudioCard />
@@ -64,4 +65,5 @@ function HomePage() {
 			</div>
 		</div>
 	);
-} export default HomePage;
+}
+export default HomePage;

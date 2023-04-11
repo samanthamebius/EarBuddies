@@ -1,11 +1,13 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 
-import express from 'express';
-import path from 'path';
-import mongoose from 'mongoose';
-import * as url from 'url';
-import cors from 'cors';
+import express from "express";
+import path from "path";
+import mongoose from "mongoose";
+import * as url from "url";
+import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
 // setup express
 const app = express();
@@ -17,26 +19,50 @@ app.use(cors());
 app.use(express.json());
 
 // Setup our routes.
-import routes from './routes';
-app.use('/', routes);
+import routes from "./routes";
+app.use("/", routes);
 
-const dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 // Make the "public" folder available statically
-app.use(express.static(path.join(dirname, '../public')));
+app.use(express.static(path.join(dirname, "../public")));
+
+// Setup server for in-app messaging
+const server = http.createServer(app);
+
+const io = new Server(server, {
+	cors: {
+		origin: "http://localhost:5173",
+		methods: ["GET", "POST"],
+	},
+});
+
+// Setup socket connection
+io.on("connection", (socket) => {
+	console.log(`⚡: ${socket.id} user just connected!`);
+
+	socket.on("disconnect", () => {
+		console.log("🔥: A user disconnected");
+	});
+});
 
 // Serve up the frontend's "dist" directory, if we're running in production mode.
-if (process.env.NODE_ENV === 'production') {
-    console.log('Running in production!');
+if (process.env.NODE_ENV === "production") {
+	console.log("Running in production!");
 
-    // Make all files in that folder public
-    app.use(express.static(path.join(dirname, '../../frontend/dist')));
+	// Make all files in that folder public
+	app.use(express.static(path.join(dirname, "../../frontend/dist")));
 
-    // If we get any GET request we can't process using one of the server routes, serve up index.html by default.
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(dirname, '../../frontend/dist/index.html'));
-    });
+	// If we get any GET request we can't process using one of the server routes, serve up index.html by default.
+	app.get("*", (req, res) => {
+		res.sendFile(path.join(dirname, "../../frontend/dist/index.html"));
+	});
 }
 
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true })
-    .then(() => app.listen(port, () => console.log(`App server listening on port ${port}!`)));
+mongoose
+	.connect(process.env.DB_URL, { useNewUrlParser: true })
+	.then(() =>
+		server.listen(port, () =>
+			console.log(`App server listening on port ${port}!`)
+		)
+	);
