@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import styles from './CreateStudio.module.css';
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
+import Tooltip from '@mui/material/Tooltip';
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
     const handleClose = () => { handleCloseDialog(false) };
@@ -33,9 +34,11 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Genres</h2>
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <div className={styles.switchContainer}>
-                    <ControlSwitch/>
-                </div>
+                <Tooltip title="Only you will be able to queue, skip and pause songs." placement="right">
+                    <div className={styles.switchContainer}>
+                        <ControlSwitch/>
+                    </div>
+                </Tooltip>
             </div>
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
         </DialogContent>
