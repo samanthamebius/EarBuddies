@@ -1,3 +1,4 @@
+// Code credit to https://mui.com/material-ui/react-switch/ 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
