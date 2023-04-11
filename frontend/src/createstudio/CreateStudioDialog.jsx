@@ -37,10 +37,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     
     const handleClose = () => { handleCloseDialog(false) };
 
-    const handleChange = event => {
-      setGenreInput(event.target.value);
-    };
-
     return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
@@ -73,7 +69,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   fullWidth
                   variant="outlined"
                   value={genreInput}
-                  onChange={handleChange}
+                  onChange={event => setGenreInput(event.target.value)}
                   className={styles.textfield}
               />
               <span className={styles.spacing}></span>
