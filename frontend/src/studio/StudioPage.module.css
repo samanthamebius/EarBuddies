@@ -101,3 +101,9 @@
 .playBtn {
 	height: 60px;
 }
+
+.controlPanel {
+	background-image: linear-gradient(180deg,#B03EEE, #E640F8);
+	border-radius: 10px;
+	margin: 10px;
+}

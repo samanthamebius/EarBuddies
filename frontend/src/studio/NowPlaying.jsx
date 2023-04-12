@@ -20,8 +20,7 @@ function ControlPanel() {
   const [isPlaying, setPlaying] = useState(false);
 
   return (
-    <div>
-
+    <div className={styles.controlPanel}>
       <img className={styles.playBtn} src={isPlaying ? pause_btn : play_btn }
             onClick={() => setPlaying(!isPlaying)} />
     </div>
