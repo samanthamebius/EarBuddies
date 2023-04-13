@@ -1,0 +1,22 @@
+.chat {
+	background-color: #c68eef;
+	grid-row-start: 1;
+	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
+	grid-column: 3 / 3;
+	border-radius: 10px;
+	padding: 24px;
+}
+
+.chatContent {
+	background-color: white;
+	padding: 24px;
+	border-radius: 10px;
+	height: 75%;
+	margin-bottom: 24px;
+}
+
+.chatInput {
+	background-color: white;
+	border-radius: 10px;
+	height: 16%;
+}

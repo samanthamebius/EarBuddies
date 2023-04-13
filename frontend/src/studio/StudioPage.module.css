@@ -89,11 +89,3 @@
 	grid-row: 2 / 2;
 	grid-column: 2 / 2;
 }
-
-.chat {
-	border: 1px solid #c68eef;
-	grid-row-start: 1;
-	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
-	grid-column: 3 / 3;
-	border-radius: 10px;
-}
