@@ -36,10 +36,16 @@ const isListening = true;
 const listenersImages = [ProfilePicImg1, ProfilePicImg2, ProfilePicImg3, ProfilePicImg4, ProfilePicImg5, ProfilePicImg6]; 
 const listenersActive = [true, true, false, false, true, false];
 
+
+
 export default function Banner() {
+  const [addIconAdded, setAddIconAdded] = useState(false)
   
-  listenersImages.push(AddListenerIcon)
-  listenersActive.push(true)
+  if (addIconAdded == false) {
+    listenersImages.push(AddListenerIcon)
+    listenersActive.push(true)
+    setAddIconAdded(true);
+  }
 
   const [controlEnabled, setControl] = useState(false)
 
@@ -50,16 +56,17 @@ export default function Banner() {
   return (
     
     <div className={styles.banner} style={backgroundImage ? {backgroundImage: `url(${backgroundImage})`} : {backgroundColor: '#797979'}}>
-      <div className={styles.bannerCardContent}>
-        <div className={styles.bannerStudioNameSection}>
-          <h1 className={styles.bannerStudioName}>{studioName}</h1>
-        </div>
-        <div className={styles.dropdownKebab}>
-          <DropdownKebab controlEnabled={controlEnabled} handleControlToggle={handleControlToggle}/>
-        </div>
+      <div className={styles.bannerBottom}>
+        
+        <h1 className={styles.bannerStudioName}>{studioName}</h1>
+        
         <div className={styles.bannerlisteners}>
-        <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
+          <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
         </div>
+      
+      </div>
+      <div className={styles.bannerDropdownKebab}>
+        <DropdownKebab controlEnabled={controlEnabled} handleControlToggle={handleControlToggle}/>
       </div>
     </div>
   );
@@ -115,7 +122,6 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
           }}>
             <img src={controlEnabled ? DisableControlIcon : EnableControlIcon} className={styles.icon}/>
             {controlEnabled ? <span>Disable Control</span> : <span>Enable Contorl</span> }
-            
         </MenuItem>
 
       </Menu>
