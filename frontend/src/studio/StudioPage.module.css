@@ -91,7 +91,7 @@
 }
 
 .chat {
-	background-color: #c68eef;
+	border: 1px solid #c68eef;
 	grid-row-start: 1;
 	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
 	grid-column: 3 / 3;

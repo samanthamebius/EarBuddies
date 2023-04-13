@@ -21,7 +21,7 @@ function App() {
 				<Route path="/" element={<PageLayout />}>
 					<Route index element={<HomePage socket={socket} />} />
 					<Route path="profile" element={<ProfilePage />} />
-					<Route path="studio" element={<StudioPage />} />
+					<Route path="studio" element={<StudioPage socket={socket} />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

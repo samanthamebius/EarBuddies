@@ -9,6 +9,7 @@ import ProfilePicImg5 from "../assets/profilepic5.png";
 import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
+import { useNavigate } from "react-router-dom";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -28,8 +29,14 @@ const listenersActive = [true, true, false, false, true, false];
 
 export default function StudioCard(props) {
 	const { socket } = props;
+	const navigate = useNavigate();
+	const room = "testRoomId"; // will be the id of the studio
+	const username = "test";
+
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
+		socket.emit("join-room", { username, room });
+		navigate("studio");
 	};
 
 	return (
