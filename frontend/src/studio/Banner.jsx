@@ -1,5 +1,6 @@
 import styles from './StudioPage.module.css'
 import * as React from "react";
+import { NavLink, Outlet } from "react-router-dom";
 
 import TaylorSwiftImg from '../assets/taylorswift.png';
 
@@ -12,6 +13,9 @@ import ProfilePicImg6 from '../assets/profilepic6.png';
 import ListenerIcons from '../shared/ListenerIcons';
 
 import AddListenerIcon from '../assets/addListenerIcon.png';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const studioName = "Software Swifties"
 const backgroundImage = TaylorSwiftImg;
@@ -31,10 +35,52 @@ export default function Banner() {
         <div className={styles.bannerStudioNameSection}>
           <h1 className={styles.bannerStudioName}>{studioName}</h1>
         </div>
+        <div >
+          <DropdownKebab />
+        </div>
         <div className={styles.bannerlisteners}>
         <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
         </div>
       </div>
+    </div>
+  );
+}
+
+export function DropdownKebab() {
+  const [isOpen, setOpen] = React.useState(null);
+  const open = Boolean(isOpen);
+  const handleClick = (event) => {
+    setOpen(event.currentTarget);
+  };
+  const handleClose = () => {
+    setOpen(null);
+  };
+
+  return (
+    <div className={styles.dropdown}>
+
+      <Button onClick={handleClick} className={styles.button}>
+        ...
+      </Button>
+
+      <Menu
+        anchorEl={isOpen}
+        open={open}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>
+            View Profile
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          View Profile
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+            View Profile
+        </MenuItem>
+
+      </Menu>
     </div>
   );
 }
