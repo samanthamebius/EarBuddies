@@ -1,5 +1,5 @@
 import styles from './StudioPage.module.css'
-import * as React from "react";
+import React from "react";
 import { useState } from 'react';
 
 import TaylorSwiftImg from '../assets/taylorswift.png';
@@ -13,7 +13,6 @@ import ProfilePicImg6 from '../assets/profilepic6.png';
 import ListenerIcons from '../shared/ListenerIcons';
 
 import AddListenerIcon from '../assets/addListenerIcon.png';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -47,23 +46,19 @@ export default function Banner() {
     setAddIconAdded(true);
   }
 
-  const [controlEnabled, setControl] = useState(false)
+  const [controlEnabled, toggleControl] = useState(false)
 
   const handleControlToggle = () => {
-    setControl((current) => !current)
+    toggleControl((current) => !current)
   }
   
   return (
     
     <div className={styles.banner} style={backgroundImage ? {backgroundImage: `url(${backgroundImage})`} : {backgroundColor: '#797979'}}>
-      <div className={styles.bannerBottom}>
-        
-        <h1 className={styles.bannerStudioName}>{studioName}</h1>
-        
-        <div className={styles.bannerlisteners}>
-          <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
-        </div>
+      <h1 className={styles.bannerStudioName}>{studioName}</h1>
       
+      <div className={styles.bannerlisteners}>
+        <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
       </div>
       <div className={styles.bannerDropdownKebab}>
         <DropdownKebab controlEnabled={controlEnabled} handleControlToggle={handleControlToggle}/>
@@ -85,11 +80,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
   };
 
   return (
-    <div className={styles.dropdown}>
-
-      <Button onClick={handleClick} className={styles.button}>
+    <div>
+      <div onClick={handleClick} className={styles.dropdownButton}>
         <img src={isOpen ? KebabActiveIcon : KebabIcon} className={styles.kebabIcon}/>
-      </Button>
+      </div>
 
       <Menu
         anchorEl={isOpen}
@@ -121,7 +115,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
           handleControlToggle()
           }}>
             <img src={controlEnabled ? DisableControlIcon : EnableControlIcon} className={styles.icon}/>
-            {controlEnabled ? <span>Disable Control</span> : <span>Enable Contorl</span> }
+            {controlEnabled ? <span>Disable Control</span> : <span>Enable Control</span> }
         </MenuItem>
 
       </Menu>

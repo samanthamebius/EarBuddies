@@ -43,19 +43,18 @@
 }
 
 .bannerDropdownKebab {
+	padding: 0;
 	position: absolute;
 	top: 0;
-	right:0;
+	right: 0;
+}
 
+.dropdownButton {
+	padding: 10px;
 }
 
 .kebabIcon {
-	height: 15px;
-}
-
-.kebabIconActive {
-	height: 15px;
-	background-color: #FFFFFF;
+	height: 20px;
 }
 
 .icon {
@@ -63,10 +62,6 @@
 	width: 20px;
     padding-right: 15px;
     pointer-events: none;
-}
-
-.bannerBottom {
-	width: 100%;
 }
 
 .bannerStudioName {
