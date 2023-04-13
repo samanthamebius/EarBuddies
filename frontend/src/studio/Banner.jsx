@@ -1,6 +1,6 @@
 import styles from './StudioPage.module.css'
 import * as React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useState } from 'react';
 
 import TaylorSwiftImg from '../assets/taylorswift.png';
 
@@ -24,6 +24,8 @@ import LeaveGroupIcon from '../assets/studio/leaveGroupIcon.png'
 import EditNicknameIcon from '../assets/studio/editIcon.png'
 import RemoveMemberIcon from '../assets/studio/removeMemberIcon.png'
 import AssignNewHostIcon from '../assets/studio/hostCrownIcon.png'
+
+import DisableControlIcon from '../assets/studio/disableControlIcon.png'
 import EnableControlIcon from '../assets/studio/enableControlIcon.png'
 
 const studioName = "Software Swifties"
@@ -35,17 +37,25 @@ const listenersImages = [ProfilePicImg1, ProfilePicImg2, ProfilePicImg3, Profile
 const listenersActive = [true, true, false, false, true, false];
 
 export default function Banner() {
+  
   listenersImages.push(AddListenerIcon)
   listenersActive.push(true)
+
+  const [controlEnabled, setControl] = useState(false)
+
+  const handleControlToggle = () => {
+    setControl((current) => !current)
+  }
   
   return (
+    
     <div className={styles.banner} style={backgroundImage ? {backgroundImage: `url(${backgroundImage})`} : {backgroundColor: '#797979'}}>
       <div className={styles.bannerCardContent}>
         <div className={styles.bannerStudioNameSection}>
           <h1 className={styles.bannerStudioName}>{studioName}</h1>
         </div>
-        <div >
-          <DropdownKebab />
+        <div className={styles.dropdownKebab}>
+          <DropdownKebab controlEnabled={controlEnabled} handleControlToggle={handleControlToggle}/>
         </div>
         <div className={styles.bannerlisteners}>
         <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>                        
@@ -55,7 +65,9 @@ export default function Banner() {
   );
 }
 
-export function DropdownKebab() {
+export function DropdownKebab({ controlEnabled, handleControlToggle }) {
+  
+  
   const [isOpen, setOpen] = React.useState(null);
   const open = Boolean(isOpen);
   const handleClick = (event) => {
@@ -69,7 +81,7 @@ export function DropdownKebab() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-      {isOpen ? <img src={KebabActiveIcon} className={styles.kebabIcon}/> : <img src={KebabIcon} className={styles.kebabIcon}/>}
+        <img src={isOpen ? KebabActiveIcon : KebabIcon} className={styles.kebabIcon}/>
       </Button>
 
       <Menu
@@ -97,9 +109,13 @@ export function DropdownKebab() {
           Assign a New Host
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
-          <img src={EnableControlIcon} className={styles.icon}/>
-          Enable Control
+        <MenuItem onClick={() => {
+          handleClose
+          handleControlToggle()
+          }}>
+            <img src={controlEnabled ? DisableControlIcon : EnableControlIcon} className={styles.icon}/>
+            {controlEnabled ? <span>Disable Control</span> : <span>Enable Contorl</span> }
+            
         </MenuItem>
 
       </Menu>

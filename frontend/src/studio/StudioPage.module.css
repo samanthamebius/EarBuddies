@@ -36,6 +36,7 @@
 	grid-row: 1 / 1;
 	grid-column: 1 / 3;
 	border-radius: 10px;
+	position: relative;
 	height: auto;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -58,6 +59,12 @@
 	font-size: 28px;
 	padding-bottom: 5px;
 	position: relative;
+}
+
+.dropdownKebab {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 .kebabIcon {
