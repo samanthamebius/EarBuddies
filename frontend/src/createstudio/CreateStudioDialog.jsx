@@ -48,7 +48,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 margin="dense"
                 id="name"
                 label="Studio Name"
-                type="email"
+                type="text"
                 fullWidth
                 variant="outlined"
                 className={styles.textfield}
@@ -65,7 +65,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   margin="dense"
                   id="name"
                   label="Add your own genres ..."
-                  type="email"
+                  type="text"
                   fullWidth
                   variant="outlined"
                   value={genreInput}

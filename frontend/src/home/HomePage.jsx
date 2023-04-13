@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState} from 'react';
 import useAuth from "../useAuth";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
@@ -28,7 +28,7 @@ function login() {
 function HomePage() {
 	login();
 
-	const [isOpen, setIsOpen] = React.useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
