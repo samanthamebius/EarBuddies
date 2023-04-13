@@ -11,6 +11,8 @@ import ProfilePicImg5 from '../assets/profilepic5.png';
 import ProfilePicImg6 from '../assets/profilepic6.png';
 import ListenerIcons from '../shared/ListenerIcons';
 
+import AddListenerIcon from '../assets/addListenerIcon.png';
+
 const studioName = "Software Swifties"
 const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
@@ -20,6 +22,8 @@ const listenersImages = [ProfilePicImg1, ProfilePicImg2, ProfilePicImg3, Profile
 const listenersActive = [true, true, false, false, true, false];
 
 export default function Banner() {
+  listenersImages.push(AddListenerIcon)
+  listenersActive.push(true)
   
   return (
     <div className={styles.banner} style={backgroundImage ? {backgroundImage: `url(${backgroundImage})`} : {backgroundColor: '#797979'}}>
