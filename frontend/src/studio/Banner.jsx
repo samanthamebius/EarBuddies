@@ -20,6 +20,12 @@ import MenuItem from '@mui/material/MenuItem';
 import KebabIcon from '../assets/studio/kebabMenuIcon.png'
 import KebabActiveIcon from '../assets/studio/kebabMenuActiveIcon.png'
 
+import LeaveGroupIcon from '../assets/studio/leaveGroupIcon.png'
+import EditNicknameIcon from '../assets/studio/editIcon.png'
+import RemoveMemberIcon from '../assets/studio/removeMemberIcon.png'
+import AssignNewHostIcon from '../assets/studio/hostCrownIcon.png'
+import EnableControlIcon from '../assets/studio/enableControlIcon.png'
+
 const studioName = "Software Swifties"
 const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
@@ -72,15 +78,28 @@ export function DropdownKebab() {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose}>
-            View Profile
+          <img src={LeaveGroupIcon} className={styles.icon}/>
+          Leave Group
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-          View Profile
+          <img src={EditNicknameIcon} className={styles.icon}/>
+          Edit Nickname
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-            View Profile
+          <img src={RemoveMemberIcon} className={styles.icon}/>
+          Remove a Member
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          <img src={AssignNewHostIcon} className={styles.icon}/>
+          Assign a New Host
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          <img src={EnableControlIcon} className={styles.icon}/>
+          Enable Control
         </MenuItem>
 
       </Menu>
