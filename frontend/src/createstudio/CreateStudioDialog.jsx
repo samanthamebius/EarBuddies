@@ -22,31 +22,19 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "R&B", isSelected: false},
                                           {name: "Jazz", isSelected: false}, 
                                           {name: "Pop", isSelected: false}]);
-    console.log(genres);
-    genres.sort();
 
-    function selectGenre(genre) {
+    function toggleGenre(genre) {
       const newGenres = genres.map(obj => {
         if(obj.name === genre) {
-          return {... obj, isSelected: true};
+          return {... obj, isSelected: !obj.isSelected};
         }
         return obj
       });
       setGenres(newGenres);
     }
 
-    function unselectGenre(genre) {
-      const newGenres = genres.map(obj => {
-        if(obj.name === genre) {
-          return {... obj, isSelected: false};
-        }
-        return obj
-      });
-      setGenres(newGenres);
-    }
-
-    function addGenre(genre) {
-      setGenres(... genres, {name: genre, isSelected: true});
+    function addGenre(genreInput) {
+      setGenres([... genres, {name: genreInput, isSelected: true}]);
       setGenreInput('');
     }
     
@@ -73,7 +61,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <FileDropZone />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
-            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag genre={genre.name} handleClick={() => selectGenre(genre.name)}/> : <SelectedGenreTag genre={genre.name} handleClick={() => unselectGenre(genre.name)}/>)}
+            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
+                                                                : <SelectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
             <div className={styles.addGenreSection}>
               <TextField 
                   margin="dense"
@@ -103,7 +92,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <SearchBar label={"Search using Spotify username ..."}/>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-          <Button variant="contained" sx={{ color: '#606060'}} className={styles.cancelButton}onClick={handleClose}>Cancel</Button>
+          <Button variant="contained" sx={{ color: '#606060'}} className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
           <Button variant="contained" className={styles.createButton} onClick={handleClose}>Create Studio</Button>
         </DialogActions>
       </Dialog>
