@@ -50,10 +50,21 @@
 }
 
 .dropdownButton {
+	margin: 0;
 	padding: 10px;
 }
 
+.dropdownButtonActive {
+	margin: 0;
+	padding: 10px;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	background-color: #ffffff;
+	z-index: 153;
+}
+
 .kebabIcon {
+	margin: 0;
 	height: 20px;
 }
 

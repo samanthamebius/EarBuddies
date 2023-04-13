@@ -81,7 +81,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 
   return (
     <div>
-      <div onClick={handleClick} className={styles.dropdownButton}>
+      <div onClick={handleClick} className={isOpen ? styles.dropdownButtonActive : styles.dropdownButton}>
         <img src={isOpen ? KebabActiveIcon : KebabIcon} className={styles.kebabIcon}/>
       </div>
 
