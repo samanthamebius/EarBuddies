@@ -13,25 +13,40 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-    const [genreInput, setGenreInput] = useState('');
-    const [selectedGenres, setSelectedGenres] = useState([]);
-    const [unselectedGenres, setUnselectedGenres] = useState(["Rap", "Rock", "K-Pop", "Country", "Classical", "R&B", "Jazz", "Pop"]);
-    
-    selectedGenres.sort();
-    unselectedGenres.sort();
+  const [genreInput, setGenreInput] = useState('');  
+  const [genres, setGenres] = useState([{name: "Rap", isSelected: false}, 
+                                          {name: "Rock", isSelected: false},
+                                          {name: "K-Pop", isSelected: false}, 
+                                          {name: "Country", isSelected: false},
+                                          {name: "Classical", isSelected: false}, 
+                                          {name: "R&B", isSelected: false},
+                                          {name: "Jazz", isSelected: false}, 
+                                          {name: "Pop", isSelected: false}]);
+    console.log(genres);
+    genres.sort();
 
     function selectGenre(genre) {
-      setSelectedGenres(selectedGenres => [...selectedGenres, genre]);
-      setUnselectedGenres(unselectedGenres => unselectedGenres.filter(unselected => unselected !== genre));
+      const newGenres = genres.map(obj => {
+        if(obj.name === genre) {
+          return {... obj, isSelected: true};
+        }
+        return obj
+      });
+      setGenres(newGenres);
     }
 
     function unselectGenre(genre) {
-      setUnselectedGenres(unselectedGenres => [...unselectedGenres, genre]);
-      setSelectedGenres(selectedGenres => selectedGenres.filter(selected => selected !== genre));
+      const newGenres = genres.map(obj => {
+        if(obj.name === genre) {
+          return {... obj, isSelected: false};
+        }
+        return obj
+      });
+      setGenres(newGenres);
     }
 
     function addGenre(genre) {
-      setSelectedGenres(selectedGenres => [...selectedGenres, genre]);
+      setGenres(... genres, {name: genre, isSelected: true});
       setGenreInput('');
     }
     
@@ -58,8 +73,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <FileDropZone />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
-            {selectedGenres.map((genre, i) => <SelectedGenreTag genre={genre} handleClick={() => unselectGenre(genre)}/>)}
-            {unselectedGenres.map((genre, i) => <UnselectedGenreTag genre={genre} handleClick={() => selectGenre(genre)}/>)}
+            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag genre={genre.name} handleClick={() => selectGenre(genre.name)}/> : <SelectedGenreTag genre={genre.name} handleClick={() => unselectGenre(genre.name)}/>)}
             <div className={styles.addGenreSection}>
               <TextField 
                   margin="dense"
