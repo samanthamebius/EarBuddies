@@ -13,7 +13,9 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-  const [genreInput, setGenreInput] = useState('');  
+  const [isErrorMessage, setIsErrorMessage] = useState(false); 
+  const [genreInput, setGenreInput] = useState(''); 
+  const [studioNameInput, setStudioNameInput] = useState('');  
   const [genres, setGenres] = useState([{name: "Rap", isSelected: false}, 
                                           {name: "Rock", isSelected: false},
                                           {name: "K-Pop", isSelected: false}, 
@@ -38,6 +40,14 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       setGenreInput('');
     }
     
+    function handleSubmit() {
+      if(studioNameInput == '') {
+        setIsErrorMessage(true);
+      } else {
+        setIsErrorMessage(false);
+      }
+    }
+    
     const handleClose = () => { handleCloseDialog(false) };
 
     return (
@@ -47,6 +57,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
         <DialogContent>
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
             <TextField 
+                value={studioNameInput}
+                error={isErrorMessage ? true : false}
+                helperText={isErrorMessage ? "No Studio Name Entry" : ""}
                 required
                 margin="dense"
                 id="name"
@@ -54,6 +67,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 type="text"
                 fullWidth
                 variant="outlined"
+                onChange={event => setStudioNameInput(event.target.value)}
                 className={styles.textfield}
             />
             
@@ -93,7 +107,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button variant="contained" sx={{ color: '#606060'}} className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" className={styles.createButton} onClick={handleClose}>Create Studio</Button>
+          <Button variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
         </DialogActions>
       </Dialog>
     </div>
