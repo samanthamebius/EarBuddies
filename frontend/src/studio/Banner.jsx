@@ -17,6 +17,9 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import KebabIcon from '../assets/studio/kebabMenuIcon.png'
+import KebabActiveIcon from '../assets/studio/kebabMenuActiveIcon.png'
+
 const studioName = "Software Swifties"
 const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
@@ -60,7 +63,7 @@ export function DropdownKebab() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        ...
+      {isOpen ? <img src={KebabActiveIcon} className={styles.kebabIcon}/> : <img src={KebabIcon} className={styles.kebabIcon}/>}
       </Button>
 
       <Menu

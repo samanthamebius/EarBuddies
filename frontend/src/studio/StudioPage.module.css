@@ -60,6 +60,10 @@
 	position: relative;
 }
 
+.kebabIcon {
+	height: 15px;
+}
+
 .bannerlisteners {
 	display: flex;
 	align-items: end;
