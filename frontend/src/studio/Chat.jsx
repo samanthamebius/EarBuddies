@@ -94,7 +94,7 @@ export default function Chat({ socket }) {
 							handleSendMessage();
 						}
 					}}
-					InputProps={{ disableUnderline: true }}
+					InputProps={{ disableUnderline: true, style: { color: "#797979" } }}
 				/>
 				<img
 					src={sendIcon}
