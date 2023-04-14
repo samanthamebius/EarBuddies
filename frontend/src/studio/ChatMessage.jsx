@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "./ChatMessage.module.css";
+import messageDecoration1 from "../assets/chat/messageDecoration1.svg";
+import messageDecoration2 from "../assets/chat/messageDecoration2.svg";
 
 function ChatMessage({ newMessage }) {
 	const { message, username, __createdtime } = newMessage;
@@ -9,7 +11,7 @@ function ChatMessage({ newMessage }) {
 		const message = {
 			backgroundColor: `${isCurrentUser ? "#E640F8" : "#B03EEE"}`,
 			padding: "12px",
-			borderRadius: "30px",
+			borderRadius: "16px",
 			overflowWrap: "break-word",
 			textAlign: "left",
 			maxWidth: "50%",
@@ -34,6 +36,10 @@ function ChatMessage({ newMessage }) {
 			<div style={setMessageBodyStyle()}>
 				<p className={styles.body}>{message}</p>
 			</div>
+			<img
+				src={isCurrentUser ? messageDecoration1 : messageDecoration2}
+				style={{ margin: "-17px 0 0 -1px", zIndex: 0 }}
+			/>
 		</div>
 	);
 }
