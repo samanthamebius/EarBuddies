@@ -3,7 +3,7 @@ import styles from "./Chat.module.css";
 import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import sendIcon from "../assets/chat/sendIcon.svg";
 
 const mockStudios = [
@@ -44,6 +44,7 @@ export default function Chat({ socket }) {
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
 	const { id } = useParams();
+	const { pathname } = useLocation();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 	const username = "test"; // this will be the username of the user from DB
 
@@ -61,6 +62,13 @@ export default function Chat({ socket }) {
 			]);
 		});
 	}, [socket]);
+
+	// user leaves the room when they navigate away
+	useEffect(() => {
+		return () => {
+			socket.emit("leave_room", { username, room });
+		};
+	}, []);
 
 	// TODO: Set previous messages that is run once
 

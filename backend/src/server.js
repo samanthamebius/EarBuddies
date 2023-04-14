@@ -71,6 +71,13 @@ io.on("connection", (socket) => {
 		io.in(room.id).emit("receive_message", data);
 	});
 
+	// remove the user so they don't receive messages while they are gone
+	socket.on("leave_room", (data) => {
+		const { username, room } = data;
+		socket.leave(room.id);
+		console.log(`${username} has left the chat`);
+	});
+
 	socket.on("disconnect", () => {
 		console.log("🔥: A user disconnected");
 	});
