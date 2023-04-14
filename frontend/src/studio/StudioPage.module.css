@@ -1,7 +1,7 @@
 .studio {
 	height: calc(100vh - 82px);
 	display: grid;
-	grid-template-rows: 1fr 4fr;
+	grid-template-rows: 1fr 5fr;
 	grid-template-columns: 2fr 3fr 4fr;
 	grid-gap: 20px;
 	padding: 20px;
@@ -82,7 +82,7 @@
 	margin: 0px;
 	padding-right: 0px;
 	font-size: 28px;
-	padding: 10px;
+	padding: 15px;
 	position: absolute;
 	bottom: 0;
 	left: 0;
