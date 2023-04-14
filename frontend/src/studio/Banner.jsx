@@ -107,7 +107,12 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				/>
 			</div>
 
-			<Menu anchorEl={isOpen} open={open} onClose={handleClose} >
+			<Menu 
+				autoFocus={false}
+				anchorEl={isOpen} 
+				open={open} 
+				onClose={handleClose} 
+			>
 				<MenuItem onClick={handleClose}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
 					Leave Group
