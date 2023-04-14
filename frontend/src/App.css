@@ -12,3 +12,35 @@
 .card {
   padding: 2em;
 }
+
+.MuiTextField-root {
+  background: white;
+  border-radius: 10px;
+}
+
+.MuiInputBase-input  {
+  background: white;
+}
+
+.MuiButtonBase-root {
+  color: white;
+}
+
+.MuiButton-root {
+  color: white;
+}
+
+.MuiButton-contained {
+  text-transform: capitalize !important;
+}
+
+.MuiDialogActions-root {
+  display: flex;
+  justify-content: center;
+}
+
+.MuiFormHelperText-root.Mui-error {
+  background-color: #F5F5F5;
+  margin: 0;
+  padding: 5px;
+}
