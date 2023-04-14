@@ -17,7 +17,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import KebabIcon from "../assets/studio/kebabMenuIcon.png";
-import KebabActiveIcon from "../assets/studio/kebabMenuActiveIcon.png";
 
 import LeaveGroupIcon from "../assets/studio/leaveGroupIcon.png";
 import EditNicknameIcon from "../assets/studio/editIcon.png";
@@ -100,15 +99,15 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 		<div>
 			<div
 				onClick={handleClick}
-				className={isOpen ? styles.dropdownButtonActive : styles.dropdownButton}
+				className={styles.dropdownButton}
 			>
 				<img
-					src={isOpen ? KebabActiveIcon : KebabIcon}
+					src={KebabIcon}
 					className={styles.kebabIcon}
 				/>
 			</div>
 
-			<Menu anchorEl={isOpen} open={open} onClose={handleClose}>
+			<Menu anchorEl={isOpen} open={open} onClose={handleClose} >
 				<MenuItem onClick={handleClose}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
 					Leave Group

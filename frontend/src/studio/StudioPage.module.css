@@ -51,21 +51,11 @@
 
 .dropdownButton {
 	margin: 0;
-	padding: 10px;
-}
-
-.dropdownButtonActive {
-	margin: 0;
-	padding: 10px;
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	background-color: #ffffff;
-	z-index: 153;
+	padding: 10px 10px 5px 10px;
 }
 
 .kebabIcon {
-	margin: 0;
-	height: 20px;
+	height: 25px;
 }
 
 .icon {
@@ -94,12 +84,6 @@
 	right: 0;
 	padding: 14px;
 }
-
-.hostImage {
-	height: 25px;
-	margin-left: auto;
-}
-
 .greyOutImage {
 	-webkit-filter: grayscale(100%);
 	-moz-filter: grayscale(100%);
