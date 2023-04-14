@@ -28,15 +28,16 @@ const listenersImages = [
 const listenersActive = [true, true, false, false, true, false];
 
 export default function StudioCard(props) {
-	const { socket } = props;
+	const { socket, studio } = props;
+	// studio will be gotten from backend when set up
 	const navigate = useNavigate();
-	const room = "testRoomId"; // will be the id of the studio
+	const room = studio.id; // will be the id of the studio
 	const username = "test";
 
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
 		socket.emit("join-room", { username, room });
-		navigate("studio");
+		navigate(`studio/${room}`);
 	};
 
 	return (

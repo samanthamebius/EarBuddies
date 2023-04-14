@@ -1,14 +1,51 @@
 import React, { useState } from "react";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
-import { Box, Button, Input, TextField } from "@mui/material";
+import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
+import { useParams } from "react-router-dom";
+import sendIcon from "../assets/chat/sendIcon.svg";
+
+const mockStudios = [
+	{
+		id: 1,
+		studioName: `smeb's studio`,
+		studioIsActive: true,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 2,
+		studioName: `smeb's studio`,
+		studioIsActive: true,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 3,
+		studioName: `smeb's studio`,
+		studioIsActive: false,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 4,
+		studioName: `smeb's studio`,
+		studioIsActive: false,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+];
+
+const StyledTextField = styled(TextField)({
+	"& .MuiInputBase-root": {
+		padding: "10px 0 0 12px",
+	},
+	width: "80%",
+});
 
 export default function Chat({ socket }) {
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
-	const room = "testRoomId"; // will be the id of the studio
-	const username = "test";
+	const { id } = useParams();
+	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
+	const username = "test"; // this will be the username of the user from DB
 
 	// continously set the live messages received
 	useEffect(() => {
@@ -23,12 +60,9 @@ export default function Chat({ socket }) {
 				},
 			]);
 		});
-
-		// remove the listener when the component unmounts
-		return () => socket.off("receive_message");
 	}, [socket]);
 
-	// Set previous messages that is run once
+	// TODO: Set previous messages that is run once
 
 	// send the message
 	const handleSendMessage = () => {
@@ -42,35 +76,32 @@ export default function Chat({ socket }) {
 	return (
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
-				{messages.map((message) => (
-					<ChatMessage newMessage={message} />
+				{messages.map((message, index) => (
+					<ChatMessage key={index} newMessage={message} />
 				))}
 			</div>
 			<div className={styles.chatInput}>
-				<Box
-					component="form"
-					noValidate
-					autoComplete="off"
-					sx={{
-						"& > :not(style)": { m: 1, width: "25ch" },
+				<StyledTextField
+					variant="standard"
+					multiline
+					maxRows={4}
+					placeholder="Message ..."
+					value={message}
+					onChange={(e) => setMessage(e.target.value)}
+					onKeyDown={(event) => {
+						if (event.key === "Enter") {
+							event.preventDefault();
+							handleSendMessage();
+						}
 					}}
-				>
-					<TextField
-						variant="outlined"
-						placeholder="Message ..."
-						value={message}
-						onChange={(e) => setMessage(e.target.value)}
-						onKeyDown={(event) => {
-							if (event.key === "Enter") {
-								event.preventDefault();
-								handleSendMessage();
-							}
-						}}
-					/>
-					<Button variant="contained" onClick={() => handleSendMessage()}>
-						Send
-					</Button>
-				</Box>
+					InputProps={{ disableUnderline: true }}
+				/>
+				<img
+					src={sendIcon}
+					alt="send"
+					onClick={() => handleSendMessage()}
+					className={styles.sendButton}
+				/>
 			</div>
 		</div>
 	);

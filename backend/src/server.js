@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
 
 	socket.on("send_message", (data) => {
 		const { room } = data;
-		io.in(room).emit("receive_message", data);
+		io.in(room.id).emit("receive_message", data);
 	});
 
 	socket.on("disconnect", () => {

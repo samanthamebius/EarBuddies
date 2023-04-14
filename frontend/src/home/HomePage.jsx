@@ -7,6 +7,33 @@ import { style } from "@mui/system";
 import SoundWavesGradient from "../assets/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 
+const mockStudios = [
+	{
+		id: 1,
+		studioName: `smeb's studio`,
+		studioIsActive: true,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 2,
+		studioName: `smeb's studio`,
+		studioIsActive: true,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 3,
+		studioName: `smeb's studio`,
+		studioIsActive: false,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+	{
+		id: 4,
+		studioName: `smeb's studio`,
+		studioIsActive: false,
+		studioGenres: ["rock", "pop", "jazz"],
+	},
+];
+
 /**
  * Checks if user is logged in, if not, redirects to login page
  */
@@ -42,12 +69,11 @@ function HomePage(props) {
 				</div>
 				<SearchBar label={"Search My Studios ..."} />
 				<div className={styles.cardContainer}>
-					<StudioCard socket={socket} />
-					<StudioCard />
-					<StudioCard />
-					<StudioCard />
-					<StudioCard />
-					<StudioCard />
+					{mockStudios
+						.filter((studio) => studio.studioIsActive === false)
+						.map((studio) => (
+							<StudioCard key={studio.id} socket={socket} studio={studio} />
+						))}
 				</div>
 			</div>
 			<div className={styles.containerChild}>
@@ -59,8 +85,11 @@ function HomePage(props) {
 				</div>
 				<SearchBar label={"Search Studios Listening Now ..."} />
 				<div className={styles.cardContainer}>
-					<StudioCard />
-					<StudioCard />
+					{mockStudios
+						.filter((studio) => studio.studioIsActive === true)
+						.map((studio) => (
+							<StudioCard key={studio.id} socket={socket} studio={studio} />
+						))}
 				</div>
 			</div>
 		</div>

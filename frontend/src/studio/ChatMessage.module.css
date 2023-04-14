@@ -12,13 +12,6 @@
 	margin: 0 0 4px 0;
 }
 
-.message {
-	background-color: #b03eee;
-	padding: 8px;
-	border-radius: 30px;
-	/* E640F8 */
-}
-
 .body {
 	margin: 0;
 	color: white;
