@@ -73,6 +73,7 @@ export default function Banner() {
 					isListening={isListening}
 					profileImages={listenersImages}
 					profileStatus={listenersActive}
+          isHomeCard={false}
 				/>
 			</div>
 			<div className={styles.bannerDropdownKebab}>

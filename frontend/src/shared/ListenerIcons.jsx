@@ -1,7 +1,13 @@
 import styles from "./ListenerIcons.module.css";
 
-const setListenerImageStyles = (i, isListening, profileStatus) => {
-	let baseStyle = { transform: `translate(${70 * i}%)` };
+const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
+    
+    let baseStyle = { transform: `translate(${70 * i}%)`, float: `right` };
+
+    if (isHomeCard) {
+        baseStyle = { transform: `translate(${-70 * i}%)`, float: `left` };
+    } 
+    
 	let greyStyle = { WebkitFilter: "brightness(30%)" };
 	let listenerStyles = {};
 	if (isListening) {
@@ -20,6 +26,7 @@ export default function StudioCard({
 	isListening,
 	profileImages,
 	profileStatus,
+    isHomeCard
 }) {
 	return (
 		<div className={styles.listenersImages}>
@@ -28,7 +35,7 @@ export default function StudioCard({
 						<img
 							className={styles.listenerImage}
 							src={listenerImage}
-							style={setListenerImageStyles(i, isListening, profileStatus)}
+							style={setListenerImageStyles(i, isListening, profileStatus, isHomeCard)}
 						/>
 				  ))
 				: null}

@@ -32,7 +32,7 @@ export default function StudioCard() {
                         {genres.map((genre, i) => <GenreTag genre={genre}/>)}
                     </div>
                     <div className={styles.listeners}>
-                        <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive}/>
+                        <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive} isHomeCard={true}/>
                         <img className={styles.hostImage} src={hostImage}/>                        
                     </div>
                 </div>
