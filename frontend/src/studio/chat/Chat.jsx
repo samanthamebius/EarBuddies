@@ -5,6 +5,7 @@ import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
 import { useParams } from "react-router-dom";
 import sendIcon from "../../assets/chat/sendIcon.svg";
+import axios from "axios";
 
 const mockStudios = [
 	{
@@ -86,6 +87,11 @@ export default function Chat({ socket }) {
 	}, []);
 
 	// TODO: Set previous messages that is run once
+	useEffect(() => {
+		// axios
+		// 	.get(`http://localhost:3000/api/chat/${id}`)
+		// 	.then((response) => setMessages([...messages, response.data]));
+	}, []);
 
 	// send the message
 	const handleSendMessage = () => {

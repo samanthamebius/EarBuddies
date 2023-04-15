@@ -10,6 +10,7 @@ import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -34,9 +35,13 @@ export default function StudioCard(props) {
 	const room = studio.id; // will be the id of the studio
 	const username = "test";
 
-	const handleJoinStudio = () => {
+	const handleJoinStudio = async () => {
 		socket.connect("http://localhost:3000");
 		socket.emit("join-room", { username, room });
+
+		// create the chat in the DB if it doesn't already exist
+		await axios.post(`http://localhost:3000/api/chat/${room}`);
+
 		navigate(`studio/${room}`);
 	};
 
