@@ -44,6 +44,11 @@ export function DropdownMenu() {
   const handleClose = () => {
     setOpen(null);
   };
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+  };
 
   return (
     <div className={styles.dropdown}>
@@ -72,7 +77,7 @@ export function DropdownMenu() {
 
         <MenuItem onClick={handleClose}>
             <img src={logoutIcon} className={styles.icon}/>
-            <NavLink to="./login" className={styles.menu_item}>Log Out</NavLink>
+            <NavLink to="./login" onClick={handleLogout} className={styles.menu_item}>Log Out</NavLink>
         </MenuItem>
 
       </Menu>
