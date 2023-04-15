@@ -71,7 +71,7 @@ export default function Chat({ socket }) {
 			.get(`http://localhost:3000/api/chat/all-messages/${id}`)
 			.then((response) => {
 				response.data.messages.length > 0 &&
-					setMessages(...messages, response.data.messages);
+					setMessages(response.data.messages);
 			});
 	}, []);
 
