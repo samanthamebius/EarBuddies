@@ -67,7 +67,7 @@ export function DropdownMenu() {
 
         <MenuItem onClick={handleClose}>
             <img src={darkmodeIcon} className={styles.icon} />
-            <p className={styles.menu_item}>Dark Mode</p>
+            <span className={styles.menu_item}>Dark Mode</span>
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
