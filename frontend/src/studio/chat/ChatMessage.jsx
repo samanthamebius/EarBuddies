@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./ChatMessage.module.css";
-import messageDecoration1 from "../assets/chat/messageDecoration1.svg";
-import messageDecoration2 from "../assets/chat/messageDecoration2.svg";
+import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
+import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
 
 function ChatMessage({ newMessage }) {
-	const { message, username, __createdtime } = newMessage;
+	const { message, username } = newMessage;
 	const isCurrentUser = username === "test";
 
 	const setMessageBodyStyle = () => {

@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./StudioPage.module.css";
 
 import Banner from "./Banner";
-import Chat from "./Chat";
+import Chat from "./chat/Chat";
 import NowPlaying from "./NowPlaying";
 import SongSelection from "./SongSelection";
 

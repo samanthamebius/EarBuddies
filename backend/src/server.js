@@ -49,20 +49,16 @@ io.on("connection", (socket) => {
 		socket.join(room); // let the user join the room
 		console.log(socket);
 
-		let __createdtime__ = Date.now();
-
 		// send to all other users in the room expect for the user that joined
 		socket.to(room).emit("receive_message", {
 			message: `${username} just joined that studio`,
 			username: CHAT_BOT,
-			__createdtime__,
 		});
 
 		// send to just the user that joined
 		socket.emit("receive_message", {
 			message: `Welcome ${username}`,
 			username: CHAT_BOT,
-			__createdtime__,
 		});
 	});
 

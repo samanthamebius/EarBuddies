@@ -3,8 +3,8 @@ import styles from "./Chat.module.css";
 import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
-import { useLocation, useParams } from "react-router-dom";
-import sendIcon from "../assets/chat/sendIcon.svg";
+import { useParams } from "react-router-dom";
+import sendIcon from "../../assets/chat/sendIcon.svg";
 
 const mockStudios = [
 	{
@@ -44,9 +44,25 @@ export default function Chat({ socket }) {
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
 	const { id } = useParams();
-	const { pathname } = useLocation();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 	const username = "test"; // this will be the username of the user from DB
+
+	// styling for send icon
+	const setSendIconStyling = () => {
+		const image = {
+			width: "16px",
+			height: "14px",
+			opacity: `${message !== "" ? "0.5" : "0.2"}`,
+			padding: "12px 12px 0 0",
+			margin: "0",
+		};
+
+		image.hover = {
+			cursor: "pointer",
+		};
+
+		return image;
+	};
 
 	// continously set the live messages received
 	useEffect(() => {
@@ -57,7 +73,6 @@ export default function Chat({ socket }) {
 				{
 					message: data.message,
 					username: data.username,
-					__createdtime__: data.__createdtime__,
 				},
 			]);
 		});
@@ -75,8 +90,7 @@ export default function Chat({ socket }) {
 	// send the message
 	const handleSendMessage = () => {
 		if (message !== "") {
-			const __createdtime = Date.now();
-			socket.emit("send_message", { username, room, message, __createdtime });
+			socket.emit("send_message", { username, room, message });
 			setMessage("");
 		}
 	};
@@ -108,7 +122,7 @@ export default function Chat({ socket }) {
 					src={sendIcon}
 					alt="send"
 					onClick={() => handleSendMessage()}
-					className={styles.sendButton}
+					style={setSendIconStyling()}
 				/>
 			</div>
 		</div>
