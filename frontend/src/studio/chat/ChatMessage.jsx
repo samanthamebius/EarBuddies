@@ -30,6 +30,8 @@ function ChatMessage({ newMessage }) {
 		return message;
 	};
 
+	console.log(`newMessage ${newMessage.username}`);
+
 	return (
 		<div style={setChatMessageStyle()}>
 			<h4 className={styles.username}>{username}</h4>

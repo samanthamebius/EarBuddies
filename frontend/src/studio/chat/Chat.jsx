@@ -65,10 +65,19 @@ export default function Chat({ socket }) {
 		return image;
 	};
 
+	// Set previous messages
+	useEffect(() => {
+		axios
+			.get(`http://localhost:3000/api/chat/all-messages/${id}`)
+			.then((response) => {
+				response.data.messages.length > 0 &&
+					setMessages(...messages, response.data.messages);
+			});
+	}, []);
+
 	// continously set the live messages received
 	useEffect(() => {
 		socket.on("receive_message", (data) => {
-			console.log(data);
 			setMessages((message) => [
 				...message,
 				{
@@ -86,17 +95,14 @@ export default function Chat({ socket }) {
 		};
 	}, []);
 
-	// TODO: Set previous messages that is run once
-	useEffect(() => {
-		// axios
-		// 	.get(`http://localhost:3000/api/chat/${id}`)
-		// 	.then((response) => setMessages([...messages, response.data]));
-	}, []);
-
 	// send the message
-	const handleSendMessage = () => {
+	const handleSendMessage = async () => {
 		if (message !== "") {
 			socket.emit("send_message", { username, room, message });
+			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
+				username: username,
+				message: message,
+			});
 			setMessage("");
 		}
 	};
