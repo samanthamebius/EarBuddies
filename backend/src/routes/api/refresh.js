@@ -14,24 +14,24 @@ router.use(bodyParser.urlencoded({ extended: true }))
  * @route POST api/refresh
  * @desc Refresh the access token
  * @access Public
- * @param {string} refreshToken - The refresh token
+ * @param {string} refresh_token - The refresh token
  * @returns {object} - The access token and expiration time
  */
 router.post("/", (req, res) => {
-  const refreshToken = req.body.refreshToken
+  const refresh_token = req.body.refresh_token
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    refreshToken,
+    refresh_token,
   })
 
   spotifyApi
     .refreshAccessToken()
     .then(data => {
       res.json({
-        accessToken: data.body.access_token,
-        expiresIn: data.body.expires_in,
+        access_token: data.body.access_token,
+        expires_in: data.body.expires_in,
       })
     })
     .catch(err => {

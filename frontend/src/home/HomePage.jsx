@@ -11,8 +11,8 @@ import CreateStudioDialog from "../createstudio/CreateStudioDialog";
  * Checks if user is logged in, if not, redirects to login page
  */
 function login() {
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken == null) {
+  const access_token = localStorage.getItem('access_token');
+  if (access_token == null) {
     //check for code
     const code = new URLSearchParams(window.location.search).get("code");
     if (code == null) {

@@ -8,9 +8,9 @@ import { useLocalStorage } from "./useLocalStorage"
  * @returns {string} - The access token
  */
 export default function useAuth(code) {
-  const [accessToken, setAccessToken] = useLocalStorage('accessToken', '')
-  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken', '')
-  const [expiresIn, setExpiresIn] = useLocalStorage('expiresIn', '')
+  const [access_token, setaccess_token] = useLocalStorage('access_token', '')
+  const [refresh_token, setrefresh_token] = useLocalStorage('refresh_token', '')
+  const [expires_in, setexpires_in] = useLocalStorage('expires_in', '')
 
   useEffect(() => {
     axios
@@ -18,9 +18,9 @@ export default function useAuth(code) {
         code,
       })
       .then(res => {
-        setAccessToken(res.data.accessToken)
-        setRefreshToken(res.data.refreshToken)
-        setExpiresIn(res.data.expiresIn)
+        setaccess_token(res.data.access_token)
+        setrefresh_token(res.data.refresh_token)
+        setexpires_in(res.data.expires_in)
         window.history.pushState({}, null, "/")
       })
       .catch(() => {
@@ -29,23 +29,23 @@ export default function useAuth(code) {
   }, [code])
 
   useEffect(() => {
-    if (!refreshToken || !expiresIn) return
+    if (!refresh_token || !expires_in) return
     const interval = setInterval(() => {
       axios
         .post("http://localhost:3000/api/refresh", {
-          refreshToken,
+          refresh_token,
         })
         .then(res => {
-          setAccessToken(res.data.accessToken)
-          setExpiresIn(res.data.expiresIn)
+          setaccess_token(res.data.access_token)
+          setexpires_in(res.data.expires_in)
         })
         .catch(() => {
           window.location = "/"
         })
-    }, (expiresIn - 60) * 1000)
+    }, (expires_in - 60) * 1000)
 
     return () => clearInterval(interval)
-  }, [refreshToken, expiresIn])
+  }, [refresh_token, expires_in])
 
-  return accessToken
+  return access_token
 }
