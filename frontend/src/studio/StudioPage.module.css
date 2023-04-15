@@ -66,6 +66,14 @@
 	pointer-events: none;
 }
 
+.menu_item {
+    color:#606060;
+}
+
+.menu_item:hover {
+    color: #B03EEE;
+}
+
 .bannerStudioName {
 	font-family: "Open Sans";
 	color: white;

@@ -115,22 +115,22 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 			>
 				<MenuItem onClick={handleClose}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
-					Leave Group
+					<span className={styles.menu_item}> Leave Group</span>
 				</MenuItem>
 
 				<MenuItem onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
-					Edit Nickname
+					<span className={styles.menu_item}>Edit Nickname </span>
 				</MenuItem>
 
 				<MenuItem onClick={handleClose}>
 					<img src={RemoveMemberIcon} className={styles.icon} />
-					Remove a Member
+					<span className={styles.menu_item}>Remove a Member</span>
 				</MenuItem>
 
 				<MenuItem onClick={handleClose}>
 					<img src={AssignNewHostIcon} className={styles.icon} />
-					Assign a New Host
+					<span className={styles.menu_item}>Assign a New Host</span>
 				</MenuItem>
 
 				<MenuItem
@@ -144,9 +144,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 						className={styles.icon}
 					/>
 					{controlEnabled ? (
-						<span>Disable Control</span>
+						<span className={styles.menu_item}>Disable Control</span>
 					) : (
-						<span>Enable Control</span>
+						<span className={styles.menu_item}>Enable Control</span>
 					)}
 				</MenuItem>
 			</Menu>
