@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import useAuth from "../useAuth";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
@@ -11,18 +11,17 @@ import CreateStudioDialog from "../createstudio/CreateStudioDialog";
  * Checks if user is logged in, if not, redirects to login page
  */
 function login() {
-  const access_token = localStorage.getItem('access_token');
-  if (access_token == null) {
-    //check for code
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (code == null) {
-      //reroute to login page
-      window.location.href = "/login";
-    } else {
-      //use code to get access token
-      useAuth(code);
-    }
-  }
+	const access_token = localStorage.getItem("access_token");
+	const code = new URLSearchParams(window.location.search).get("code");
+	if (access_token == null) {
+		//check for code
+		if (code == null) {
+			//reroute to login page
+			window.location.href = "/login";
+			return;
+		}
+	}
+	useAuth(access_token, code);
 }
 
 function HomePage() {
@@ -40,8 +39,16 @@ function HomePage() {
 				<div className={styles.header}>
 					<h1 className={styles.headings}>My Studios</h1>
 					<div className={styles.headerChild}>
-						<CreateStudioDialog isDialogOpened={isOpen} handleCloseDialog={() => setIsOpen(false)}/>
-						<Button variant="contained" size="large" className={styles.button} onClick={() => handleOpen()}>
+						<CreateStudioDialog
+							isDialogOpened={isOpen}
+							handleCloseDialog={() => setIsOpen(false)}
+						/>
+						<Button
+							variant="contained"
+							size="large"
+							className={styles.button}
+							onClick={() => handleOpen()}
+						>
 							+ Create Studio
 						</Button>
 					</div>
@@ -71,4 +78,5 @@ function HomePage() {
 			</div>
 		</div>
 	);
-} export default HomePage;
+}
+export default HomePage;
