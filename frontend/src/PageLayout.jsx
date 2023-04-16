@@ -46,12 +46,10 @@ export function DropdownMenu() {
     setOpen(null);
   };
   const handleLogout = () => {
-    console.log("logout");
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("expires_in");
     
-    console.log("navigate");
     navigate("/login");
   };
 

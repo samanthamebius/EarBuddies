@@ -57,6 +57,5 @@ export default function useAuth(accessToken, code) {
 		}
 	}, [refresh_token, expires_in, access_token]);
 
-	console.log(access_token);
 	return access_token;
 }
