@@ -1,12 +1,37 @@
 // Code credit to https://react-dropzone.org/#!/Examples
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import styles from "./FileDropZone.module.css";
 import photoIcon from '../assets/create_studio/photoicon.png';
 import closeIcon from '../assets/create_studio/closeicon.png';
 
 export default function FileDropZone(props) {
-  const { acceptedFiles, getRootProps, getInputProps} = useDropzone({ maxFiles: 1, accept: { 'image/jpeg': [], 'image/png': []}});
+  const [files, setFiles] = useState([]);
+  const { acceptedFiles, getRootProps, getInputProps} = useDropzone({ 
+    maxFiles: 1, 
+    accept: { 'image/jpeg': [], 'image/png': []},
+    onDrop: acceptedFiles => {
+      setFiles(acceptedFiles.map(file => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+    }
+  });
+
+  const thumbs = files.map(file => (
+    <div key={file.name}>
+      <div>
+        <img
+          className = {styles.previewImg}
+          src={file.preview}
+          onLoad={() => { URL.revokeObjectURL(file.preview) }}
+        />
+      </div>
+    </div>
+  ));
+
+  useEffect(() => {
+    return () => files.forEach(file => URL.revokeObjectURL(file.preview));
+  }, []);
   
   const acceptedFileItems = acceptedFiles.map(file => ( 
     <p className={styles.uploadedfileText}>{file.path}</p>
@@ -24,7 +49,7 @@ export default function FileDropZone(props) {
             </div>
             <div style={{ display: acceptedFiles.length == 0 ? 'none' : ''}} className={styles.uploadedView}>
                 <input {...getInputProps()} />
-                <img src={photoIcon} className={styles.photoIcon}></img>
+                {thumbs}
                 {acceptedFileItems}
                 <img src={closeIcon} className={styles.closeIcon}></img>
             </div>
