@@ -1,6 +1,6 @@
 import React from "react";
 import styles from './PageLayout.module.css';
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -37,12 +37,20 @@ function NavMenu() {
 
 export function DropdownMenu() {
   const [isOpen, setOpen] = React.useState(null);
+  const navigate = useNavigate();
   const open = Boolean(isOpen);
   const handleClick = (event) => {
     setOpen(event.currentTarget);
   };
   const handleClose = () => {
     setOpen(null);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+    
+    navigate("/login");
   };
 
   return (
@@ -67,12 +75,12 @@ export function DropdownMenu() {
 
         <MenuItem onClick={handleClose}>
             <img src={darkmodeIcon} className={styles.icon} />
-            <p className={styles.menu_item}>Dark Mode</p>
+            <span className={styles.menu_item}>Dark Mode</span>
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
             <img src={logoutIcon} className={styles.icon}/>
-            <NavLink to="./login" className={styles.menu_item}>Log Out</NavLink>
+            <p onClick={handleLogout} className={styles.menu_item}>Log Out</p>
         </MenuItem>
 
       </Menu>

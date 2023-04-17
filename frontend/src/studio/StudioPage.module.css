@@ -1,7 +1,7 @@
 .studio {
 	height: calc(100vh - 82px);
 	display: grid;
-	grid-template-rows: 1fr 4fr;
+	grid-template-rows: 1fr 5fr;
 	grid-template-columns: 2fr 3fr 4fr;
 	grid-gap: 20px;
 	padding: 20px;
@@ -37,16 +37,41 @@
 	grid-column: 1 / 3;
 	border-radius: 10px;
 	height: auto;
+	position: relative;
 	background-size: cover;
 	background-repeat: no-repeat;
 }
 
-.bannerCardContent {
-	padding: 20px 25px 20px 25px;
+.bannerDropdownKebab {
+	padding: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
-.bannerStudioNameSection {
-	display: flex;
+.dropdownButton {
+	margin: 0;
+	padding: 10px 10px 5px 10px;
+	cursor: pointer;
+}
+
+.kebabIcon {
+	height: 25px;
+}
+
+.icon {
+	height: 20px;
+	width: 20px;
+	padding-right: 15px;
+	pointer-events: none;
+}
+
+.menu_item {
+    color:#606060;
+}
+
+.menu_item:hover {
+    color: #B03EEE;
 }
 
 .bannerStudioName {
@@ -56,20 +81,19 @@
 	margin: 0px;
 	padding-right: 0px;
 	font-size: 28px;
-	padding-bottom: 5px;
-	position: relative;
+	padding: 15px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
 }
 
 .bannerlisteners {
-	display: flex;
-	align-items: end;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 14px;
+	cursor: pointer;
 }
-
-.hostImage {
-	height: 25px;
-	margin-left: auto;
-}
-
 .greyOutImage {
 	-webkit-filter: grayscale(100%);
 	-moz-filter: grayscale(100%);
