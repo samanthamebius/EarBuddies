@@ -33,6 +33,7 @@ export default function StudioCard({
 			{Array.isArray(profileImages)
 				? profileImages.map((listenerImage, i) => (
 						<img
+							key={i} 
 							className={styles.listenerImage}
 							src={listenerImage}
 							style={setListenerImageStyles(i, isListening, profileStatus, isHomeCard)}

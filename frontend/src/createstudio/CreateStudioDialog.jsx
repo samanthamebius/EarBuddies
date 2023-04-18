@@ -44,7 +44,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "Pop", isSelected: false}]);
 
   function toggleGenre(genre) {
-    const newGenres = genres.map(obj => {
+    const newGenres = genres.map((obj, i) => {
       if(obj.name === genre) {
         return {... obj, isSelected: !obj.isSelected};
       }
@@ -111,8 +111,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <FileDropZone />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
-            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
-                                                                : <SelectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
+            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
+                                                                : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
             <div className={styles.addGenreSection}>
               <TextField 
                   margin="dense"

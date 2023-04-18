@@ -33,7 +33,7 @@ function SearchBar({label}) {
           ),
         }}
         InputLabelProps={{
-          shrink: focused || searchTerm,
+          shrink: focused || searchTerm.length > 0,
           style: {marginLeft: searchTerm || focused  ? 0 : 30 }
         }}
       />
