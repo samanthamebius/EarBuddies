@@ -7,10 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import styles from './CreateStudioDialog.module.css';
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
-import Tooltip from '@mui/material/Tooltip';
 import SearchBar from "../shared/SearchBar";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
+import { styled } from '@mui/material/styles';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
   const [isErrorMessage, setIsErrorMessage] = useState(false); 
@@ -39,6 +40,22 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       setGenres([... genres, {name: genreInput, isSelected: true}]);
       setGenreInput('');
     }
+
+    const ToolTip = styled(({ className, ...props }) => (
+      <Tooltip {...props} classes={{ popper: className }} />
+    ))(({ theme }) => ({
+      [`& .${tooltipClasses.arrow}`]: {
+        color: theme.palette.common.white,
+      },
+      [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 14,
+        color: '#666666',
+        maxWidth: '70%'
+      },
+    }));  
     
     function handleSubmit() {
       if(studioNameInput == '') {
@@ -63,7 +80,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 required
                 margin="dense"
                 id="name"
-                label="Studio Name"
+                label="Enter a Studio Name ..."
                 type="text"
                 fullWidth
                 variant="outlined"
@@ -95,11 +112,11 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <Tooltip title="Only you will be able to queue, skip and pause songs." placement="right" arrow>
+                <ToolTip title="Only you will be able to queue, skip and pause songs." placement="right-end" arrow>
                     <div className={styles.switchContainer}>
                         <ControlSwitch/>
                     </div>
-                </Tooltip>
+                </ToolTip>
             </div>
             
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
