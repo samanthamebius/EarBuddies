@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 /**
  * @route POST api/login
- * @desc Login to Spotify
+ * @desc Login to Spotify and add user to database if not already in it
  * @access Public
  * @param {string} code - The code returned from Spotify's auth server
  * @returns {object} - The access token, refresh token, and expiration time
@@ -35,11 +35,13 @@ router.post("/", (req, res) => {
       var expires_in = data.body['expires_in']
       spotifyApi.setAccessToken(access_token)
 
+
       spotifyApi.getMe()
         .then(async function (data) {
           const user = await User.find({ username: data.body.id })
-          console.log(user.length)
+          // check to see if user in db
           if (user.length === 0) {
+            // check to see if user has a profile pic
             if (data.body.images.length === null) {
               const newUser = new User({
                 username: data.body.id,
