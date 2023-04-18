@@ -58,7 +58,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     }
     
     function handleSubmit() {
-
       if(studioNameInput == '') {
         setIsErrorMessage(true);
       } else {
