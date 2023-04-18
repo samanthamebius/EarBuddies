@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ChatMessage.module.css";
 import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
@@ -6,9 +6,10 @@ import pinIcon from "../../assets/chat/pinIcon.svg";
 import filledPinIcon from "../../assets/chat/filledPinIcon.svg";
 
 function ChatMessage(props) {
-	const { newMessage, setPinnedMessage } = props;
+	const { newMessage, setPinnedMessages, pinnedMessages } = props;
 	const { message, username } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
+
 	const isCurrentUser = username === "test";
 
 	const setMessageBodyStyle = () => {
@@ -34,13 +35,14 @@ function ChatMessage(props) {
 		return message;
 	};
 
-	const handlePinMessage = () => {
-		setIsPinned(!isPinned);
-
+	useEffect(() => {
 		if (isPinned) {
-			setPinnedMessage(message);
+			setPinnedMessages([...pinnedMessages, message]);
 		}
-	};
+		// else {
+		// 	setPinnedMessages(pinnedMessages.slice(0, -1));
+		// }
+	}, [isPinned]);
 
 	return (
 		<div style={setChatMessageStyle()}>
@@ -74,7 +76,7 @@ function ChatMessage(props) {
 					src={isPinned ? filledPinIcon : pinIcon}
 					alt="pin"
 					className={styles.pin}
-					onClick={() => handlePinMessage()}
+					onClick={() => setIsPinned(!isPinned)}
 				/>
 			</div>
 		</div>

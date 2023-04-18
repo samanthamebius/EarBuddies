@@ -5,6 +5,7 @@ import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
 import { useParams } from "react-router-dom";
 import sendIcon from "../../assets/chat/sendIcon.svg";
+import PinnedMessage from "./PinnedMessage";
 
 const mockStudios = [
 	{
@@ -43,6 +44,11 @@ const StyledTextField = styled(TextField)({
 export default function Chat({ socket }) {
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
+	const [pinnedMessages, setPinnedMessages] = useState([]);
+	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
+	const displayedPinnedMessages = expandedPinnedMessages
+		? pinnedMessages
+		: pinnedMessages.slice(0, 1);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 	const username = "test"; // this will be the username of the user from DB
@@ -98,9 +104,36 @@ export default function Chat({ socket }) {
 	return (
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
-				{messages.map((message, index) => (
-					<ChatMessage key={index} newMessage={message} />
-				))}
+				<div
+					style={{
+						position: "sticky",
+						top: "0",
+						display: "flex",
+						flexDirection: "column",
+					}}
+				>
+					{displayedPinnedMessages.map((message, index) => (
+						<PinnedMessage key={index} message={message} />
+					))}
+					{pinnedMessages.length > 1 && (
+						<p
+							className={styles.expandPinnedMessages}
+							onClick={() => setExpandedPinnedMessages(!expandedPinnedMessages)}
+						>
+							{expandedPinnedMessages ? "show less" : "show more"}
+						</p>
+					)}
+				</div>
+				<div style={{ overflowY: "auto" }}>
+					{messages.map((message, index) => (
+						<ChatMessage
+							key={index}
+							newMessage={message}
+							setPinnedMessages={setPinnedMessages}
+							pinnedMessages={pinnedMessages}
+						/>
+					))}
+				</div>
 			</div>
 			<div className={styles.chatInput}>
 				<StyledTextField

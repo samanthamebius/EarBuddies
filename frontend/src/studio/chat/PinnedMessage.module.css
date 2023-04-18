@@ -1,0 +1,22 @@
+.pinnedMessage {
+	background-color: #cc3ae420;
+	border-radius: 10px;
+	padding: 12px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+.message {
+	margin: 0 0 0 10px;
+	color: "#606060";
+	font-size: 14px;
+}
+
+.pinIcon {
+	opacity: 0.5;
+}
+
+.profileImage {
+	width: 4.5%;
+}

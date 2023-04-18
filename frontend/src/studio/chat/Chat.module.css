@@ -16,7 +16,8 @@
 	padding: 24px;
 	border-radius: 10px;
 	height: 75%;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
 }
 
 .chatInput {
@@ -31,4 +32,15 @@
 .input {
 	padding: 8px 0 0 12px;
 	width: 80%;
+}
+
+.expandPinnedMessages {
+	color: #b03eee;
+	font-size: 14px;
+	margin: 0;
+	align-self: flex-end;
+}
+
+.expandPinnedMessages:hover {
+	cursor: pointer;
 }
