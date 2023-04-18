@@ -51,7 +51,7 @@ router.post("/", (req, res) => {
             });
             await newUser.save()
           } else {
-            user.userIsActive = true;
+            const updateUser = await User.findOneAndUpdate({ username: data.body.id }, { userIsActive: true })
           }
 
         })
