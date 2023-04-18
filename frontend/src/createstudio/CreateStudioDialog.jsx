@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -14,6 +14,22 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
+  const ToolTip = styled(({ className, ...props }) => (
+      <Tooltip {...props} classes={{ popper: className }} />
+    ))(({ theme }) => ({
+      [`& .${tooltipClasses.arrow}`]: {
+        color: theme.palette.common.white,
+      },
+      [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 14,
+        color: '#666666',
+        maxWidth: '70%'
+      },
+    }));  
+    
   const [isErrorMessage, setIsErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
   const [studioNameInput, setStudioNameInput] = useState('');  
@@ -40,24 +56,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       setGenres([... genres, {name: genreInput, isSelected: true}]);
       setGenreInput('');
     }
-
-    const ToolTip = styled(({ className, ...props }) => (
-      <Tooltip {...props} classes={{ popper: className }} />
-    ))(({ theme }) => ({
-      [`& .${tooltipClasses.arrow}`]: {
-        color: theme.palette.common.white,
-      },
-      [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 14,
-        color: '#666666',
-        maxWidth: '70%'
-      },
-    }));  
     
     function handleSubmit() {
+
       if(studioNameInput == '') {
         setIsErrorMessage(true);
       } else {
@@ -66,6 +67,12 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     }
     
     const handleClose = () => { handleCloseDialog(false) };
+
+    function handleKeyPress(event, genreInput) {
+      if(event.key == "Enter") {
+        addGenre(genreInput);
+      }
+    }
 
     return (
     <div>
@@ -86,6 +93,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 variant="outlined"
                 onChange={event => setStudioNameInput(event.target.value)}
                 className={styles.textfield}
+                autoComplete="off"
             />
             
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
@@ -105,6 +113,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   value={genreInput}
                   onChange={event => setGenreInput(event.target.value)}
                   className={styles.textfield}
+                  autoComplete="off"
+                  onKeyDown={event => handleKeyPress(event, genreInput)} 
               />
               <span className={styles.spacing}></span>
               <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
