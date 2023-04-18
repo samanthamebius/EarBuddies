@@ -14,22 +14,6 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 function SwitchWithTooltip() {
-  const [switchOn, setSwitchOn] = useState(false);
-
-  const title = switchOn
-    ? 'Only you can queue, skip, and pause songs.'
-    : 'Other users can queue, skip, and pause songs.';
-
-  return (
-    <Tooltip title={title} placement="right-end" arrow>
-      <div className={styles.switchContainer}>
-        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
-      </div>
-    </Tooltip>
-  );
-}
-
-export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
   const ToolTip = styled(({ className, ...props }) => (
       <Tooltip {...props} classes={{ popper: className }} />
     ))(({ theme }) => ({
@@ -44,7 +28,25 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
         color: '#666666',
         maxWidth: '70%'
       },
-    }));  
+    })); 
+  
+  const [switchOn, setSwitchOn] = useState(false);
+
+  const title = switchOn
+    ? 'Only you can queue, skip, and pause songs.'
+    : 'Other users can queue, skip, and pause songs.';
+
+  return (
+    <ToolTip title={title} placement="right-end" arrow>
+      <div className={styles.switchContainer}>
+        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
+      </div>
+    </ToolTip>
+  );
+}
+
+export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
+   
     
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
