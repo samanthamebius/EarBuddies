@@ -30,7 +30,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       },
     }));  
     
-  const [isErrorMessage, setIsErrorMessage] = useState(false); 
+  const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
+  const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
   const [studioNameInput, setStudioNameInput] = useState('');  
   const [genres, setGenres] = useState([{name: "Rap", isSelected: false}, 
@@ -42,38 +43,49 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "Jazz", isSelected: false}, 
                                           {name: "Pop", isSelected: false}]);
 
-    function toggleGenre(genre) {
-      const newGenres = genres.map(obj => {
-        if(obj.name === genre) {
-          return {... obj, isSelected: !obj.isSelected};
-        }
-        return obj
-      });
-      setGenres(newGenres);
-    }
+  function toggleGenre(genre) {
+    const newGenres = genres.map(obj => {
+      if(obj.name === genre) {
+        return {... obj, isSelected: !obj.isSelected};
+      }
+      return obj
+    });
+    setGenres(newGenres);
+  }
 
-    function addGenre(genreInput) {
+  function addGenre(genreInput) {
+    const isFound = genres.some(obj => {
+      if (obj.name.toLowerCase() === genreInput.toLowerCase()) {
+        return true;
+      }
+    });
+  
+    if(isFound){
+      setIsGenreInputErrorMessage(true);
+    } else {
+      setIsGenreInputErrorMessage(false);
       setGenres([... genres, {name: genreInput, isSelected: true}]);
       setGenreInput('');
     }
-    
-    function handleSubmit() {
-      if(studioNameInput == '') {
-        setIsErrorMessage(true);
-      } else {
-        setIsErrorMessage(false);
-      }
+  }
+  
+  function handleSubmit() {
+    if(studioNameInput == '') {
+      setIsStudioNameErrorMessage(true);
+    } else {
+      setIsStudioNameErrorMessage(false);
     }
-    
-    const handleClose = () => { handleCloseDialog(false) };
+  }
+  
+  const handleClose = () => { handleCloseDialog(false) };
 
-    function handleKeyPress(event, genreInput) {
-      if(event.key == "Enter") {
-        addGenre(genreInput);
-      }
+  function handleKeyPress(event, genreInput) {
+    if(event.key == "Enter") {
+      addGenre(genreInput);
     }
+  }
 
-    return (
+  return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
         <h1 className={styles.heading}>Create Studio</h1>
@@ -81,8 +93,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
             <TextField 
                 value={studioNameInput}
-                error={isErrorMessage ? true : false}
-                helperText={isErrorMessage ? "No Studio Name Entry" : ""}
+                error={isStudioNameErrorMessage ? true : false}
+                helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
                 required
                 margin="dense"
                 id="name"
@@ -114,6 +126,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   className={styles.textfield}
                   autoComplete="off"
                   onKeyDown={event => handleKeyPress(event, genreInput)} 
+                  error={isGenreInputErrorMessage ? true : false}
+                  helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
               />
               <span className={styles.spacing}></span>
               <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
