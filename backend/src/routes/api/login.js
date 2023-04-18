@@ -27,17 +27,22 @@ router.post("/", (req, res) => {
   })
   spotifyApi
     .authorizationCodeGrant(code)
-    .then(data => {
-      res.json({
-        access_token: data.body.access_token,
-        refresh_token: data.body.refresh_token,
-        expires_in: data.body.expires_in,
+    .then(function(data) {
+        var access_token = data.body['access_token']
+        var refresh_token = data.body['refresh_token']
+        var expires_in = data.body['expires_in']
+        spotifyApi.setAccessToken(access_token)
+    
+        spotifyApi.getMe()
+          .then(function(data) {
+          var spotifyId = data.body.id
+          console.log('User data request success! Id is ' + spotifyId)
+
+          })
+          .catch(function(err) {
+            console.log('Something went wrong!', err)
+          })
       })
-    })
-    .catch(err => {
-      console.log(err)
-      res.sendStatus(400)
-    })
 })
 
 export default router;
