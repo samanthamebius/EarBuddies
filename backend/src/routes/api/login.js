@@ -42,25 +42,16 @@ router.post("/", (req, res) => {
           // check to see if user in db
           if (user.length === 0) {
             // check to see if user has a profile pic
-            if (data.body.images.length === null) {
-              const newUser = new User({
-                username: data.body.id,
-                userDisplayName: data.body.display_name,
-                profilePic: '',
-                userIsActive: true,
-                userStudios: []
-              })
-              await newUser.save()
-            } else {
-              const newUser = new User({
-                username: data.body.id,
-                userDisplayName: data.body.display_name,
-                profilePic: data.body.images[0].url,
-                userIsActive: true,
-                userStudios: []
-              })
-            }
+            const newUser = new User({
+              username: data.body.id,
+              userDisplayName: data.body.display_name,
+              profilePic: `${data.body.images.length === null ? "" : data.body.images[0].url}`,
+              userIsActive: true,
+              userStudios: [],
+            });
             await newUser.save()
+          } else {
+            user.userIsActive = true;
           }
 
         })
