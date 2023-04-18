@@ -13,6 +13,22 @@ import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
+function SwitchWithTooltip() {
+  const [switchOn, setSwitchOn] = useState(false);
+
+  const title = switchOn
+    ? 'Only you can queue, skip, and pause songs.'
+    : 'Other users can queue, skip, and pause songs.';
+
+  return (
+    <Tooltip title={title} placement="right-end" arrow>
+      <div className={styles.switchContainer}>
+        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
+      </div>
+    </Tooltip>
+  );
+}
+
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
   const ToolTip = styled(({ className, ...props }) => (
       <Tooltip {...props} classes={{ popper: className }} />
@@ -135,11 +151,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <ToolTip title="Only you will be able to queue, skip and pause songs." placement="right-end" arrow>
-                    <div className={styles.switchContainer}>
-                        <ControlSwitch/>
-                    </div>
-                </ToolTip>
+                <SwitchWithTooltip />
             </div>
             
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
