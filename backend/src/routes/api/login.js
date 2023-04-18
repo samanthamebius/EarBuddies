@@ -4,12 +4,14 @@ import express from 'express';
 import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
+import mongoose from 'mongoose';
+import { User } from '../../database/schema';
 
 const router = express.Router();
 router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
-
+await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 /**
  * @route POST api/login
  * @desc Login to Spotify
@@ -27,22 +29,43 @@ router.post("/", (req, res) => {
   })
   spotifyApi
     .authorizationCodeGrant(code)
-    .then(function(data) {
-        var access_token = data.body['access_token']
-        var refresh_token = data.body['refresh_token']
-        var expires_in = data.body['expires_in']
-        spotifyApi.setAccessToken(access_token)
-    
-        spotifyApi.getMe()
-          .then(function(data) {
-          var spotifyId = data.body.id
-          console.log('User data request success! Id is ' + spotifyId)
+    .then(function (data) {
+      var access_token = data.body['access_token']
+      var refresh_token = data.body['refresh_token']
+      var expires_in = data.body['expires_in']
+      spotifyApi.setAccessToken(access_token)
 
-          })
-          .catch(function(err) {
-            console.log('Something went wrong!', err)
-          })
-      })
+      spotifyApi.getMe()
+        .then(async function (data) {
+          const user = await User.find({ username: data.body.id })
+          console.log(user.length)
+          if (user.length === 0) {
+            if (data.body.images.length === null) {
+              const newUser = new User({
+                username: data.body.id,
+                userDisplayName: data.body.display_name,
+                profilePic: '',
+                userIsActive: true,
+                userStudios: []
+              })
+              await newUser.save()
+            } else {
+              const newUser = new User({
+                username: data.body.id,
+                userDisplayName: data.body.display_name,
+                profilePic: data.body.images[0].url,
+                userIsActive: true,
+                userStudios: []
+              })
+            }
+            await newUser.save()
+          }
+
+        })
+        .catch(function (err) {
+          console.log('Something went wrong!', err)
+        })
+    })
 })
 
 export default router;
