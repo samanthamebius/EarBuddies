@@ -1,18 +1,28 @@
 import React from "react";
 import styles from './StudioPage.module.css'
 import { useState } from 'react';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
+import Slider from '@mui/material/Slider';
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
 
 import pause_btn from '../assets/now_playing/pause_btn.png'
 import play_btn from '../assets/now_playing/play_btn.png'
+import next_btn from '../assets/now_playing/next_btn.png'
+import prev_btn from '../assets/now_playing/prev_btn.png'
 
 import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
+
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 export default function NowPlaying() {
   
   return (
     <div className={styles.nowplaying}>
-      <label className={styles.greyheading}>Now Playing</label>
       <SongInfo/>
       <ControlPanel/>
     </div>
@@ -21,14 +31,22 @@ export default function NowPlaying() {
 
 function SongInfo() {
   return (
-    <div className={styles.songInfo}>
-      <img className={styles.albumArtwork} src={album_artwork}/>
-      <h1>champagne problems</h1>
-      <div>
-        <img src={artist_profile}/>
-        <h2>Taylor Swift</h2>
+    <div>
+
+        <div className={styles.song}>
+          <h3>champagne problems</h3>
+        </div>
+        
+        <div className={styles.artist}>
+          <img className={styles.artistImg} src={artist_profile}/>
+          <div>Taylor Swift</div>
+        </div>
+
+        <div className={styles.artwork}>
+          <img className={styles.albumArtwork} src={album_artwork}/>
       </div>
     </div>
+
   )
 }
 
@@ -38,8 +56,106 @@ function ControlPanel() {
 
   return (
     <div className={styles.controlPanel}>
-      <img className={styles.playBtn} src={isPlaying ? pause_btn : play_btn }
-            onClick={() => setPlaying(!isPlaying)} />
+      <div className={styles.playbackCntrls}>
+        <img className={styles.changeSongBtn} src={prev_btn}/>
+        <img className={styles.playBtn} src={isPlaying ? pause_btn : play_btn }
+              onClick={() => setPlaying(!isPlaying)} />
+        <img className={styles.changeSongBtn} src={next_btn}/>
+      </div>
+      <TimeBar/>
+      <ContinuousSlider/>
+      
     </div>
   )
 }
+
+export function ContinuousSlider() {
+  const [value, setValue] = React.useState(30);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box fullwidth>
+      <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
+        <VolumeDown />
+        <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} />
+        <VolumeUp />
+      </Stack>
+    </Box>
+  );
+}
+
+export function TimeBar() {
+
+  const duration = 200; //seconds
+  const [position, setPosition] = React.useState(32);
+
+  const TinyText = styled(Typography)({
+    fontSize: '0.75rem',
+    opacity: 0.38,
+    fontWeight: 500,
+    letterSpacing: 0.2,
+  });
+
+  function formatDuration(value) {
+    const minute = Math.floor(value / 60);
+    const secondLeft = value - minute * 60;
+    return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+  }
+
+  return (
+    <div>
+      <Slider
+          aria-label="time-indicator"
+          size="small"
+          value={position}
+          min={0}
+          step={1}
+          max={duration}
+          onChange={(_, value) => setPosition(value)}
+          sx={{
+            height: 4,
+            '& .MuiSlider-thumb': {
+              width: 8,
+              height: 8,
+              transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+              '&:before': {
+                boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
+              },
+              '&:hover, &.Mui-focusVisible': {
+              },
+              '&.Mui-active': {
+                width: 20,
+                height: 20,
+              },
+            },
+            '& .MuiSlider-rail': {
+              opacity: 0.28,
+            },
+          }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mt: -2,
+          }}
+        >
+          <TinyText>{formatDuration(position)}</TinyText>
+          <TinyText>-{formatDuration(duration - position)}</TinyText>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mt: -1,
+          }}
+        ></Box>
+    </div>
+  )
+}
+
