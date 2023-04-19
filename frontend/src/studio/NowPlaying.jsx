@@ -98,6 +98,7 @@ export function TimeSlider() {
     opacity: 0.38,
     fontWeight: 500,
     letterSpacing: 0.2,
+    color: "white",
   });
 
   function formatDuration(value) {
