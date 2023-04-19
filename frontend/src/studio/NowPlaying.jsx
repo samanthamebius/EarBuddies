@@ -80,7 +80,7 @@ export function VolumeSlider() {
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
           <img src={VolumeDown} className={styles.volIcon}/>
-          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} />
+          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} color="secondary"/>
           <img src={VolumeUp} className={styles.volIcon}/>
         </Stack>
      </Box>
@@ -116,6 +116,7 @@ export function TimeSlider() {
           min={0}
           step={1}
           max={duration}
+          color="secondary"
           onChange={(_, value) => setPosition(value)}
           sx={{
             height: 4,
