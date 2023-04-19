@@ -2,16 +2,15 @@ import React from "react";
 import styles from './StudioPage.module.css'
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
-import VolumeDown from '@mui/icons-material/VolumeDown';
-import VolumeUp from '@mui/icons-material/VolumeUp';
 
 import pause_btn from '../assets/now_playing/pause_btn.png'
 import play_btn from '../assets/now_playing/play_btn.png'
 import next_btn from '../assets/now_playing/next_btn.png'
 import prev_btn from '../assets/now_playing/prev_btn.png'
+import VolumeDown from '../assets/now_playing/volume_down.png'
+import VolumeUp from '../assets/now_playing/volume_up.png'
 
 import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
@@ -63,13 +62,13 @@ function ControlPanel() {
         <img className={styles.changeSongBtn} src={next_btn}/>
       </div>
       <TimeSlider/>
-      <ContinuousSlider/>
+      <VolumeSlider/>
       
     </div>
   )
 }
 
-export function ContinuousSlider() {
+export function VolumeSlider() {
   const [value, setValue] = React.useState(30);
 
   const handleChange = (event, newValue) => {
@@ -80,9 +79,9 @@ export function ContinuousSlider() {
     <div className={styles.volume}>
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
-          <VolumeDown />
+          <img src={VolumeDown} className={styles.volIcon}/>
           <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} />
-          <VolumeUp />
+          <img src={VolumeUp} className={styles.volIcon}/>
         </Stack>
      </Box>
     </div>
