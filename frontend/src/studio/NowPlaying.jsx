@@ -39,7 +39,7 @@ function SongInfo() {
         
         <div className={styles.artist}>
           <img className={styles.artistImg} src={artist_profile}/>
-          <div>Taylor Swift</div>
+          <div className={styles.artistName}>Taylor Swift</div>
         </div>
 
         <div className={styles.artwork}>
@@ -62,7 +62,7 @@ function ControlPanel() {
               onClick={() => setPlaying(!isPlaying)} />
         <img className={styles.changeSongBtn} src={next_btn}/>
       </div>
-      <TimeBar/>
+      <TimeSlider/>
       <ContinuousSlider/>
       
     </div>
@@ -77,17 +77,19 @@ export function ContinuousSlider() {
   };
 
   return (
-    <Box fullwidth>
-      <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
-        <VolumeDown />
-        <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} />
-        <VolumeUp />
-      </Stack>
-    </Box>
+    <div className={styles.volume}>
+      <Box fullwidth>
+        <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
+          <VolumeDown />
+          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} />
+          <VolumeUp />
+        </Stack>
+     </Box>
+    </div>
   );
 }
 
-export function TimeBar() {
+export function TimeSlider() {
 
   const duration = 200; //seconds
   const [position, setPosition] = React.useState(32);
@@ -106,7 +108,7 @@ export function TimeBar() {
   }
 
   return (
-    <div>
+    <div className={styles.time}>
       <Slider
           aria-label="time-indicator"
           size="small"
