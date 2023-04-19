@@ -4,11 +4,15 @@ import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
 import pinIcon from "../../assets/chat/pinIcon.svg";
 import filledPinIcon from "../../assets/chat/filledPinIcon.svg";
+import replyIcon from "../../assets/chat/replyIcon.svg";
 
 function ChatMessage(props) {
-	const { newMessage, setPinnedMessages, pinnedMessages } = props;
+	const { newMessage, setPinnedMessages, pinnedMessages, setReplyToMessage } =
+		props;
 	const { message, username } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
+	const [isReplying, setIsReplying] = useState(false);
+	const [hover, setHover] = useState(false);
 
 	const isCurrentUser = username === "test";
 
@@ -32,8 +36,19 @@ function ChatMessage(props) {
 			marginBottom: "16px",
 			maxWidth: "100%",
 		};
+
 		return message;
 	};
+
+	useEffect(() => {
+		if (isReplying) {
+			setReplyToMessage(
+				`Replying to ${isCurrentUser ? "yourself" : username}: ${message}`
+			);
+		} else {
+			setReplyToMessage("");
+		}
+	}, [isReplying]);
 
 	useEffect(() => {
 		if (isPinned) {
@@ -45,7 +60,11 @@ function ChatMessage(props) {
 	}, [isPinned]);
 
 	return (
-		<div style={setChatMessageStyle()}>
+		<div
+			style={setChatMessageStyle()}
+			onMouseOver={() => setHover(true)}
+			onMouseOut={() => setHover(false)}
+		>
 			<h4 className={styles.username}>{username}</h4>
 			<div
 				style={{
@@ -72,12 +91,22 @@ function ChatMessage(props) {
 						}}
 					/>
 				</div>
-				<img
-					src={isPinned ? filledPinIcon : pinIcon}
-					alt="pin"
-					className={styles.pin}
-					onClick={() => setIsPinned(!isPinned)}
-				/>
+				{hover && (
+					<>
+						<img
+							src={replyIcon}
+							alt="reply"
+							className={styles.reply}
+							onClick={() => setIsReplying(!isReplying)}
+						/>
+						<img
+							src={isPinned ? filledPinIcon : pinIcon}
+							alt="pin"
+							className={styles.pin}
+							onClick={() => setIsPinned(!isPinned)}
+						/>
+					</>
+				)}
 			</div>
 		</div>
 	);

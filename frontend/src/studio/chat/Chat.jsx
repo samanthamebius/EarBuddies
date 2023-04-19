@@ -36,7 +36,7 @@ const mockStudios = [
 
 const StyledTextField = styled(TextField)({
 	"& .MuiInputBase-root": {
-		padding: "10px 0 0 12px",
+		padding: "0",
 	},
 	width: "80%",
 });
@@ -46,6 +46,7 @@ export default function Chat({ socket }) {
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
+	const [replyToMessage, setReplyToMessage] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
@@ -96,8 +97,10 @@ export default function Chat({ socket }) {
 	// send the message
 	const handleSendMessage = () => {
 		if (message !== "") {
+			// if there is a reply, attach onto the end
 			socket.emit("send_message", { username, room, message });
 			setMessage("");
+			setReplyToMessage("");
 		}
 	};
 
@@ -131,26 +134,47 @@ export default function Chat({ socket }) {
 							newMessage={message}
 							setPinnedMessages={setPinnedMessages}
 							pinnedMessages={pinnedMessages}
+							setReplyToMessage={setReplyToMessage}
 						/>
 					))}
 				</div>
 			</div>
 			<div className={styles.chatInput}>
-				<StyledTextField
-					variant="standard"
-					multiline
-					maxRows={4}
-					placeholder="Message ..."
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
-					onKeyDown={(event) => {
-						if (event.key === "Enter") {
-							event.preventDefault();
-							handleSendMessage();
-						}
+				<div
+					style={{
+						width: "80%",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "flex-start",
+						padding: "10px 0 0 12px",
 					}}
-					InputProps={{ disableUnderline: true, style: { color: "#797979" } }}
-				/>
+				>
+					<div
+						style={{
+							textAlign: "unset",
+							margin: 0,
+							color: "#79797980",
+							fontSize: "14px",
+						}}
+					>
+						{replyToMessage}
+					</div>
+					<StyledTextField
+						variant="standard"
+						multiline
+						maxRows={replyToMessage === null ? 4 : 3}
+						placeholder="Message ..."
+						value={message}
+						onChange={(e) => setMessage(e.target.value)}
+						onKeyDown={(event) => {
+							if (event.key === "Enter") {
+								event.preventDefault();
+								handleSendMessage();
+							}
+						}}
+						InputProps={{ disableUnderline: true, style: { color: "#797979" } }}
+					/>
+				</div>
 				<img
 					src={sendIcon}
 					alt="send"
