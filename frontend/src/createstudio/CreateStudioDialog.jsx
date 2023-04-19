@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,13 +7,49 @@ import DialogContent from '@mui/material/DialogContent';
 import styles from './CreateStudioDialog.module.css';
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
-import Tooltip from '@mui/material/Tooltip';
 import SearchBar from "../shared/SearchBar";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
+import { styled } from '@mui/material/styles';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+
+function SwitchWithTooltip() {
+  const ToolTip = styled(({ className, ...props }) => (
+      <Tooltip {...props} classes={{ popper: className }} />
+    ))(({ theme }) => ({
+      [`& .${tooltipClasses.arrow}`]: {
+        color: theme.palette.common.white,
+      },
+      [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 14,
+        color: '#666666',
+        maxWidth: '70%'
+      },
+    })); 
+  
+  const [switchOn, setSwitchOn] = useState(false);
+
+  const title = switchOn
+    ? 'Only you can queue, skip, and pause songs.'
+    : 'Other users can queue, skip, and pause songs.';
+
+  return (
+    <ToolTip title={title} placement="right-end" arrow>
+      <div className={styles.switchContainer}>
+        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
+      </div>
+    </ToolTip>
+  );
+}
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-  const [isErrorMessage, setIsErrorMessage] = useState(false); 
+   
+    
+  const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
+  const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
   const [studioNameInput, setStudioNameInput] = useState('');  
   const [genres, setGenres] = useState([{name: "Rap", isSelected: false}, 
@@ -25,32 +61,49 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "Jazz", isSelected: false}, 
                                           {name: "Pop", isSelected: false}]);
 
-    function toggleGenre(genre) {
-      const newGenres = genres.map(obj => {
-        if(obj.name === genre) {
-          return {... obj, isSelected: !obj.isSelected};
-        }
-        return obj
-      });
-      setGenres(newGenres);
-    }
+  function toggleGenre(genre) {
+    const newGenres = genres.map((obj, i) => {
+      if(obj.name === genre) {
+        return {... obj, isSelected: !obj.isSelected};
+      }
+      return obj
+    });
+    setGenres(newGenres);
+  }
 
-    function addGenre(genreInput) {
+  function addGenre(genreInput) {
+    const isFound = genres.some(obj => {
+      if (obj.name.toLowerCase() === genreInput.toLowerCase()) {
+        return true;
+      }
+    });
+  
+    if(isFound){
+      setIsGenreInputErrorMessage(true);
+    } else {
+      setIsGenreInputErrorMessage(false);
       setGenres([... genres, {name: genreInput, isSelected: true}]);
       setGenreInput('');
     }
-    
-    function handleSubmit() {
-      if(studioNameInput == '') {
-        setIsErrorMessage(true);
-      } else {
-        setIsErrorMessage(false);
-      }
+  }
+  
+  function handleSubmit() {
+    if(studioNameInput == '') {
+      setIsStudioNameErrorMessage(true);
+    } else {
+      setIsStudioNameErrorMessage(false);
     }
-    
-    const handleClose = () => { handleCloseDialog(false) };
+  }
+  
+  const handleClose = () => { handleCloseDialog(false) };
 
-    return (
+  function handleKeyPress(event, genreInput) {
+    if(event.key == "Enter") {
+      addGenre(genreInput);
+    }
+  }
+
+  return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
         <h1 className={styles.heading}>Create Studio</h1>
@@ -58,25 +111,26 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
             <TextField 
                 value={studioNameInput}
-                error={isErrorMessage ? true : false}
-                helperText={isErrorMessage ? "No Studio Name Entry" : ""}
+                error={isStudioNameErrorMessage ? true : false}
+                helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
                 required
                 margin="dense"
                 id="name"
-                label="Studio Name"
+                label="Enter a Studio Name ..."
                 type="text"
                 fullWidth
                 variant="outlined"
                 onChange={event => setStudioNameInput(event.target.value)}
                 className={styles.textfield}
+                autoComplete="off"
             />
             
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
             <FileDropZone />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
-            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
-                                                                : <SelectedGenreTag genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
+            {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
+                                                                : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
             <div className={styles.addGenreSection}>
               <TextField 
                   margin="dense"
@@ -88,6 +142,10 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   value={genreInput}
                   onChange={event => setGenreInput(event.target.value)}
                   className={styles.textfield}
+                  autoComplete="off"
+                  onKeyDown={event => handleKeyPress(event, genreInput)} 
+                  error={isGenreInputErrorMessage ? true : false}
+                  helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
               />
               <span className={styles.spacing}></span>
               <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
@@ -95,11 +153,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <Tooltip title="Only you will be able to queue, skip and pause songs." placement="right" arrow>
-                    <div className={styles.switchContainer}>
-                        <ControlSwitch/>
-                    </div>
-                </Tooltip>
+                <SwitchWithTooltip />
             </div>
             
             <h2 className={styles.sectionHeading}>Add Listeners</h2>

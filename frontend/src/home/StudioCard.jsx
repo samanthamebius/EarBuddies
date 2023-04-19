@@ -29,7 +29,7 @@ export default function StudioCard() {
                         <img className={styles.soundWaves} src={SoundWaves} style={isListening ? {}: {display: 'none'}}/>
                     </div>
                     <div className={styles.genreTags}>
-                        {genres.map((genre, i) => <GenreTag genre={genre}/>)}
+                        {genres.map((genre, i) => <GenreTag key={i} genre={genre}/>)}
                     </div>
                     <div className={styles.listeners}>
                         <ListenerIcons isListening={isListening} profileImages={listenersImages} profileStatus={listenersActive} isHomeCard={true}/>
