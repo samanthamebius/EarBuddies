@@ -7,9 +7,10 @@ import styles from './SearchBar.module.css';
 import { sizing } from '@mui/system';
 
 function SearchBar({label}) {
-    const [searchTerm, setSearchTerm] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-    const handleChange = (event) => {
+  const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
@@ -21,13 +22,19 @@ function SearchBar({label}) {
         label={label}
         value={searchTerm}
         onChange={handleChange}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         fullWidth
         InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <SearchIcon />
-            </InputAdornment>
+          startAdornment: (
+            //<InputAdornment >
+              <SearchIcon position="start" className={styles.searchIcon}/>
+            //</InputAdornment>
           ),
+        }}
+        InputLabelProps={{
+          shrink: focused || searchTerm.length > 0,
+          style: {marginLeft: searchTerm || focused  ? 0 : 30 }
         }}
       />
     </Container>

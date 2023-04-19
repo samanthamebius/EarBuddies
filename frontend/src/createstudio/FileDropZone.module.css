@@ -19,8 +19,7 @@
 }
 
 .uploadedfileText {
-    font-weight: 800;
-	color: #CA3FF3;
+	color: black;
 	font-size: 16px;
 	position: relative;
     margin: 0px;
@@ -53,4 +52,12 @@ p {
     height: 20px;
     display: block;
     margin-left: auto;
+}
+
+.previewImg {
+    height: 40px;
+}
+
+p {
+    color: #666666;
 }
