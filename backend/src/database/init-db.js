@@ -5,12 +5,12 @@ import mongoose from 'mongoose';
 import { User, Studio } from './schema';
 
 const users = [
-    { username: 'smeb', userIsActive: true },
-    { username: 'bre', userIsActive: false},
-    { username: 'ananya', userIsActive: true},
-    { username: 'amy', userIsActive: false },
-    { username: 'ange', userIsActive: true },
-    { username: 'yuewen', userIsActive: false }
+    { username: 'smeb123', userIsActive: true },
+    { username: 'bre123', userIsActive: false },
+    { username: 'ananya456', userIsActive: true },
+    { username: 'amy456', userIsActive: false },
+    { username: 'ange789', userIsActive: true },
+    { username: 'yuewen789', userIsActive: false }
 ];
 
 const studios = [
