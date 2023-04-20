@@ -13,14 +13,14 @@ import logo from './assets/shared/earBuddiesLogo.png';
 import profileIcon from './assets/profilepic.png'
 
 export default function PageLayout() {
-    return (
-        <React.Fragment>
-            <NavMenu />
-            <div className="container">
-                <Outlet />
-            </div>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <NavMenu />
+      <div className="container">
+        <Outlet />
+      </div>
+    </React.Fragment>
+  );
 }
 
 function NavMenu() {
@@ -35,6 +35,7 @@ function NavMenu() {
             <DropdownMenu/>
         </header>
     );
+
 }
 
 export function DropdownMenu() {
@@ -62,7 +63,7 @@ export function DropdownMenu() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("expires_in");
-    
+
     navigate("/login");
   };
 
