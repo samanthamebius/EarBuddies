@@ -22,14 +22,6 @@
   background: white;
 }
 
-.MuiButtonBase-root {
-  color: white;
-}
-
-.MuiButton-root {
-  color: white;
-}
-
 .MuiButton-contained {
   text-transform: capitalize !important;
 }

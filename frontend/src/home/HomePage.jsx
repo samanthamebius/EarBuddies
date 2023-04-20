@@ -44,6 +44,7 @@ function HomePage() {
 							handleCloseDialog={() => setIsOpen(false)}
 						/>
 						<Button
+							sx={{ fontWeight: 600 }}
 							variant="contained"
 							size="large"
 							className={styles.button}
