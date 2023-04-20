@@ -16,23 +16,23 @@ import upArrow from './assets/nav_menu/dropdownUpArrow.png';
 import downArrow from './assets/nav_menu/dropdownDownArrow.png';
 
 export default function PageLayout() {
-    return (
-        <React.Fragment>
-            <NavMenu />
-            <div className="container">
-                <Outlet />
-            </div>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <NavMenu />
+      <div className="container">
+        <Outlet />
+      </div>
+    </React.Fragment>
+  );
 }
 
 function NavMenu() {
-    return (
-        <header className={styles.navmenu}>
-            <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
-            <DropdownMenu/>
-        </header>
-    );
+  return (
+    <header className={styles.navmenu}>
+      <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
+      <DropdownMenu />
+    </header>
+  );
 }
 
 export function DropdownMenu() {
@@ -49,7 +49,7 @@ export function DropdownMenu() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("expires_in");
-    
+
     navigate("/login");
   };
 
@@ -59,7 +59,7 @@ export function DropdownMenu() {
       <Button onClick={handleClick} className={styles.button}>
         <img src={profileIcon} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
-        {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
+        {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />}
       </Button>
 
       <Menu
@@ -68,19 +68,19 @@ export function DropdownMenu() {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose}>
-            <img src={profileIcon} className={styles.icon}/>
-            <profileIcon/>
-            <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
+          <img src={profileIcon} className={styles.icon} />
+          <profileIcon />
+          <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-            <img src={darkmodeIcon} className={styles.icon} />
-            <span className={styles.menu_item}>Dark Mode</span>
+          <img src={darkmodeIcon} className={styles.icon} />
+          <span className={styles.menu_item}>Dark Mode</span>
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-            <img src={logoutIcon} className={styles.icon}/>
-            <p onClick={handleLogout} className={styles.menu_item}>Log Out</p>
+          <img src={logoutIcon} className={styles.icon} />
+          <p onClick={handleLogout} className={styles.menu_item}>Log Out</p>
         </MenuItem>
 
       </Menu>
