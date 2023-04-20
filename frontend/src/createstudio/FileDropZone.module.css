@@ -44,12 +44,7 @@ p {
   margin: 10px 0px 10px 0px;  
 }
 
-.photoIcon {
-    height: 40px;
-}
-
 .closeIcon {
-    height: 20px;
     display: block;
     margin-left: auto;
 }

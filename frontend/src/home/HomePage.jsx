@@ -3,7 +3,7 @@ import useAuth from "../useAuth";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
-import SoundWavesGradient from "../assets/soundwavesgradient.png";
+import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';

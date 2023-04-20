@@ -10,12 +10,7 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import logo from './assets/shared/earBuddiesLogo.png';
 
-import profileIcon from './assets/nav_menu/profileIcon.png'
-import logoutIcon from './assets/nav_menu/logoutIcon.png'
-import darkmodeIcon from './assets/nav_menu/darkmodeIcon.png'
-
-import upArrow from './assets/nav_menu/dropdownUpArrow.png';
-import downArrow from './assets/nav_menu/dropdownDownArrow.png';
+import profileIcon from './assets/profilepic.png'
 
 export default function PageLayout() {
     return (

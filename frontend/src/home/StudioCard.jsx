@@ -1,5 +1,5 @@
 import styles from './StudioCard.module.css';
-import SoundWaves from '../assets/soundwaves.png';
+import SoundWaves from '../assets/studio_cards/soundwaves.png';
 import TaylorSwiftImg from '../assets/taylorswift.png';
 import ProfilePicImg1 from '../assets/profilepic1.png';
 import ProfilePicImg2 from '../assets/profilepic2.png';
