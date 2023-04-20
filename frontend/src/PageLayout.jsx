@@ -51,6 +51,7 @@ export function DropdownMenu() {
     setOpen(null);
   };
   const handleLogout = () => {
+    handleClose
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("expires_in");
@@ -72,20 +73,22 @@ export function DropdownMenu() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>
+        <NavLink to="./profile" className={styles.menu_item}>
+          <MenuItem onClick={handleClose}>
             <img src={profileIcon} className={styles.icon}/>
             <profileIcon/>
-            <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
-        </MenuItem>
+            View Profile
+          </MenuItem>
+        </NavLink>
 
         <MenuItem onClick={handleClose}>
             <img src={darkmodeIcon} className={styles.icon} />
             <span className={styles.menu_item}>Dark Mode</span>
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
             <img src={logoutIcon} className={styles.icon}/>
-            <p onClick={handleLogout} className={styles.menu_item}>Log Out</p>
+            <p className={styles.menu_item}>Log Out</p>
         </MenuItem>
 
       </Menu>

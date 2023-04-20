@@ -148,7 +148,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
               />
               <span className={styles.spacing}></span>
-              <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
+              <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>              
             </div>
 
             <div className={styles.controlSection}>
@@ -160,8 +160,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <SearchBar label={"Search using Spotify username ..."}/>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-          <Button variant="contained" sx={{ color: '#606060'}} className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
+          <Button sx={{ fontWeight: 600, color: '#606060' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
+          <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
         </DialogActions>
       </Dialog>
     </div>

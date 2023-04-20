@@ -36,3 +36,11 @@
   margin: 0;
   padding: 5px;
 }
+
+a {
+  text-decoration: none;
+}
+
+Button {
+  background: linear-gradient(#B03EEE, #E640F8);
+}

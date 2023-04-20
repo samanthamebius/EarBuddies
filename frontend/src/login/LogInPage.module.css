@@ -28,7 +28,7 @@
     background: linear-gradient(#B03EEE, #E640F8);
 }
 
-a {
+.link {
     color: white;
     text-decoration: none;
     font-weight: 600;

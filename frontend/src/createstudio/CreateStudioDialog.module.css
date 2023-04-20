@@ -36,12 +36,7 @@
 }
 
 .createButton {
-    background: linear-gradient(#B03EEE, #E640F8);
     font-weight: 700;
-}
-
-.addButton {
-    background: linear-gradient(#B03EEE, #E640F8);
 }
 
 .cancelButton {
