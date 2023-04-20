@@ -29,7 +29,7 @@
 }
 
 .button {
-    border-radius: 10px !important;
+    border-radius: 4px !important;
     height:45px;
     flex-direction: row;
     display: flex;
@@ -59,10 +59,11 @@
     pointer-events: none;
 }
 
-.menu_item {
-    color:#606060;
+.menu_title {
+    color:#757575;
+    margin: 5px 0px 5px 10px;
 }
 
-.menu_item:hover {
+.menu_item:hover .menu_title {
     color: #B03EEE;
 }

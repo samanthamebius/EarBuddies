@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import SoundWavesGradient from "../assets/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 /**
  * Checks if user is logged in, if not, redirects to login page
@@ -48,9 +49,8 @@ function HomePage() {
 							variant="contained"
 							size="large"
 							className={styles.button}
-							onClick={() => handleOpen()}
-						>
-							+ Create Studio
+							onClick={() => handleOpen()}>
+							<AddRoundedIcon sx={{pr: 1}}/> Create Studio
 						</Button>
 					</div>
 				</div>

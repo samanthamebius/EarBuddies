@@ -160,7 +160,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <SearchBar label={"Search using Spotify username ..."}/>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-          <Button sx={{ fontWeight: 600, color: '#606060' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
+          <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
           <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
         </DialogActions>
       </Dialog>

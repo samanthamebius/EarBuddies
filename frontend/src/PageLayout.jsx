@@ -1,11 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from './PageLayout.module.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-
+import { sizing } from '@mui/system';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import logo from './assets/shared/earBuddiesLogo.png';
 
 import profileIcon from './assets/nav_menu/profileIcon.png'
@@ -41,15 +43,22 @@ function NavMenu() {
 }
 
 export function DropdownMenu() {
-  const [isOpen, setOpen] = React.useState(null);
+  const [isOpen, setOpen] = useState(null);
+  const [isInProfle, setInProfile] = useState(false);
+  const [isInDarkMode, setInDarkMode] = useState(false);
+  const [isInLogOut, setInLogOut] = useState(false);
+
   const navigate = useNavigate();
   const open = Boolean(isOpen);
+  
   const handleClick = (event) => {
     setOpen(event.currentTarget);
   };
+  
   const handleClose = () => {
     setOpen(null);
   };
+  
   const handleLogout = () => {
     handleClose
     localStorage.removeItem("access_token");
@@ -59,13 +68,17 @@ export function DropdownMenu() {
     navigate("/login");
   };
 
+  const toggleProfile = () => {setInProfile(!isInProfle)};
+  const toggleDarkMode= () => {setInDarkMode(!isInDarkMode)};
+  const toggleLogOut= () => {setInLogOut(!isInLogOut)};
+
   return (
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
         <img src={profileIcon} className={styles.profile_picture} />
         <p className={styles.username}>Username </p>
-        {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
+        {/* {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>} */}
       </Button>
 
       <Menu
@@ -73,22 +86,21 @@ export function DropdownMenu() {
         open={open}
         onClose={handleClose}
       >
-        <NavLink to="./profile" className={styles.menu_item}>
-          <MenuItem onClick={handleClose}>
-            <img src={profileIcon} className={styles.icon}/>
-            <profileIcon/>
-            View Profile
+        <NavLink to="./profile">
+          <MenuItem className={styles.menu_item} onClick={handleClose} onMouseEnter={toggleProfile} onMouseLeave={toggleProfile}>
+            <PersonRoundedIcon className={styles.icon} style={{ color: isInProfle ? "#B03EEE" : "#757575"}} />
+            <p className={styles.menu_title}>View Profile</p>
           </MenuItem>
         </NavLink>
 
-        <MenuItem onClick={handleClose}>
-            <img src={darkmodeIcon} className={styles.icon} />
-            <span className={styles.menu_item}>Dark Mode</span>
+        <MenuItem className={styles.menu_item} onClick={handleClose} onMouseEnter={toggleDarkMode} onMouseLeave={toggleDarkMode}>
+            <DarkModeRoundedIcon className={styles.icon} style={{ color: isInDarkMode ? "#B03EEE" : "#757575"}} />
+            <p className={styles.menu_title}>Dark Mode</p>
         </MenuItem>
 
-        <MenuItem onClick={handleLogout}>
-            <img src={logoutIcon} className={styles.icon}/>
-            <p className={styles.menu_item}>Log Out</p>
+        <MenuItem className={styles.menu_item} onClick={handleLogout} onMouseEnter={toggleLogOut} onMouseLeave={toggleLogOut}>
+            <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575"}} />
+            <p className={styles.menu_title}>Log Out</p>
         </MenuItem>
 
       </Menu>

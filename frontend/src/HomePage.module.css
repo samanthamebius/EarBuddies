@@ -17,6 +17,7 @@
 }
 
 .button {
+	background: linear-gradient(#b03eee, #e640f8);
 	height: fit-content;
 	margin-left: auto;
 	display: flex;
@@ -36,16 +37,8 @@
 
 .cardContainer {
 	height: calc(0.8 * 100vh);
-	overflow-y: scroll;
-}
-
-.cardContainer::-webkit-scrollbar {
-	display: none;
-}
-  
-.cardContainer {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+	overflow-y: auto;
+	padding-right: 8px;
 }
 
 .soundWaves {

@@ -44,3 +44,7 @@ a {
 Button {
   background: linear-gradient(#B03EEE, #E640F8);
 }
+
+Button:hover {
+  cursor: pointer;
+}

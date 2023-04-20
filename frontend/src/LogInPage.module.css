@@ -1,0 +1,29 @@
+.page {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.logo {
+    width: 13em;
+}
+
+.brandName {
+    margin: 0.5em;
+    font-family: 'Secular One';
+    font-size: 4em;
+    background: -webkit-linear-gradient(#B03EEE, #E640F8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+.button {
+    background: linear-gradient(#B03EEE, #E640F8);
+}
