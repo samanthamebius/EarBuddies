@@ -9,9 +9,23 @@
     padding: 0 20px;
 }
 
+.navLink {
+    display:flex;
+    align-items: center;
+}
+
 .logo {
-    height: 60px;
+    height: 50px;
     pointer-events: none;
+}
+
+.brandName {
+    margin-left: 15px;
+    font-family: 'Secular One';
+    font-size: 26px;
+    background: -webkit-linear-gradient(#B03EEE, #E640F8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .button {

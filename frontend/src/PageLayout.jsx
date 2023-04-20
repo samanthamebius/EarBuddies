@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import logo from './assets/nav_menu/earBuddiesLogoWithName.png';
+import logo from './assets/shared/earBuddiesLogo.png';
 
 import profileIcon from './assets/nav_menu/profileIcon.png'
 import logoutIcon from './assets/nav_menu/logoutIcon.png'
@@ -29,7 +29,12 @@ export default function PageLayout() {
 function NavMenu() {
     return (
         <header className={styles.navmenu}>
-            <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
+            <NavLink to=".">
+              <div className={styles.navLink}>
+                <img src={logo} className={styles.logo} />
+                <h1 className={styles.brandName}>EAR BUDDIES</h1> 
+              </div>
+            </NavLink>
             <DropdownMenu/>
         </header>
     );
