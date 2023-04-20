@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
+import { grey } from '@mui/material/colors';
 
 import pause_btn from '../assets/now_playing/pause_btn.png'
 import play_btn from '../assets/now_playing/play_btn.png'
@@ -80,7 +81,7 @@ export function VolumeSlider() {
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
           <img src={VolumeDown} className={styles.volIcon}/>
-          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} color="secondary"/>
+          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color:grey[50]}}/>
           <img src={VolumeUp} className={styles.volIcon}/>
         </Stack>
      </Box>
@@ -119,6 +120,7 @@ export function TimeSlider() {
           color="secondary"
           onChange={(_, value) => setPosition(value)}
           sx={{
+            color:grey[50],
             height: 4,
             '& .MuiSlider-thumb': {
               width: 8,
