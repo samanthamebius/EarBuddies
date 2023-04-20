@@ -5,16 +5,16 @@ import mongoose from 'mongoose';
 import { User, Studio } from './schema';
 
 const users = [
-    { username: 'smeb123', userIsActive: true },
-    { username: 'bre123', userIsActive: false },
-    { username: 'ananya456', userIsActive: true },
-    { username: 'amy456', userIsActive: false },
-    { username: 'ange789', userIsActive: true },
-    { username: 'yuewen789', userIsActive: false }
+    { username: 'smeb123', userDisplayName: "Samantha Mebius", profilePic: "avatar1.png", userIsActive: true, userStudios: [] },
+    { username: 'bre123', userDisplayName: "Breanna Jury", profilePic: "avatar2.png", userIsActive: false, userStudios: [] },
+    { username: 'ananya456', userDisplayName: "Ananya Ahluwalia", profilePic: "avatar3.png", userIsActive: true, userStudios: [] },
+    { username: 'amy456', userDisplayName: "Amy Rimmer", profilePic: "avatar4.png", userIsActive: false, userStudios: [] },
+    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "avatar5.png", userIsActive: true, userStudios: [] },
+    { username: 'yuewen789', userDisplayName: "Yuewen Zheng", profilePic: "avatar6.png", userIsActive: false, userStudios: [] }
 ];
 
 const studios = [
-    { studioName: 'smeb\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
+    { studioName: 'Software Swifties', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
     { studioName: 'bre\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
     { studioName: 'ananya\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
     { studioName: 'amy\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
