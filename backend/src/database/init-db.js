@@ -14,12 +14,12 @@ const users = [
 ];
 
 const studios = [
-    { studioName: 'Software Swifties', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'bre\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'ananya\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'amy\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'ange\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'yuewen\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] }
+    { studioName: 'Software Swifties', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'softwareswifties.png', studioUsers: [] },
+    { studioName: 'Country Crew', studioIsActive: false, studioGenres: ['country'], studioPicture: 'countrycrew.png', studioUsers: [] },
+    { studioName: 'Tune Team', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'tuneteam.png', studioUsers: [] },
+    { studioName: 'Sad Club', studioIsActive: false, studioGenres: ['pop'], studioPicture: 'sadclub.png', studioUsers: [] },
+    { studioName: 'Sound Scholars', studioIsActive: true, studioGenres: ['Lo-Fi'], studioPicture: 'soundscholars.png', studioUsers: [] },
+    { studioName: 'BLINKS', studioIsActive: false, studioGenres: ['K-Pop'], studioPicture: 'blinks.png', studioUsers: [] }
 ];
 
 main();
