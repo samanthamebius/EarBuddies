@@ -3,12 +3,6 @@
   text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
   padding: 2em;
 }
@@ -43,8 +37,4 @@ a {
 
 Button {
   background: linear-gradient(#B03EEE, #E640F8);
-}
-
-Button:hover {
-  cursor: pointer;
 }

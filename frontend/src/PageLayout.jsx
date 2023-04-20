@@ -52,6 +52,9 @@ export function DropdownMenu() {
   
   const handleClose = () => {
     setOpen(null);
+    setInProfile(false)
+    setInDarkMode(false)
+    setInDarkMode(false)
   };
   
   const handleLogout = () => {
