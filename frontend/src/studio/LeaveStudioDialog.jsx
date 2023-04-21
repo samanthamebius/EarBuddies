@@ -25,7 +25,7 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
     const [ newHost, setNewHost] = useState(null);
     
     return(
-        <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="md" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+        <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
             <div className={styles.dialogHeader}>
                 <img className={styles.headerIcon} src={leaveIcon}/>
                 <h1 className={styles.heading}>Leave Studio</h1>
