@@ -1,9 +1,9 @@
 .heading {
     font-weight: 800;
+    margin: 20px 0 0 10px;
 	color: #606060;
 	font-size: 32px;
 	position: relative;
-    margin: 0px;
 }
 
 .subheading {
@@ -11,7 +11,8 @@
 	color: #606060;
 	font-size: 24px;
 	position: relative;
-    margin: 0px;
+    display: flex;
+    margin: 0 20px;
 }
 
 .dialogHeader {
@@ -20,8 +21,10 @@
 }
 
 .headerIcon {
-    height: 25px;
-    padding: 10px
+    height: 30px;
+    padding: 10px;
+    margin: 20px 0 0 20px;
+    position: relative;
 }
 
 .purpleButton {
@@ -39,4 +42,40 @@
 
 .dialogContent {
     text-align: center;
+    padding:0;
 }
+
+.listenerList {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.listenerListItem {
+    display: flex;
+    align-items: center;
+    border: #ABABAB solid;
+    width: 100%;
+    padding: 10px;
+    background-color: #FFF;
+  }
+  
+  .listenerListItem img {
+    height: 50px;
+    margin-right: 10px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .listenerListItem p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .listenerListItem img:last-of-type {
+    margin-left: auto;
+    cursor: pointer;
+  }
