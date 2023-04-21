@@ -12,6 +12,14 @@ import uncrownedIcon from "../assets/studio/hollowCrownIcon.png";
 
 export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, listeners }) {
     const handleClose = () => { handleCloseDialog(false) };
+    const handleSubmit = () => {
+        if (newHost === null) {
+          alert('Please crown a member before submitting.');
+          return;
+        }
+        // TODO: Do something with the new host/return to home
+      };
+    const [ newHost, setNewHost] = useState(null);
     
     return(
         <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="md" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
@@ -25,26 +33,31 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
 
                 <div className={styles.listenerList}>
                     {listeners.map((listener) => (
-                        <ListenerListItem key={listener.id} listener={listener} />
+                        <ListenerListItem key={listener.id} 
+                            listener={listener} 
+                            isNewHost={listener.id === newHost}
+                            setNewHost={setNewHost}
+                        />
                     ))}
                 </div>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
                     <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={handleClose}>Cancel</Button>
-                    <Button variant="contained" className={styles.purpleButton} >Leave Studio</Button>
+                    <Button variant="contained" className={styles.purpleButton} onClick={handleSubmit}>Leave Studio</Button>
                 </DialogActions>
             </DialogContent>
         </Dialog>
     )
 }
 
-function ListenerListItem ({ listener }) {
-    const [isCrowned, setIsCrowned] = useState(false);
+function ListenerListItem ({ listener, isNewHost, setNewHost }) {
+
+    // const [isCrowned, setIsCrowned] = useState(false);
   
     const handleClick = () => {
-      setIsCrowned(!isCrowned);
+      setNewHost(listener.id);
     };
   
-    const crownIcon = isCrowned ? crownedIcon : uncrownedIcon;
+    const crownIcon = isNewHost ? crownedIcon : uncrownedIcon;
   
     return (
       <div className={styles.listenerListItem}>
