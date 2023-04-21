@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
@@ -55,7 +56,8 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
                 </DialogActions>
                 <ConfirmLeave 
                     isConfirmDialogOpened={isConfirmOpen}
-					handleCloseConfirmDialog={() => setIsConfirmOpen(false)}/>
+					handleCloseConfirmDialog={() => setIsConfirmOpen(false)}
+                    handleClose={handleClose}/>
             </DialogContent>
         </Dialog>
     )
@@ -77,9 +79,14 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     );
   };
 
-function ConfirmLeave ({ isConfirmDialogOpened, handleCloseConfirmDialog, }) {
+function ConfirmLeave ({ isConfirmDialogOpened, handleCloseConfirmDialog, handleClose}) {
+    const navigate = useNavigate();
     const handleCloseConfirm = () => { handleCloseConfirmDialog(false) };
-    const handleSubmitConfirm = () => {};
+    const handleSubmitConfirm = () => { 
+        handleCloseConfirm()
+        handleClose()
+        navigate('/', { replace: true });
+    };
 
     return (
     <Dialog  open={isConfirmDialogOpened} onClose={handleCloseConfirm} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
