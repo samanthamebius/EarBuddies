@@ -20,6 +20,10 @@
     display: flex;
 }
 
+.helperText{
+    color:rgb(218, 0, 0);
+}
+
 .headerIcon {
     height: 30px;
     padding: 10px;
