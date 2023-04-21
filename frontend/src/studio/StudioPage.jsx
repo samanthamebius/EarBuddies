@@ -6,7 +6,6 @@ import Banner from "./Banner";
 import Chat from "./Chat";
 import NowPlaying from "./NowPlaying";
 import SongSelection from "./SongSelection";
-import LeaveStudioDialog from "./LeaveStudioDialog"
 
 
 function StudioPage() {
@@ -17,7 +16,6 @@ function StudioPage() {
       <NowPlaying/>
       <SongSelection/>
       <Chat/>
-      <LeaveStudioDialog />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import styles from "./StudioPage.module.css";
 import React from "react";
 import { useState } from "react";
+import LeaveStudioDialog from "./LeaveStudioDialog"
 
 import TaylorSwiftImg from "../assets/taylorswift.png";
 
@@ -43,7 +44,6 @@ const listenersActive = [true, true, false, false, true, false];
 
 export default function Banner() {
 	const [addIconAdded, setAddIconAdded] = useState(false);
-
 	if (addIconAdded == false) {
 		listenersImages.push(AddListenerIcon);
 		listenersActive.push(true);
@@ -51,7 +51,6 @@ export default function Banner() {
 	}
 
 	const [controlEnabled, toggleControl] = useState(false);
-
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
 	};
@@ -94,6 +93,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 	const handleClose = () => {
 		setOpen(null);
 	};
+	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+	const handleLeaveOpen = () => {
+		setIsLeaveOpen(!isLeaveOpen);
+	};
 
 	return (
 		<div>
@@ -113,10 +116,13 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				open={open} 
 				onClose={handleClose} 
 			>
-				<MenuItem onClick={handleClose}>
+				<MenuItem onClick={handleLeaveOpen}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
 					<span className={styles.menu_item}> Leave Group</span>
 				</MenuItem>
+				<LeaveStudioDialog 
+					isDialogOpened={isLeaveOpen}
+					handleCloseDialog={() => setIsLeaveOpen(false)}/>
 
 				<MenuItem onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
