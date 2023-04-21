@@ -19,7 +19,10 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
 		setIsConfirmOpen(!isConfirmOpen);
 	};
 
-    const handleClose = () => { handleCloseDialog(false) };
+    const handleClose = () => { 
+        handleCloseDialog(false) 
+    };
+
     const handleSubmit = () => {
         if (newHost === null) {
             setIsHostErrorMessage(true);
@@ -51,7 +54,7 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
                 </div>
                 {isHostErrorMessage && <p className={styles.helperText}>You must select a host</p> }
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
-                    <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={handleClose}>Cancel</Button>
+                    <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={() => { setNewHost(null); handleClose(); }}>Cancel</Button>
                     <Button variant="contained" className={styles.purpleButton} onClick={handleSubmit}>Leave Studio</Button>
                 </DialogActions>
                 <ConfirmLeave 
