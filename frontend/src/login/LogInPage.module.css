@@ -27,3 +27,10 @@
 .button {
     background: linear-gradient(#B03EEE, #E640F8);
 }
+
+.link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 20px;
+}
