@@ -12,6 +12,11 @@ import uncrownedIcon from "../assets/studio/hollowCrownIcon.png";
 
 export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, listeners }) {
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+	const handleConfirmOpen = () => {
+		setIsConfirmOpen(!isConfirmOpen);
+	};
 
     const handleClose = () => { handleCloseDialog(false) };
     const handleSubmit = () => {
@@ -19,8 +24,8 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
             setIsHostErrorMessage(true);
         } else {
             setIsHostErrorMessage(false);
+            handleConfirmOpen();
         }
-        // TODO: Do something with the new host/return to home
       };
     const [ newHost, setNewHost] = useState(null);
     
@@ -48,13 +53,15 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
                     <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={handleClose}>Cancel</Button>
                     <Button variant="contained" className={styles.purpleButton} onClick={handleSubmit}>Leave Studio</Button>
                 </DialogActions>
+                <ConfirmLeave 
+                    isConfirmDialogOpened={isConfirmOpen}
+					handleCloseConfirmDialog={() => setIsConfirmOpen(false)}/>
             </DialogContent>
         </Dialog>
     )
 }
 
 function ListenerListItem ({ listener, isNewHost, setNewHost }) {
-  
     const handleClick = () => {
       setNewHost(listener.id);
     };
@@ -69,3 +76,26 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
       </div>
     );
   };
+
+function ConfirmLeave ({ isConfirmDialogOpened, handleCloseConfirmDialog, }) {
+    const handleCloseConfirm = () => { handleCloseConfirmDialog(false) };
+    const handleSubmitConfirm = () => {};
+
+    return (
+    <Dialog  open={isConfirmDialogOpened} onClose={handleCloseConfirm} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+            <div className={styles.dialogHeader}>
+                <img className={styles.headerIcon} src={leaveIcon}/>
+                <h1 className={styles.heading}>Leave Studio</h1>
+            </div>
+            
+            <DialogContent className={styles.dialogContent}>
+                <h2 className={styles.subheading}>Are you sure you want to leave</h2>
+
+                <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
+                    <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={handleCloseConfirm}>Cancel</Button>
+                    <Button variant="contained" className={styles.purpleButton} onClick={handleSubmitConfirm}>Leave Studio</Button>
+                </DialogActions>
+            </DialogContent>
+        </Dialog>
+    );
+}
