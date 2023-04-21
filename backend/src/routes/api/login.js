@@ -30,9 +30,15 @@ router.post("/", (req, res) => {
   spotifyApi
     .authorizationCodeGrant(code)
     .then(function (data) {
-      var access_token = data.body['access_token']
-      var refresh_token = data.body['refresh_token']
-      var expires_in = data.body['expires_in']
+      const access_token = data.body.access_token;
+      const refresh_token = data.body.refresh_token;
+      const expires_in = data.body.expires_in;
+
+      res.json({
+        access_token: access_token,
+        refresh_token: refresh_token,
+        expires_in: expires_in,
+      });
       spotifyApi.setAccessToken(access_token)
 
 
