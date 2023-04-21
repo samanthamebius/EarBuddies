@@ -50,7 +50,7 @@ function ListenerListItem ({ listener }) {
       <div className={styles.listenerListItem}>
         <img src={listener.icon}/>
         <p>{listener.username}</p>
-        <img src={crownIcon} onClick={handleClick} />
+        <img src={crownIcon} className={styles.listenerListItemCrown} onClick={handleClick} />
       </div>
     );
   };
