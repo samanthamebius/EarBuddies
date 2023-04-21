@@ -42,6 +42,15 @@ const listenersImages = [
 ];
 const listenersActive = [true, true, false, false, true, false];
 
+const listeners = [
+	{ id:1, username:'breannajury', icon: ProfilePicImg1},
+	{ id:2, username:'ananyaahluwalia', icon: ProfilePicImg2},
+	{ id:3, username:'yuewenzheng', icon: ProfilePicImg3},
+	{ id:4, username:'samanthamebius', icon: ProfilePicImg4},
+	{ id:5, username:'amyrimmer', icon: ProfilePicImg5},
+	{ id:6, username:'angelalorusso', icon: ProfilePicImg6}
+];
+
 export default function Banner() {
 	const [addIconAdded, setAddIconAdded] = useState(false);
 	if (addIconAdded == false) {
@@ -122,7 +131,6 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				</MenuItem>
 				<LeaveStudioDialog 
 					isDialogOpened={isLeaveOpen}
-					handleCloseDialog={() => setIsLeaveOpen(false)}/>
 
 				<MenuItem onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
