@@ -1,6 +1,8 @@
 import React from "react";
 import styles from './PageLayout.module.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -14,6 +16,7 @@ import darkmodeIcon from './assets/nav_menu/darkmodeIcon.png'
 
 import upArrow from './assets/nav_menu/dropdownUpArrow.png';
 import downArrow from './assets/nav_menu/dropdownDownArrow.png';
+import useGet from "./useGet";
 
 export default function PageLayout() {
   return (
@@ -34,6 +37,33 @@ function NavMenu() {
     </header>
   );
 }
+
+function UserInfo() {
+  console.log("in user info")
+  const {
+    data: user,
+    isLoading: userIsLoading,
+    refresh: refreshUser} = useGet("/user");
+
+  console.log(user);
+
+  if (userIsLoading) {
+    return <p>Loading...</p>;
+  } else {
+    // const profilePicture = user.profile_picture;
+    const username = user.username;
+    return (
+      <div>
+        {/* <img src={profilePicture} className={styles.profile_picture} /> */}
+        <p className={styles.username}>{username} </p> 
+      </div>
+    );
+  }
+
+  
+}
+    
+
 
 export function DropdownMenu() {
   const [isOpen, setOpen] = React.useState(null);
@@ -57,8 +87,9 @@ export function DropdownMenu() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        <img src={profileIcon} className={styles.profile_picture} />
-        <p className={styles.username}>Username </p>
+        <UserInfo />
+        {/* <img src={profileIcon} className={styles.profile_picture} /> */}
+        {/* <p className={styles.username}>Username </p> */}
         {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />}
       </Button>
 

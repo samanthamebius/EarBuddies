@@ -5,7 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 import mongoose from 'mongoose';
-import { User } from '../../database/schema';
+import { setCurrentUser } from '../../database/user_dao';
 
 const router = express.Router();
 router.use(cors())
@@ -39,32 +39,11 @@ router.post("/", (req, res) => {
         refresh_token: refresh_token,
         expires_in: expires_in,
       });
-      spotifyApi.setAccessToken(access_token)
-
-
-      spotifyApi.getMe()
-        .then(async function (data) {
-          const user = await User.find({ username: data.body.id })
-          // check to see if user in db
-          if (user.length === 0) {
-            // check to see if user has a profile pic
-            const newUser = new User({
-              username: data.body.id,
-              userDisplayName: data.body.display_name,
-              profilePic: `${data.body.images.length === null ? "" : data.body.images[0].url}`,
-              userIsActive: true,
-              userStudios: [],
-            });
-            await newUser.save()
-          } else {
-            const updateUser = await User.findOneAndUpdate({ username: data.body.id }, { userIsActive: true })
-          }
-
-        })
-        .catch(function (err) {
-          console.log('Something went wrong!', err)
-        })
-    })
+      setCurrentUser(spotifyApi, data);
 })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 
 export default router;
