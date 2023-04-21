@@ -131,6 +131,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				</MenuItem>
 				<LeaveStudioDialog 
 					isDialogOpened={isLeaveOpen}
+					handleCloseDialog={() => setIsLeaveOpen(false)} 
+					listeners={listeners}/>
 
 				<MenuItem onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
