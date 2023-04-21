@@ -1,0 +1,42 @@
+.heading {
+    font-weight: 800;
+	color: #606060;
+	font-size: 32px;
+	position: relative;
+    margin: 0px;
+}
+
+.subheading {
+    font-weight: 800;
+	color: #606060;
+	font-size: 24px;
+	position: relative;
+    margin: 0px;
+}
+
+.dialogHeader {
+    margin: 20px;
+    display: flex;
+}
+
+.headerIcon {
+    height: 25px;
+    padding: 10px
+}
+
+.purpleButton {
+    background: linear-gradient(#B03EEE, #E640F8);
+    font-weight: 700;
+    width: 200px;
+}
+
+.greyButton {
+    background: linear-gradient(#BEBEBE, #EDEDED);
+    font-weight: 700;
+    text-align: center;
+    width: 200px;
+}
+
+.dialogContent {
+    text-align: center;
+}
