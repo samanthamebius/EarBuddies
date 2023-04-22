@@ -6,9 +6,9 @@ import axios from "axios";
  * whether the data is still being loaded or not.
  * code credit: Andrew Meads 
  */
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function useGet(url, initialState = null) {
+export default function useGet(url, initialState = null, access_token = null) {
   const [data, setData] = useState(initialState);
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
@@ -17,6 +17,10 @@ export default function useGet(url, initialState = null) {
   console.log("in useGet " + url)
 
   useEffect(() => {
+    if (!access_token) {
+      console.log("No access token")
+      return;
+    }
     console.log("hello")
     async function fetchData() {
       setLoading(true);
@@ -29,7 +33,7 @@ export default function useGet(url, initialState = null) {
       setLoading(false);
     }
     fetchData();
-  }, [url, refreshToggle]);
+  }, [url, refreshToggle, access_token]);
 
   function refresh() {
     setRefreshToggle(!refreshToggle);

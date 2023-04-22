@@ -59,6 +59,7 @@ async function updateUser(username) {
 }
 
 async function getUser(username) {
+  console.log("getting user " + username)
   return await User.find({ username: username });
 }
 

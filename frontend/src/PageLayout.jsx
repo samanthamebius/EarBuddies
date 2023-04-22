@@ -43,15 +43,17 @@ function UserInfo() {
   const current_user_id = localStorage.getItem("current_user_id");
   console.log("current user id: " + current_user_id)
   console.log(current_user_id.length)
-  if (current_user_id.length == 2 || current_user_id == null) {
+  if (current_user_id.length == 2 || current_user_id == null) {//find a better way to check this
     console.log("current user id is null")
     return <p>Could not load user</p>;
   }
 
+  const access_token = localStorage.getItem("access_token");
+
   const {
     data: user,
     isLoading: userIsLoading,
-    refresh: refreshUser } = useGet(`/user/${current_user_id}`, []);
+    refresh: refreshUser } = useGet(`/api/user/${current_user_id}`, [], access_token);
 
   console.log('user: ' + user);
 
@@ -60,8 +62,10 @@ function UserInfo() {
   } else  if (!user) {
     return <p>Could not load user</p>;
   } else {
-    const profilePicture = user[0].profilePic;
-    const username = user[0].userDisplayName;
+    // const profilePicture = user[0].profilePic;
+    // const username = user[0].userDisplayName;
+    const profilePicture = "testing";
+    const username = "testing";
     return (
       <div>
         <img src={profilePicture} className={styles.profile_picture} />
@@ -69,11 +73,7 @@ function UserInfo() {
       </div>
     );
   }
-
-
 }
-
-
 
 export function DropdownMenu() {
   const [isOpen, setOpen] = React.useState(null);

@@ -41,6 +41,7 @@ function HomePage() {
 		<div className={styles.container}>
 			<div className={styles.containerChild} style={{ marginRight: "45px" }}>
 				<div className={styles.header}>
+					<h1>{localStorage.getItem("access_token")}</h1>
 					<h1 className={styles.headings}>My Studios</h1>
 					<div className={styles.headerChild}>
 						<CreateStudioDialog
