@@ -13,9 +13,7 @@ export default function useAuth(accessToken, code) {
 		accessToken
 	);
 	const [refresh_token, setrefresh_token] = useLocalStorage(
-		"refresh_token",
-		""
-	);
+		"refresh_token", "");
 	const [expires_in, setexpires_in] = useLocalStorage("expires_in", "");
 
 	useEffect(() => {
@@ -56,6 +54,5 @@ export default function useAuth(accessToken, code) {
 			return () => clearInterval(interval);
 		}
 	}, [refresh_token, expires_in, access_token]);
-
 	return access_token;
 }

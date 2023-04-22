@@ -45,16 +45,16 @@ function UserInfo() {
     isLoading: userIsLoading,
     refresh: refreshUser } = useGet("/user", []);
 
-  console.log(user);
+  console.log('user: ' + user);
 
   if (userIsLoading) {
     return <p>Loading...</p>;
   } else {
-    // const profilePicture = user.profile_picture;
+    const profilePicture = user[0].profilePic;
     const username = user[0].userDisplayName;
     return (
       <div>
-        {/* <img src={profilePicture} className={styles.profile_picture} /> */}
+        <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>{username} </p>
       </div>
     );

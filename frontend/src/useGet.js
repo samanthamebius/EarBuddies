@@ -25,6 +25,7 @@ export default function useGet(url, initialState = null) {
         onError: (err) => console.log(err),
       });
       setData(response.data);
+      console.log(response.data)
       setLoading(false);
     }
     fetchData();

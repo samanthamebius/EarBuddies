@@ -22,6 +22,7 @@ await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 router.post("/", (req, res) => {
   const code = req.body.code
+  console.log("in login.js " + code)
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
@@ -39,6 +40,7 @@ router.post("/", (req, res) => {
         refresh_token: refresh_token,
         expires_in: expires_in,
       });
+      console.log('setting access token')
       spotifyApi.setAccessToken(access_token);
       setCurrentUser(spotifyApi, data);
     })

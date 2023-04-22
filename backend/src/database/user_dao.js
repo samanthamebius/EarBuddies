@@ -62,4 +62,6 @@ async function getUser(username) {
   return await User.find({ username: username });
 }
 
+await mongoose.disconnect;
+
 export { createUser, updateUser, getUser, setCurrentUser, getCurrentUser };

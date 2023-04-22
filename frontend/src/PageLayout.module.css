@@ -16,18 +16,18 @@
 
 .button {
     border-radius: 10px !important;
-    height:45px;
+    height: 45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
     align-items: center;
-    background-image: linear-gradient(180deg,#B03EEE, #E640F8);
+    background-image: linear-gradient(180deg, #B03EEE, #E640F8);
 }
 
 .profile_picture {
     height: 30px;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .arrow {
@@ -41,13 +41,13 @@
 }
 
 .icon {
-    height: 30px; 
+    height: 30px;
     padding-right: 15px;
     pointer-events: none;
 }
 
 .menu_item {
-    color:#606060;
+    color: #606060;
 }
 
 .menu_item:hover {
