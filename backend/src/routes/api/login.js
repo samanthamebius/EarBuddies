@@ -37,7 +37,7 @@ router.post("/", (req, res) => {
       
       console.log('setting access token')
       spotifyApi.setAccessToken(access_token);
-      user_id = loginUser(spotifyApi, data);
+      const user_id = loginUser(spotifyApi, data);
       console.log('user_id: ' + user_id)
 
       res.json({
