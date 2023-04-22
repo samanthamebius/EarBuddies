@@ -2,7 +2,7 @@
 
 import { Container, InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import styles from './SearchBar.module.css';
 import { sizing } from '@mui/system';
 
@@ -27,9 +27,7 @@ function SearchBar({label}) {
         fullWidth
         InputProps={{
           startAdornment: (
-            //<InputAdornment >
-              <SearchIcon position="start" className={styles.searchIcon}/>
-            //</InputAdornment>
+            <SearchRoundedIcon color="action" position="start" className={styles.searchIcon}/>
           ),
         }}
         InputLabelProps={{

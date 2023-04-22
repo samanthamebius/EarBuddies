@@ -11,13 +11,12 @@
 
 .headings {
 	font-weight: 800;
-	color: #606060;
+	color: #757575;
 	font-size: 32px;
 	position: relative;
 }
 
 .button {
-	background: linear-gradient(#b03eee, #e640f8);
 	height: fit-content;
 	margin-left: auto;
 	display: flex;
@@ -37,8 +36,16 @@
 
 .cardContainer {
 	height: calc(0.8 * 100vh);
-	overflow-y: auto;
-	padding-right: 8px;
+	overflow-y: scroll;
+}
+
+.cardContainer::-webkit-scrollbar {
+	display: none;
+}
+  
+.cardContainer {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
 }
 
 .soundWaves {
