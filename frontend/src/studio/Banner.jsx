@@ -48,7 +48,13 @@ const listeners = [
 	{ id:3, username:'yuewenzheng', icon: ProfilePicImg3},
 	{ id:4, username:'samanthamebius', icon: ProfilePicImg4},
 	{ id:5, username:'amyrimmer', icon: ProfilePicImg5},
-	{ id:6, username:'angelalorusso', icon: ProfilePicImg6}
+	{ id:6, username:'angelalorusso', icon: ProfilePicImg6},
+	{ id:7, username:'breannajury1', icon: ProfilePicImg1},
+	{ id:8, username:'ananyaahluwalia1', icon: ProfilePicImg2},
+	{ id:9, username:'yuewenzheng1', icon: ProfilePicImg3},
+	{ id:10, username:'samanthamebius1', icon: ProfilePicImg4},
+	{ id:11, username:'amyrimmer1', icon: ProfilePicImg5},
+	{ id:12, username:'angelalorusso1', icon: ProfilePicImg6}
 ];
 
 export default function Banner() {
