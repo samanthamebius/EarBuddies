@@ -87,7 +87,7 @@ export function DropdownMenu() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        <UserInfo />
+        {/* <UserInfo /> */}
         {/* <img src={profileIcon} className={styles.profile_picture} /> */}
         {/* <p className={styles.username}>Username </p> */}
         {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />}
