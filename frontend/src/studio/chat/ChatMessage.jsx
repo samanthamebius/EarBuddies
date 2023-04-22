@@ -5,6 +5,17 @@ import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
 import pinIcon from "../../assets/chat/pinIcon.svg";
 import filledPinIcon from "../../assets/chat/filledPinIcon.svg";
 import replyIcon from "../../assets/chat/replyIcon.svg";
+import { ReactionBarSelector } from "@charkour/react-reactions";
+import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
+
+const defaultReactions = [
+	{ label: "angry", reaction: <div>😡</div> },
+	{ label: "satisfaction", reaction: <div>👍</div> },
+	{ label: "happy", reaction: <div>😆</div> },
+	{ label: "surprise", reaction: <div>😮</div> },
+	{ label: "sad", reaction: <div>😢</div> },
+	{ label: "love", reaction: <div>❤️</div> },
+];
 
 function ChatMessage(props) {
 	const {
@@ -17,6 +28,8 @@ function ChatMessage(props) {
 	const { message, username } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
+	const [isReacting, setIsReacting] = useState(false);
+	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
 
 	const isCurrentUser = username === "test";
@@ -43,6 +56,15 @@ function ChatMessage(props) {
 		};
 
 		return message;
+	};
+
+	const handleReactions = (selectedReaction) => {
+		const reactionIcon = defaultReactions.find(
+			(reaction) => reaction.label === selectedReaction
+		);
+		setReactions([
+			{ label: selectedReaction, node: reactionIcon.reaction, by: username },
+		]);
 	};
 
 	useEffect(() => {
@@ -112,8 +134,36 @@ function ChatMessage(props) {
 						}}
 					/>
 				</div>
+				{reactions.length > 0 && (
+					<div
+						style={{
+							backgroundColor: "white",
+							alignSelf: "end",
+							borderRadius: "80px",
+							fontSize: "12px",
+							padding: "2px",
+							marginLeft: "-14px",
+							border: "1px solid lightgrey",
+							display: "flex",
+							alignItems: "center",
+							color: "grey",
+							// for current user and no margin left
+							// marginRight: "-14px"
+							// zIndex: "1"
+						}}
+					>
+						{reactions.map((reaction) => reaction.node)}
+						{reactions.length > 1 && reactions.length}
+					</div>
+				)}
 				{hover && (
-					<>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							alignItems: "center",
+						}}
+					>
 						<img
 							src={replyIcon}
 							alt="reply"
@@ -126,7 +176,17 @@ function ChatMessage(props) {
 							className={styles.pin}
 							onClick={() => setIsPinned(!isPinned)}
 						/>
-					</>
+						<SentimentSatisfiedRoundedIcon
+							onClick={() => setIsReacting(!isReacting)}
+						/>
+						{isReacting && hover && (
+							<ReactionBarSelector
+								iconSize={14}
+								style={{ height: "fit-content" }}
+								onSelect={(reaction) => handleReactions(reaction)}
+							/>
+						)}
+					</div>
 				)}
 			</div>
 		</div>
