@@ -74,10 +74,10 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     const crownIcon = isNewHost ? crownedIcon : uncrownedIcon;
   
     return (
-      <div className={styles.listenerListItem}>
+      <div className={styles.listenerListItem} onClick={handleClick}>
         <img src={listener.icon}/>
         <p>{listener.username}</p>
-        <img src={crownIcon} className={styles.listenerListItemCrown} onClick={handleClick} />
+        <img src={crownIcon} className={styles.listenerListItemCrown} />
       </div>
     );
   };
