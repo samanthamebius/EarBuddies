@@ -39,8 +39,9 @@ router.post("/", (req, res) => {
         refresh_token: refresh_token,
         expires_in: expires_in,
       });
+      spotifyApi.setAccessToken(access_token);
       setCurrentUser(spotifyApi, data);
-})
+    })
     .catch((err) => {
       res.status(400).json(err);
     });
