@@ -15,6 +15,7 @@ export default function useAuth(accessToken, code) {
 	const [refresh_token, setrefresh_token] = useLocalStorage(
 		"refresh_token", "");
 	const [expires_in, setexpires_in] = useLocalStorage("expires_in", "");
+	const [current_user_id, setcurrent_user_id] = useLocalStorage("current_user_id", "");
 	console.log("in useAuth");
 
 	// useEffect(() => {
@@ -29,10 +30,11 @@ export default function useAuth(accessToken, code) {
 				const response = await axios.post("http://localhost:3000/api/login", {
 					code,
 				});
-				const { access_token, refresh_token, expires_in } = response.data;
+				const { access_token, refresh_token, expires_in, user_id } = response.data;
 				setaccess_token(access_token);
 				setrefresh_token(refresh_token);
 				setexpires_in(expires_in);
+				setcurrent_user_id(user_id);
 				window.history.pushState({}, null, "/");
 			} catch (error) {
 				console.error(error);

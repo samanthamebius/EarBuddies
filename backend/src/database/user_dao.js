@@ -3,7 +3,7 @@ dotenv.config();
 import { User } from "./schema.js";
 import mongoose from "mongoose";
 
-var currentUserId = null;
+// var currentUserId = null;
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createUser(username, userDisplayName, profilePic) {
@@ -17,7 +17,7 @@ async function createUser(username, userDisplayName, profilePic) {
   return await newUser.save();
 }
 
-async function setCurrentUser(spotifyApi, data) {
+async function loginUser(spotifyApi, data) {
   console.log("setting current user");
   spotifyApi
     .getMe()
@@ -34,22 +34,22 @@ async function setCurrentUser(spotifyApi, data) {
         updateUser(data.body.id);
       }
       console.log("setting id " + data.body.id);
-      currentUserId = data.body.id;
+      return data.body.id;
     })
     .catch(function (err) {
       console.log("Something went wrong!", err);
     });
 }
 
-async function getCurrentUser() {
-  console.log("getting current user");
-  if (currentUserId === null) {
-    console.log("no current user");
-    return null;
-  } else {
-    return await getUser(currentUserId);
-  }
-}
+// async function getCurrentUser() {
+//   console.log("getting current user");
+//   if (currentUserId === null) {
+//     console.log("no current user");
+//     return null;
+//   } else {
+//     return await getUser(currentUserId);
+//   }
+// }
 
 async function updateUser(username) {
   return await User.findOneAndUpdate(
@@ -64,4 +64,4 @@ async function getUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, setCurrentUser, getCurrentUser };
+export { createUser, updateUser, getUser, loginUser };

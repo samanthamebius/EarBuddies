@@ -6,13 +6,13 @@ import axios from "axios";
  * whether the data is still being loaded or not.
  * code credit: Andrew Meads 
  */
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function useGet(url, initialState = null) {
   const [data, setData] = useState(initialState);
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
-  url = "http://localhost:3000/api" + url;
+  const full_url = BASE_URL + url; 
 
   console.log("in useGet " + url)
 
@@ -21,7 +21,7 @@ export default function useGet(url, initialState = null) {
     async function fetchData() {
       setLoading(true);
       console.log("fetching data")
-      const response = await axios.get(url, {
+      const response = await axios.get(full_url, {
         onError: (err) => console.log(err),
       });
       setData(response.data);

@@ -40,15 +40,25 @@ function NavMenu() {
 
 function UserInfo() {
   console.log("in user info")
+  const current_user_id = localStorage.getItem("current_user_id");
+  console.log("current user id: " + current_user_id)
+  console.log(current_user_id.length)
+  if (current_user_id.length == 2 || current_user_id == null) {
+    console.log("current user id is null")
+    return <p>Could not load user</p>;
+  }
+
   const {
     data: user,
     isLoading: userIsLoading,
-    refresh: refreshUser } = useGet("/user", []);
+    refresh: refreshUser } = useGet(`/user/${current_user_id}`, []);
 
   console.log('user: ' + user);
 
   if (userIsLoading) {
     return <p>Loading...</p>;
+  } else  if (!user) {
+    return <p>Could not load user</p>;
   } else {
     const profilePicture = user[0].profilePic;
     const username = user[0].userDisplayName;
@@ -87,7 +97,7 @@ export function DropdownMenu() {
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        {/* <UserInfo /> */}
+        <UserInfo />
         {/* <img src={profileIcon} className={styles.profile_picture} /> */}
         {/* <p className={styles.username}>Username </p> */}
         {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />}

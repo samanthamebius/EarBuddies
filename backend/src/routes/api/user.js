@@ -1,13 +1,14 @@
 import express from "express";
-import {getCurrentUser} from "../../database/user_dao";
+import {getUser} from "../../database/user_dao";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
     console.log("called user!")
+    const {id} = req.params;
   try {
     console.log("in user.js");
-    const user = await getCurrentUser();
+    const user = await getUser(id);
     console.log("in user.js " + user + "!");
     res.json(user);
   } catch (err) {
