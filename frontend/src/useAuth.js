@@ -18,13 +18,14 @@ export default function useAuth(accessToken, code, current_user) {
 	const [current_user_id, setcurrent_user_id] = useLocalStorage("current_user_id", current_user);
 	console.log("in useAuth");
 
-	// useEffect(() => {
-	// 	console.log("in useAuth useEffect");
-	// }, [console.log]);
+	useEffect(() => {
+		console.log("testing UseEffect dummy");
+	}, [console.log]);
 
 	useEffect(() => {
-		if (!access_token && code && !current_user_id) {
-			console.log("in useAuth useEffect")
+		console.log("in useAuth useEffect");
+		if (!access_token && code) {
+			console.log("in useAuth useEffect if")
 			const fetchData = async () => {
 				try {
 					console.log("in useAuth useEffect fetchData")
@@ -45,7 +46,7 @@ export default function useAuth(accessToken, code, current_user) {
 			};
 			fetchData();
 		}
-	}, [access_token, code, current_user]);
+	}, [access_token, code, current_user, console.log]);
 
 	// useEffect(() => {
 	// 	console.log("in useAuth useEffect");
