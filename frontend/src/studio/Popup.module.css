@@ -68,6 +68,10 @@
     background-color: #FFF;
     cursor: pointer;
   }
+
+  .listenerListItem:hover p {
+    color: #B03EEE;
+  }
   
   .listenerListItem img {
     height: 35px;
