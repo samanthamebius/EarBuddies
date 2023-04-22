@@ -58,6 +58,13 @@
     overflow: scroll;
     margin: 0 20px 20px 20px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.listenerList::-webkit-scrollbar {
+  display: none;
 }
 
 .listenerListItem {
