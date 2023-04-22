@@ -80,6 +80,7 @@ export default function Chat({ socket }) {
 				{
 					message: data.message,
 					username: data.username,
+					messageReply: data?.replyToMessage,
 				},
 			]);
 		});
@@ -98,7 +99,7 @@ export default function Chat({ socket }) {
 	const handleSendMessage = () => {
 		if (message !== "") {
 			// if there is a reply, attach onto the end
-			socket.emit("send_message", { username, room, message });
+			socket.emit("send_message", { username, room, message, replyToMessage });
 			setMessage("");
 			setReplyToMessage("");
 		}
@@ -135,6 +136,7 @@ export default function Chat({ socket }) {
 							setPinnedMessages={setPinnedMessages}
 							pinnedMessages={pinnedMessages}
 							setReplyToMessage={setReplyToMessage}
+							messageReply={message.messageReply}
 						/>
 					))}
 				</div>

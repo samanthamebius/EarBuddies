@@ -7,8 +7,13 @@ import filledPinIcon from "../../assets/chat/filledPinIcon.svg";
 import replyIcon from "../../assets/chat/replyIcon.svg";
 
 function ChatMessage(props) {
-	const { newMessage, setPinnedMessages, pinnedMessages, setReplyToMessage } =
-		props;
+	const {
+		newMessage,
+		setPinnedMessages,
+		pinnedMessages,
+		setReplyToMessage,
+		messageReply,
+	} = props;
 	const { message, username } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
@@ -66,6 +71,22 @@ function ChatMessage(props) {
 			onMouseOut={() => setHover(false)}
 		>
 			<h4 className={styles.username}>{username}</h4>
+			{messageReply && (
+				<div
+					style={{
+						backgroundColor: "#f6f9fa",
+						padding: "12px",
+						borderRadius: `${
+							isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
+						}`,
+						marginBottom: "-10px",
+					}}
+				>
+					<p style={{ margin: 0, fontSize: "12px", color: "grey" }}>
+						{messageReply}
+					</p>
+				</div>
+			)}
 			<div
 				style={{
 					display: "flex",
