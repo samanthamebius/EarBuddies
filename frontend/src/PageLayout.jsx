@@ -43,7 +43,7 @@ function UserInfo() {
   const {
     data: user,
     isLoading: userIsLoading,
-    refresh: refreshUser} = useGet("/user");
+    refresh: refreshUser } = useGet("/user", []);
 
   console.log(user);
 
@@ -55,14 +55,14 @@ function UserInfo() {
     return (
       <div>
         {/* <img src={profilePicture} className={styles.profile_picture} /> */}
-        <p className={styles.username}>{username} </p> 
+        <p className={styles.username}>{username} </p>
       </div>
     );
   }
 
-  
+
 }
-    
+
 
 
 export function DropdownMenu() {
