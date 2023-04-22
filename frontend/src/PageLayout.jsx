@@ -51,7 +51,7 @@ function UserInfo() {
     return <p>Loading...</p>;
   } else {
     // const profilePicture = user.profile_picture;
-    const username = user.username;
+    const username = user[0].userDisplayName;
     return (
       <div>
         {/* <img src={profilePicture} className={styles.profile_picture} /> */}
