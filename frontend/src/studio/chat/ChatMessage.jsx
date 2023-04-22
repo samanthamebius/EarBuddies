@@ -99,7 +99,6 @@ function ChatMessage(props) {
 			alignItems: "center",
 			color: "grey",
 			zIndex: "1",
-			position: `${isCurrentUser && "absolute"}`,
 		};
 		return reactionCounter;
 	};
@@ -154,7 +153,7 @@ function ChatMessage(props) {
 				<div
 					style={{
 						display: "flex",
-						maxWidth: "100%",
+						maxWidth: "70%",
 					}}
 				>
 					{/* Message Content */}
@@ -175,28 +174,22 @@ function ChatMessage(props) {
 							className={styles.messageDecoration}
 						/>
 					</div>
-					{reactions.length > 0 && (
-						<div style={setReactionCounterStyle()}>
-							{reactions.map((reaction) => reaction.node)}
-							{reactions.length > 1 && reactions.length}
-						</div>
-					)}
 				</div>
-				{hover && (
-					<div style={{ display: "flex" }}>
-						{isReacting && hover && (
-							<ReactionBarSelector
-								iconSize={12}
-								style={{
-									height: "fit-content",
-									marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
-									marginRight: `${isCurrentUser ? "4px" : "0"}`,
-									position: "absolute",
-									zIndex: 3,
-								}}
-								onSelect={(reaction) => handleReactions(reaction)}
-							/>
-						)}
+				{/* Reaction Counter */}
+				{reactions.length > 0 && (
+					<div style={setReactionCounterStyle()}>
+						{reactions.map((reaction) => reaction.node)}
+						{reactions.length > 1 && reactions.length}
+					</div>
+				)}
+				{hover ? (
+					// Actions Container
+					<div
+						style={{
+							display: "flex",
+							flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
+						}}
+					>
 						<div style={setActionsContainerStyle()}>
 							<ReplyRoundedIcon
 								className={styles.reply}
@@ -222,7 +215,23 @@ function ChatMessage(props) {
 								fontSize="small"
 							/>
 						</div>
+						{/* Reaction Bar */}
+						{isReacting && hover && (
+							<ReactionBarSelector
+								iconSize={12}
+								style={{
+									alignSelf: "center",
+									marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
+									marginRight: `${isCurrentUser ? "4px" : "0"}`,
+									marginBottom: "6px",
+								}}
+								onSelect={(reaction) => handleReactions(reaction)}
+							/>
+						)}
 					</div>
+				) : (
+					// placeholder
+					<div style={{ width: "72px" }}></div>
 				)}
 			</div>
 		</div>
