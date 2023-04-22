@@ -4,8 +4,10 @@ import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
 import { useParams } from "react-router-dom";
-import sendIcon from "../../assets/chat/sendIcon.svg";
 import PinnedMessage from "./PinnedMessage";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 
 const mockStudios = [
 	{
@@ -37,8 +39,9 @@ const mockStudios = [
 const StyledTextField = styled(TextField)({
 	"& .MuiInputBase-root": {
 		padding: "0",
+		fontSize: "15px",
 	},
-	width: "80%",
+	width: "100%",
 });
 
 export default function Chat({ socket }) {
@@ -57,14 +60,9 @@ export default function Chat({ socket }) {
 	// styling for send icon
 	const setSendIconStyling = () => {
 		const image = {
-			width: "16px",
-			height: "14px",
 			opacity: `${message !== "" ? "0.5" : "0.2"}`,
-			padding: "12px 12px 0 0",
+			padding: "10px 10px 0 0",
 			margin: "0",
-		};
-
-		image.hover = {
 			cursor: "pointer",
 		};
 
@@ -98,7 +96,6 @@ export default function Chat({ socket }) {
 	// send the message
 	const handleSendMessage = () => {
 		if (message !== "") {
-			// if there is a reply, attach onto the end
 			socket.emit("send_message", { username, room, message, replyToMessage });
 			setMessage("");
 			setReplyToMessage("");
@@ -108,27 +105,28 @@ export default function Chat({ socket }) {
 	return (
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
-				<div
-					style={{
-						position: "sticky",
-						top: "0",
-						display: "flex",
-						flexDirection: "column",
-					}}
-				>
+				<div className={styles.pinnedMessages}>
 					{displayedPinnedMessages.map((message, index) => (
 						<PinnedMessage key={index} message={message} />
 					))}
 					{pinnedMessages.length > 1 && (
-						<p
+						<div
 							className={styles.expandPinnedMessages}
 							onClick={() => setExpandedPinnedMessages(!expandedPinnedMessages)}
 						>
-							{expandedPinnedMessages ? "show less" : "show more"}
-						</p>
+							{expandedPinnedMessages ? (
+								<div className={styles.expandMessagesContent}>
+									show less <ExpandLessRoundedIcon />
+								</div>
+							) : (
+								<div className={styles.expandMessagesContent}>
+									show more <ExpandMoreRoundedIcon />
+								</div>
+							)}
+						</div>
 					)}
 				</div>
-				<div style={{ overflowY: "auto" }}>
+				<div className={styles.messagesContainer}>
 					{messages.map((message, index) => (
 						<ChatMessage
 							key={index}
@@ -142,25 +140,8 @@ export default function Chat({ socket }) {
 				</div>
 			</div>
 			<div className={styles.chatInput}>
-				<div
-					style={{
-						width: "80%",
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "flex-start",
-						padding: "10px 0 0 12px",
-					}}
-				>
-					<div
-						style={{
-							textAlign: "unset",
-							margin: 0,
-							color: "#79797980",
-							fontSize: "14px",
-						}}
-					>
-						{replyToMessage}
-					</div>
+				<div className={styles.inputContent}>
+					<div className={styles.messageReply}>{replyToMessage}</div>
 					<StyledTextField
 						variant="standard"
 						multiline
@@ -177,11 +158,10 @@ export default function Chat({ socket }) {
 						InputProps={{ disableUnderline: true, style: { color: "#797979" } }}
 					/>
 				</div>
-				<img
-					src={sendIcon}
-					alt="send"
+				<SendRoundedIcon
 					onClick={() => handleSendMessage()}
 					style={setSendIconStyling()}
+					fontSize="small"
 				/>
 			</div>
 		</div>

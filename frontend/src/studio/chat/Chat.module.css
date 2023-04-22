@@ -34,13 +34,45 @@
 	width: 80%;
 }
 
+.pinnedMessages {
+	position: "sticky";
+	top: "0";
+	display: "flex";
+	flex-direction: "column";
+}
+
 .expandPinnedMessages {
-	color: #b03eee;
+	opacity: 0.5;
 	font-size: 14px;
+	float: right;
 	margin: 0;
-	align-self: flex-end;
 }
 
 .expandPinnedMessages:hover {
 	cursor: pointer;
+	opacity: 0.8;
+}
+
+.expandMessagesContent {
+	display: flex;
+	align-items: center;
+}
+
+.messagesContainer {
+	overflow-y: auto;
+}
+
+.inputContent {
+	width: 88%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 10px 0 0 10px;
+}
+
+.messageReply {
+	margin: 0;
+	font-size: 13px;
+	opacity: 0.5;
+	text-align: unset;
 }

@@ -7,13 +7,20 @@
 	margin-bottom: 12px;
 }
 
+.content {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	align-items: center;
+}
+
 .message {
 	margin: 0 0 0 10px;
-	color: "#606060";
+	opacity: 0.6;
 	font-size: 14px;
 }
 
-.pinIcon {
+.pin {
 	opacity: 0.5;
 }
 

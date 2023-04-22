@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import styles from "./ChatMessage.module.css";
 import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
-import pinIcon from "../../assets/chat/pinIcon.svg";
-import filledPinIcon from "../../assets/chat/filledPinIcon.svg";
-import replyIcon from "../../assets/chat/replyIcon.svg";
 import { ReactionBarSelector } from "@charkour/react-reactions";
 import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
+import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import PushPinIcon from "@mui/icons-material/PushPin";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 
 const defaultReactions = [
 	{ label: "angry", reaction: <div>😡</div> },
@@ -34,18 +34,6 @@ function ChatMessage(props) {
 
 	const isCurrentUser = username === "test";
 
-	const setMessageBodyStyle = () => {
-		const message = {
-			backgroundColor: `${isCurrentUser ? "#E640F8" : "#B03EEE"}`,
-			padding: "12px",
-			borderRadius: "16px",
-			overflowWrap: "break-word",
-			textAlign: "left",
-			maxWidth: "100%",
-		};
-		return message;
-	};
-
 	const setChatMessageStyle = () => {
 		const message = {
 			display: "flex",
@@ -56,6 +44,64 @@ function ChatMessage(props) {
 		};
 
 		return message;
+	};
+
+	const setMessageReplyStyle = () => {
+		const message = {
+			backgroundColor: "#f6f9fa",
+			padding: "12px",
+			borderRadius: `${
+				isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
+			}`,
+			marginBottom: "-10px",
+		};
+
+		return message;
+	};
+
+	const setMessageBodyStyle = () => {
+		const message = {
+			backgroundColor: `${isCurrentUser ? "#E640F8" : "#B03EEE"}`,
+			padding: "12px",
+			borderRadius: "16px",
+			overflowWrap: "anywhere",
+			textAlign: "left",
+			position: "relative",
+		};
+
+		return message;
+	};
+
+	const setActionsContainerStyle = () => {
+		const container = {
+			display: "flex",
+			alignItems: "center",
+			flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
+			marginRight: `${isCurrentUser ? "8px" : "0"}`,
+			marginLeft: `${isCurrentUser ? "0" : "8px"}`,
+			marginBottom: "5px",
+			gap: "2px",
+		};
+
+		return container;
+	};
+
+	const setReactionCounterStyle = () => {
+		const reactionCounter = {
+			backgroundColor: "white",
+			alignSelf: "end",
+			borderRadius: "80px",
+			fontSize: "12px",
+			padding: "2px",
+			margin: "0 -10px 0 -10px",
+			border: "1px solid lightgrey",
+			display: "flex",
+			alignItems: "center",
+			color: "grey",
+			zIndex: "1",
+			position: `${isCurrentUser && "absolute"}`,
+		};
+		return reactionCounter;
 	};
 
 	const handleReactions = (selectedReaction) => {
@@ -94,98 +140,88 @@ function ChatMessage(props) {
 		>
 			<h4 className={styles.username}>{username}</h4>
 			{messageReply && (
-				<div
-					style={{
-						backgroundColor: "#f6f9fa",
-						padding: "12px",
-						borderRadius: `${
-							isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
-						}`,
-						marginBottom: "-10px",
-					}}
-				>
-					<p style={{ margin: 0, fontSize: "12px", color: "grey" }}>
-						{messageReply}
-					</p>
+				<div style={setMessageReplyStyle()}>
+					<p className={styles.messageReplyContent}>{messageReply}</p>
 				</div>
 			)}
 			<div
 				style={{
 					display: "flex",
-					// maxWidth: "60%",
 					flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
 				}}
 			>
+				{/* Message */}
 				<div
 					style={{
 						display: "flex",
-						flexDirection: "column",
-						alignItems: `${isCurrentUser ? "flex-end" : "flex-start"}`,
+						maxWidth: "100%",
 					}}
 				>
-					<div style={setMessageBodyStyle()}>
-						<p className={styles.body}>{message}</p>
-					</div>
-					<img
-						src={isCurrentUser ? messageDecoration1 : messageDecoration2}
+					{/* Message Content */}
+					<div
 						style={{
-							margin: "-17px 0 0 -1px",
-							zIndex: 0,
+							display: "flex",
+							flexDirection: "column",
+							position: "relative",
+							width: "100%",
+							alignItems: `${isCurrentUser ? "flex-end" : "flex-start"}`,
 						}}
-					/>
+					>
+						<div style={setMessageBodyStyle()}>
+							<p className={styles.body}>{message}</p>
+						</div>
+						<img
+							src={isCurrentUser ? messageDecoration1 : messageDecoration2}
+							className={styles.messageDecoration}
+						/>
+					</div>
+					{reactions.length > 0 && (
+						<div style={setReactionCounterStyle()}>
+							{reactions.map((reaction) => reaction.node)}
+							{reactions.length > 1 && reactions.length}
+						</div>
+					)}
 				</div>
-				{reactions.length > 0 && (
-					<div
-						style={{
-							backgroundColor: "white",
-							alignSelf: "end",
-							borderRadius: "80px",
-							fontSize: "12px",
-							padding: "2px",
-							marginLeft: "-14px",
-							border: "1px solid lightgrey",
-							display: "flex",
-							alignItems: "center",
-							color: "grey",
-							// for current user and no margin left
-							// marginRight: "-14px"
-							// zIndex: "1"
-						}}
-					>
-						{reactions.map((reaction) => reaction.node)}
-						{reactions.length > 1 && reactions.length}
-					</div>
-				)}
 				{hover && (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							alignItems: "center",
-						}}
-					>
-						<img
-							src={replyIcon}
-							alt="reply"
-							className={styles.reply}
-							onClick={() => setIsReplying(!isReplying)}
-						/>
-						<img
-							src={isPinned ? filledPinIcon : pinIcon}
-							alt="pin"
-							className={styles.pin}
-							onClick={() => setIsPinned(!isPinned)}
-						/>
-						<SentimentSatisfiedRoundedIcon
-							onClick={() => setIsReacting(!isReacting)}
-						/>
+					<div style={{ display: "flex" }}>
 						{isReacting && hover && (
 							<ReactionBarSelector
-								iconSize={14}
-								style={{ height: "fit-content" }}
+								iconSize={12}
+								style={{
+									height: "fit-content",
+									marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
+									marginRight: `${isCurrentUser ? "4px" : "0"}`,
+									position: "absolute",
+									zIndex: 3,
+								}}
 								onSelect={(reaction) => handleReactions(reaction)}
 							/>
 						)}
+						<div style={setActionsContainerStyle()}>
+							<ReplyRoundedIcon
+								className={styles.reply}
+								onClick={() => setIsReplying(!isReplying)}
+								fontSize="small"
+							/>
+							{isPinned ? (
+								<PushPinIcon
+									className={styles.pin}
+									onClick={() => setIsPinned(!isPinned)}
+									fontSize="small"
+								/>
+							) : (
+								<PushPinOutlinedIcon
+									className={styles.pin}
+									onClick={() => setIsPinned(!isPinned)}
+									fontSize="small"
+								/>
+							)}
+							<SentimentSatisfiedRoundedIcon
+								onClick={() => setIsReacting(!isReacting)}
+								className={styles.reaction}
+								fontSize="small"
+							/>
+						</div>
 					</div>
 				)}
 			</div>
