@@ -70,6 +70,10 @@
     cursor: pointer;
   }
 
+  .listenerListItem:hover {
+    background-color: #f1f1f1;
+  }
+
   .listenerListItem:hover p {
     color: #B03EEE;
   }
