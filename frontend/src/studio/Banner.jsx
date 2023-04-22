@@ -125,31 +125,31 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				open={open} 
 				onClose={handleClose} 
 			>
-				<MenuItem onClick={handleLeaveOpen}>
+				<MenuItem className={styles.menu_item} onClick={handleLeaveOpen}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
-					<span className={styles.menu_item}> Leave Group</span>
+					<span> Leave Group</span>
 				</MenuItem>
 				<LeaveStudioDialog 
 					isDialogOpened={isLeaveOpen}
 					handleCloseDialog={() => setIsLeaveOpen(false)} 
 					listeners={listeners}/>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Edit Nickname </span>
+					<span>Edit Nickname </span>
 				</MenuItem>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={RemoveMemberIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Remove a Member</span>
+					<span>Remove a Member</span>
 				</MenuItem>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={AssignNewHostIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Assign a New Host</span>
+					<span>Assign a New Host</span>
 				</MenuItem>
 
-				<MenuItem
+				<MenuItem className={styles.menu_item}
 					onClick={() => {
 						handleClose;
 						handleControlToggle();
@@ -160,9 +160,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 						className={styles.icon}
 					/>
 					{controlEnabled ? (
-						<span className={styles.menu_item}>Disable Control</span>
+						<span>Disable Control</span>
 					) : (
-						<span className={styles.menu_item}>Enable Control</span>
+						<span>Enable Control</span>
 					)}
 				</MenuItem>
 			</Menu>
