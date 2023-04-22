@@ -68,11 +68,11 @@
 	pointer-events: none;
 }
 
-.menu_item {
-    color:#757575;
+.menu_item span {
+    color:#606060;
 }
 
-.menu_item:hover {
+.menu_item:hover span {
     color: #B03EEE;
 }
 
