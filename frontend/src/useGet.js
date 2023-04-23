@@ -33,9 +33,5 @@ export default function useGet(url, initialState = null, access_token = null) {
     fetchData();
   }, [url, refreshToggle, access_token]);
 
-  function refresh() {
-    setRefreshToggle(!refreshToggle);
-  }
-
-  return { data, isLoading, refresh };
+  return { data, isLoading };
 }

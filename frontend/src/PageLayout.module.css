@@ -39,6 +39,11 @@
     align-items: center;
 }
 
+.profile_layout {
+    display: flex;
+    align-items: center;
+}
+
 .profile_picture {
     height: 30px;
     pointer-events: none;

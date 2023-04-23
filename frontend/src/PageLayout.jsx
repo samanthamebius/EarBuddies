@@ -54,8 +54,7 @@ function UserInfo() {
 
   const {
     data: user,
-    isLoading: userIsLoading,
-    refresh: refreshUser } = useGet(`/api/user/${id}`, [], access_token);
+    isLoading: userIsLoading } = useGet(`/api/user/${id}`, [], access_token);
 
   if (userIsLoading) {
     return <p>Loading...</p>;
@@ -71,7 +70,7 @@ function UserInfo() {
       console.log(error)
     }
     return (
-      <div style={{ display: 'flex' }}>
+      <div className={styles.profile_layout}>
         <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>{username} </p>
       </div>
@@ -95,7 +94,6 @@ function login() {
     }
   }
   useAuth(access_token, code, current_user_id);
-  const current_user = localStorage.getItem("current_user_id");
 }
 
 export function DropdownMenu() {
@@ -138,9 +136,6 @@ export function DropdownMenu() {
 
       <Button onClick={handleClick} className={styles.button}>
         <UserInfo />
-        {/* <img src={profileIcon} className={styles.profile_picture} /> */}
-        {/* <p className={styles.username}>Username </p> */}
-        {/* {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />} */}
       </Button>
 
       <Menu
