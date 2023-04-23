@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./ChatMessage.module.css";
 import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
+import { AppContext } from "../../AppContextProvider";
 
-function ChatMessage({ newMessage }) {
-	const { message, username } = newMessage;
-	const isCurrentUser = username === "test";
+function ChatMessage({ newMessage, messageUsername }) {
+	const { message } = newMessage;
+	const { username } = useContext(AppContext);
+	const isCurrentUser = username === messageUsername;
 
 	const setMessageBodyStyle = () => {
 		const message = {
@@ -32,7 +34,7 @@ function ChatMessage({ newMessage }) {
 
 	return (
 		<div style={setChatMessageStyle()}>
-			<h4 className={styles.username}>{username}</h4>
+			<h4 className={styles.username}>{messageUsername}</h4>
 			<div style={setMessageBodyStyle()}>
 				<p className={styles.body}>{message}</p>
 			</div>

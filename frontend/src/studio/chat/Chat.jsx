@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
 import ChatMessage from "./ChatMessage";
 import { useParams } from "react-router-dom";
 import sendIcon from "../../assets/chat/sendIcon.svg";
+import { AppContext } from "../../AppContextProvider";
 
 const mockStudios = [
 	{
@@ -40,12 +41,13 @@ const StyledTextField = styled(TextField)({
 	width: "80%",
 });
 
-export default function Chat({ socket }) {
+export default function Chat(props) {
+	const { socket } = props;
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
+	const { username } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
-	const username = "test"; // this will be the username of the user from DB
 
 	// styling for send icon
 	const setSendIconStyling = () => {
@@ -55,9 +57,6 @@ export default function Chat({ socket }) {
 			opacity: `${message !== "" ? "0.5" : "0.2"}`,
 			padding: "12px 12px 0 0",
 			margin: "0",
-		};
-
-		image.hover = {
 			cursor: "pointer",
 		};
 
@@ -99,7 +98,11 @@ export default function Chat({ socket }) {
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
 				{messages.map((message, index) => (
-					<ChatMessage key={index} newMessage={message} />
+					<ChatMessage
+						key={index}
+						newMessage={message}
+						messageUsername={message.username}
+					/>
 				))}
 			</div>
 			<div className={styles.chatInput}>

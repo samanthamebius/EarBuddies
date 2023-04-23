@@ -10,6 +10,8 @@ import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../AppContextProvider";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -27,12 +29,12 @@ const listenersImages = [
 ];
 const listenersActive = [true, true, false, false, true, false];
 
-export default function StudioCard() {
+export default function StudioCard(props) {
 	const { socket, studio } = props;
 	// studio will be gotten from backend when set up
-	const navigate = useNavigate();
 	const room = studio.id; // will be the id of the studio
-	const username = "test";
+	const { username } = useContext(AppContext);
+	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
