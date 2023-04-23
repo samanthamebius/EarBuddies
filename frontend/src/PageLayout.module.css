@@ -29,13 +29,12 @@
 }
 
 .button {
-
     border-radius: 4px !important;
     height: 45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 8px 22px 8px 22px;
     align-items: center;
 }
 
@@ -46,7 +45,9 @@
 
 .profile_picture {
     height: 30px;
+    width: 30px;
     pointer-events: none;
+    border-radius: 4px;
 }
 
 .arrow {
@@ -55,8 +56,8 @@
 
 .username {
     color: #FFFFFF;
-    font-weight: bold;
-    padding: 0 15px;
+    font-weight: 600;
+    padding-left: 15px;
 }
 
 .icon {

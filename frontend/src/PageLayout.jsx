@@ -134,7 +134,11 @@ export function DropdownMenu() {
   return (
     <div className={styles.dropdown}>
 
-      <Button onClick={handleClick} className={styles.button}>
+      <Button sx={{ fontWeight: 600 }}
+							variant="contained"
+							size="large"
+              onClick={handleClick} 
+              className={styles.button}>
         <UserInfo />
       </Button>
 
