@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./PageLayout.module.css";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
@@ -55,6 +55,12 @@ function UserInfo() {
 		access_token
 	);
 
+	useEffect(() => {
+		if (!userIsLoading && user) {
+			setUsername(user[0]?.userDisplayName);
+		}
+	}, [user, userIsLoading]);
+
 	if (userIsLoading) {
 		return <p>Loading...</p>;
 	} else if (!user) {
@@ -65,8 +71,6 @@ function UserInfo() {
 		try {
 			profilePicture = user[0].profilePic;
 			username = user[0].userDisplayName;
-			console.log(username);
-			setUsername(username);
 		} catch (error) {
 			console.log(error);
 		}

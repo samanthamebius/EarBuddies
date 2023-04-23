@@ -33,12 +33,11 @@ export default function StudioCard(props) {
 	const { socket, studio } = props;
 	// studio will be gotten from backend when set up
 	const room = studio.id; // will be the id of the studio
-	const { username } = useContext(AppContext);
 	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
-		socket.emit("join-room", { username, room });
+		socket.emit("join-room", { room });
 		navigate(`studio/${room}`);
 	};
 

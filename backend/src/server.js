@@ -45,21 +45,8 @@ io.on("connection", (socket) => {
 
 	// add a user to a studio chat
 	socket.on("join-room", (data) => {
-		const { username, room } = data;
+		const { room } = data;
 		socket.join(room); // let the user join the room
-		console.log(socket);
-
-		// send to all other users in the room expect for the user that joined
-		socket.to(room).emit("receive_message", {
-			message: `${username} just joined that studio`,
-			username: CHAT_BOT,
-		});
-
-		// send to just the user that joined
-		socket.emit("receive_message", {
-			message: `Welcome ${username}`,
-			username: CHAT_BOT,
-		});
 	});
 
 	socket.on("send_message", (data) => {
