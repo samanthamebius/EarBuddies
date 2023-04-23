@@ -37,8 +37,6 @@ const io = new Server(server, {
 	},
 });
 
-const CHAT_BOT = "ChatBot";
-
 // Setup socket connection
 io.on("connection", (socket) => {
 	console.log(`⚡: ${socket.id} user just connected!`);
