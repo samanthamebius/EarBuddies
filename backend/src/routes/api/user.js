@@ -9,12 +9,13 @@ router.get("/:id", async (req, res) => {
     if (!id) {
        return res.status(400).json({msg: "No user id provided"});
     }
-  try {
-    const user = await getUser(id);
-    res.json(user);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    try {
+      const user = await getUser(id);
+      console.log("user.js | line 14 | user: " + user)
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
 });
 
 export default router;

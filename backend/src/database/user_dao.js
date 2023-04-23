@@ -87,7 +87,9 @@ async function updateUser(username) {
 
 async function getUser(username) {
   console.log("user_dao.js | line 61 | getUser username: " + username)
-  return await User.find({ username: username });
+  const user = await User.find({ username: username });
+  console.log("user_dao.js | line 63 | getUser user: " + user)
+  return user;
 }
 
 await mongoose.disconnect;
