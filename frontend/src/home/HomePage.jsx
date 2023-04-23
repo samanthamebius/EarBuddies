@@ -3,9 +3,10 @@ import useAuth from "../useAuth";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
-import SoundWavesGradient from "../assets/soundwavesgradient.png";
+import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 
 function HomePage() {
@@ -26,12 +27,12 @@ function HomePage() {
 							handleCloseDialog={() => setIsOpen(false)}
 						/>
 						<Button
+							sx={{ fontWeight: 600 }}
 							variant="contained"
 							size="large"
 							className={styles.button}
-							onClick={() => handleOpen()}
-						>
-							+ Create Studio
+							onClick={() => handleOpen()}>
+							<AddRoundedIcon sx={{pr: 1}}/> Create Studio
 						</Button>
 					</div>
 				</div>

@@ -3,12 +3,6 @@
   text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
   padding: 2em;
 }
@@ -20,14 +14,6 @@
 
 .MuiInputBase-input  {
   background: white;
-}
-
-.MuiButtonBase-root {
-  color: white;
-}
-
-.MuiButton-root {
-  color: white;
 }
 
 .MuiButton-contained {
@@ -43,4 +29,12 @@
   background-color: #F5F5F5;
   margin: 0;
   padding: 5px;
+}
+
+a {
+  text-decoration: none;
+}
+
+Button {
+  background: linear-gradient(#B03EEE, #E640F8);
 }

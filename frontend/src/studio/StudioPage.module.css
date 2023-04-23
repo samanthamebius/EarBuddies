@@ -36,6 +36,8 @@
 	grid-row: 1 / 1;
 	grid-column: 1 / 3;
 	border-radius: 10px;
+	min-height: 40px;
+	overflow: hidden;
 	height: auto;
 	position: relative;
 	background-size: cover;
@@ -66,22 +68,20 @@
 	pointer-events: none;
 }
 
-.menu_item {
+.menu_item span {
     color:#606060;
 }
 
-.menu_item:hover {
+.menu_item:hover span {
     color: #B03EEE;
 }
 
 .bannerStudioName {
-	font-family: "Open Sans";
 	color: white;
 	font-weight: bold;
 	margin: 0px;
-	padding-right: 0px;
 	font-size: 28px;
-	padding: 15px;
+	padding: 10px;
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -91,7 +91,7 @@
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	padding: 14px;
+	padding: 10px;
 	cursor: pointer;
 }
 .greyOutImage {
@@ -120,4 +120,18 @@
 	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
 	grid-column: 3 / 3;
 	border-radius: 10px;
+}
+
+@media only screen and ((max-width: 800px) or (max-height: 600px)) {
+	.bannerStudioName {
+	  font-size: 20px;
+	}
+
+	.kebabIcon {
+		height: 20px;
+	}
+
+	.bannerlisteners {
+		transform: scale(0.9);
+	}
 }

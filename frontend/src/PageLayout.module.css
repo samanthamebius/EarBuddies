@@ -1,6 +1,6 @@
 .navmenu {
     font-size: 10;
-    background-color: #E9DCF1;
+    background-color: #E6E6E6;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -9,20 +9,34 @@
     padding: 0 20px;
 }
 
+.navLink {
+    display:flex;
+    align-items: center;
+}
+
 .logo {
-    height: 60px;
+    height: 50px;
     pointer-events: none;
 }
 
+.brandName {
+    margin-left: 15px;
+    font-family: 'Secular One';
+    font-size: 26px;
+    background: -webkit-linear-gradient(#B03EEE, #E640F8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .button {
-    border-radius: 10px !important;
-    height: 45px;
+
+    border-radius: 4px !important;
+    height:45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
     align-items: center;
-    background-image: linear-gradient(180deg, #B03EEE, #E640F8);
 }
 
 .profile_picture {
@@ -48,8 +62,11 @@
 
 .menu_item {
     color: #606060;
+.menu_title {
+    color:#757575;
+    margin: 5px 0px 5px 10px;
 }
 
-.menu_item:hover {
+.menu_item:hover .menu_title {
     color: #B03EEE;
 }

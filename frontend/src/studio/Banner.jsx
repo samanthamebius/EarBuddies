@@ -1,6 +1,7 @@
 import styles from "./StudioPage.module.css";
 import React from "react";
 import { useState } from "react";
+import LeaveStudioDialog from "./LeaveStudioDialog"
 
 import TaylorSwiftImg from "../assets/taylorswift.png";
 
@@ -41,9 +42,23 @@ const listenersImages = [
 ];
 const listenersActive = [true, true, false, false, true, false];
 
+const listeners = [
+	{ id:1, username:'breannajury', icon: ProfilePicImg1},
+	{ id:2, username:'ananyaahluwalia', icon: ProfilePicImg2},
+	{ id:3, username:'yuewenzheng', icon: ProfilePicImg3},
+	{ id:4, username:'samanthamebius', icon: ProfilePicImg4},
+	{ id:5, username:'amyrimmer', icon: ProfilePicImg5},
+	{ id:6, username:'angelalorusso', icon: ProfilePicImg6},
+	{ id:7, username:'breannajury1', icon: ProfilePicImg1},
+	{ id:8, username:'ananyaahluwalia1', icon: ProfilePicImg2},
+	{ id:9, username:'yuewenzheng1', icon: ProfilePicImg3},
+	{ id:10, username:'samanthamebius1', icon: ProfilePicImg4},
+	{ id:11, username:'amyrimmer1', icon: ProfilePicImg5},
+	{ id:12, username:'angelalorusso1', icon: ProfilePicImg6}
+];
+
 export default function Banner() {
 	const [addIconAdded, setAddIconAdded] = useState(false);
-
 	if (addIconAdded == false) {
 		listenersImages.push(AddListenerIcon);
 		listenersActive.push(true);
@@ -51,7 +66,6 @@ export default function Banner() {
 	}
 
 	const [controlEnabled, toggleControl] = useState(false);
-
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
 	};
@@ -94,6 +108,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 	const handleClose = () => {
 		setOpen(null);
 	};
+	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+	const handleLeaveOpen = () => {
+		setIsLeaveOpen(!isLeaveOpen);
+	};
 
 	return (
 		<div>
@@ -113,27 +131,31 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 				open={open} 
 				onClose={handleClose} 
 			>
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleLeaveOpen}>
 					<img src={LeaveGroupIcon} className={styles.icon} />
-					<span className={styles.menu_item}> Leave Group</span>
+					<span> Leave Group</span>
 				</MenuItem>
+				<LeaveStudioDialog 
+					isDialogOpened={isLeaveOpen}
+					handleCloseDialog={() => setIsLeaveOpen(false)} 
+					listeners={listeners}/>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={EditNicknameIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Edit Nickname </span>
+					<span>Edit Nickname </span>
 				</MenuItem>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={RemoveMemberIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Remove a Member</span>
+					<span>Remove a Member</span>
 				</MenuItem>
 
-				<MenuItem onClick={handleClose}>
+				<MenuItem className={styles.menu_item} onClick={handleClose}>
 					<img src={AssignNewHostIcon} className={styles.icon} />
-					<span className={styles.menu_item}>Assign a New Host</span>
+					<span>Assign a New Host</span>
 				</MenuItem>
 
-				<MenuItem
+				<MenuItem className={styles.menu_item}
 					onClick={() => {
 						handleClose;
 						handleControlToggle();
@@ -144,9 +166,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 						className={styles.icon}
 					/>
 					{controlEnabled ? (
-						<span className={styles.menu_item}>Disable Control</span>
+						<span>Disable Control</span>
 					) : (
-						<span className={styles.menu_item}>Enable Control</span>
+						<span>Enable Control</span>
 					)}
 				</MenuItem>
 			</Menu>
