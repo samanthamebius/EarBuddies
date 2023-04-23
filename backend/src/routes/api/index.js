@@ -8,6 +8,9 @@ router.use('/login', login);
 import refresh from './refresh';
 router.use('/refresh', refresh);
 
+import user from './user';
+router.use('/user', user);
+
 //tester api call
 router.get('/hello', (req, res) => {
     res.send('Hello, World');

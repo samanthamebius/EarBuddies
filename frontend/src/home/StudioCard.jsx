@@ -1,5 +1,5 @@
 import styles from "./StudioCard.module.css";
-import SoundWaves from "../assets/soundwaves.png";
+import SoundWaves from "../assets/studio_cards/soundwaves.png";
 import TaylorSwiftImg from "../assets/taylorswift.png";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
@@ -27,7 +27,7 @@ const listenersImages = [
 ];
 const listenersActive = [true, true, false, false, true, false];
 
-export default function StudioCard(props) {
+export default function StudioCard() {
 	const { socket, studio } = props;
 	// studio will be gotten from backend when set up
 	const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function StudioCard(props) {
 					</div>
 					<div className={styles.genreTags}>
 						{genres.map((genre, i) => (
-							<GenreTag genre={genre} />
+							<GenreTag key={i} genre={genre} />
 						))}
 					</div>
 					<div className={styles.listeners}>
@@ -70,6 +70,7 @@ export default function StudioCard(props) {
 							isListening={isListening}
 							profileImages={listenersImages}
 							profileStatus={listenersActive}
+							isHomeCard={true}
 						/>
 						<img className={styles.hostImage} src={hostImage} />
 					</div>
