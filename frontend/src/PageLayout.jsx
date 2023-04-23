@@ -41,9 +41,7 @@ function NavMenu() {
 
 function UserInfo() {
   const current_user_id = localStorage.getItem("current_user_id");
-  console.log("PageLayout.jsx | line 44 | current user id: " + current_user_id)
   const id = JSON.parse(current_user_id);
-  console.log("PageLayout.jsx | line 46 | id: " + id)
   
   if (!current_user_id) {
     return <p>Could not load user</p>;
@@ -56,33 +54,21 @@ function UserInfo() {
     isLoading: userIsLoading,
     refresh: refreshUser } = useGet(`/api/user/${id}`, [], access_token);
 
-  console.log('PageLayout.jsx | line 57 | user: ' + user);
-
   if (userIsLoading) {
     return <p>Loading...</p>;
   } else  if (!user) {
-    console.log("PageLayout.jsx | line 62 | user is null ==============")
     return <p>Could not load user</p>;
   } else {
-    console.log("PageLayout.jsx | line 65 | user is not null ==============")
-
     var profilePicture = "";
     var username = "";
     try {
       profilePicture = user[0].profilePic;
       username = user[0].userDisplayName;
     } catch (error) {
-      console.log("PageLayout.jsx | line 72 | error: " + error)
+      console.log(error)
     }
-
-
-
-    // const profilePicture = user[0].profilePic;
-    // const username = user[0].userDisplayName;
-    // const profilePicture = "testing";
-    // const username = "testing";
     return (
-      <div>
+      <div style={{display: 'flex'}}>
         <img src={profilePicture} className={styles.profile_picture} />
         <p className={styles.username}>{username} </p>
       </div>
@@ -97,7 +83,6 @@ function login() {
 	const access_token = localStorage.getItem("access_token");
 	const code = new URLSearchParams(window.location.search).get("code");
 	const current_user_id = localStorage.getItem("current_user_id");
-  console.log("PageLayout.jsx | line 84 | current user id: " + current_user_id)
 	if (access_token == null) {
 		//check for code
 		if (code == null) {
@@ -108,7 +93,6 @@ function login() {
 	}
 	useAuth(access_token, code, current_user_id);
   const current_user = localStorage.getItem("current_user_id");
-  console.log("PageLayout.jsx | line 95 | current user id: " + current_user)
 }
 
 export function DropdownMenu() {

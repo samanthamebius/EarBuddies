@@ -13,7 +13,6 @@ export default function useGet(url, initialState = null, access_token = null) {
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const full_url = BASE_URL + url; 
-  console.log("useGet | line 21 | full_url: " + full_url)
 
   useEffect(() => {
     setRefreshToggle(!refreshToggle);
@@ -21,7 +20,6 @@ export default function useGet(url, initialState = null, access_token = null) {
 
   useEffect(() => {
     if (!access_token) {
-      console.log("useGet | line 21 | No access token")
       return;
     }
     async function fetchData() {
@@ -30,7 +28,6 @@ export default function useGet(url, initialState = null, access_token = null) {
         onError: (err) => console.log(err),
       });
       setData(response.data);
-      console.log("useGet | line 30 | data: " + response.data)
       setLoading(false);
     }
     fetchData();

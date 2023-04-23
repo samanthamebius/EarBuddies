@@ -19,37 +19,6 @@ await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
  * @param {string} code - The code returned from Spotify's auth server
  * @returns {object} - The access token, refresh token, and expiration time
  */
-
-// router.post("/", async (req, res) => {
-//   const code = req.body.code
-//   const spotifyApi = new SpotifyWebApi({
-//     redirectUri: process.env.REDIRECT_URI,
-//     clientId: process.env.CLIENT_ID,
-//     clientSecret: process.env.CLIENT_SECRET,
-//   })
-//   spotifyApi
-//     .authorizationCodeGrant(code)
-//     .then(async function (data) {
-//       const access_token = data.body.access_token;
-//       const refresh_token = data.body.refresh_token;
-//       const expires_in = data.body.expires_in;
-      
-//       spotifyApi.setAccessToken(access_token);
-//       const user_id = await loginUser(spotifyApi, data);
-//       console.log('login.js | line 40 | user_id: ' + user_id)
-
-//       res.json({
-//         access_token: access_token,
-//         refresh_token: refresh_token,
-//         expires_in: expires_in,
-//         user_id: user_id,
-//       });
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err);
-//     });
-// });
-
 router.post("/", async (req, res) => {
   const code = req.body.code;
   const spotifyApi = new SpotifyWebApi({
@@ -65,7 +34,6 @@ router.post("/", async (req, res) => {
 
     spotifyApi.setAccessToken(access_token);
     const user_id = await loginUser(spotifyApi, data);
-    console.log("login.js | line 40 | user_id: " + user_id);
 
     res.json({
       access_token: access_token,
