@@ -10,7 +10,7 @@
 }
 
 .navLink {
-    display:flex;
+    display: flex;
     align-items: center;
 }
 
@@ -31,7 +31,7 @@
 .button {
 
     border-radius: 4px !important;
-    height:45px;
+    height: 45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
@@ -62,8 +62,10 @@
 
 .menu_item {
     color: #606060;
+}
+
 .menu_title {
-    color:#757575;
+    color: #757575;
     margin: 5px 0px 5px 10px;
 }
 
