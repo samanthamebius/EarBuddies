@@ -8,7 +8,6 @@ import { useLocalStorage } from "./useLocalStorage";
  * @returns {string} - The access token
  */
 export default function useAuth(accessToken, code, current_user) {
-	console.log(current_user)
 	const [access_token, setaccess_token] = useLocalStorage(
 		"access_token",
 		accessToken
@@ -17,44 +16,31 @@ export default function useAuth(accessToken, code, current_user) {
 		"refresh_token", "");
 	const [expires_in, setexpires_in] = useLocalStorage("expires_in", "");
 	const [current_user_id, setcurrent_user_id] = useLocalStorage("current_user_id", current_user);
-	console.log("in useAuth");
+
+	// useEffect(() => {
+	// 	console.log("testing UseEffect dummy");
+	// }, [console.log]);
+
+	console.log("useAuth.js | line 26 | user: " + current_user_id)
 
 	useEffect(() => {
-		console.log("testing UseEffect dummy");
-	}, [console.log]);
-
-	console.log("useAuth user " + current_user_id)
-	console.log(current_user_id.length)
-	console.log(Object.keys(current_user_id).length === 0)
-
-	useEffect(() => {
-		console.log("in useAuth useEffect");
-		if (!access_token && code && Object.keys(current_user_id).length === 0) {
-      console.log("in useAuth useEffect if");
+		if (!access_token && code) {
       const fetchData = async () => {
         try {
-          console.log("in useAuth useEffect fetchData");
           const response = await axios.post("http://localhost:3000/api/login", {
             code,
           });
+		  console.log("useAuth.js | line 36 | response: " + response)
+		  console.log("useAuth.js | line 37 | response.data: " + response.data)
           const { access_token, refresh_token, expires_in, user_id } =
             response.data;
+		  console.log("useAuth.js | line 39 | access_token: " + access_token)
+		  console.log("useAuth.js | line 42 | user_id: " + user_id)
+		  console.log("useAuth.js | line 43 | user: " + user_id.length())
           setaccess_token(access_token);
           setrefresh_token(refresh_token);
           setexpires_in(expires_in);
           setcurrent_user_id(user_id);
-          console.log(
-            "in useAuth useEffect " +
-              access_token +
-              " " +
-              refresh_token +
-              " " +
-              expires_in +
-              " " +
-              user_id +
-              " " +
-              code
-          );
           window.history.pushState({}, null, "/");
         } catch (error) {
           console.error(error);
@@ -63,7 +49,7 @@ export default function useAuth(accessToken, code, current_user) {
       };
       fetchData();
     }
-	}, [access_token, code, current_user, console.log]);
+	}, [access_token, code, current_user]);
 
 	// useEffect(() => {
 	// 	console.log("in useAuth useEffect");

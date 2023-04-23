@@ -14,22 +14,18 @@ export default function useGet(url, initialState = null, access_token = null) {
   const [refreshToggle, setRefreshToggle] = useState(false);
   const full_url = BASE_URL + url; 
 
-  console.log("in useGet " + url)
-
   useEffect(() => {
     if (!access_token) {
-      console.log("No access token")
+      console.log("useGet | line 21 | No access token")
       return;
     }
-    console.log("hello")
     async function fetchData() {
       setLoading(true);
-      console.log("fetching data")
       const response = await axios.get(full_url, {
         onError: (err) => console.log(err),
       });
       setData(response.data);
-      console.log(response.data)
+      console.log("useGet | line 30 | data: " + response.data)
       setLoading(false);
     }
     fetchData();

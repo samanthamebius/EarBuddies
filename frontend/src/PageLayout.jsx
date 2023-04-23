@@ -3,6 +3,7 @@ import styles from './PageLayout.module.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
+import useAuth from "./useAuth";
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -39,12 +40,10 @@ function NavMenu() {
 }
 
 function UserInfo() {
-  console.log("in user info")
   const current_user_id = localStorage.getItem("current_user_id");
-  console.log("current user id: " + current_user_id)
-  console.log(current_user_id.length)
-  if (current_user_id.length == 2 || current_user_id == null) {//find a better way to check this
-    console.log("current user id is null")
+  console.log("PageLayout.jsx | line 44| current user id: " + current_user_id)
+  
+  if (!current_user_id) {
     return <p>Could not load user</p>;
   }
 
@@ -55,7 +54,7 @@ function UserInfo() {
     isLoading: userIsLoading,
     refresh: refreshUser } = useGet(`/api/user/${current_user_id}`, [], access_token);
 
-  console.log('user: ' + user);
+  console.log('PageLayout.jsx | line 57 | user: ' + user);
 
   if (userIsLoading) {
     return <p>Loading...</p>;
@@ -73,6 +72,24 @@ function UserInfo() {
       </div>
     );
   }
+}
+
+/**
+ * Checks if user is logged in, if not, redirects to login page
+ */
+function login() {
+	const access_token = localStorage.getItem("access_token");
+	const code = new URLSearchParams(window.location.search).get("code");
+	const current_user_id = localStorage.getItem("current_user_id");
+	if (access_token == null) {
+		//check for code
+		if (code == null) {
+			//reroute to login page
+			window.location.href = "/login";
+			return;
+		}
+	}
+	useAuth(access_token, code, current_user_id);
 }
 
 export function DropdownMenu() {
@@ -94,11 +111,13 @@ export function DropdownMenu() {
     navigate("/login");
   };
 
+  login();
+
   return (
     <div className={styles.dropdown}>
 
       <Button onClick={handleClick} className={styles.button}>
-        <UserInfo />
+        {/* <UserInfo /> */}
         {/* <img src={profileIcon} className={styles.profile_picture} /> */}
         {/* <p className={styles.username}>Username </p> */}
         {isOpen ? <img src={upArrow} className={styles.arrow} /> : <img src={downArrow} className={styles.arrow} />}

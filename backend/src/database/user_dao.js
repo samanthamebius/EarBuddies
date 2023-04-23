@@ -17,28 +17,55 @@ async function createUser(username, userDisplayName, profilePic) {
   return await newUser.save();
 }
 
+// async function loginUser(spotifyApi, data) {
+//   spotifyApi
+//     .getMe()
+//     .then(async function (data) {
+//       const user = await getUser(data.body.id);
+//       // console.log("user_dao.js | line 25 | user: " + user)
+//       // check to see if user in db
+//       if (user.length === 0) {
+//         await createUser(
+//           data.body.id,
+//           data.body.display_name,
+//           `${data.body.images.length === null ? "" : data.body.images[0].url}`
+//         );
+//       } else {
+//         await updateUser(data.body.id);
+//       }
+//       console.log("user_dao.js | line 37 | user_id: " + data.body.id)
+//       return data.body.id;
+//     })
+//     .catch(function (err) {
+//       console.log("Something went wrong!", err);
+//     });
+// }
+
 async function loginUser(spotifyApi, data) {
-  console.log("setting current user");
-  spotifyApi
-    .getMe()
-    .then(async function (data) {
-      const user = getUser(data.body.id);
-      // check to see if user in db
-      if (user.length === 0) {
-        createUser(
-          data.body.id,
-          data.body.display_name,
-          `${data.body.images.length === null ? "" : data.body.images[0].url}`
-        );
-      } else {
-        updateUser(data.body.id);
-      }
-      console.log("setting id " + data.body.id);
-      return data.body.id;
-    })
-    .catch(function (err) {
-      console.log("Something went wrong!", err);
-    });
+  return new Promise((resolve, reject) => {
+    spotifyApi
+      .getMe()
+      .then(async function (data) {
+        const user = await getUser(data.body.id);
+        // console.log("user_dao.js | line 25 | user: " + user)
+        // check to see if user in db
+        if (user.length === 0) {
+          await createUser(
+            data.body.id,
+            data.body.display_name,
+            `${data.body.images.length === null ? "" : data.body.images[0].url}`
+          );
+        } else {
+          await updateUser(data.body.id);
+        }
+        console.log("user_dao.js | line 37 | user_id: " + data.body.id);
+        resolve(data.body.id);
+      })
+      .catch(function (err) {
+        console.log("Something went wrong!", err);
+        reject(err);
+      });
+  });
 }
 
 // async function getCurrentUser() {
@@ -59,7 +86,7 @@ async function updateUser(username) {
 }
 
 async function getUser(username) {
-  console.log("getting user " + username)
+  console.log("user_dao.js | line 61 | getUser username: " + username)
   return await User.find({ username: username });
 }
 
