@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createUser(username, userDisplayName, profilePic) {
+  console.log("user_dao.js | line 21 | username: " + username)
   const newUser = new User({
     username: username,
     userDisplayName: userDisplayName,
@@ -49,13 +50,15 @@ async function loginUser(spotifyApi, data) {
         console.log("user_dao.js | line 25 | data: " + data.body)
         console.log("user_dao.js | line 25 | data.body.id: " + data.body.id)
         const user = await getUser(data.body.id);
+        console.log("user length" + user.length)
+        console.log("user_dao.js | line 25 | images: " + data.body.images.length)
         // console.log("user_dao.js | line 25 | user: " + user)
         // check to see if user in db
         if (user.length === 0) {
           await createUser(
             data.body.id,
             data.body.display_name,
-            `${data.body.images.length === null ? "" : data.body.images[0].url}`
+            `${data.body.images.length === 0 ? "" : data.body.images[0].url}`
           );
         } else {
           await updateUser(data.body.id);
