@@ -16,6 +16,10 @@ export default function useGet(url, initialState = null, access_token = null) {
   console.log("useGet | line 21 | full_url: " + full_url)
 
   useEffect(() => {
+    setRefreshToggle(!refreshToggle);
+  }, []);
+
+  useEffect(() => {
     if (!access_token) {
       console.log("useGet | line 21 | No access token")
       return;

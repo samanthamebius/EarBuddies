@@ -61,10 +61,24 @@ function UserInfo() {
   if (userIsLoading) {
     return <p>Loading...</p>;
   } else  if (!user) {
+    console.log("PageLayout.jsx | line 62 | user is null ==============")
     return <p>Could not load user</p>;
   } else {
-    const profilePicture = user[0].profilePic;
-    const username = user[0].userDisplayName;
+    console.log("PageLayout.jsx | line 65 | user is not null ==============")
+
+    var profilePicture = "";
+    var username = "";
+    try {
+      profilePicture = user[0].profilePic;
+      username = user[0].userDisplayName;
+    } catch (error) {
+      console.log("PageLayout.jsx | line 72 | error: " + error)
+    }
+
+
+
+    // const profilePicture = user[0].profilePic;
+    // const username = user[0].userDisplayName;
     // const profilePicture = "testing";
     // const username = "testing";
     return (
