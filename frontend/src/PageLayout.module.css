@@ -10,7 +10,7 @@
 }
 
 .navLink {
-    display:flex;
+    display: flex;
     align-items: center;
 }
 
@@ -30,17 +30,24 @@
 
 .button {
     border-radius: 4px !important;
-    height:45px;
+    height: 45px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 8px 22px 8px 22px;
+    align-items: center;
+}
+
+.profile_layout {
+    display: flex;
     align-items: center;
 }
 
 .profile_picture {
     height: 30px;
-    pointer-events: none; 
+    width: 30px;
+    pointer-events: none;
+    border-radius: 4px;
 }
 
 .arrow {
@@ -49,18 +56,22 @@
 
 .username {
     color: #FFFFFF;
-    font-weight: bold;
-    padding: 0 15px;
+    font-weight: 600;
+    padding-left: 15px;
 }
 
 .icon {
-    height: 30px; 
+    height: 30px;
     padding-right: 15px;
     pointer-events: none;
 }
 
+.menu_item {
+    color: #606060;
+}
+
 .menu_title {
-    color:#757575;
+    color: #757575;
     margin: 5px 0px 5px 10px;
 }
 

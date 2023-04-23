@@ -8,26 +8,8 @@ import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-/**
- * Checks if user is logged in, if not, redirects to login page
- */
-function login() {
-	const access_token = localStorage.getItem("access_token");
-	const code = new URLSearchParams(window.location.search).get("code");
-	if (access_token == null) {
-		//check for code
-		if (code == null) {
-			//reroute to login page
-			window.location.href = "/login";
-			return;
-		}
-	}
-	useAuth(access_token, code);
-}
 
 function HomePage() {
-	login();
-
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
