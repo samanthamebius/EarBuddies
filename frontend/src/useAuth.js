@@ -36,7 +36,6 @@ export default function useAuth(accessToken, code, current_user) {
             response.data;
 		  console.log("useAuth.js | line 39 | access_token: " + access_token)
 		  console.log("useAuth.js | line 42 | user_id: " + user_id)
-		  console.log("useAuth.js | line 43 | user: " + user_id.length())
           setaccess_token(access_token);
           setrefresh_token(refresh_token);
           setexpires_in(expires_in);

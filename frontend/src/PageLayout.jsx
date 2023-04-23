@@ -81,6 +81,7 @@ function login() {
 	const access_token = localStorage.getItem("access_token");
 	const code = new URLSearchParams(window.location.search).get("code");
 	const current_user_id = localStorage.getItem("current_user_id");
+  console.log("PageLayout.jsx | line 84 | current user id: " + current_user_id)
 	if (access_token == null) {
 		//check for code
 		if (code == null) {
@@ -90,6 +91,8 @@ function login() {
 		}
 	}
 	useAuth(access_token, code, current_user_id);
+  const current_user = localStorage.getItem("current_user_id");
+  console.log("PageLayout.jsx | line 95 | current user id: " + current_user)
 }
 
 export function DropdownMenu() {
