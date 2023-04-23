@@ -89,6 +89,7 @@ export function DropdownMenu() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("expires_in");
+    localStorage.removeItem("current_user_id");
 
     navigate("/login");
   };

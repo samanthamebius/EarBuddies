@@ -14,6 +14,7 @@ function login() {
 	console.log("in login homepage");
 	const access_token = localStorage.getItem("access_token");
 	const code = new URLSearchParams(window.location.search).get("code");
+	const current_user_id = localStorage.getItem("current_user_id");
 	if (access_token == null) {
 		console.log("access token is null");
 		//check for code
@@ -25,7 +26,7 @@ function login() {
 		}
 	}
 	console.log("access token is not null")
-	useAuth(access_token, code);
+	useAuth(access_token, code, current_user_id);
 }
 
 function HomePage() {
