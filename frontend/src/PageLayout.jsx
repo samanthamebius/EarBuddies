@@ -41,7 +41,9 @@ function NavMenu() {
 
 function UserInfo() {
   const current_user_id = localStorage.getItem("current_user_id");
-  console.log("PageLayout.jsx | line 44| current user id: " + current_user_id)
+  console.log("PageLayout.jsx | line 44 | current user id: " + current_user_id)
+  const id = JSON.parse(current_user_id);
+  console.log("PageLayout.jsx | line 46 | id: " + id)
   
   if (!current_user_id) {
     return <p>Could not load user</p>;
@@ -52,7 +54,7 @@ function UserInfo() {
   const {
     data: user,
     isLoading: userIsLoading,
-    refresh: refreshUser } = useGet(`/api/user/${current_user_id}`, [], access_token);
+    refresh: refreshUser } = useGet(`/api/user/${id}`, [], access_token);
 
   console.log('PageLayout.jsx | line 57 | user: ' + user);
 
@@ -61,10 +63,10 @@ function UserInfo() {
   } else  if (!user) {
     return <p>Could not load user</p>;
   } else {
-    // const profilePicture = user[0].profilePic;
-    // const username = user[0].userDisplayName;
-    const profilePicture = "testing";
-    const username = "testing";
+    const profilePicture = user[0].profilePic;
+    const username = user[0].userDisplayName;
+    // const profilePicture = "testing";
+    // const username = "testing";
     return (
       <div>
         <img src={profilePicture} className={styles.profile_picture} />

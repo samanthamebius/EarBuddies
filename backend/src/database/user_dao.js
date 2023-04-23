@@ -46,6 +46,8 @@ async function loginUser(spotifyApi, data) {
     spotifyApi
       .getMe()
       .then(async function (data) {
+        console.log("user_dao.js | line 25 | data: " + data.body)
+        console.log("user_dao.js | line 25 | data.body.id: " + data.body.id)
         const user = await getUser(data.body.id);
         // console.log("user_dao.js | line 25 | user: " + user)
         // check to see if user in db

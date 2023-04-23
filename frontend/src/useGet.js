@@ -13,6 +13,7 @@ export default function useGet(url, initialState = null, access_token = null) {
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const full_url = BASE_URL + url; 
+  console.log("useGet | line 21 | full_url: " + full_url)
 
   useEffect(() => {
     if (!access_token) {
