@@ -30,6 +30,20 @@
 	z-index: 0;
 }
 
+.reactionCounter {
+	background-color: white;
+	align-self: end;
+	border-radius: 80px;
+	font-size: 12px;
+	padding: 2px;
+	margin: 0 -10px 0 -10px;
+	border: 1px solid lightgrey;
+	display: flex;
+	align-items: center;
+	color: grey;
+	z-index: 1;
+}
+
 .reply,
 .pin,
 .reaction {

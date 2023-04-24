@@ -58,6 +58,12 @@ io.on("connection", (socket) => {
 		io.in(room.id).emit("receive_pinned_message", data);
 	});
 
+	// send the message reaction to users
+	socket.on("send_message_reaction", (data) => {
+		const { room } = data;
+		io.in(room.id).emit("receive_message_reaction", data);
+	});
+
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
 		const { username, room } = data;

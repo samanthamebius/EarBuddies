@@ -74,8 +74,8 @@ export default function Chat(props) {
 	// continously set the live messages received
 	useEffect(() => {
 		socket.on("receive_message", (data) => {
-			setMessages((message) => [
-				...message,
+			setMessages((messages) => [
+				...messages,
 				{
 					message: data.message,
 					username: data.username,
@@ -89,8 +89,8 @@ export default function Chat(props) {
 	// continously set the pinned messages received
 	useEffect(() => {
 		socket.on("receive_pinned_message", (data) => {
-			setPinnedMessages((pinnedMessage) => [
-				...pinnedMessage,
+			setPinnedMessages((pinnedMessages) => [
+				...pinnedMessages,
 				{
 					message: data.newMessage.message,
 					username: data.newMessage.username,
@@ -99,8 +99,6 @@ export default function Chat(props) {
 			]);
 		});
 	}, [socket]);
-
-	console.log(pinnedMessages);
 
 	// user leaves the room when they navigate away
 	useEffect(() => {

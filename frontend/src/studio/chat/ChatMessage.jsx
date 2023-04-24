@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 import styles from "./ChatMessage.module.css";
 import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
@@ -10,12 +11,12 @@ import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import { AppContext } from "../../AppContextProvider";
 
 const defaultReactions = [
-	{ label: "angry", reaction: <div>😡</div> },
-	{ label: "satisfaction", reaction: <div>👍</div> },
-	{ label: "happy", reaction: <div>😆</div> },
-	{ label: "surprise", reaction: <div>😮</div> },
-	{ label: "sad", reaction: <div>😢</div> },
-	{ label: "love", reaction: <div>❤️</div> },
+	{ label: "angry", reaction: "😡" },
+	{ label: "satisfaction", reaction: "👍" },
+	{ label: "happy", reaction: "😆" },
+	{ label: "surprise", reaction: "😮" },
+	{ label: "sad", reaction: "😢" },
+	{ label: "love", reaction: "❤️" },
 ];
 
 function ChatMessage(props) {
@@ -82,38 +83,14 @@ function ChatMessage(props) {
 		return container;
 	};
 
-	const setReactionCounterStyle = () => {
-		const reactionCounter = {
-			backgroundColor: "white",
-			alignSelf: "end",
-			borderRadius: "80px",
-			fontSize: "12px",
-			padding: "2px",
-			margin: "0 -10px 0 -10px",
-			border: "1px solid lightgrey",
-			display: "flex",
-			alignItems: "center",
-			color: "grey",
-			zIndex: "1",
-		};
-		return reactionCounter;
-	};
-
-	const handleReactions = (selectedReaction) => {
-		const reactionIcon = defaultReactions.find(
-			(reaction) => reaction.label === selectedReaction
-		);
-		setReactions([
-			{ label: selectedReaction, node: reactionIcon.reaction, by: username },
-		]);
-	};
-
+	// send the pinned message to the socket
 	useEffect(() => {
 		if (isPinned) {
 			socket.emit("send_pinned_message", { newMessage, room });
 		}
 	}, [isPinned]);
 
+	// set the reply message
 	useEffect(() => {
 		if (isReplying) {
 			setReplyToMessage(
@@ -126,14 +103,70 @@ function ChatMessage(props) {
 		}
 	}, [isReplying]);
 
-	// useEffect(() => {
-	// 	if (isPinned) {
-	// 		setPinnedMessages([...pinnedMessages, message]); // sets the local pinned messages
-	// 	}
-	// 	// else {
-	// 	// 	setPinnedMessages(pinnedMessages.slice(0, -1));
-	// 	// }
-	// }, [isPinned]);
+	// send the chat reactions
+	const handleReactions = (selectedReaction) => {
+		socket.emit("send_message_reaction", {
+			room,
+			selectedReaction,
+			username,
+			id: uuid(),
+			reactions,
+		});
+	};
+
+	// get the reactions from the socket
+	useEffect(() => {
+		socket.on("receive_message_reaction", (data) => {
+			const {
+				id,
+				selectedReaction,
+				username: reactionUsername,
+				reactions: messageReactions,
+			} = data;
+
+			// set the reaction icon
+			const reactionIcon = defaultReactions.find(
+				(reaction) => reaction.label === data.selectedReaction
+			);
+
+			// check if the user has already reacted
+			const reactionExists = messageReactions.find(
+				(reaction) => reaction.by === reactionUsername
+			);
+
+			console.log(reactionExists);
+			if (reactionExists) {
+				// update the reaction
+				const currentReactionIndex = messageReactions.findIndex(
+					(reaction) => reaction.by === reactionUsername
+				);
+				const updatedReaction = {
+					...messageReactions[currentReactionIndex],
+					id: id,
+					label: selectedReaction,
+					node: reactionIcon.reaction,
+				};
+				const newReactions = [
+					...messageReactions.slice(0, currentReactionIndex),
+					updatedReaction,
+					...messageReactions.slice(currentReactionIndex + 1),
+				];
+				// console.log(newReactions);
+				setReactions(() => newReactions);
+			} else {
+				// add a new reaction
+				setReactions((reactions) => [
+					...reactions,
+					{
+						label: selectedReaction,
+						node: reactionIcon.reaction,
+						by: reactionUsername,
+						id: id,
+					},
+				]);
+			}
+		});
+	}, [socket]);
 
 	return (
 		<div
@@ -181,8 +214,11 @@ function ChatMessage(props) {
 				</div>
 				{/* Reaction Counter */}
 				{reactions.length > 0 && (
-					<div style={setReactionCounterStyle()}>
-						{reactions.map((reaction) => reaction.node)}
+					<div className={styles.reactionCounter}>
+						{reactions.map((reaction) => (
+							<div key={reaction.id}>{reaction.node}</div>
+						))}
+						&nbsp;
 						{reactions.length > 1 && reactions.length}
 					</div>
 				)}
