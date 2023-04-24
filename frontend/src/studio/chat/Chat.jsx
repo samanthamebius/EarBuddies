@@ -193,7 +193,6 @@ export default function Chat(props) {
 					<StyledTextField
 						variant="standard"
 						multiline
-						maxRows={replyToMessage === null ? 4 : 3}
 						placeholder="Message ..."
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
@@ -210,9 +209,11 @@ export default function Chat(props) {
 					onClick={() => handleSendMessage()}
 					style={{
 						opacity: `${message !== "" ? "0.5" : "0.2"}`,
-						padding: "10px 10px 0 0",
+						padding: `${replyToMessage !== "" ? "14px" : "12px"} 10px 0 0`,
 						margin: "0",
 						cursor: "pointer",
+						position: "sticky",
+						top: "0",
 					}}
 					fontSize="small"
 				/>
