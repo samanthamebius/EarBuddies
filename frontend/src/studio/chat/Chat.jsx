@@ -50,6 +50,7 @@ export default function Chat(props) {
 	const { socket } = props;
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
+	const [isPinned, setIsPinned] = useState(false);
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyToMessage, setReplyToMessage] = useState("");
@@ -97,10 +98,22 @@ export default function Chat(props) {
 					message: data.newMessage.message,
 					username: data.newMessage.username,
 					spotifyUsername: data.newMessage.spotifyUsername,
+					messageId: data.newMessage.id,
 				},
 			]);
 		});
 	}, [socket]);
+
+	// remove pinned messages
+	useEffect(() => {
+		socket.on("receive_remove_pinned_message", (data) => {
+			setPinnedMessages(() =>
+				pinnedMessages.filter(
+					(message) => message.messageId !== data.newMessage.id
+				)
+			);
+		});
+	});
 
 	// user leaves the room when they navigate away
 	useEffect(() => {
@@ -156,8 +169,6 @@ export default function Chat(props) {
 						<ChatMessage
 							key={index}
 							newMessage={message}
-							setPinnedMessages={setPinnedMessages}
-							pinnedMessages={pinnedMessages}
 							setReplyToMessage={setReplyToMessage}
 							messageReply={message.messageReply}
 							room={room}

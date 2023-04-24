@@ -47,6 +47,7 @@ io.on("connection", (socket) => {
 		socket.join(room); // let the user join the room
 	});
 
+	// send message to users
 	socket.on("send_message", (data) => {
 		const { room } = data;
 		io.in(room.id).emit("receive_message", data);
@@ -56,6 +57,12 @@ io.on("connection", (socket) => {
 	socket.on("send_pinned_message", (data) => {
 		const { room } = data;
 		io.in(room.id).emit("receive_pinned_message", data);
+	});
+
+	// send removed pinned messages to users
+	socket.on("remove_pinned_message", (data) => {
+		const { room } = data;
+		io.in(room.id).emit("receive_remove_pinned_message", data);
 	});
 
 	// send the message reaction to users

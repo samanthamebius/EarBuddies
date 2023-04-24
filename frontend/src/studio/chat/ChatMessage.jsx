@@ -90,7 +90,13 @@ function ChatMessage(props) {
 	// send the pinned message to the socket
 	useEffect(() => {
 		if (isPinned) {
-			socket.emit("send_pinned_message", { newMessage, room });
+			socket.emit("send_pinned_message", {
+				newMessage,
+				room,
+			});
+		} else {
+			// remove the pinned message
+			socket.emit("remove_pinned_message", { newMessage, room });
 		}
 	}, [isPinned]);
 
