@@ -12,6 +12,41 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import axios from 'axios';
+
+function useStudioPost() {
+  const [studio, setStudio] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const postStudio = async (name, genres = [], coverPhoto = '', listeners = [], isHostOnly = true) => {
+    const host = localStorage.getItem("current_user_id");
+    listeners.push(host);
+    setLoading(true);
+
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const url = `${BASE_URL}/api/studio/new`;
+
+    try {
+      const response = await axios.post(url, {
+        name,
+        listeners,
+        host,
+        genres,
+        coverPhoto,
+        isHostOnly
+      });
+
+      setStudio(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
+  return { studio, isLoading, error, postStudio };
+}
 
 function SwitchWithTooltip() {
   const ToolTip = styled(({ className, ...props }) => (
@@ -46,8 +81,7 @@ function SwitchWithTooltip() {
 }
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-   
-    
+  const { studio, isLoading, error, postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
@@ -91,7 +125,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     if(studioNameInput == '') {
       setIsStudioNameErrorMessage(true);
     } else {
+      console.log("CreateStudioDialog: handleSubmit: 102: studioNameInput: ", studioNameInput);
       setIsStudioNameErrorMessage(false);
+      postStudio(studioNameInput);
     }
   }
   

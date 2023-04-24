@@ -15,10 +15,7 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly) {
     studioPicture: photo,
     studioControlHostOnly: isHostOnly,
   });
-  await newStudio.save(function (err, studio) {
-    if (err) return console.error(err);
-    else return studio._id;
-  });
+  await newStudio.save();
 }
 
 async function getStudio(id) {

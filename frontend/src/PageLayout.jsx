@@ -3,7 +3,7 @@ import styles from './PageLayout.module.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
-import useAuth from "./useAuth";
+import useAuth from "./hooks/useAuth";
 
 import { sizing } from '@mui/system';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import logo from './assets/shared/earBuddiesLogo.png';
-import useGet from "./useGet";
+import useGet from "./hooks/useGet";
 import profileIcon from './assets/profilepic.png'
 
 export default function PageLayout() {

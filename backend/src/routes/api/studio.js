@@ -1,25 +1,28 @@
 import express from "express";
-import { getStudio } from "../../database/studio_dao";
+import { createStudio } from "../../database/studio_dao.js";
+import { getUser } from "../../database/user_dao.js";
 
 const router = express.Router();
 
 router.post("/new", async (req, res) => {
+    console.log("studio: ", req.body)
     const { name, listeners, host, genres, photo, isHostOnly } = req.body;
-    if ( !name || !host || !genres || !photo || !isHostOnly) {
-        return res.status(400).json({ msg: "Missing required fields" });
-    }
+    const host_user = await getUser(host);
+    console.log("host_user: ", host_user);
+    const listeners_user = listeners.map(async (listener) => { await getUser(listener)});
+    console.log("listeners_user: ", listeners_user);
     try {
-        const studio_id = await createStudio(
-        id,
+        await createStudio(
         name,
-        listeners,
-        host,
+        listeners_user,
+        host_user,
         genres,
         photo,
         isHostOnly
         );
-        res.json(getStudio(studio_id));
+        res.status(201).location(`/api/studio/`).json(studio);
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 });
