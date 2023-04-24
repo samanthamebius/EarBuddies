@@ -11,8 +11,8 @@ router.use('/refresh', refresh);
 import user from './user';
 router.use('/user', user);
 
-import music from './music';
-router.use('/music', music);
+import spotify from './spotify';
+router.use('/spotify', spotify);
 
 //tester api call
 router.get('/hello', (req, res) => {
