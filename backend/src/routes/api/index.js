@@ -11,6 +11,9 @@ router.use('/refresh', refresh);
 import user from './user';
 router.use('/user', user);
 
+import music from './music';
+router.use('/music', music);
+
 //tester api call
 router.get('/hello', (req, res) => {
     res.send('Hello, World');
