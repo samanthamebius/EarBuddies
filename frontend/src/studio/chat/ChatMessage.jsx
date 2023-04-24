@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./ChatMessage.module.css";
 import messageDecoration1 from "../../assets/chat/messageDecoration1.svg";
 import messageDecoration2 from "../../assets/chat/messageDecoration2.svg";
@@ -7,6 +7,7 @@ import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfie
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import { AppContext } from "../../AppContextProvider";
 
 const defaultReactions = [
 	{ label: "angry", reaction: <div>😡</div> },
@@ -25,14 +26,15 @@ function ChatMessage(props) {
 		setReplyToMessage,
 		messageReply,
 	} = props;
-	const { message, username } = newMessage;
+	const { message, username: messageUsername } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
 
-	const isCurrentUser = username === "test";
+	const { username } = useContext(AppContext);
+	const isCurrentUser = username === messageUsername;
 
 	const setChatMessageStyle = () => {
 		const message = {
@@ -115,7 +117,9 @@ function ChatMessage(props) {
 	useEffect(() => {
 		if (isReplying) {
 			setReplyToMessage(
-				`Replying to ${isCurrentUser ? "yourself" : username}: ${message}`
+				`Replying to ${
+					isCurrentUser ? "yourself" : messageUsername
+				}: ${message}`
 			);
 		} else {
 			setReplyToMessage("");
@@ -137,7 +141,7 @@ function ChatMessage(props) {
 			onMouseOver={() => setHover(true)}
 			onMouseOut={() => setHover(false)}
 		>
-			<h4 className={styles.username}>{username}</h4>
+			<h4 className={styles.username}>{messageUsername}</h4>
 			{messageReply && (
 				<div style={setMessageReplyStyle()}>
 					<p className={styles.messageReplyContent}>{messageReply}</p>

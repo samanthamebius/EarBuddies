@@ -5,21 +5,21 @@ import mongoose from 'mongoose';
 import { User, Studio } from './schema';
 
 const users = [
-    { username: 'smeb', userIsActive: true },
-    { username: 'bre', userIsActive: false},
-    { username: 'ananya', userIsActive: true},
-    { username: 'amy', userIsActive: false },
-    { username: 'ange', userIsActive: true },
-    { username: 'yuewen', userIsActive: false }
+    { username: 'smeb123', userDisplayName: "Samantha Mebius", profilePic: "avatar1.png", userIsActive: true, userStudios: [] },
+    { username: 'bre123', userDisplayName: "Breanna Jury", profilePic: "avatar2.png", userIsActive: false, userStudios: [] },
+    { username: 'ananya456', userDisplayName: "Ananya Ahluwalia", profilePic: "avatar3.png", userIsActive: true, userStudios: [] },
+    { username: 'amy456', userDisplayName: "Amy Rimmer", profilePic: "avatar4.png", userIsActive: false, userStudios: [] },
+    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "avatar5.png", userIsActive: true, userStudios: [] },
+    { username: 'yuewen789', userDisplayName: "Yuewen Zheng", profilePic: "avatar6.png", userIsActive: false, userStudios: [] }
 ];
 
 const studios = [
-    { studioName: 'smeb\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'bre\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'ananya\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'amy\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'ange\'s studio', studioIsActive: true, studioGenres: ['rock', 'pop', 'jazz'] },
-    { studioName: 'yuewen\'s studio', studioIsActive: false, studioGenres: ['rock', 'pop', 'jazz'] }
+    { studioName: 'Software Swifties', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'softwareswifties.png', studioUsers: [] },
+    { studioName: 'Country Crew', studioIsActive: false, studioGenres: ['country'], studioPicture: 'countrycrew.png', studioUsers: [] },
+    { studioName: 'Tune Team', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'tuneteam.png', studioUsers: [] },
+    { studioName: 'Sad Club', studioIsActive: false, studioGenres: ['pop'], studioPicture: 'sadclub.png', studioUsers: [] },
+    { studioName: 'Sound Scholars', studioIsActive: true, studioGenres: ['Lo-Fi'], studioPicture: 'soundscholars.png', studioUsers: [] },
+    { studioName: 'BLINKS', studioIsActive: false, studioGenres: ['K-Pop'], studioPicture: 'blinks.png', studioUsers: [] }
 ];
 
 main();

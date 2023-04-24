@@ -1,5 +1,5 @@
 import styles from "./StudioCard.module.css";
-import SoundWaves from "../assets/soundwaves.png";
+import SoundWaves from "../assets/studio_cards/soundwaves.png";
 import TaylorSwiftImg from "../assets/taylorswift.png";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
@@ -10,6 +10,8 @@ import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../AppContextProvider";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -30,13 +32,12 @@ const listenersActive = [true, true, false, false, true, false];
 export default function StudioCard(props) {
 	const { socket, studio } = props;
 	// studio will be gotten from backend when set up
-	const navigate = useNavigate();
 	const room = studio.id; // will be the id of the studio
-	const username = "test";
+	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
-		socket.emit("join-room", { username, room });
+		socket.emit("join-room", { room });
 		navigate(`studio/${room}`);
 	};
 
@@ -62,7 +63,7 @@ export default function StudioCard(props) {
 					</div>
 					<div className={styles.genreTags}>
 						{genres.map((genre, i) => (
-							<GenreTag genre={genre} />
+							<GenreTag key={i} genre={genre} />
 						))}
 					</div>
 					<div className={styles.listeners}>
@@ -70,6 +71,7 @@ export default function StudioCard(props) {
 							isListening={isListening}
 							profileImages={listenersImages}
 							profileStatus={listenersActive}
+							isHomeCard={true}
 						/>
 						<img className={styles.hostImage} src={hostImage} />
 					</div>

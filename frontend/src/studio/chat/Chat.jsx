@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
@@ -8,6 +8,7 @@ import PinnedMessage from "./PinnedMessage";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { AppContext } from "../../AppContextProvider";
 
 const mockStudios = [
 	{
@@ -44,7 +45,8 @@ const StyledTextField = styled(TextField)({
 	width: "100%",
 });
 
-export default function Chat({ socket }) {
+export default function Chat(props) {
+	const { socket } = props;
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
@@ -53,9 +55,9 @@ export default function Chat({ socket }) {
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
+	const { username } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
-	const username = "test"; // this will be the username of the user from DB
 
 	// styling for send icon
 	const setSendIconStyling = () => {

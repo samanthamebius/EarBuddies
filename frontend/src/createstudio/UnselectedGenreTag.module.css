@@ -1,0 +1,13 @@
+.genreButton {
+    background: linear-gradient(#BEBEBE, #EDEDED);
+}
+
+.genreLabel {
+    margin: 0px;
+    font-weight: 600;
+}
+
+.genreIcon {
+    height: 20px;
+    padding-left: 10px;
+}
