@@ -7,7 +7,6 @@ import { ReactionBarSelector } from "@charkour/react-reactions";
 import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import { AppContext } from "../../AppContextProvider";
 
 const defaultReactions = [
@@ -20,13 +19,19 @@ const defaultReactions = [
 ];
 
 function ChatMessage(props) {
-	const { newMessage, setReplyToMessage, messageReply, room, socket } = props;
+	const {
+		newMessage,
+		setReplyToMessage,
+		messageReply,
+		room,
+		socket,
+		pinnedMessages,
+	} = props;
 	const {
 		message,
 		username: messageUsername,
 		id: currentMessageId,
 	} = newMessage;
-	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
@@ -88,17 +93,13 @@ function ChatMessage(props) {
 	};
 
 	// send the pinned message to the socket
-	useEffect(() => {
-		if (isPinned) {
-			socket.emit("send_pinned_message", {
-				newMessage,
-				room,
-			});
-		} else {
-			// remove the pinned message
-			socket.emit("remove_pinned_message", { newMessage, room });
-		}
-	}, [isPinned]);
+	const handlePinMessage = () => {
+		socket.emit("send_pinned_message", {
+			newMessage,
+			room,
+			pinnedMessages,
+		});
+	};
 
 	// set the reply message
 	useEffect(() => {
@@ -248,19 +249,11 @@ function ChatMessage(props) {
 								onClick={() => setIsReplying(!isReplying)}
 								fontSize="small"
 							/>
-							{isPinned ? (
-								<PushPinIcon
-									className={styles.pin}
-									onClick={() => setIsPinned(!isPinned)}
-									fontSize="small"
-								/>
-							) : (
-								<PushPinOutlinedIcon
-									className={styles.pin}
-									onClick={() => setIsPinned(!isPinned)}
-									fontSize="small"
-								/>
-							)}
+							<PushPinIcon
+								className={styles.pin}
+								onClick={() => handlePinMessage()}
+								fontSize="small"
+							/>
 							<SentimentSatisfiedRoundedIcon
 								onClick={() => setIsReacting(!isReacting)}
 								className={styles.reaction}

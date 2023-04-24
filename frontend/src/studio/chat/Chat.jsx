@@ -50,7 +50,6 @@ export default function Chat(props) {
 	const { socket } = props;
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
-	const [isPinned, setIsPinned] = useState(false);
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyToMessage, setReplyToMessage] = useState("");
@@ -60,18 +59,6 @@ export default function Chat(props) {
 	const { username, spotifyUsername } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
-
-	// styling for send icon
-	const setSendIconStyling = () => {
-		const image = {
-			opacity: `${message !== "" ? "0.5" : "0.2"}`,
-			padding: "10px 10px 0 0",
-			margin: "0",
-			cursor: "pointer",
-		};
-
-		return image;
-	};
 
 	// continously set the live messages received
 	useEffect(() => {
@@ -92,15 +79,23 @@ export default function Chat(props) {
 	// continously set the pinned messages received
 	useEffect(() => {
 		socket.on("receive_pinned_message", (data) => {
-			setPinnedMessages((pinnedMessages) => [
-				...pinnedMessages,
-				{
-					message: data.newMessage.message,
-					username: data.newMessage.username,
-					spotifyUsername: data.newMessage.spotifyUsername,
-					messageId: data.newMessage.id,
-				},
-			]);
+			const { newMessage, pinnedMessages } = data;
+
+			const messageExists = pinnedMessages.find(
+				(message) => message.id === newMessage.id
+			);
+
+			if (!messageExists) {
+				setPinnedMessages((pinnedMessages) => [
+					...pinnedMessages,
+					{
+						message: newMessage.message,
+						username: newMessage.username,
+						spotifyUsername: newMessage.spotifyUsername,
+						id: newMessage.id,
+					},
+				]);
+			}
 		});
 	}, [socket]);
 
@@ -108,9 +103,7 @@ export default function Chat(props) {
 	useEffect(() => {
 		socket.on("receive_remove_pinned_message", (data) => {
 			setPinnedMessages(() =>
-				pinnedMessages.filter(
-					(message) => message.messageId !== data.newMessage.id
-				)
+				pinnedMessages.filter((message) => message.id !== data.newMessage.id)
 			);
 		});
 	});
@@ -145,7 +138,12 @@ export default function Chat(props) {
 			<div className={styles.chatContent}>
 				<div className={styles.pinnedMessages}>
 					{displayedPinnedMessages.map((message, index) => (
-						<PinnedMessage key={index} pinnedMessage={message} />
+						<PinnedMessage
+							key={index}
+							pinnedMessage={message}
+							room={room}
+							socket={socket}
+						/>
 					))}
 					{pinnedMessages.length > 1 && (
 						<div
@@ -173,6 +171,7 @@ export default function Chat(props) {
 							messageReply={message.messageReply}
 							room={room}
 							socket={socket}
+							pinnedMessages={pinnedMessages}
 						/>
 					))}
 				</div>
@@ -198,7 +197,12 @@ export default function Chat(props) {
 				</div>
 				<SendRoundedIcon
 					onClick={() => handleSendMessage()}
-					style={setSendIconStyling()}
+					style={{
+						opacity: `${message !== "" ? "0.5" : "0.2"}`,
+						padding: "10px 10px 0 0",
+						margin: "0",
+						cursor: "pointer",
+					}}
 					fontSize="small"
 				/>
 			</div>
