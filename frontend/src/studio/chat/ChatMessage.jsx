@@ -32,7 +32,6 @@ function ChatMessage(props) {
 		username: messageUsername,
 		id: currentMessageId,
 	} = newMessage;
-	const [isReplying, setIsReplying] = useState(false);
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
@@ -102,17 +101,11 @@ function ChatMessage(props) {
 	};
 
 	// set the reply message
-	useEffect(() => {
-		if (isReplying) {
-			setReplyToMessage(
-				`Replying to ${
-					isCurrentUser ? "yourself" : messageUsername
-				}: ${message}`
-			);
-		} else {
-			setReplyToMessage("");
-		}
-	}, [isReplying]);
+	const handleMessageReply = () => {
+		setReplyToMessage(
+			`Replying to ${isCurrentUser ? "yourself" : messageUsername}: ${message}`
+		);
+	};
 
 	// send the chat reactions
 	const handleReactions = (selectedReaction) => {
@@ -231,8 +224,7 @@ function ChatMessage(props) {
 						{reactions.map((reaction) => (
 							<div key={reaction.id}>{reaction.node}</div>
 						))}
-						&nbsp;
-						{reactions.length > 1 && reactions.length}
+						{reactions.length > 1 && <div>&nbsp; {reactions.length}</div>}
 					</div>
 				)}
 				{hover ? (
@@ -246,7 +238,7 @@ function ChatMessage(props) {
 						<div style={setActionsContainerStyle()}>
 							<ReplyRoundedIcon
 								className={styles.reply}
-								onClick={() => setIsReplying(!isReplying)}
+								onClick={() => handleMessageReply()}
 								fontSize="small"
 							/>
 							<PushPinIcon

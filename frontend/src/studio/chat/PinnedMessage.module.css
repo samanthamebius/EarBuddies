@@ -1,5 +1,5 @@
 .pinnedMessage {
-	background-color: #cc3ae420;
+	background-color: #f8e9fc;
 	border-radius: 10px;
 	padding: 12px;
 	display: flex;
@@ -17,7 +17,7 @@
 
 .message {
 	margin: 0 0 0 10px;
-	opacity: 0.6;
+	color: #a49da5;
 	font-size: 14px;
 }
 

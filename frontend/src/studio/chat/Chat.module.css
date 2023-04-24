@@ -74,6 +74,20 @@
 .messageReply {
 	margin: 0;
 	font-size: 13px;
+	background-color: #f8e9fc;
+	padding: 4px;
+	border-radius: 10px;
+	width: 100%;
+	display: flex;
+	color: #a49da5;
+	justify-content: space-between;
+}
+
+.dismissReply {
 	opacity: 0.5;
-	text-align: unset;
+}
+
+.dismissReply:hover {
+	opacity: 1;
+	cursor: pointer;
 }

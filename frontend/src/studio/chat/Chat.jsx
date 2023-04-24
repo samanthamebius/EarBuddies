@@ -9,6 +9,8 @@ import PinnedMessage from "./PinnedMessage";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+
 import { AppContext } from "../../AppContextProvider";
 
 const mockStudios = [
@@ -178,7 +180,16 @@ export default function Chat(props) {
 			</div>
 			<div className={styles.chatInput}>
 				<div className={styles.inputContent}>
-					<div className={styles.messageReply}>{replyToMessage}</div>
+					{replyToMessage !== "" && (
+						<div className={styles.messageReply}>
+							<div>{replyToMessage}</div>
+							<CloseRoundedIcon
+								fontSize="small"
+								className={styles.dismissReply}
+								onClick={() => setReplyToMessage("")}
+							/>
+						</div>
+					)}
 					<StyledTextField
 						variant="standard"
 						multiline
