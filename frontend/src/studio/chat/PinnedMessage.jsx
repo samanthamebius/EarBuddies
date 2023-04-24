@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./PinnedMessage.module.css";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
-import mockProfilePic from "../../assets/profilepic1.png";
+import PushPinIcon from "@mui/icons-material/PushPin";
+import axios from "axios";
+import defaultProfilePicture from "../../assets/profilepic.png";
 
-function PinnedMessage({ message }) {
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+function PinnedMessage({ pinnedMessage }) {
+	const [profileImage, setProfileImage] = useState(defaultProfilePicture);
+
+	useEffect(() => {
+		axios
+			.get(`${BASE_URL}/api/user/${pinnedMessage.spotifyUsername}`)
+			.then((response) => {
+				if (response.data?.profilePic !== "") {
+					setProfileImage(response.data?.profilePic);
+				}
+			});
+	}, []);
+
 	return (
 		<div className={styles.pinnedMessage}>
 			<div className={styles.content}>
-				<PushPinOutlinedIcon className={styles.pin} />
-				<p className={styles.message}>{message}</p>
+				<PushPinIcon className={styles.pin} />
+				<p className={styles.message}>{pinnedMessage.message}</p>
 			</div>
-			<img src={mockProfilePic} alt="profile" className={styles.profileImage} />
+			<img src={profileImage} alt="profile" className={styles.profileImage} />
 		</div>
 	);
 }

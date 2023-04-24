@@ -55,7 +55,7 @@ export default function Chat(props) {
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
-	const { username } = useContext(AppContext);
+	const { username, spotifyUsername } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 
@@ -74,17 +74,33 @@ export default function Chat(props) {
 	// continously set the live messages received
 	useEffect(() => {
 		socket.on("receive_message", (data) => {
-			console.log(data);
 			setMessages((message) => [
 				...message,
 				{
 					message: data.message,
 					username: data.username,
 					messageReply: data?.replyToMessage,
+					spotifyUsername: data.spotifyUsername,
 				},
 			]);
 		});
 	}, [socket]);
+
+	// continously set the pinned messages received
+	useEffect(() => {
+		socket.on("receive_pinned_message", (data) => {
+			setPinnedMessages((pinnedMessage) => [
+				...pinnedMessage,
+				{
+					message: data.newMessage.message,
+					username: data.newMessage.username,
+					spotifyUsername: data.newMessage.spotifyUsername,
+				},
+			]);
+		});
+	}, [socket]);
+
+	console.log(pinnedMessages);
 
 	// user leaves the room when they navigate away
 	useEffect(() => {
@@ -98,7 +114,13 @@ export default function Chat(props) {
 	// send the message
 	const handleSendMessage = () => {
 		if (message !== "") {
-			socket.emit("send_message", { username, room, message, replyToMessage });
+			socket.emit("send_message", {
+				username,
+				room,
+				message,
+				replyToMessage,
+				spotifyUsername,
+			});
 			setMessage("");
 			setReplyToMessage("");
 		}
@@ -109,7 +131,7 @@ export default function Chat(props) {
 			<div className={styles.chatContent}>
 				<div className={styles.pinnedMessages}>
 					{displayedPinnedMessages.map((message, index) => (
-						<PinnedMessage key={index} message={message} />
+						<PinnedMessage key={index} pinnedMessage={message} />
 					))}
 					{pinnedMessages.length > 1 && (
 						<div
@@ -137,6 +159,8 @@ export default function Chat(props) {
 							pinnedMessages={pinnedMessages}
 							setReplyToMessage={setReplyToMessage}
 							messageReply={message.messageReply}
+							room={room}
+							socket={socket}
 						/>
 					))}
 				</div>

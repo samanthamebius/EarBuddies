@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 	console.log(`⚡: ${socket.id} user just connected!`);
 
 	// add a user to a studio chat
-	socket.on("join-room", (data) => {
+	socket.on("join_room", (data) => {
 		const { room } = data;
 		socket.join(room); // let the user join the room
 	});
@@ -50,6 +50,12 @@ io.on("connection", (socket) => {
 	socket.on("send_message", (data) => {
 		const { room } = data;
 		io.in(room.id).emit("receive_message", data);
+	});
+
+	// send pinned messages to users
+	socket.on("send_pinned_message", (data) => {
+		const { room } = data;
+		io.in(room.id).emit("receive_pinned_message", data);
 	});
 
 	// remove the user so they don't receive messages while they are gone

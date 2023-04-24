@@ -39,7 +39,7 @@ function NavMenu() {
 }
 
 function UserInfo() {
-	const { setUsername } = useContext(AppContext);
+	const { setUsername, setSpotifyUsername } = useContext(AppContext);
 	const current_user_id = localStorage.getItem("current_user_id");
 	const id = JSON.parse(current_user_id);
 
@@ -57,7 +57,9 @@ function UserInfo() {
 
 	useEffect(() => {
 		if (!userIsLoading && user) {
-			setUsername(user[0]?.userDisplayName);
+			console.log(user);
+			setUsername(user?.userDisplayName);
+			setSpotifyUsername(user?.username);
 		}
 	}, [user, userIsLoading]);
 
@@ -69,8 +71,8 @@ function UserInfo() {
 		var profilePicture = "";
 		var username = "";
 		try {
-			profilePicture = user[0].profilePic;
-			username = user[0].userDisplayName;
+			profilePicture = user.profilePic;
+			username = user.userDisplayName;
 		} catch (error) {
 			console.log(error);
 		}

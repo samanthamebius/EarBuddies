@@ -35,17 +35,17 @@
 }
 
 .pinnedMessages {
-	position: "sticky";
-	top: "0";
-	display: "flex";
-	flex-direction: "column";
+	position: sticky;
+	top: 0;
+	display: flex;
+	flex-direction: column;
 }
 
 .expandPinnedMessages {
 	opacity: 0.5;
 	font-size: 14px;
-	float: right;
 	margin: 0;
+	margin-bottom: 8px;
 }
 
 .expandPinnedMessages:hover {
@@ -56,6 +56,7 @@
 .expandMessagesContent {
 	display: flex;
 	align-items: center;
+	float: right;
 }
 
 .messagesContainer {

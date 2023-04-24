@@ -19,13 +19,7 @@ const defaultReactions = [
 ];
 
 function ChatMessage(props) {
-	const {
-		newMessage,
-		setPinnedMessages,
-		pinnedMessages,
-		setReplyToMessage,
-		messageReply,
-	} = props;
+	const { newMessage, setReplyToMessage, messageReply, room, socket } = props;
 	const { message, username: messageUsername } = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
@@ -115,6 +109,12 @@ function ChatMessage(props) {
 	};
 
 	useEffect(() => {
+		if (isPinned) {
+			socket.emit("send_pinned_message", { newMessage, room });
+		}
+	}, [isPinned]);
+
+	useEffect(() => {
 		if (isReplying) {
 			setReplyToMessage(
 				`Replying to ${
@@ -126,14 +126,14 @@ function ChatMessage(props) {
 		}
 	}, [isReplying]);
 
-	useEffect(() => {
-		if (isPinned) {
-			setPinnedMessages([...pinnedMessages, message]);
-		}
-		// else {
-		// 	setPinnedMessages(pinnedMessages.slice(0, -1));
-		// }
-	}, [isPinned]);
+	// useEffect(() => {
+	// 	if (isPinned) {
+	// 		setPinnedMessages([...pinnedMessages, message]); // sets the local pinned messages
+	// 	}
+	// 	// else {
+	// 	// 	setPinnedMessages(pinnedMessages.slice(0, -1));
+	// 	// }
+	// }, [isPinned]);
 
 	return (
 		<div
