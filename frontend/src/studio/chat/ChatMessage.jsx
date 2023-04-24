@@ -21,7 +21,11 @@ const defaultReactions = [
 
 function ChatMessage(props) {
 	const { newMessage, setReplyToMessage, messageReply, room, socket } = props;
-	const { message, username: messageUsername } = newMessage;
+	const {
+		message,
+		username: messageUsername,
+		id: currentMessageId,
+	} = newMessage;
 	const [isPinned, setIsPinned] = useState(false);
 	const [isReplying, setIsReplying] = useState(false);
 	const [isReacting, setIsReacting] = useState(false);
@@ -109,8 +113,9 @@ function ChatMessage(props) {
 			room,
 			selectedReaction,
 			username,
-			id: uuid(),
+			reactionId: uuid(),
 			reactions,
+			messageId: currentMessageId,
 		});
 	};
 
@@ -118,52 +123,53 @@ function ChatMessage(props) {
 	useEffect(() => {
 		socket.on("receive_message_reaction", (data) => {
 			const {
-				id,
+				reactionId,
 				selectedReaction,
 				username: reactionUsername,
 				reactions: messageReactions,
+				messageId,
 			} = data;
 
-			// set the reaction icon
-			const reactionIcon = defaultReactions.find(
-				(reaction) => reaction.label === data.selectedReaction
-			);
+			if (messageId === currentMessageId) {
+				// set the reaction icon
+				const reactionIcon = defaultReactions.find(
+					(reaction) => reaction.label === data.selectedReaction
+				);
 
-			// check if the user has already reacted
-			const reactionExists = messageReactions.find(
-				(reaction) => reaction.by === reactionUsername
-			);
-
-			console.log(reactionExists);
-			if (reactionExists) {
-				// update the reaction
-				const currentReactionIndex = messageReactions.findIndex(
+				// check if the user has already reacted
+				const reactionExists = messageReactions.find(
 					(reaction) => reaction.by === reactionUsername
 				);
-				const updatedReaction = {
-					...messageReactions[currentReactionIndex],
-					id: id,
-					label: selectedReaction,
-					node: reactionIcon.reaction,
-				};
-				const newReactions = [
-					...messageReactions.slice(0, currentReactionIndex),
-					updatedReaction,
-					...messageReactions.slice(currentReactionIndex + 1),
-				];
-				// console.log(newReactions);
-				setReactions(() => newReactions);
-			} else {
-				// add a new reaction
-				setReactions((reactions) => [
-					...reactions,
-					{
+
+				if (reactionExists) {
+					// update the reaction
+					const currentReactionIndex = messageReactions.findIndex(
+						(reaction) => reaction.by === reactionUsername
+					);
+					const updatedReaction = {
+						...messageReactions[currentReactionIndex],
+						id: reactionId,
 						label: selectedReaction,
 						node: reactionIcon.reaction,
-						by: reactionUsername,
-						id: id,
-					},
-				]);
+					};
+					const newReactions = [
+						...messageReactions.slice(0, currentReactionIndex),
+						updatedReaction,
+						...messageReactions.slice(currentReactionIndex + 1),
+					];
+					setReactions(() => newReactions);
+				} else {
+					// add a new reaction
+					setReactions((reactions) => [
+						...reactions,
+						{
+							label: selectedReaction,
+							node: reactionIcon.reaction,
+							by: reactionUsername,
+							id: reactionId,
+						},
+					]);
+				}
 			}
 		});
 	}, [socket]);

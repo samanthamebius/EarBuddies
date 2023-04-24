@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { v4 as uuid } from "uuid";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
 import { TextField, styled } from "@mui/material";
@@ -81,6 +82,7 @@ export default function Chat(props) {
 					username: data.username,
 					messageReply: data?.replyToMessage,
 					spotifyUsername: data.spotifyUsername,
+					id: data.id,
 				},
 			]);
 		});
@@ -118,6 +120,7 @@ export default function Chat(props) {
 				message,
 				replyToMessage,
 				spotifyUsername,
+				id: uuid(),
 			});
 			setMessage("");
 			setReplyToMessage("");
