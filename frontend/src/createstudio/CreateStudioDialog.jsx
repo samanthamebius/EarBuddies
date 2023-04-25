@@ -20,8 +20,9 @@ function useStudioPost() {
   const [error, setError] = useState(null);
 
   const postStudio = async (name, genres = [], coverPhoto = '', listeners = [], isHostOnly = true) => {
-    const host = localStorage.getItem("current_user_id");
+    const host = JSON.parse(localStorage.getItem("current_user_id"));
     listeners.push(host);
+    listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
     setLoading(true);
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;

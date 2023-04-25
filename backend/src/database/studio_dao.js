@@ -9,9 +9,9 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly) {
   const newStudio = new Studio({
     studioName: name,
     studioIsActive: true,
-    studioUsers: [listeners],
+    studioUsers: listeners,
     studioHost: host,
-    studioGenres: [genres],
+    studioGenres: genres,
     studioPicture: photo,
     studioControlHostOnly: isHostOnly,
   });

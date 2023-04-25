@@ -11,6 +11,7 @@ const userSchema = new Schema({
 });
 
 const studioSchema = new Schema({
+    studioName: String,
     studioIsActive: Boolean,
     studioUsers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
     studioHost: { type: Schema.Types.ObjectId, ref: 'User' },

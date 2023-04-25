@@ -53,6 +53,11 @@ async function getUser(username) {
   return user;
 }
 
+async function getUserId(username) {
+  const user = await getUser(username);
+  return user[0]._id;
+}
+
 async function getStudios(username) {
   const user = await getUser(username);
   return user[0].userStudios;
@@ -67,4 +72,4 @@ async function updateStudios(username, studios) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId };
