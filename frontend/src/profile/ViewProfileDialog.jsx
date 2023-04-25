@@ -1,5 +1,5 @@
 import styles from './ViewProfileDialog.module.css';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';

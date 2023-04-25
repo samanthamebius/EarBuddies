@@ -4,11 +4,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 
 export default function DeleteAccountDialog({ isDeleteAccountOpen, handleDeleteAccountClose }) {
-
     return(
         <div>
             <Dialog fullWidth maxWidth='sm' open={isDeleteAccountOpen} onClose={handleDeleteAccountClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
