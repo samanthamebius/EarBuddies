@@ -21,7 +21,12 @@
 }
 
 .cancelButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#EDEDED, #BEBEBE);
+    font-weight: 700;
+}
+
+.linkButton {
+    background: linear-gradient(#EDEDED, #BEBEBE);
     font-weight: 700;
 }
 
@@ -44,6 +49,14 @@
    padding-right: 14px;
 }
 
+.clearIcon {
+    color: #757575;
+}
+
+.clearIcon:hover {
+    color: #B03EEE;
+}
+
 .displayPhotoContainer {
     display: flex;
     border: solid 1px #C4C4C4;
@@ -55,12 +68,15 @@
 
 .displayPhotoContainer:hover {
     border: solid 1px #212121;
-    cursor: pointer;
 }
 
 .currentDisplayPhotoContainter {
     display: flex;
     align-items: center;
+}
+
+.currentDisplayPhotoContainter:hover {
+    cursor: pointer;
 }
 
 .avatars {

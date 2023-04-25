@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import InputAdornment from '@mui/material/InputAdornment';
-
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import AnacondaAvatar from "../assets/profile/anaconda.png"; //https://www.freepik.com/
 import BeaverAvatar from "../assets/profile/beaver.png";
 import BoarAvatar from "../assets/profile/boar.png";
@@ -48,10 +48,16 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
     const toggleInDisplayPhoto = () => { setInDisplayPhoto(!isInDisplayPhoto) };
 
     const openAvatarOptions = () => { setAvatarOptionsOpen(true)};
+    const closeAvatarOptions = () => { setAvatarOptionsOpen(false)};
+
+    const onClose= () => {
+        setAvatarOptionsOpen(false);
+        handleViewProfileClose();
+    }
 
     return(
         <div>
-            <Dialog fullWidth maxWidth="sm" open={isViewProfileOpen} onClose={handleViewProfileClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+            <Dialog fullWidth maxWidth="sm" open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
                 <h1 className={styles.heading}>View Profile</h1>
                 <DialogContent>
                     <h2 className={styles.sectionHeading}>Display Name</h2>
@@ -80,32 +86,37 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                         className={styles.displayPhotoContainer}
                         onMouseEnter={toggleInDisplayPhoto} 
                         onMouseLeave={toggleInDisplayPhoto}
-                        onClick={openAvatarOptions}
                     >
-                        <div className={styles.currentDisplayPhotoContainter} >
+                        <div onClick={isAvatarOptionsOpen ? closeAvatarOptions : openAvatarOptions} className={styles.currentDisplayPhotoContainter} >
                             <img src={displayPhoto} className={styles.displayPhoto}/>
                             <div className={styles.editIconContainer}>
-                                <EditRoundedIcon className={styles.editIcon} style={{ color: isInDisplayPhoto ? "#B03EEE" : "#757575"}}/>
+                                <EditRoundedIcon style={{ color: isInDisplayPhoto ? "#757575" : "#B03EEE"}}/>
                             </div>
                         </div>
-                        <div className={styles.avatars} style={{display: isAvatarOptionsOpen ? "" : "none"}}>
-                            {Array.isArray(avatars)
-                            ? avatars.map((avatar, i) => (
-                                    <img
-                                        style={{border: avatar === displayPhoto ? "solid 2px #CA3FF3" : "" }}
-                                        key={i} 
-                                        src={avatar}
-                                        className={styles.avatarOption}
-                                        onClick={() => setDisplayPhoto(avatar)}
-                                    />
-                            ))
-                            : null}
+                        <div className={styles.hiddenPhotoSection} style={{display: isAvatarOptionsOpen ? "" : "none"}}>
+                            <div className={styles.avatars} >
+                                {Array.isArray(avatars)
+                                ? avatars.map((avatar, i) => (
+                                        <img
+                                            style={{border: avatar === displayPhoto ? "solid 2px #CA3FF3" : "" }}
+                                            key={i} 
+                                            src={avatar}
+                                            className={styles.avatarOption}
+                                            onClick={() => setDisplayPhoto(avatar)}
+                                        />
+                                ))
+                                : null}
+                            </div>
                         </div>
                     </div>
+                    <h2 className={styles.sectionHeading}></h2>
+                    <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.linkButton} onClick={onClose}>Link to Spotify Account</Button>
+                    <h2 className={styles.sectionHeading}></h2>
+                    <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.linkButton} onClick={onClose}>Delete Account</Button>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-                <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleViewProfileClose}>Close</Button>
-                <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleViewProfileClose}>Save</Button>
+                <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={onClose}>Close</Button>
+                <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={onClose}>Save</Button>
                 </DialogActions>
             </Dialog>
         </div>
