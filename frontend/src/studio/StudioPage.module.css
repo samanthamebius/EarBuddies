@@ -69,11 +69,11 @@
 }
 
 .menu_item span {
-    color:#606060;
+	color: #606060;
 }
 
 .menu_item:hover span {
-    color: #B03EEE;
+	color: #b03eee;
 }
 
 .bannerStudioName {
@@ -114,17 +114,9 @@
 	grid-column: 2 / 2;
 }
 
-.chat {
-	background-color: #c68eef;
-	grid-row-start: 1;
-	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
-	grid-column: 3 / 3;
-	border-radius: 10px;
-}
-
 @media only screen and ((max-width: 800px) or (max-height: 600px)) {
 	.bannerStudioName {
-	  font-size: 20px;
+		font-size: 20px;
 	}
 
 	.kebabIcon {
