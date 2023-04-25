@@ -90,7 +90,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                         <div onClick={isAvatarOptionsOpen ? closeAvatarOptions : openAvatarOptions} className={styles.currentDisplayPhotoContainter} >
                             <img src={displayPhoto} className={styles.displayPhoto}/>
                             <div className={styles.editIconContainer}>
-                                <EditRoundedIcon style={{ color: isInDisplayPhoto ? "#757575" : "#B03EEE"}}/>
+                                <EditRoundedIcon style={{ color: isInDisplayPhoto ?  "#B03EEE" : "#757575"}}/>
                             </div>
                         </div>
                         <div className={styles.hiddenPhotoSection} style={{display: isAvatarOptionsOpen ? "" : "none"}}>
@@ -112,7 +112,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                     <h2 className={styles.sectionHeading}></h2>
                     <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.linkButton} onClick={onClose}>Link to Spotify Account</Button>
                     <h2 className={styles.sectionHeading}></h2>
-                    <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.linkButton} onClick={onClose}>Delete Account</Button>
+                    <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.linkButton} onClick={onClose}>Delete Ear Buddies Account</Button>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
                 <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={onClose}>Close</Button>
