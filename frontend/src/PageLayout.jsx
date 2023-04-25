@@ -1,23 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./PageLayout.module.css";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useEffect } from "react";
 import useAuth from "./hooks/useAuth";
 
-import { sizing } from '@mui/system';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import logo from './assets/shared/earBuddiesLogo.png';
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import logo from "./assets/shared/earBuddiesLogo.png";
 import useGet from "./hooks/useGet";
-import profileIcon from './assets/profilepic.png'
-
 import { AppContext } from "./AppContextProvider";
-
 
 export default function PageLayout() {
 	return (
