@@ -13,19 +13,20 @@ const socket = io("http://localhost:3000", { autoConnect: false });
 document.body.style.overflow = "hidden";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='login' element={<LogInPage/>}/>
-        <Route path='/' element={<PageLayout/>}>
-          <Route index element={<HomePage />} />
-          <Route path='profile' element={<ProfilePage/>}/>
-          <Route path='studio/:id' element={<StudioPage socket={socket} />}/>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
-
+	return (
+		<AppContextProvider>
+			<BrowserRouter>
+				<Routes>
+					<Route path="login" element={<LogInPage />} />
+					<Route path="/" element={<PageLayout />}>
+						<Route index element={<HomePage socket={socket} />} />
+						<Route path="profile" element={<ProfilePage />} />
+						<Route path="studio/:id" element={<StudioPage socket={socket} />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</AppContextProvider>
+	);
 }
 
 export default App;
