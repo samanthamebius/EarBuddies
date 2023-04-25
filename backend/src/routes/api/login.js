@@ -12,6 +12,11 @@ router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
+const spotifyApi = new SpotifyWebApi({
+  redirectUri: process.env.REDIRECT_URI,
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+});
 /**
  * @route POST api/login
  * @desc Login to Spotify and add user to database if not already in it
@@ -21,11 +26,6 @@ await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
  */
 router.post("/", async (req, res) => {
   const code = req.body.code;
-  const spotifyApi = new SpotifyWebApi({
-    redirectUri: process.env.REDIRECT_URI,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-  });
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const access_token = data.body.access_token;
@@ -34,6 +34,14 @@ router.post("/", async (req, res) => {
 
     spotifyApi.setAccessToken(access_token);
     const user_id = await loginUser(spotifyApi, data);
+    // spotifyApi.search('love', ['track', 'episode', 'audiobook'])
+    //   .then(function (data) {
+    //     console.log('Search by "Love"', data.body);
+    //     // want an image to show (from album)
+    //     // song name
+    //     // artist name
+    //     // spotify id
+    //   })
 
     res.json({
       access_token: access_token,
@@ -48,3 +56,4 @@ router.post("/", async (req, res) => {
 });
 
 export default router;
+export { spotifyApi };

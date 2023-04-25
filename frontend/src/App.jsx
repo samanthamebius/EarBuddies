@@ -15,11 +15,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* check if user is already logged in, if not redirect to login page */}
-        <Route path='login' element={<LogInPage/>}/>
-        <Route path='/' element={<PageLayout/>}>
+        <Route path='login' element={<LogInPage />} />
+        <Route path='/' element={<PageLayout />}>
           <Route index element={<HomePage />} />
-          <Route path='profile' element={<ProfilePage/>}/>
-          <Route path='studio' element={<StudioPage/>}/>
+          <Route path='profile' element={<ProfilePage />} />
+          <Route path='studio' element={<StudioPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

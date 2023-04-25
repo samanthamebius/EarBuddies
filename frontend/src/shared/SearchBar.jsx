@@ -5,13 +5,26 @@ import { useState } from "react";
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import styles from './SearchBar.module.css';
 import { sizing } from '@mui/system';
+import axios from "axios";
+import useGet from "../useGet";
 
-function SearchBar({label}) {
+function SearchBar({ label }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+    console.log(searchTerm)
+    try {
+      axios.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -27,12 +40,12 @@ function SearchBar({label}) {
         fullWidth
         InputProps={{
           startAdornment: (
-            <SearchRoundedIcon color="action" position="start" className={styles.searchIcon}/>
+            <SearchRoundedIcon color="action" position="start" className={styles.searchIcon} />
           ),
         }}
         InputLabelProps={{
           shrink: focused || searchTerm.length > 0,
-          style: {marginLeft: searchTerm || focused  ? 0 : 30 }
+          style: { marginLeft: searchTerm || focused ? 0 : 30 }
         }}
       />
     </Container>

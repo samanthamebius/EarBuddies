@@ -1,10 +1,10 @@
-async function searchSpotify(spotifyApi, query) {
+import spotifyApi from '../api/login.js';
+
+async function searchSpotify(query) {
     return new Promise((resolve, reject) => {
-        spotifyApi
-            //actually could just use search because it searches all types
-            .search(query, ['track', 'episode', 'audiobook'])
+        spotifyApi.search(query, ['track', 'episode', 'audiobook'])
             .then(function (data) {
-                resolve(data.body.tracks.items);
+                console.log('Search by "Love"', data.body);
                 // want an image to show (from album)
                 // song name
                 // artist name
@@ -16,3 +16,5 @@ async function searchSpotify(spotifyApi, query) {
             });
     });
 }
+
+export { searchSpotify };
