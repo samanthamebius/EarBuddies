@@ -37,7 +37,7 @@ export default function StudioCard(props) {
 
 	const handleJoinStudio = () => {
 		socket.connect("http://localhost:3000");
-		socket.emit("join-room", { room });
+		socket.emit("join_room", { room });
 		navigate(`studio/${room}`);
 	};
 
