@@ -47,13 +47,7 @@ function UserInfo() {
 		return <p>Could not load user</p>;
 	}
 
-	const access_token = localStorage.getItem("access_token");
-
-	const { data: user, isLoading: userIsLoading } = useGet(
-		`/api/user/${id}`,
-		[],
-		access_token
-	);
+	const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
 
 	useEffect(() => {
 		if (!userIsLoading && user) {

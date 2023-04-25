@@ -1,6 +1,6 @@
 import express from "express";
 import { createStudio, getStudio, deleteStudio } from "../../database/studio_dao.js";
-import { getUserId } from "../../database/user_dao.js";
+import { getUserId, getStudios, updateStudios } from "../../database/user_dao.js";
 
 const router = express.Router();
 
@@ -22,6 +22,12 @@ router.post("/new", async (req, res) => {
       photo,
       isHostOnly
     );
+
+    listenerUserIds.forEach(listener => {
+      const studios = getStudios(listener);
+      studios.push(newStudio._id);
+      updateStudios(listener, studios);
+    });
     
     // Respond with the newly created studio
     res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
@@ -33,6 +39,7 @@ router.post("/new", async (req, res) => {
 
 //get studio by id
 router.get("/:id", async (req, res) => {
+  console.log("get studio by id " + req.params.id)
   try {
     const { id } = req.params;
     if (!id) {

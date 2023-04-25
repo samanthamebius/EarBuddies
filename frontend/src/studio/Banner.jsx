@@ -27,6 +27,8 @@ import AssignNewHostIcon from "../assets/studio/hostCrownIcon.png";
 import DisableControlIcon from "../assets/studio/disableControlIcon.png";
 import EnableControlIcon from "../assets/studio/enableControlIcon.png";
 
+import useGet from "../hooks/useGet.js"
+
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
@@ -57,10 +59,19 @@ const listeners = [
 	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
 ];
 
-export default function Banner() {
+export default function Banner(id) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
+
+	const id_string = id.id;
+	const {data: studio, isLoading: isLoading} = useGet(`/api/studio/${id_string}`);
+	console.log("studio: " + studio[0].studioName);
+	const studioName = studio[0].studioName;
+	const backgroundImage = studio[0].backgroundImage;
+	const studioHost = studio[0].host;
+	//TODO: get listeners and their active status from database
+
 
 	useEffect(() => {
 		if (isAddIcon == false) {

@@ -8,11 +8,13 @@ import axios from "axios";
  */
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function useGet(url, initialState = null, access_token = null) {
-  const [data, setData] = useState(initialState);
+export default function useGet(url) {
+  const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const full_url = BASE_URL + url; 
+  const access_token = localStorage.getItem("access_token");
+  console.log("full url: " + full_url);
 
   useEffect(() => {
     setRefreshToggle(!refreshToggle);

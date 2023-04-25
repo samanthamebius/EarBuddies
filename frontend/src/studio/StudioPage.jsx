@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
 
@@ -8,9 +9,10 @@ import NowPlaying from "./NowPlaying";
 import SongSelection from "./SongSelection";
 
 function StudioPage({ socket }) {
+	const { id } = useParams();
 	return (
 		<div className={styles.studio}>
-			<Banner />
+			<Banner id={id}/>
 			<NowPlaying />
 			<SongSelection />
 			<Chat socket={socket} />
