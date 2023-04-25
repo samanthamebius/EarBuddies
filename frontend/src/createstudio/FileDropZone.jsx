@@ -14,6 +14,7 @@ export default function FileDropZone(props) {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
+      props.onFileChange(acceptedFiles)
     }
   });
 

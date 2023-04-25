@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./PageLayout.module.css";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import useAuth from "./useAuth";
+import useAuth from "./hooks/useAuth";
 
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -10,7 +10,7 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import logo from "./assets/shared/earBuddiesLogo.png";
-import useGet from "./useGet";
+import useGet from "./hooks/useGet";
 import { AppContext } from "./AppContextProvider";
 
 export default function PageLayout() {

@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import useAuth from "../useAuth";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";

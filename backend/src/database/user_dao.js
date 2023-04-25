@@ -3,7 +3,6 @@ dotenv.config();
 import { User } from "./schema.js";
 import mongoose from "mongoose";
 
-// var currentUserId = null;
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createUser(username, userDisplayName, profilePic) {
@@ -54,6 +53,23 @@ async function getUser(username) {
 	return user;
 }
 
+async function getUserId(username) {
+  const user = await getUser(username);
+  return user._id;
+}
+
+async function getStudios(username) {
+  const user = await getUser(username);
+  return user.userStudios;
+}
+
+async function updateStudios(username, studios) {
+  return await User.findOneAndUpdate(
+    { username: username },
+    { userStudios: studios }
+  );
+}
+
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId };
