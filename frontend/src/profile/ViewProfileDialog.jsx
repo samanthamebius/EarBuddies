@@ -8,10 +8,38 @@ import DialogContent from '@mui/material/DialogContent';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import AnacondaAvatar from "../assets/profile/anaconda.png"; //https://www.freepik.com/
+import BeaverAvatar from "../assets/profile/beaver.png";
+import BoarAvatar from "../assets/profile/boar.png";
+import BunnyAvatar from "../assets/profile/bunny.png";
+import CatAvatar from "../assets/profile/cat.png";
+import ClownFishAvatar from "../assets/profile/clown-fish.png";
+import CowAvatar from "../assets/profile/cow.png";
+import GiraffeAvatar from "../assets/profile/giraffe.png";
+import JaguarAvatar from "../assets/profile/jaguar.png";
+import JellyfishAvatar from "../assets/profile/jellyfish.png";
+import MonkeyAvatar from "../assets/profile/monkey.png";
+import PandaAvatar from "../assets/profile/panda.png";
+import PelicanAvatar from "../assets/profile/pelican.png";
+import PenguinAvatar from "../assets/profile/penguin.png";
+import ScorpionAvatar from "../assets/profile/scorpion.png";
+import SharkAvatar from "../assets/profile/shark.png";
+import SheepAvatar from "../assets/profile/sheep.png";
+import SnailAvatar from "../assets/profile/snail.png";
+import TurtleAvatar from "../assets/profile/turtle.png";
+import WhaleAvatar from "../assets/profile/whale.png";
 
 export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
-    const [displayName, setDisplayName] = useState('username'); 
+    // temporary - change AnacondaAvatar with actual profile image
+    const [displayPhoto, setDisplayPhoto] = useState(AnacondaAvatar); 
+    
+    const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
+
+    const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, 
+        CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar, 
+        PenguinAvatar, ScorpionAvatar, SharkAvatar, SheepAvatar, SnailAvatar, TurtleAvatar, WhaleAvatar
+    ]
     
     const toggleInDisplayName = () => { setInDisplayName(!isInDisplayName) };
 
@@ -41,6 +69,20 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                         }}
                     />
                     <h2 className={styles.sectionHeading}>Display Photo</h2>
+                    <img src={displayPhoto} className={styles.displayPhoto}/>
+                    <div className={styles.avatars}>
+                        {Array.isArray(avatars)
+                        ? avatars.map((avatar, i) => (
+                                <img
+                                    style={{border: avatar === displayPhoto ? "solid 2px #CA3FF3" : "" }}
+                                    key={i} 
+                                    src={avatar}
+                                    className={styles.avatarOption}
+                                    onClick={() => setDisplayPhoto(avatar)}
+                                />
+                        ))
+                        : null}
+                    </div>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
                 <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleViewProfileClose}>Close</Button>

@@ -30,3 +30,33 @@
     display: flex;
     justify-content: center;
 }
+
+.displayPhoto {
+    height: 150px;
+    border-radius: 4px;
+    margin: auto;
+    display: block;
+    padding: 8px 0px 8px 0px;
+}
+
+.avatars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 5px;
+    width:fit-content;
+    background-color: white;
+}
+
+.avatarOption {
+    width: 15%;
+    margin: 5px;
+    border-radius: 4px;
+    border: solid 2px white;
+}
+
+.avatarOption:hover {
+    cursor: pointer;
+    border: solid 2px #C4C4C4;
+}
