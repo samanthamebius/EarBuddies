@@ -49,7 +49,7 @@ function useStudioPost() {
   return { studio, isLoading, error, postStudio };
 }
 
-function SwitchWithTooltip() {
+function SwitchWithTooltip({ checked, onChange }) {
   const ToolTip = styled(({ className, ...props }) => (
       <Tooltip {...props} classes={{ popper: className }} />
     ))(({ theme }) => ({
@@ -65,17 +65,15 @@ function SwitchWithTooltip() {
         maxWidth: '70%'
       },
     })); 
-  
-  const [switchOn, setSwitchOn] = useState(false);
 
-  const title = switchOn
+  const title = checked
     ? 'Only you can queue, skip, and pause songs.'
     : 'Other users can queue, skip, and pause songs.';
 
   return (
     <ToolTip title={title} placement="right-end" arrow>
       <div className={styles.switchContainer}>
-        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
+        <ControlSwitch checked={checked} onChange={(e) => onChange(e.target.checked)} />
       </div>
     </ToolTip>
   );
@@ -95,6 +93,14 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "R&B", isSelected: false},
                                           {name: "Jazz", isSelected: false}, 
                                           {name: "Pop", isSelected: false}]);
+  const [file, setFile] = useState(null);
+  const handleFileChange = (selectedFile) => {
+    setFile(selectedFile);
+  };
+  const [isHostOnly, setIsHostOnly] = useState(false);
+  const handleSwitchToggle = (isChecked) => {
+    setIsHostOnly(isChecked);
+  };
 
   function toggleGenre(genre) {
     const newGenres = genres.map((obj, i) => {
@@ -128,8 +134,15 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     } else {
       console.log("CreateStudioDialog: handleSubmit: 102: studioNameInput: ", studioNameInput);
       setIsStudioNameErrorMessage(false);
-      postStudio(studioNameInput);
+      const selecetedGenres = getSelectedGenres();
+      postStudio(studioNameInput, selecetedGenres, file, [], isHostOnly);
     }
+  }
+
+  function getSelectedGenres() {
+    const selectedGenres = genres.filter(obj => obj.isSelected);
+    const selectedGenreNames = selectedGenres.map(obj => obj.name);
+    return selectedGenreNames;
   }
   
   const handleClose = () => { handleCloseDialog(false) };
@@ -163,7 +176,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             />
             
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
-            <FileDropZone />
+            <FileDropZone onFileChange={handleFileChange} />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
             {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
@@ -190,7 +203,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <SwitchWithTooltip />
+                <SwitchWithTooltip  checked={isHostOnly} onChange={handleSwitchToggle}/>
             </div>
             
             <h2 className={styles.sectionHeading}>Add Listeners</h2>

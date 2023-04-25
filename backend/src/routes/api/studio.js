@@ -1,6 +1,6 @@
 import express from "express";
-import { createStudio, getStudio } from "../../database/studio_dao.js";
-import { getUser, getUserId } from "../../database/user_dao.js";
+import { createStudio } from "../../database/studio_dao.js";
+import { getUserId } from "../../database/user_dao.js";
 
 const router = express.Router();
 
