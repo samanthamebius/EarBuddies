@@ -16,17 +16,15 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function useStudioPost() {
-  const [studio, setStudio] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const postStudio = async (navigate, name, genres = [], coverPhoto = '', listeners = [], isHostOnly = true) => {
+  const postStudio = async (navigate, name, genres, coverPhoto, listeners, isHostOnly) => {
 
     const host = JSON.parse(localStorage.getItem("current_user_id"));
     listeners.push(host);
     //add dummy listener pending search bar completion
     listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
-    setLoading(true);
+
+    //todo: add cover photo
+    coverPhoto = '';
 
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const url = `${BASE_URL}/api/studio/new`;
@@ -40,19 +38,13 @@ function useStudioPost() {
         coverPhoto,
         isHostOnly
       });
-
-      setStudio(response.data);
-      setLoading(false);
-      console.log(response.data._id)
-      console.log("redirecting to " + `/studio/${response.data._id}`)
       navigate(`/studio/${response.data._id}`);
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      console.error(err);
     }
   };
 
-  return { studio, isLoading, error, postStudio };
+  return { postStudio };
 }
 
 function SwitchWithTooltip({ checked, onChange }) {
@@ -87,7 +79,7 @@ function SwitchWithTooltip({ checked, onChange }) {
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
   const navigate = useNavigate();
-  const { studio, isLoading, error, postStudio } = useStudioPost();
+  const { postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
@@ -139,7 +131,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     if(studioNameInput == '') {
       setIsStudioNameErrorMessage(true);
     } else {
-      console.log("CreateStudioDialog: handleSubmit: 102: studioNameInput: ", studioNameInput);
       setIsStudioNameErrorMessage(false);
       const selecetedGenres = getSelectedGenres();
       postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
