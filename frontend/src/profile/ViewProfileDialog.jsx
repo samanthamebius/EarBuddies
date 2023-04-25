@@ -15,6 +15,7 @@ import BunnyAvatar from "../assets/profile/bunny.png";
 import CatAvatar from "../assets/profile/cat.png";
 import ClownFishAvatar from "../assets/profile/clown-fish.png";
 import CowAvatar from "../assets/profile/cow.png";
+import ElephantAvatar from "../assets/profile/elephant.png";
 import GiraffeAvatar from "../assets/profile/giraffe.png";
 import JaguarAvatar from "../assets/profile/jaguar.png";
 import JellyfishAvatar from "../assets/profile/jellyfish.png";
@@ -35,13 +36,18 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
     
     const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
+    const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
+    const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
 
-    const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, 
+    const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
         CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar, 
         PenguinAvatar, ScorpionAvatar, SharkAvatar, SheepAvatar, SnailAvatar, TurtleAvatar, WhaleAvatar
     ]
     
     const toggleInDisplayName = () => { setInDisplayName(!isInDisplayName) };
+    const toggleInDisplayPhoto = () => { setInDisplayPhoto(!isInDisplayPhoto) };
+
+    const openAvatarOptions = () => { setAvatarOptionsOpen(true)};
 
     return(
         <div>
@@ -69,19 +75,32 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                         }}
                     />
                     <h2 className={styles.sectionHeading}>Display Photo</h2>
-                    <img src={displayPhoto} className={styles.displayPhoto}/>
-                    <div className={styles.avatars}>
-                        {Array.isArray(avatars)
-                        ? avatars.map((avatar, i) => (
-                                <img
-                                    style={{border: avatar === displayPhoto ? "solid 2px #CA3FF3" : "" }}
-                                    key={i} 
-                                    src={avatar}
-                                    className={styles.avatarOption}
-                                    onClick={() => setDisplayPhoto(avatar)}
-                                />
-                        ))
-                        : null}
+                    
+                    <div 
+                        className={styles.displayPhotoContainer}
+                        onMouseEnter={toggleInDisplayPhoto} 
+                        onMouseLeave={toggleInDisplayPhoto}
+                        onClick={openAvatarOptions}
+                    >
+                        <div className={styles.currentDisplayPhotoContainter} >
+                            <img src={displayPhoto} className={styles.displayPhoto}/>
+                            <div className={styles.editIconContainer}>
+                                <EditRoundedIcon className={styles.editIcon} style={{ color: isInDisplayPhoto ? "#B03EEE" : "#757575"}}/>
+                            </div>
+                        </div>
+                        <div className={styles.avatars} style={{display: isAvatarOptionsOpen ? "" : "none"}}>
+                            {Array.isArray(avatars)
+                            ? avatars.map((avatar, i) => (
+                                    <img
+                                        style={{border: avatar === displayPhoto ? "solid 2px #CA3FF3" : "" }}
+                                        key={i} 
+                                        src={avatar}
+                                        className={styles.avatarOption}
+                                        onClick={() => setDisplayPhoto(avatar)}
+                                    />
+                            ))
+                            : null}
+                        </div>
                     </div>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
