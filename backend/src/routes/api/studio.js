@@ -21,9 +21,9 @@ router.post("/new", async (req, res) => {
       photo,
       isHostOnly
     );
-
+    
     // Respond with the newly created studio
-    res.status(201).json(newStudio);
+    res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

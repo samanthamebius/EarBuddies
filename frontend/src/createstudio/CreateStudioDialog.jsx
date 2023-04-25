@@ -13,15 +13,18 @@ import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function useStudioPost() {
   const [studio, setStudio] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const postStudio = async (name, genres = [], coverPhoto = '', listeners = [], isHostOnly = true) => {
+  const postStudio = async (navigate, name, genres = [], coverPhoto = '', listeners = [], isHostOnly = true) => {
+
     const host = JSON.parse(localStorage.getItem("current_user_id"));
     listeners.push(host);
+    //add dummy listener pending search bar completion
     listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
     setLoading(true);
 
@@ -40,6 +43,9 @@ function useStudioPost() {
 
       setStudio(response.data);
       setLoading(false);
+      console.log(response.data._id)
+      console.log("redirecting to " + `/studio/${response.data._id}`)
+      navigate(`/studio/${response.data._id}`);
     } catch (err) {
       setError(err);
       setLoading(false);
@@ -80,6 +86,7 @@ function SwitchWithTooltip({ checked, onChange }) {
 }
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
+  const navigate = useNavigate();
   const { studio, isLoading, error, postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
@@ -135,7 +142,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       console.log("CreateStudioDialog: handleSubmit: 102: studioNameInput: ", studioNameInput);
       setIsStudioNameErrorMessage(false);
       const selecetedGenres = getSelectedGenres();
-      postStudio(studioNameInput, selecetedGenres, file, [], isHostOnly);
+      postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
     }
   }
 
