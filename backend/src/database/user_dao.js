@@ -55,12 +55,12 @@ async function getUser(username) {
 
 async function getUserId(username) {
   const user = await getUser(username);
-  return user[0]._id;
+  return user._id;
 }
 
 async function getStudios(username) {
   const user = await getUser(username);
-  return user[0].userStudios;
+  return user.userStudios;
 }
 
 async function updateStudios(username, studios) {
