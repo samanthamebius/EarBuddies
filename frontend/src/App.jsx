@@ -3,7 +3,6 @@ import './App.css'
 import LogInPage from './login/LogInPage';
 import HomePage from './home/HomePage';
 import PageLayout from './PageLayout';
-import ProfilePage from './profile/ProfilePage';
 import StudioPage from './studio/StudioPage';
 
 const code = new URLSearchParams(window.location.search).get("code")
@@ -18,7 +17,6 @@ function App() {
         <Route path='login' element={<LogInPage/>}/>
         <Route path='/' element={<PageLayout/>}>
           <Route index element={<HomePage />} />
-          <Route path='profile' element={<ProfilePage/>}/>
           <Route path='studio' element={<StudioPage/>}/>
         </Route>
       </Routes>

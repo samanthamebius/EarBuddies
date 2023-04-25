@@ -1,0 +1,32 @@
+.heading {
+    font-weight: 800;
+	color: #757575;
+	font-size: 32px;
+	position: relative;
+    margin: 0px;
+    padding: 20px 24px 0px 24px
+}
+
+.sectionHeading {
+    font-weight: 800;
+	color: #757575;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 20px 0px 10px 0px
+}
+
+.createButton {
+    font-weight: 700;
+}
+
+.cancelButton {
+    background: linear-gradient(#BEBEBE, #EDEDED);
+    font-weight: 700;
+}
+
+.buttons {
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+}
