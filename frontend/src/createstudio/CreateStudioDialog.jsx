@@ -21,7 +21,7 @@ function useStudioPost() {
     const host = JSON.parse(localStorage.getItem("current_user_id"));
     listeners.push(host);
     //add dummy listener pending search bar completion
-    listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
     //todo: add cover photo
     coverPhoto = '';
