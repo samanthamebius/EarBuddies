@@ -3,7 +3,6 @@ import "./App.css";
 import LogInPage from "./login/LogInPage";
 import HomePage from "./home/HomePage";
 import PageLayout from "./PageLayout";
-import ProfilePage from "./profile/ProfilePage";
 import StudioPage from "./studio/StudioPage";
 import io from "socket.io-client";
 import { AppContextProvider } from "./AppContextProvider";
@@ -20,7 +19,6 @@ function App() {
 					<Route path="login" element={<LogInPage />} />
 					<Route path="/" element={<PageLayout />}>
 						<Route index element={<HomePage socket={socket} />} />
-						<Route path="profile" element={<ProfilePage />} />
 						<Route path="studio/:id" element={<StudioPage socket={socket} />} />
 					</Route>
 				</Routes>

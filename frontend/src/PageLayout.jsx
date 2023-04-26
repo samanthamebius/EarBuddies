@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./PageLayout.module.css";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import ViewProfileDialog from "./profile/ViewProfileDialog";
 import useAuth from "./hooks/useAuth";
-
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -104,100 +104,92 @@ function login() {
 }
 
 export function DropdownMenu() {
-	const [isOpen, setOpen] = useState(null);
-	const [isInProfle, setInProfile] = useState(false);
-	const [isInDarkMode, setInDarkMode] = useState(false);
-	const [isInLogOut, setInLogOut] = useState(false);
+	const [isViewProfileOpen, setIsViewProfileOpen] = useState(false);
+  const [isOpen, setOpen] = useState(null);
+  const [isInProfle, setInProfile] = useState(false);
+  const [isInDarkMode, setInDarkMode] = useState(false);
+  const [isInLogOut, setInLogOut] = useState(false);
 
-	const navigate = useNavigate();
-	const open = Boolean(isOpen);
+  const navigate = useNavigate();
+  const open = Boolean(isOpen);
 
-	const handleClick = (event) => {
-		setOpen(event.currentTarget);
+  const handleClick = (event) => {
+    setOpen(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setOpen(null);
+    setInProfile(false)
+    setInDarkMode(false)
+    setInDarkMode(false)
+  };
+
+  const handleLogout = () => {
+    handleClose
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+    localStorage.removeItem("current_user_id");
+
+    navigate("/login");
+  };
+
+  const handleViewProfileOpen = () => {
+		setIsViewProfileOpen(!isViewProfileOpen);
 	};
 
-	const handleClose = () => {
-		setOpen(null);
-		setInProfile(false);
-		setInDarkMode(false);
-		setInDarkMode(false);
-	};
+  login();
+  const toggleProfile = () => { setInProfile(!isInProfle) };
+  const toggleDarkMode = () => { setInDarkMode(!isInDarkMode) };
+  const toggleLogOut = () => { setInLogOut(!isInLogOut) };
 
-	const handleLogout = () => {
-		handleClose;
-		localStorage.removeItem("access_token");
-		localStorage.removeItem("refresh_token");
-		localStorage.removeItem("expires_in");
-		localStorage.removeItem("current_user_id");
+  return (
+    <>
+      <ViewProfileDialog
+        isViewProfileOpen={isViewProfileOpen}
+        handleViewProfileClose={() => setIsViewProfileOpen(false)}
+      />
+      <div className={styles.dropdown}>
+        <Button sx={{ fontWeight: 600 }}
+                variant="contained"
+                size="large"
+                onClick={handleClick} 
+                className={styles.button}>
+          <UserInfo />
+        </Button>
 
-		navigate("/login");
-	};
+        <Menu
+          anchorEl={isOpen}
+          open={open}
+          onClose={handleClose}
+        >
+          
+          <MenuItem className={styles.menu_item} 
+                    onClick={() => handleViewProfileOpen()} 
+                    onMouseEnter={toggleProfile} 
+                    onMouseLeave={toggleProfile}>
+            <PersonRoundedIcon className={styles.icon} style={{ color: isInProfle ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>View Profile</p>
+          </MenuItem>
 
-	login();
-	const toggleProfile = () => {
-		setInProfile(!isInProfle);
-	};
-	const toggleDarkMode = () => {
-		setInDarkMode(!isInDarkMode);
-	};
-	const toggleLogOut = () => {
-		setInLogOut(!isInLogOut);
-	};
+          <MenuItem className={styles.menu_item} 
+                    onClick={handleClose} 
+                    onMouseEnter={toggleDarkMode} 
+                    onMouseLeave={toggleDarkMode}>
+            <DarkModeRoundedIcon className={styles.icon} style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>Dark Mode</p>
+          </MenuItem>
 
-	return (
-		<div className={styles.dropdown}>
-			<Button
-				sx={{ fontWeight: 600 }}
-				variant="contained"
-				size="large"
-				onClick={handleClick}
-				className={styles.button}
-			>
-				<UserInfo />
-			</Button>
+          <MenuItem className={styles.menu_item} 
+                    onClick={handleLogout} 
+                    onMouseEnter={toggleLogOut} 
+                    onMouseLeave={toggleLogOut}>
+            <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>Log Out</p>
+          </MenuItem>
 
-			<Menu anchorEl={isOpen} open={open} onClose={handleClose}>
-				<NavLink to="./profile">
-					<MenuItem
-						className={styles.menu_item}
-						onClick={handleClose}
-						onMouseEnter={toggleProfile}
-						onMouseLeave={toggleProfile}
-					>
-						<PersonRoundedIcon
-							className={styles.icon}
-							style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
-						/>
-						<p className={styles.menu_title}>View Profile</p>
-					</MenuItem>
-				</NavLink>
-
-				<MenuItem
-					className={styles.menu_item}
-					onClick={handleClose}
-					onMouseEnter={toggleDarkMode}
-					onMouseLeave={toggleDarkMode}
-				>
-					<DarkModeRoundedIcon
-						className={styles.icon}
-						style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }}
-					/>
-					<p className={styles.menu_title}>Dark Mode</p>
-				</MenuItem>
-
-				<MenuItem
-					className={styles.menu_item}
-					onClick={handleLogout}
-					onMouseEnter={toggleLogOut}
-					onMouseLeave={toggleLogOut}
-				>
-					<LogoutRoundedIcon
-						className={styles.icon}
-						style={{ color: isInLogOut ? "#B03EEE" : "#757575" }}
-					/>
-					<p className={styles.menu_title}>Log Out</p>
-				</MenuItem>
-			</Menu>
-		</div>
-	);
+        </Menu>
+      </div>
+    </>
+  );
 }
