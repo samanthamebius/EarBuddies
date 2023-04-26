@@ -4,6 +4,7 @@ import express from 'express';
 import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
+import { setAccessToken } from '../dao/spotify_dao';
 
 const router = express.Router();
 router.use(cors())
@@ -32,6 +33,7 @@ router.post("/", (req, res) => {
       var access_token = data.body['access_token']
       var expires_in = data.body['expires_in']
       spotifyApi.setAccessToken(access_token)
+      setAccessToken(spotifyApi, access_token)
     })
     .catch(err => {
       console.log(err)

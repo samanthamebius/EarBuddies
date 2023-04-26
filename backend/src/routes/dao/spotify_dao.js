@@ -9,18 +9,10 @@ async function setAccessToken(spotifyApi, access_token) {
 }
 
 async function searchSpotify(query) {
-    // spotifyApi.getMe().then(
-    //   function (data) {
-    //     console.log("Some information about the authenticated user", data.body);
-    //   },
-    //   function (err) {
-    //     console.log("Something went wrong!", err);
-    //   }
-    // );
     return new Promise((resolve, reject) => {
         thisSpotifyApi.search(query, ['track', 'episode', 'audiobook'])
             .then(function (data) {
-                console.log('Search by "Love"', data.body);
+                console.log('Search by "Love"', data.body.tracks.items[0].album.images[0].url);
                 // want an image to show (from album)
                 // song name
                 // artist name
