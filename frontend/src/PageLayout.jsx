@@ -1,100 +1,110 @@
-import React, { useState } from "react";
-import styles from './PageLayout.module.css';
+import React, { useContext, useEffect, useState } from "react";
+import styles from "./PageLayout.module.css";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import useAuth from "./useAuth";
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import logo from './assets/shared/earBuddiesLogo.png';
-import useGet from "./useGet";
 import ViewProfileDialog from "./profile/ViewProfileDialog";
+import useAuth from "./hooks/useAuth";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import logo from "./assets/shared/earBuddiesLogo.png";
+import useGet from "./hooks/useGet";
+import { AppContext } from "./AppContextProvider";
 
 export default function PageLayout() {
-  return (
-    <React.Fragment>
-      <NavMenu />
-      <div className="container">
-        <Outlet />
-      </div>
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<NavMenu />
+			<div className="container">
+				<Outlet />
+			</div>
+		</React.Fragment>
+	);
 }
 
 function NavMenu() {
-  return (
-    <header className={styles.navmenu}>
-      <NavLink to=".">
-        <div className={styles.navLink}>
-          <img src={logo} className={styles.logo} />
-          <h1 className={styles.brandName}>EAR BUDDIES</h1>
-        </div>
-      </NavLink>
-      <DropdownMenu />
-    </header>
-  );
-
+	return (
+		<header className={styles.navmenu}>
+			<NavLink to=".">
+				<div className={styles.navLink}>
+					<img src={logo} className={styles.logo} />
+					<h1 className={styles.brandName}>EAR BUDDIES</h1>
+				</div>
+			</NavLink>
+			<DropdownMenu />
+		</header>
+	);
 }
 
 function UserInfo() {
-  const current_user_id = localStorage.getItem("current_user_id");
-  const id = JSON.parse(current_user_id);
+	const { setUsername, setSpotifyUsername } = useContext(AppContext);
+	const current_user_id = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user_id);
 
-  if (!current_user_id) {
-    return <p>Could not load user</p>;
-  }
+	if (!current_user_id) {
+		return <p>Could not load user</p>;
+	}
 
-  const access_token = localStorage.getItem("access_token");
+	const access_token = localStorage.getItem("access_token");
 
-  const {
-    data: user,
-    isLoading: userIsLoading } = useGet(`/api/user/${id}`, [], access_token);
+	const { data: user, isLoading: userIsLoading } = useGet(
+		`/api/user/${id}`,
+		[],
+		access_token
+	);
 
-  if (userIsLoading) {
-    return <p>Loading...</p>;
-  } else if (!user) {
-    return <p>Could not load user</p>;
-  } else {
-    var profilePicture = "";
-    var username = "";
-    try {
-      profilePicture = user[0].profilePic;
-      username = user[0].userDisplayName;
-    } catch (error) {
-      console.log(error)
-    }
-    return (
-      <div className={styles.profile_layout}>
-        <img src={profilePicture} className={styles.profile_picture} />
-        <p className={styles.username}>{username} </p>
-      </div>
-    );
-  }
+	useEffect(() => {
+		if (!userIsLoading && user) {
+			console.log(user);
+			setUsername(user?.userDisplayName);
+			setSpotifyUsername(user?.username);
+		}
+	}, [user, userIsLoading]);
+
+	if (userIsLoading) {
+		return <p>Loading...</p>;
+	} else if (!user) {
+		return <p>Could not load user</p>;
+	} else {
+		var profilePicture = "";
+		var username = "";
+		try {
+			profilePicture = user.profilePic;
+			username = user.userDisplayName;
+		} catch (error) {
+			console.log(error);
+		}
+		return (
+			<div className={styles.profile_layout}>
+				<img src={profilePicture} className={styles.profile_picture} />
+				<p className={styles.username}>{username} </p>
+			</div>
+		);
+	}
 }
 
 /**
  * Checks if user is logged in, if not, redirects to login page
  */
 function login() {
-  const access_token = localStorage.getItem("access_token");
-  const code = new URLSearchParams(window.location.search).get("code");
-  const current_user_id = localStorage.getItem("current_user_id");
-  if (access_token == null) {
-    //check for code
-    if (code == null) {
-      //reroute to login page
-      window.location.href = "/login";
-      return;
-    }
-  }
-  useAuth(access_token, code, current_user_id);
+	const access_token = localStorage.getItem("access_token");
+	const code = new URLSearchParams(window.location.search).get("code");
+	const current_user_id = localStorage.getItem("current_user_id");
+	if (access_token == null) {
+		//check for code
+		if (code == null) {
+			//reroute to login page
+			window.location.href = "/login";
+			return;
+		}
+	}
+	useAuth(access_token, code, current_user_id);
 }
 
 export function DropdownMenu() {
 	const [isViewProfileOpen, setIsViewProfileOpen] = useState(false);
-
   const [isOpen, setOpen] = useState(null);
   const [isInProfle, setInProfile] = useState(false);
   const [isInDarkMode, setInDarkMode] = useState(false);
@@ -181,6 +191,5 @@ export function DropdownMenu() {
         </Menu>
       </div>
     </>
-    
   );
 }
