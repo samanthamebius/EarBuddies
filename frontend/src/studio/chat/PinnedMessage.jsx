@@ -17,7 +17,7 @@ function PinnedMessage({ pinnedMessage, room, socket }) {
 
 	useEffect(() => {
 		axios
-			.get(`${BASE_URL}/api/user/${pinnedMessage.spotifyUsername}`)
+			.get(`${BASE_URL}/api/user/${pinnedMessage.username}`)
 			.then((response) => {
 				console.log(response.data);
 				if (response.data?.profilePic !== "") {

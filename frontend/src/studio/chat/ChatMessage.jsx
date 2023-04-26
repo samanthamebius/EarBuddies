@@ -21,7 +21,7 @@ const defaultReactions = [
 function ChatMessage(props) {
 	const {
 		newMessage,
-		setReplyToMessage,
+		setMessageReply,
 		messageReply,
 		room,
 		socket,
@@ -30,13 +30,14 @@ function ChatMessage(props) {
 	const {
 		message,
 		username: messageUsername,
+		displayName: messageDisplayName,
 		id: currentMessageId,
 	} = newMessage;
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
 
-	const { username } = useContext(AppContext);
+	const { username, displayName } = useContext(AppContext);
 	const isCurrentUser = username === messageUsername;
 
 	const setChatMessageStyle = () => {
@@ -102,8 +103,11 @@ function ChatMessage(props) {
 
 	// set the reply message
 	const handleMessageReply = () => {
-		setReplyToMessage(
-			`Replying to ${isCurrentUser ? "yourself" : messageUsername}: ${message}`
+		console.log("reply");
+		setMessageReply(
+			`Replying to ${
+				isCurrentUser ? "yourself" : messageDisplayName
+			}: ${message}`
 		);
 	};
 
@@ -111,11 +115,12 @@ function ChatMessage(props) {
 	const handleReactions = (selectedReaction) => {
 		socket.emit("send_message_reaction", {
 			room,
-			selectedReaction,
-			username,
 			reactionId: uuid(),
-			reactions,
 			messageId: currentMessageId,
+			username,
+			displayName,
+			selectedReaction,
+			reactions,
 		});
 	};
 
@@ -180,7 +185,7 @@ function ChatMessage(props) {
 			onMouseOver={() => setHover(true)}
 			onMouseOut={() => setHover(false)}
 		>
-			<h4 className={styles.username}>{messageUsername}</h4>
+			<h4 className={styles.username}>{messageDisplayName}</h4>
 			{messageReply && (
 				<div style={setMessageReplyStyle()}>
 					<p className={styles.messageReplyContent}>{messageReply}</p>

@@ -11,8 +11,6 @@ import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useContext } from "react";
-import { AppContext } from "../AppContextProvider";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -32,14 +30,13 @@ const listenersActive = [true, true, false, false, true, false];
 
 export default function StudioCard(props) {
 	const { socket, studio } = props;
-	const { username } = useContext(AppContext);
 	// studio will be gotten from backend when set up
 	const room = studio.id; // will be the id of the studio
 	const navigate = useNavigate();
 
 	const handleJoinStudio = async () => {
 		socket.connect("http://localhost:3000");
-		socket.emit("join_room", { username, room });
+		socket.emit("join_room", { room });
 
 		// create the chat in the DB if it doesn't already exist
 		await axios.post(`http://localhost:3000/api/chat/${room}`);

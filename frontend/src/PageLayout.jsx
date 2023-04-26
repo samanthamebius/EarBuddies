@@ -39,7 +39,7 @@ function NavMenu() {
 }
 
 function UserInfo() {
-	const { setUsername, setSpotifyUsername } = useContext(AppContext);
+	const { setUsername, setDisplayName } = useContext(AppContext);
 	const current_user_id = localStorage.getItem("current_user_id");
 	const id = JSON.parse(current_user_id);
 
@@ -57,9 +57,8 @@ function UserInfo() {
 
 	useEffect(() => {
 		if (!userIsLoading && user) {
-			console.log(user);
-			setUsername(user?.userDisplayName);
-			setSpotifyUsername(user?.username);
+			setDisplayName(user?.userDisplayName);
+			setUsername(user?.username);
 		}
 	}, [user, userIsLoading]);
 
@@ -105,91 +104,108 @@ function login() {
 
 export function DropdownMenu() {
 	const [isViewProfileOpen, setIsViewProfileOpen] = useState(false);
-  const [isOpen, setOpen] = useState(null);
-  const [isInProfle, setInProfile] = useState(false);
-  const [isInDarkMode, setInDarkMode] = useState(false);
-  const [isInLogOut, setInLogOut] = useState(false);
+	const [isOpen, setOpen] = useState(null);
+	const [isInProfle, setInProfile] = useState(false);
+	const [isInDarkMode, setInDarkMode] = useState(false);
+	const [isInLogOut, setInLogOut] = useState(false);
 
-  const navigate = useNavigate();
-  const open = Boolean(isOpen);
+	const navigate = useNavigate();
+	const open = Boolean(isOpen);
 
-  const handleClick = (event) => {
-    setOpen(event.currentTarget);
-  };
+	const handleClick = (event) => {
+		setOpen(event.currentTarget);
+	};
 
-  const handleClose = () => {
-    setOpen(null);
-    setInProfile(false)
-    setInDarkMode(false)
-    setInDarkMode(false)
-  };
+	const handleClose = () => {
+		setOpen(null);
+		setInProfile(false);
+		setInDarkMode(false);
+		setInDarkMode(false);
+	};
 
-  const handleLogout = () => {
-    handleClose
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("expires_in");
-    localStorage.removeItem("current_user_id");
+	const handleLogout = () => {
+		handleClose;
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		localStorage.removeItem("expires_in");
+		localStorage.removeItem("current_user_id");
 
-    navigate("/login");
-  };
+		navigate("/login");
+	};
 
-  const handleViewProfileOpen = () => {
+	const handleViewProfileOpen = () => {
 		setIsViewProfileOpen(!isViewProfileOpen);
 	};
 
-  login();
-  const toggleProfile = () => { setInProfile(!isInProfle) };
-  const toggleDarkMode = () => { setInDarkMode(!isInDarkMode) };
-  const toggleLogOut = () => { setInLogOut(!isInLogOut) };
+	login();
+	const toggleProfile = () => {
+		setInProfile(!isInProfle);
+	};
+	const toggleDarkMode = () => {
+		setInDarkMode(!isInDarkMode);
+	};
+	const toggleLogOut = () => {
+		setInLogOut(!isInLogOut);
+	};
 
-  return (
-    <>
-      <ViewProfileDialog
-        isViewProfileOpen={isViewProfileOpen}
-        handleViewProfileClose={() => setIsViewProfileOpen(false)}
-      />
-      <div className={styles.dropdown}>
-        <Button sx={{ fontWeight: 600 }}
-                variant="contained"
-                size="large"
-                onClick={handleClick} 
-                className={styles.button}>
-          <UserInfo />
-        </Button>
+	return (
+		<>
+			<ViewProfileDialog
+				isViewProfileOpen={isViewProfileOpen}
+				handleViewProfileClose={() => setIsViewProfileOpen(false)}
+			/>
+			<div className={styles.dropdown}>
+				<Button
+					sx={{ fontWeight: 600 }}
+					variant="contained"
+					size="large"
+					onClick={handleClick}
+					className={styles.button}
+				>
+					<UserInfo />
+				</Button>
 
-        <Menu
-          anchorEl={isOpen}
-          open={open}
-          onClose={handleClose}
-        >
-          
-          <MenuItem className={styles.menu_item} 
-                    onClick={() => handleViewProfileOpen()} 
-                    onMouseEnter={toggleProfile} 
-                    onMouseLeave={toggleProfile}>
-            <PersonRoundedIcon className={styles.icon} style={{ color: isInProfle ? "#B03EEE" : "#757575" }} />
-            <p className={styles.menu_title}>View Profile</p>
-          </MenuItem>
+				<Menu anchorEl={isOpen} open={open} onClose={handleClose}>
+					<MenuItem
+						className={styles.menu_item}
+						onClick={() => handleViewProfileOpen()}
+						onMouseEnter={toggleProfile}
+						onMouseLeave={toggleProfile}
+					>
+						<PersonRoundedIcon
+							className={styles.icon}
+							style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
+						/>
+						<p className={styles.menu_title}>View Profile</p>
+					</MenuItem>
 
-          <MenuItem className={styles.menu_item} 
-                    onClick={handleClose} 
-                    onMouseEnter={toggleDarkMode} 
-                    onMouseLeave={toggleDarkMode}>
-            <DarkModeRoundedIcon className={styles.icon} style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }} />
-            <p className={styles.menu_title}>Dark Mode</p>
-          </MenuItem>
+					<MenuItem
+						className={styles.menu_item}
+						onClick={handleClose}
+						onMouseEnter={toggleDarkMode}
+						onMouseLeave={toggleDarkMode}
+					>
+						<DarkModeRoundedIcon
+							className={styles.icon}
+							style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }}
+						/>
+						<p className={styles.menu_title}>Dark Mode</p>
+					</MenuItem>
 
-          <MenuItem className={styles.menu_item} 
-                    onClick={handleLogout} 
-                    onMouseEnter={toggleLogOut} 
-                    onMouseLeave={toggleLogOut}>
-            <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575" }} />
-            <p className={styles.menu_title}>Log Out</p>
-          </MenuItem>
-
-        </Menu>
-      </div>
-    </>
-  );
+					<MenuItem
+						className={styles.menu_item}
+						onClick={handleLogout}
+						onMouseEnter={toggleLogOut}
+						onMouseLeave={toggleLogOut}
+					>
+						<LogoutRoundedIcon
+							className={styles.icon}
+							style={{ color: isInLogOut ? "#B03EEE" : "#757575" }}
+						/>
+						<p className={styles.menu_title}>Log Out</p>
+					</MenuItem>
+				</Menu>
+			</div>
+		</>
+	);
 }

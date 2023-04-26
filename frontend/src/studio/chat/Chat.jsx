@@ -55,11 +55,11 @@ export default function Chat(props) {
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
-	const [replyToMessage, setReplyToMessage] = useState("");
+	const [messageReply, setMessageReply] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
-	const { username, spotifyUsername } = useContext(AppContext);
+	const { username, displayName } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 
@@ -80,11 +80,12 @@ export default function Chat(props) {
 			setMessages((messages) => [
 				...messages,
 				{
-					message: data.message,
-					username: data.username,
-					messageReply: data?.replyToMessage,
-					spotifyUsername: data.spotifyUsername,
 					id: data.id,
+					username: data.username,
+					displayName: data.displayName,
+					message: data.message,
+					isReply: data.isReply,
+					messageReply: data?.messageReply,
 				},
 			]);
 		});
@@ -103,10 +104,10 @@ export default function Chat(props) {
 				setPinnedMessages((pinnedMessages) => [
 					...pinnedMessages,
 					{
+						id: newMessage.id,
 						message: newMessage.message,
 						username: newMessage.username,
-						spotifyUsername: newMessage.spotifyUsername,
-						id: newMessage.id,
+						displayName: newMessage.displayName,
 					},
 				]);
 			}
@@ -125,27 +126,34 @@ export default function Chat(props) {
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
-			socket.emit("leave_room", { username, room });
+			socket.emit("leave_room", { displayName, room });
 		};
 	}, []);
 
 	// send the message
 	const handleSendMessage = async () => {
+		const isReply = messageReply !== "";
+		const messageId = uuid();
 		if (message !== "") {
 			socket.emit("send_message", {
-				username,
 				room,
+				id: messageId,
+				username,
+				displayName,
 				message,
-				replyToMessage,
-				spotifyUsername,
-				id: uuid(),
+				isReply,
+				messageReply,
 			});
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
+				id: messageId,
 				username: username,
+				displayName: displayName,
 				message: message,
+				isReply: isReply,
+				messageReply: messageReply,
 			});
 			setMessage("");
-			setReplyToMessage("");
+			setMessageReply("");
 		}
 	};
 
@@ -183,7 +191,7 @@ export default function Chat(props) {
 						<ChatMessage
 							key={index}
 							newMessage={message}
-							setReplyToMessage={setReplyToMessage}
+							setMessageReply={setMessageReply}
 							messageReply={message.messageReply}
 							room={room}
 							socket={socket}
@@ -194,13 +202,13 @@ export default function Chat(props) {
 			</div>
 			<div className={styles.chatInput}>
 				<div className={styles.inputContent}>
-					{replyToMessage !== "" && (
+					{messageReply !== "" && (
 						<div className={styles.messageReply}>
-							<div>{replyToMessage}</div>
+							<div>{messageReply}</div>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}
-								onClick={() => setReplyToMessage("")}
+								onClick={() => setMessageReply("")}
 							/>
 						</div>
 					)}
@@ -223,7 +231,7 @@ export default function Chat(props) {
 					onClick={() => handleSendMessage()}
 					style={{
 						opacity: `${message !== "" ? "0.5" : "0.2"}`,
-						padding: `${replyToMessage !== "" ? "14px" : "12px"} 10px 0 0`,
+						padding: `${messageReply !== "" ? "14px" : "12px"} 10px 0 0`,
 						margin: "0",
 						cursor: "pointer",
 						position: "sticky",
