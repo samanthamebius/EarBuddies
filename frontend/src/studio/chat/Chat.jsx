@@ -49,6 +49,8 @@ const StyledTextField = styled(TextField)({
 	width: "100%",
 });
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Chat(props) {
 	const { socket } = props;
 	const [messages, setMessages] = useState([]);
@@ -65,12 +67,10 @@ export default function Chat(props) {
 
 	// Set previous messages
 	useEffect(() => {
-		axios
-			.get(`http://localhost:3000/api/chat/all-messages/${id}`)
-			.then((response) => {
-				response.data.messages.length > 0 &&
-					setMessages(response.data.messages);
-			});
+		axios.get(`${BASE_URL}/api/chat/all-messages/${id}`).then((response) => {
+			response.data.messages.length > 0 && setMessages(response.data.messages);
+			setPinnedMessages(response.data.pinnedMessages);
+		});
 	}, []);
 
 	// continously set the live messages received

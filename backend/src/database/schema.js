@@ -32,22 +32,14 @@ const chatSchema = new Schema({
 			replyMessage: String,
 		},
 	],
-	// pinned messages
+	pinnedMessages: [
+		{ id: String, message: String, username: String, displayName: String },
+	],
 	// reactions
 });
-
-// const messageSchema = new Schema({
-// 	id: String,
-// 	username: String,
-// 	displayName: String,
-// 	message: String,
-// 	isReply: Boolean,
-// 	replyMessage: String,
-// });
 
 const User = mongoose.model("User", userSchema);
 const Studio = mongoose.model("Studio", studioSchema);
 const Chat = mongoose.model("Chat", chatSchema);
-// const Message = mongoose.model("Message", messageSchema);
 
 export { User, Studio, Chat };

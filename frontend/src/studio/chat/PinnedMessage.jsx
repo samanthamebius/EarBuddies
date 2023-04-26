@@ -11,8 +11,13 @@ function PinnedMessage({ pinnedMessage, room, socket }) {
 	const [profileImage, setProfileImage] = useState(defaultProfilePicture);
 	const [hover, setHover] = useState(false);
 
-	const handleRemovePin = () => {
+	const handleRemovePin = async () => {
 		socket.emit("remove_pinned_message", { newMessage: pinnedMessage, room });
+		console.log(pinnedMessage);
+		await axios.put(
+			`${BASE_URL}/api/chat/remove-pinned-message/${room.id}`,
+			pinnedMessage
+		);
 	};
 
 	useEffect(() => {

@@ -17,6 +17,17 @@ router.post("/:id", async (req, res) => {
 	res.sendStatus(201);
 });
 
+// get all messages in the chat room
+router.get("/all-messages/:id", async (req, res) => {
+	const { id } = req.params;
+	const messages = await Chat.findOne(
+		{ roomId: id.toString() },
+		{ messages: 1, pinnedMessages: 1 }
+	);
+
+	res.status(200).json(messages);
+});
+
 // update message history
 router.put("/new-message/:id", async (req, res) => {
 	const { id } = req.params;
@@ -26,17 +37,36 @@ router.put("/new-message/:id", async (req, res) => {
 		{ roomId: id.toString() },
 		{ $push: { messages: message } }
 	);
+
 	res.sendStatus(success ? 204 : 404);
 });
 
-// get all messages in the chat room
-router.get("/all-messages/:id", async (req, res) => {
+// update pinned message history
+router.put("/pinned-messages/:id", async (req, res) => {
 	const { id } = req.params;
-	const messages = await Chat.findOne(
+	const pinnedMessage = req.body;
+
+	const success = await Chat.updateOne(
 		{ roomId: id.toString() },
-		{ messages: 1 }
+		{ $push: { pinnedMessages: pinnedMessage } }
 	);
-	res.status(200).json(messages);
+
+	res.sendStatus(success ? 204 : 404);
+});
+
+// delete pinned message
+router.put("/remove-pinned-message/:id", async (req, res) => {
+	const { id } = req.params;
+	const pinnedMessage = req.body;
+
+	const success = await Chat.updateOne(
+		{
+			roomId: id.toString(),
+		},
+		{ $pull: { pinnedMessages: { id: pinnedMessage.id } } }
+	);
+
+	res.sendStatus(success ? 204 : 404);
 });
 
 export default router;

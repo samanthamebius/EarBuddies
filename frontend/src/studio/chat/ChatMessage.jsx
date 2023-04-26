@@ -8,6 +8,7 @@ import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfie
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import { AppContext } from "../../AppContextProvider";
+import axios from "axios";
 
 const defaultReactions = [
 	{ label: "angry", reaction: "😡" },
@@ -38,16 +39,9 @@ function ChatMessage(props) {
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
-	const [pastMessageReply, setPastMessageReply] = useState("");
 
 	const { username, displayName } = useContext(AppContext);
 	const isCurrentUser = username === messageUsername;
-	console.log(newMessage);
-	useEffect(() => {
-		if (isPastReply) {
-			setPastMessageReply(messageReplyHistory);
-		}
-	}, []);
 
 	const setChatMessageStyle = () => {
 		const message = {
@@ -102,12 +96,21 @@ function ChatMessage(props) {
 	};
 
 	// send the pinned message to the socket
-	const handlePinMessage = () => {
+	const handlePinMessage = async () => {
 		socket.emit("send_pinned_message", {
 			newMessage,
 			room,
 			pinnedMessages,
 		});
+		await axios.put(
+			`http://localhost:3000/api/chat/pinned-messages/${room.id}`,
+			{
+				id: newMessage.id,
+				message: newMessage.message,
+				username: newMessage.username,
+				displayName: newMessage.displayName,
+			}
+		);
 	};
 
 	// set the reply message
