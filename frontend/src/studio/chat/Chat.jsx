@@ -55,7 +55,7 @@ export default function Chat(props) {
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
-	const [messageReply, setMessageReply] = useState("");
+	const [replyMessage, setReplyMessage] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
@@ -85,7 +85,7 @@ export default function Chat(props) {
 					displayName: data.displayName,
 					message: data.message,
 					isReply: data.isReply,
-					messageReply: data?.messageReply,
+					replyMessage: data?.replyMessage,
 				},
 			]);
 		});
@@ -132,7 +132,7 @@ export default function Chat(props) {
 
 	// send the message
 	const handleSendMessage = async () => {
-		const isReply = messageReply !== "";
+		const isReply = replyMessage !== "";
 		const messageId = uuid();
 		if (message !== "") {
 			socket.emit("send_message", {
@@ -142,7 +142,7 @@ export default function Chat(props) {
 				displayName,
 				message,
 				isReply,
-				messageReply,
+				replyMessage,
 			});
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
@@ -150,10 +150,10 @@ export default function Chat(props) {
 				displayName: displayName,
 				message: message,
 				isReply: isReply,
-				messageReply: messageReply,
+				replyMessage: replyMessage,
 			});
 			setMessage("");
-			setMessageReply("");
+			setReplyMessage("");
 		}
 	};
 
@@ -191,8 +191,8 @@ export default function Chat(props) {
 						<ChatMessage
 							key={index}
 							newMessage={message}
-							setMessageReply={setMessageReply}
-							messageReply={message.messageReply}
+							setReplyMessage={setReplyMessage}
+							replyMessage={message.replyMessage}
 							room={room}
 							socket={socket}
 							pinnedMessages={pinnedMessages}
@@ -202,13 +202,13 @@ export default function Chat(props) {
 			</div>
 			<div className={styles.chatInput}>
 				<div className={styles.inputContent}>
-					{messageReply !== "" && (
-						<div className={styles.messageReply}>
-							<div>{messageReply}</div>
+					{replyMessage !== "" && (
+						<div className={styles.replyMessage}>
+							<div>{replyMessage}</div>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}
-								onClick={() => setMessageReply("")}
+								onClick={() => setReplyMessage("")}
 							/>
 						</div>
 					)}
@@ -231,7 +231,7 @@ export default function Chat(props) {
 					onClick={() => handleSendMessage()}
 					style={{
 						opacity: `${message !== "" ? "0.5" : "0.2"}`,
-						padding: `${messageReply !== "" ? "14px" : "12px"} 10px 0 0`,
+						padding: `${replyMessage !== "" ? "14px" : "12px"} 10px 0 0`,
 						margin: "0",
 						cursor: "pointer",
 						position: "sticky",

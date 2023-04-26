@@ -21,14 +21,16 @@ const defaultReactions = [
 function ChatMessage(props) {
 	const {
 		newMessage,
-		setMessageReply,
-		messageReply,
+		setReplyMessage,
+		replyMessage,
 		room,
 		socket,
 		pinnedMessages,
 	} = props;
 	const {
 		message,
+		isReply: isPastReply,
+		messageReply: messageReplyHistory,
 		username: messageUsername,
 		displayName: messageDisplayName,
 		id: currentMessageId,
@@ -36,9 +38,16 @@ function ChatMessage(props) {
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
 	const [hover, setHover] = useState(false);
+	const [pastMessageReply, setPastMessageReply] = useState("");
 
 	const { username, displayName } = useContext(AppContext);
 	const isCurrentUser = username === messageUsername;
+	console.log(newMessage);
+	useEffect(() => {
+		if (isPastReply) {
+			setPastMessageReply(messageReplyHistory);
+		}
+	}, []);
 
 	const setChatMessageStyle = () => {
 		const message = {
@@ -52,7 +61,7 @@ function ChatMessage(props) {
 		return message;
 	};
 
-	const setMessageReplyStyle = () => {
+	const setReplyMessageStyle = () => {
 		const message = {
 			backgroundColor: "#f6f9fa",
 			padding: "12px",
@@ -104,7 +113,7 @@ function ChatMessage(props) {
 	// set the reply message
 	const handleMessageReply = () => {
 		console.log("reply");
-		setMessageReply(
+		setReplyMessage(
 			`Replying to ${
 				isCurrentUser ? "yourself" : messageDisplayName
 			}: ${message}`
@@ -179,6 +188,8 @@ function ChatMessage(props) {
 		});
 	}, [socket]);
 
+	console.log(replyMessage);
+
 	return (
 		<div
 			style={setChatMessageStyle()}
@@ -186,9 +197,10 @@ function ChatMessage(props) {
 			onMouseOut={() => setHover(false)}
 		>
 			<h4 className={styles.username}>{messageDisplayName}</h4>
-			{messageReply && (
-				<div style={setMessageReplyStyle()}>
-					<p className={styles.messageReplyContent}>{messageReply}</p>
+			{/* Message Reply */}
+			{(replyMessage || isPastReply) && (
+				<div style={setReplyMessageStyle()}>
+					<p className={styles.messageReplyContent}>{replyMessage}</p>
 				</div>
 			)}
 			<div
