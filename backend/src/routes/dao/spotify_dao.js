@@ -1,4 +1,7 @@
 import { spotifyApi } from '../api/login'
+import dotenv from 'dotenv';
+dotenv.config();
+import { refreshAccessToken } from '../api/refresh';
 
 var thisSpotifyApi = null;
 
@@ -8,7 +11,12 @@ async function setAccessToken(spotifyApi, access_token) {
     thisSpotifyApi.setAccessToken(access_token);
 }
 
-async function searchSpotify(query) {
+async function searchSpotify(query, refresh_token) {
+    if (thisSpotifyApi == null) {
+        console.log("spotify api not set")
+        refreshAccessToken(thisSpotifyApi, refresh_token);
+        return null;
+    }
     return new Promise((resolve, reject) => {
         thisSpotifyApi.search(query, ['track', 'episode', 'audiobook'])
             .then(function (data) {

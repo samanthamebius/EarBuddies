@@ -3,11 +3,11 @@ import { searchSpotify } from "../../routes/dao/spotify_dao";
 
 const router = express.Router();
 
-router.get("/search/:query", async (req, res) => {
-
+router.post("/search/:query", async (req, res) => {
+    const refresh_token = req.body.refresh_token;
     try {
         const { query } = req.params;
-        const results = await searchSpotify(query);
+        const results = await searchSpotify(query, refresh_token);
         res.json(results);
     }
     catch (err) {

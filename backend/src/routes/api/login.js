@@ -36,14 +36,6 @@ router.post("/", async (req, res) => {
     spotifyApi.setAccessToken(access_token);
     setAccessToken(spotifyApi, access_token);
     const user_id = await loginUser(spotifyApi, data);
-    // spotifyApi.search('love', ['track', 'episode', 'audiobook'])
-    //   .then(function (data) {
-    //     console.log('Search by "Love"', data.body);
-    //     // want an image to show (from album)
-    //     // song name
-    //     // artist name
-    //     // spotify id
-    //   })
 
     res.json({
       access_token: access_token,

@@ -48,7 +48,7 @@ function SearchBar({ label }) {
     console.log(searchTerm)
     if (searchTerm.trim().length > 0) {
       try {
-        axios.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
+        axios.post(`${BASE_URL}/api/spotify/search/${searchTerm}`, localStorage.getItem("refresh_token"))
           .then((response) => {
             setSearchResults(response.data);
           })
