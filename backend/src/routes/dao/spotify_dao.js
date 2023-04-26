@@ -46,9 +46,11 @@ async function searchSpotify(query) {
                     for (var j = 0; j < data.body.audiobooks.items[i].authors.length; j++) {
                         audiobook.authors.push(data.body.audiobooks.items[i].authors[j].name);
                     }
-                    results.push(audiobook);
-                    resolve(results)
+                    if (!data.body.audiobooks.items[i].explicit) {
+                        results.push(audiobook);
+                    }
                 }
+                resolve(results);
             })
             .catch(function (err) {
                 console.log("Something went wrong!", err);
