@@ -15,16 +15,18 @@ function SearchBar({ label }) {
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+    var results = [];
     console.log(searchTerm)
     try {
       axios.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
         .then((response) => {
-          console.log(response.data);
+          results = response.data;
         })
     }
     catch (error) {
       console.log(error);
     }
+
   };
 
   return (
