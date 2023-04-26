@@ -1,81 +1,195 @@
-import React from "react";
-import styles from './PageLayout.module.css';
-import { NavLink, Outlet } from "react-router-dom";
-
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-
-import logo from './assets/nav_menu/earBuddiesLogoWithName.png';
-
-import profileIcon from './assets/nav_menu/profileIcon.png'
-import logoutIcon from './assets/nav_menu/logoutIcon.png'
-import darkmodeIcon from './assets/nav_menu/darkmodeIcon.png'
-
-import upArrow from './assets/nav_menu/dropdownUpArrow.png';
-import downArrow from './assets/nav_menu/dropdownDownArrow.png';
+import React, { useContext, useEffect, useState } from "react";
+import styles from "./PageLayout.module.css";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import ViewProfileDialog from "./profile/ViewProfileDialog";
+import useAuth from "./hooks/useAuth";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import logo from "./assets/shared/earBuddiesLogo.png";
+import useGet from "./hooks/useGet";
+import { AppContext } from "./AppContextProvider";
 
 export default function PageLayout() {
-    return (
-        <React.Fragment>
-            <NavMenu />
-            <div className="container">
-                <Outlet />
-            </div>
-        </React.Fragment>
-    );
+	return (
+		<React.Fragment>
+			<NavMenu />
+			<div className="container">
+				<Outlet />
+			</div>
+		</React.Fragment>
+	);
 }
 
 function NavMenu() {
-    return (
-        <header className={styles.navmenu}>
-            <NavLink to="." ><img src={logo} className={styles.logo} /></NavLink>
-            <DropdownMenu/>
-        </header>
-    );
+	return (
+		<header className={styles.navmenu}>
+			<NavLink to=".">
+				<div className={styles.navLink}>
+					<img src={logo} className={styles.logo} />
+					<h1 className={styles.brandName}>EAR BUDDIES</h1>
+				</div>
+			</NavLink>
+			<DropdownMenu />
+		</header>
+	);
+}
+
+function UserInfo() {
+	const { setUsername, setSpotifyUsername } = useContext(AppContext);
+	const current_user_id = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user_id);
+
+	if (!current_user_id) {
+		return <p>Could not load user</p>;
+	}
+
+	const access_token = localStorage.getItem("access_token");
+
+	const { data: user, isLoading: userIsLoading } = useGet(
+		`/api/user/${id}`,
+		[],
+		access_token
+	);
+
+	useEffect(() => {
+		if (!userIsLoading && user) {
+			console.log(user);
+			setUsername(user?.userDisplayName);
+			setSpotifyUsername(user?.username);
+		}
+	}, [user, userIsLoading]);
+
+	if (userIsLoading) {
+		return <p>Loading...</p>;
+	} else if (!user) {
+		return <p>Could not load user</p>;
+	} else {
+		var profilePicture = "";
+		var username = "";
+		try {
+			profilePicture = user.profilePic;
+			username = user.userDisplayName;
+		} catch (error) {
+			console.log(error);
+		}
+		return (
+			<div className={styles.profile_layout}>
+				<img src={profilePicture} className={styles.profile_picture} />
+				<p className={styles.username}>{username} </p>
+			</div>
+		);
+	}
+}
+
+/**
+ * Checks if user is logged in, if not, redirects to login page
+ */
+function login() {
+	const access_token = localStorage.getItem("access_token");
+	const code = new URLSearchParams(window.location.search).get("code");
+	const current_user_id = localStorage.getItem("current_user_id");
+	if (access_token == null) {
+		//check for code
+		if (code == null) {
+			//reroute to login page
+			window.location.href = "/login";
+			return;
+		}
+	}
+	useAuth(access_token, code, current_user_id);
 }
 
 export function DropdownMenu() {
-  const [isOpen, setOpen] = React.useState(null);
+	const [isViewProfileOpen, setIsViewProfileOpen] = useState(false);
+  const [isOpen, setOpen] = useState(null);
+  const [isInProfle, setInProfile] = useState(false);
+  const [isInDarkMode, setInDarkMode] = useState(false);
+  const [isInLogOut, setInLogOut] = useState(false);
+
+  const navigate = useNavigate();
   const open = Boolean(isOpen);
+
   const handleClick = (event) => {
     setOpen(event.currentTarget);
   };
+
   const handleClose = () => {
     setOpen(null);
+    setInProfile(false)
+    setInDarkMode(false)
+    setInDarkMode(false)
   };
 
+  const handleLogout = () => {
+    handleClose
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+    localStorage.removeItem("current_user_id");
+
+    navigate("/login");
+  };
+
+  const handleViewProfileOpen = () => {
+		setIsViewProfileOpen(!isViewProfileOpen);
+	};
+
+  login();
+  const toggleProfile = () => { setInProfile(!isInProfle) };
+  const toggleDarkMode = () => { setInDarkMode(!isInDarkMode) };
+  const toggleLogOut = () => { setInLogOut(!isInLogOut) };
+
   return (
-    <div className={styles.dropdown}>
+    <>
+      <ViewProfileDialog
+        isViewProfileOpen={isViewProfileOpen}
+        handleViewProfileClose={() => setIsViewProfileOpen(false)}
+      />
+      <div className={styles.dropdown}>
+        <Button sx={{ fontWeight: 600 }}
+                variant="contained"
+                size="large"
+                onClick={handleClick} 
+                className={styles.button}>
+          <UserInfo />
+        </Button>
 
-      <Button onClick={handleClick} className={styles.button}>
-        <img src={profileIcon} className={styles.profile_picture} />
-        <p className={styles.username}>Username </p>
-        {isOpen ? <img src={upArrow} className={styles.arrow}/> : <img src={downArrow} className={styles.arrow}/>}
-      </Button>
+        <Menu
+          anchorEl={isOpen}
+          open={open}
+          onClose={handleClose}
+        >
+          
+          <MenuItem className={styles.menu_item} 
+                    onClick={() => handleViewProfileOpen()} 
+                    onMouseEnter={toggleProfile} 
+                    onMouseLeave={toggleProfile}>
+            <PersonRoundedIcon className={styles.icon} style={{ color: isInProfle ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>View Profile</p>
+          </MenuItem>
 
-      <Menu
-        anchorEl={isOpen}
-        open={open}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>
-            <img src={profileIcon} className={styles.icon}/>
-            <profileIcon/>
-            <NavLink to="./profile" className={styles.menu_item}>View Profile</NavLink>
-        </MenuItem>
+          <MenuItem className={styles.menu_item} 
+                    onClick={handleClose} 
+                    onMouseEnter={toggleDarkMode} 
+                    onMouseLeave={toggleDarkMode}>
+            <DarkModeRoundedIcon className={styles.icon} style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>Dark Mode</p>
+          </MenuItem>
 
-        <MenuItem onClick={handleClose}>
-            <img src={darkmodeIcon} className={styles.icon} />
-            <p className={styles.menu_item}>Dark Mode</p>
-        </MenuItem>
+          <MenuItem className={styles.menu_item} 
+                    onClick={handleLogout} 
+                    onMouseEnter={toggleLogOut} 
+                    onMouseLeave={toggleLogOut}>
+            <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575" }} />
+            <p className={styles.menu_title}>Log Out</p>
+          </MenuItem>
 
-        <MenuItem onClick={handleClose}>
-            <img src={logoutIcon} className={styles.icon}/>
-            <NavLink to="./login" className={styles.menu_item}>Log Out</NavLink>
-        </MenuItem>
-
-      </Menu>
-    </div>
+        </Menu>
+      </div>
+    </>
   );
 }

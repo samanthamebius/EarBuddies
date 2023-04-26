@@ -1,12 +1,11 @@
 .listenersImages {
-    padding-top: 25px;
-    position: relative;
-    padding-bottom: 25px;
+	padding-top: 25px;
+	position: relative;
 }
 .listenerImage {
-    height: 25px;
-    position: absolute;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    float: left;
+	height: 25px;
+	margin-left: 10px;
+	position: relative;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
 }

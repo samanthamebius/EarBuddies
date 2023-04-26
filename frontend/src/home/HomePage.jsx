@@ -1,11 +1,12 @@
-import * as React from "react";
-import useAuth from "../useAuth";
+import React, { useContext, useState } from "react";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
-import { style } from "@mui/system";
-import SoundWavesGradient from "../assets/soundwavesgradient.png";
+import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
+import CreateStudioDialog from "../createstudio/CreateStudioDialog";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { AppContext } from "../AppContextProvider";
 
 const mockStudios = [
 	{
@@ -34,27 +35,14 @@ const mockStudios = [
 	},
 ];
 
-/**
- * Checks if user is logged in, if not, redirects to login page
- */
-function login() {
-	const accessToken = localStorage.getItem("accessToken");
-	if (accessToken == null) {
-		//check for code
-		const code = new URLSearchParams(window.location.search).get("code");
-		if (code == null) {
-			//reroute to login page
-			window.location.href = "/login";
-		} else {
-			//use code to get access token
-			useAuth(code);
-		}
-	}
-}
-
 function HomePage(props) {
 	const { socket } = props;
-	login();
+	const [isOpen, setIsOpen] = useState(false);
+	const { username } = useContext(AppContext);
+
+	const handleOpen = () => {
+		setIsOpen(!isOpen);
+	};
 
 	return (
 		<div className={styles.container}>
@@ -62,8 +50,18 @@ function HomePage(props) {
 				<div className={styles.header}>
 					<h1 className={styles.headings}>My Studios</h1>
 					<div className={styles.headerChild}>
-						<Button variant="contained" size="large" className={styles.button}>
-							+ Create Studio
+						<CreateStudioDialog
+							isDialogOpened={isOpen}
+							handleCloseDialog={() => setIsOpen(false)}
+						/>
+						<Button
+							sx={{ fontWeight: 600 }}
+							variant="contained"
+							size="large"
+							className={styles.button}
+							onClick={() => handleOpen()}
+						>
+							<AddRoundedIcon sx={{ pr: 1 }} /> Create Studio
 						</Button>
 					</div>
 				</div>
@@ -72,7 +70,12 @@ function HomePage(props) {
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === false)
 						.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
+							<StudioCard
+								key={studio.id}
+								socket={socket}
+								studio={studio}
+								username={username}
+							/>
 						))}
 				</div>
 			</div>
@@ -88,7 +91,12 @@ function HomePage(props) {
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === true)
 						.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
+							<StudioCard
+								key={studio.id}
+								socket={socket}
+								studio={studio}
+								username={username}
+							/>
 						))}
 				</div>
 			</div>

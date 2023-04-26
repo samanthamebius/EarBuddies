@@ -1,0 +1,14 @@
+.genreButton {
+    background: linear-gradient(#E640F8, #B03EEE);
+}
+
+.genreLabel {
+    margin: 0px;
+    font-weight: 600;
+    color: white;
+}
+
+.genreIcon {
+    height: 20px;
+    padding-left: 10px;
+}

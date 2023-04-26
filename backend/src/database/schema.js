@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
 	username: String,
+	userDisplayName: String,
 	profilePic: String,
 	userIsActive: Boolean,
 	userStudios: [{ type: Schema.Types.ObjectId, ref: "Studio" }],
@@ -16,6 +17,7 @@ const studioSchema = new Schema({
 	studioHost: { type: Schema.Types.ObjectId, ref: "User" },
 	studioGenres: [String],
 	studioPicture: String,
+	studioControlHostOnly: Boolean,
 });
 
 const chatSchema = new Schema({

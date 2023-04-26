@@ -1,0 +1,59 @@
+.heading {
+    font-weight: 800;
+	color: #757575;
+	font-size: 32px;
+	position: relative;
+    margin: 0px;
+    padding: 20px 24px 0px 24px
+}
+
+.sectionHeading {
+    font-weight: 800;
+	color: #757575;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 20px 0px 10px 0px
+}
+
+.focusText {
+    font-weight: 800;
+	color: #CA3FF3;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 10px 0px 10px 0px
+}
+
+.controlSection {
+    display: flex;
+}
+
+.switchContainer {
+    padding: 0px 20px 0px 20px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.createButton {
+    font-weight: 700;
+}
+
+.cancelButton {
+    background: linear-gradient(#EDEDED, #BEBEBE);
+    font-weight: 700;
+}
+
+.buttons {
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.addGenreSection {
+    display: flex;
+    align-items: center;
+}
+.spacing {
+    width: 10px;
+}

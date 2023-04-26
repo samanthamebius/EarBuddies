@@ -1,4 +1,9 @@
 .searchBar {
     background-color: white;
+    border-radius: 4px;
     padding: 0px;
+}
+
+.searchIcon {
+    padding-right: 10px;
 }

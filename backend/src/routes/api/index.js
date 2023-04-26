@@ -11,6 +11,12 @@ router.use("/refresh", refresh);
 import chat from "./chat";
 router.use("/chat", chat);
 
+import user from './user';
+router.use('/user', user);
+
+import studio from './studio';
+router.use('/studio', studio);
+
 //tester api call
 router.get("/hello", (req, res) => {
 	res.send("Hello, World");
