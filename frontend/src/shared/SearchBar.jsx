@@ -8,6 +8,7 @@ import styles from './SearchBar.module.css';
 import { sizing } from '@mui/system';
 import axios from "axios";
 import { List, ListItem, ListItemText, ListItemAvatar, IconButton, Avatar } from '@mui/material';
+import { useEffect } from "react";
 import React from 'react';
 
 function SearchBar({ label }) {
@@ -33,8 +34,14 @@ function SearchBar({ label }) {
     } else {
       setSearchResults([]);
     }
-
   };
+
+  useEffect(() => {
+    return () => {
+      // clear search results when the input field is unmounted
+      setSearchResults([]);
+    };
+  }, []);
 
   function displayText(result) {
     if (result.type === "audiobook") {
@@ -59,6 +66,7 @@ function SearchBar({ label }) {
         onChange={handleChange}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        onCancelSearch={() => setSearchTerm("")}
         fullWidth
         InputProps={{
           startAdornment: (
