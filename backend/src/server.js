@@ -50,7 +50,6 @@ io.on("connection", (socket) => {
 	// send message to users
 	socket.on("send_message", (data) => {
 		const { room } = data;
-		console.log(room);
 		io.in(room.id).emit("receive_message", data);
 	});
 
@@ -74,9 +73,9 @@ io.on("connection", (socket) => {
 
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
-		const { username, room } = data;
+		const { displayName, room } = data;
 		socket.leave(room.id);
-		console.log(`${username} has left the chat`);
+		console.log(`${displayName} has left the chat`);
 	});
 
 	socket.on("disconnect", () => {

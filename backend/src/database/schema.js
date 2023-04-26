@@ -22,23 +22,32 @@ const studioSchema = new Schema({
 
 const chatSchema = new Schema({
 	roomId: String,
-	messages: [{ username: String, message: String }],
+	messages: [
+		{
+			id: String,
+			username: String,
+			displayName: String,
+			message: String,
+			isReply: Boolean,
+			replyMessage: String,
+		},
+	],
 	// pinned messages
 	// reactions
 });
 
-const messageSchema = new Schema({
-	id: String,
-	username: String,
-	displayName: String,
-	message: String,
-	isReply: Boolean,
-	replyMessage: String,
-});
+// const messageSchema = new Schema({
+// 	id: String,
+// 	username: String,
+// 	displayName: String,
+// 	message: String,
+// 	isReply: Boolean,
+// 	replyMessage: String,
+// });
 
 const User = mongoose.model("User", userSchema);
 const Studio = mongoose.model("Studio", studioSchema);
 const Chat = mongoose.model("Chat", chatSchema);
-const Message = mongoose.model("Message", messageSchema);
+// const Message = mongoose.model("Message", messageSchema);
 
-export { User, Studio, Chat, Message };
+export { User, Studio, Chat };

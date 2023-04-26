@@ -64,14 +64,14 @@ export default function Chat(props) {
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
 
 	// Set previous messages
-	// useEffect(() => {
-	// 	axios
-	// 		.get(`http://localhost:3000/api/chat/all-messages/${id}`)
-	// 		.then((response) => {
-	// 			response.data.messages.length > 0 &&
-	// 				setMessages(response.data.messages);
-	// 		});
-	// }, []);
+	useEffect(() => {
+		axios
+			.get(`http://localhost:3000/api/chat/all-messages/${id}`)
+			.then((response) => {
+				response.data.messages.length > 0 &&
+					setMessages(response.data.messages);
+			});
+	}, []);
 
 	// continously set the live messages received
 	useEffect(() => {
