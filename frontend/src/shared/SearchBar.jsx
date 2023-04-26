@@ -10,14 +10,6 @@ import axios from "axios";
 import { List, ListItem, ListItemText, ListItemAvatar, IconButton, Avatar } from '@mui/material';
 import React from 'react';
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
 function SearchBar({ label }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,18 +17,37 @@ function SearchBar({ label }) {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (event) => {
+    event.persist();
     setSearchTerm(event.target.value);
     console.log(searchTerm)
-    try {
-      axios.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
-        .then((response) => {
-          setSearchResults(response.data);
-        })
+    if (searchTerm.trim().length > 0) {
+      try {
+        axios.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
+          .then((response) => {
+            setSearchResults(response.data);
+          })
+      }
+      catch (error) {
+        console.log(error);
+      }
+    } else {
+      setSearchResults([]);
     }
-    catch (error) {
-      console.log(error);
-    }
+
   };
+
+  function displayText(result) {
+    if (result.type === "audiobook") {
+      return `${result.name} - ${result.authors}`
+    }
+    else if (result.type === "track") {
+      return `${result.name} - ${result.artists}`
+    }
+    else {
+      return `${result.name}`
+    }
+  }
+
 
   return (
     <Container disableGutters={true} className={styles.searchBar}>
@@ -59,27 +70,21 @@ function SearchBar({ label }) {
           style: { marginLeft: searchTerm || focused ? 0 : 30 }
         }}
       />
-      <List>
-        {generate(
+      <List className={styles.listContainer}>
+        {searchResults.map((result) => (
           <ListItem
             secondaryAction={
-              <IconButton edge="end" aria-label="delete">
+              <IconButton edge="end" aria-label="more options">
                 <MoreHorizIcon />
               </IconButton>
             }
           >
             <ListItemAvatar>
-              <Avatar>
-                {searchResults.map((result) => (
-                  <img src={result.image} />
-                ))}
-              </Avatar>
+              <Avatar><img src={result.image} /></Avatar>
             </ListItemAvatar>
-            {searchResults.map((result) => (
-              <ListItemText primary={result.name} />
-            ))}
-          </ListItem>,
-        )}
+            <ListItemText primary={displayText(result)} />
+          </ListItem>
+        ))}
       </List>
     </Container>
   );

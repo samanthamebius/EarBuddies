@@ -7,3 +7,8 @@
 .searchIcon {
     padding-right: 10px;
 }
+
+.listContainer {
+    max-height: 400px;
+    overflow: auto;
+}
