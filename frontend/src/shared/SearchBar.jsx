@@ -140,7 +140,7 @@ function SearchBar({ label }) {
             </StyledMenu>
             <ListItemAvatar>
               <Avatar>
-                <img src={result.image} />
+                <img className={styles.image} src={result.image} />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={displayText(result)} />
