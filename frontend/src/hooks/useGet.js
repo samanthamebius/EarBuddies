@@ -4,7 +4,7 @@ import axios from "axios";
 /**
  * A custom hook which fetches data from the given URL. Includes functionality to determine
  * whether the data is still being loaded or not.
- * code credit: Andrew Meads 
+ * code credit: Andrew Meads (modified)
  */
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,10 +17,12 @@ export default function useGet(url) {
   console.log("full url: " + full_url);
 
   useEffect(() => {
+    console.log("useEffect1")
     setRefreshToggle(!refreshToggle);
   }, []);
 
   useEffect(() => {
+    console.log("useEffect")
     if (!access_token) {
       return;
     }

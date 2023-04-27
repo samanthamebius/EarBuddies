@@ -28,6 +28,7 @@ import DisableControlIcon from "../assets/studio/disableControlIcon.png";
 import EnableControlIcon from "../assets/studio/enableControlIcon.png";
 
 import useGet from "../hooks/useGet.js"
+import axios from "axios";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -59,19 +60,10 @@ const listeners = [
 	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
 ];
 
-export default function Banner(id) {
+export default function Banner(id, studio) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
-
-	const id_string = id.id;
-	const {data: studio, isLoading: isLoading} = useGet(`/api/studio/${id_string}`);
-	console.log("studio: " + studio[0].studioName);
-	const studioName = studio[0].studioName;
-	const backgroundImage = studio[0].backgroundImage;
-	const studioHost = studio[0].host;
-	//TODO: get listeners and their active status from database
-
 
 	useEffect(() => {
 		if (isAddIcon == false) {
@@ -83,6 +75,9 @@ export default function Banner(id) {
 	const [controlEnabled, toggleControl] = useState(false);
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
+	};
+	const handleDelete = () => {
+		console.log("delete");
 	};
 
 	return (
@@ -108,13 +103,14 @@ export default function Banner(id) {
 				<DropdownKebab
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
+					handleDelete={handleDelete}
 				/>
 			</div>
 		</div>
 	);
 }
 
-export function DropdownKebab({ controlEnabled, handleControlToggle }) {
+export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelete }) {
 	const [isOpen, setOpen] = React.useState(null);
 	const open = Boolean(isOpen);
 	const handleClick = (event) => {
@@ -181,6 +177,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 					) : (
 						<span>Enable Control</span>
 					)}
+				</MenuItem>
+				<MenuItem className={styles.menu_item} onClick={() => {handleClose; handleDelete();}}>
+					{/* <img src={DeleteGroupIcon} className={styles.icon} /> */}
+					<span>Delete Group</span>
 				</MenuItem>
 			</Menu>
 		</div>

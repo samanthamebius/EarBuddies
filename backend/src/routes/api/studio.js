@@ -23,8 +23,8 @@ router.post("/new", async (req, res) => {
       isHostOnly
     );
 
-    listenerUserIds.forEach(listener => {
-      const studios = getStudios(listener);
+    listenerUserIds.forEach(async (listener) => {
+      const studios = await getStudios(listener);
       studios.push(newStudio._id);
       updateStudios(listener, studios);
     });
@@ -46,6 +46,7 @@ router.get("/:id", async (req, res) => {
       return res.status(400).json({ msg: "No studio id provided" });
     }
     const studio = await getStudio(id);
+    console.log(studio);
     res.json(studio);
   } catch (err) {
     res.status(500).json(err);

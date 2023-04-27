@@ -58,8 +58,13 @@ async function getUserId(username) {
   return user._id;
 }
 
+async function getUserbyId(id) {
+	const user = await User.findOne({ _id: id });
+	return user;
+}
+
 async function getStudios(username) {
-  const user = await getUser(username);
+  const user = await getUserbyId(username);
   return user.userStudios;
 }
 
