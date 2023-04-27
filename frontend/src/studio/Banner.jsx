@@ -29,6 +29,7 @@ import EnableControlIcon from "../assets/studio/enableControlIcon.png";
 
 import useGet from "../hooks/useGet.js"
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // const studioName = "Software Swifties";
 // const backgroundImage = TaylorSwiftImg;
@@ -64,7 +65,7 @@ export default function Banner({id, studio}) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
-	// const { id, studio } = useParams();
+	const navigate = useNavigate();
 
 	if (!studio) {
 		return <p>Could not load studio</p>;
@@ -89,8 +90,14 @@ export default function Banner({id, studio}) {
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
 	};
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const handleDelete = () => {
 		console.log("delete");
+		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
+			console.log(res);
+		});
+		navigate("/");
+
 	};
 
 	console.log("studio users banner " + studio.studioUsers);

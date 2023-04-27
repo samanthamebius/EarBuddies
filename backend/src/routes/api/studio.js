@@ -55,6 +55,7 @@ router.get("/:id", async (req, res) => {
 
 //delete studio by id
 router.delete("/:id", async (req, res) => {
+  console.log("DELETING")
   try {
     const { id } = req.params;
     if (!id) {
