@@ -51,7 +51,6 @@ function UserInfo() {
 
 	useEffect(() => {
 		if (!userIsLoading && user) {
-			console.log(user);
 			setUsername(user?.userDisplayName);
 			setSpotifyUsername(user?.username);
 		}

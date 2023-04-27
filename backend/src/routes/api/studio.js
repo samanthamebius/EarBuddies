@@ -39,14 +39,12 @@ router.post("/new", async (req, res) => {
 
 //get studio by id
 router.get("/:id", async (req, res) => {
-  console.log("get studio by id " + req.params.id)
   try {
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({ msg: "No studio id provided" });
     }
     const studio = await getStudio(id);
-    console.log(studio);
     res.json(studio);
   } catch (err) {
     res.status(500).json(err);
@@ -55,7 +53,6 @@ router.get("/:id", async (req, res) => {
 
 //delete studio by id
 router.delete("/:id", async (req, res) => {
-  console.log("DELETING")
   try {
     const { id } = req.params;
     if (!id) {

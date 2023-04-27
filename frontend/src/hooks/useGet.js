@@ -14,15 +14,12 @@ export default function useGet(url) {
   const [refreshToggle, setRefreshToggle] = useState(false);
   const full_url = BASE_URL + url; 
   const access_token = localStorage.getItem("access_token");
-  console.log("full url: " + full_url);
 
   useEffect(() => {
-    console.log("useEffect1")
     setRefreshToggle(!refreshToggle);
   }, []);
 
   useEffect(() => {
-    console.log("useEffect")
     if (!access_token) {
       return;
     }

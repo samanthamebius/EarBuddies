@@ -17,8 +17,6 @@ function StudioPage({ socket }) {
 	} else if (!studio) {
 		return <p>Could not load studio</p>;
 	} else {
-		console.log(studio);
-		console.log(studio[0]);
 		return (
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]}/>

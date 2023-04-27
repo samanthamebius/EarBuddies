@@ -71,12 +71,7 @@ export default function Banner({id, studio}) {
 		return <p>Could not load studio</p>;
 	}
 
-	console.log("in banner " + id);
-
-	console.log("in banner " + studio);
-	console.log(studio);
 	const studioName = studio.studioName;
-	console.log(studioName);
 	const backgroundImage = studio.backgroundImage;
 
 	useEffect(() => {
@@ -92,7 +87,6 @@ export default function Banner({id, studio}) {
 	};
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const handleDelete = () => {
-		console.log("delete");
 		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
 			console.log(res);
 		});
@@ -100,7 +94,6 @@ export default function Banner({id, studio}) {
 
 	};
 
-	console.log("studio users banner " + studio.studioUsers);
 	const users = studio.studioUsers;
 
 	return (
