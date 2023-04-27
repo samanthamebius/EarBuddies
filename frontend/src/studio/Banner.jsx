@@ -93,6 +93,9 @@ export default function Banner({id, studio}) {
 		console.log("delete");
 	};
 
+	console.log("studio users banner " + studio.studioUsers);
+	const users = studio.studioUsers;
+
 	return (
 		<div
 			className={styles.banner}
@@ -106,6 +109,7 @@ export default function Banner({id, studio}) {
 
 			<div className={styles.bannerlisteners}>
 				<ListenerIcons
+					studioUsers={users}
 					isListening={isListening}
 					profileImages={listenersImages}
 					profileStatus={listenersActive}

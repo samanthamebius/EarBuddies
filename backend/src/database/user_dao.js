@@ -81,4 +81,4 @@ async function deleteUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId };
