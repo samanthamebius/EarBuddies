@@ -30,8 +30,8 @@ import EnableControlIcon from "../assets/studio/enableControlIcon.png";
 import useGet from "../hooks/useGet.js"
 import axios from "axios";
 
-const studioName = "Software Swifties";
-const backgroundImage = TaylorSwiftImg;
+// const studioName = "Software Swifties";
+// const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
 const isListening = true;
 
@@ -60,10 +60,23 @@ const listeners = [
 	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
 ];
 
-export default function Banner(id, studio) {
+export default function Banner({id, studio}) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
+	// const { id, studio } = useParams();
+
+	if (!studio) {
+		return <p>Could not load studio</p>;
+	}
+
+	console.log("in banner " + id);
+
+	console.log("in banner " + studio);
+	console.log(studio);
+	const studioName = studio.studioName;
+	console.log(studioName);
+	const backgroundImage = studio.backgroundImage;
 
 	useEffect(() => {
 		if (isAddIcon == false) {
