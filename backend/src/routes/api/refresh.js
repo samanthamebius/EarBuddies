@@ -11,17 +11,9 @@ router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
-var refresh_tokenSet = '';
 
 async function refreshAccessToken(thisSpotifyApi, refresh_tokenSet) {
-  console.log(refresh_tokenSet);
-  const spotifyApi = new SpotifyWebApi({
-    redirectUri: process.env.REDIRECT_URI,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refresh_token: refresh_tokenSet,
-  })
-  thisSpotifyApi = spotifyApi
+  console.log("refresh token in refresh: " + refresh_tokenSet)
   thisSpotifyApi.refreshAccessToken()
     .then(function (data) {
       var access_token = data.body['access_token']
@@ -43,7 +35,6 @@ async function refreshAccessToken(thisSpotifyApi, refresh_tokenSet) {
  */
 router.post("/", (req, res) => {
   const refresh_token = req.body.refresh_token
-  refresh_tokenSet = refresh_token
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
@@ -58,7 +49,6 @@ router.post("/", (req, res) => {
       var expires_in = data.body['expires_in']
       spotifyApi.setAccessToken(access_token)
       console.log('The access token has been refreshed!')
-      setAccessToken(spotifyApi, access_token)
     })
     .catch(err => {
       console.log(err)

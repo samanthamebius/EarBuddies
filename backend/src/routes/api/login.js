@@ -18,6 +18,8 @@ const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
 });
+
+
 /**
  * @route POST api/login
  * @desc Login to Spotify and add user to database if not already in it
@@ -31,10 +33,12 @@ router.post("/", async (req, res) => {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const access_token = data.body.access_token;
     const refresh_token = data.body.refresh_token;
-    const expires_in = data.body.expires_in;
+    const expires_in = 5;
 
+    spotifyApi.setRefreshToken(refresh_token);
+    console.log("refresh token in login: " + refresh_token)
     spotifyApi.setAccessToken(access_token);
-    setAccessToken(spotifyApi, access_token);
+    setAccessToken(spotifyApi, access_token, refresh_token);
     const user_id = await loginUser(spotifyApi, data);
 
     res.json({

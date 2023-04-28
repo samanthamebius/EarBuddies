@@ -62,6 +62,7 @@ function SearchBar({ label }) {
             `${BASE_URL}/api/spotify/search/${searchTerm}`,
             {
               refreshToken: localStorage.getItem("refresh_token"),
+              accessToken: localStorage.getItem("access_token"),
             })
           .then((response) => {
             setSearchResults(response.data);
@@ -69,7 +70,7 @@ function SearchBar({ label }) {
       } catch (error) {
         console.log(error);
       }
-    } else if (searchTerm.length === 0) {
+    } else {
       setSearchResults([]);
     }
   }, [searchTerm]);
