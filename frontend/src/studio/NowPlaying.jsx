@@ -4,23 +4,18 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
-import { grey } from '@mui/material/colors';
-
 import pause_btn from '../assets/now_playing/pause_btn.png'
 import play_btn from '../assets/now_playing/play_btn.png'
 import next_btn from '../assets/now_playing/next_btn.png'
 import prev_btn from '../assets/now_playing/prev_btn.png'
 import VolumeDown from '../assets/now_playing/volume_down.png'
 import VolumeUp from '../assets/now_playing/volume_up.png'
-
 import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
-
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 export default function NowPlaying() {
-  
   return (
     <div className={styles.nowplaying}>
       <SongInfo/>
@@ -31,27 +26,18 @@ export default function NowPlaying() {
 
 function SongInfo() {
   return (
-    <div>
-
-        <div className={styles.song}>
-          <h3>champagne problems</h3>
-        </div>
-        
-        <div className={styles.artist}>
-          <img className={styles.artistImg} src={artist_profile}/>
-          <div className={styles.artistName}>Taylor Swift</div>
-        </div>
-
-        <div className={styles.artwork}>
-          <img className={styles.albumArtwork} src={album_artwork}/>
+    <div className={styles.songSection}>
+      <h3 className={styles.song}>champagne problems</h3>
+      <div className={styles.artist}>
+        <img className={styles.artistImg} src={artist_profile}/>
+        <div className={styles.artistName}>Taylor Swift</div>
       </div>
+      <img className={styles.albumArtwork} src={album_artwork}/>
     </div>
-
   )
 }
 
 function ControlPanel() {
-
   const [isPlaying, setPlaying] = useState(false);
 
   return (
@@ -81,7 +67,7 @@ export function VolumeSlider() {
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
           <img src={VolumeDown} className={styles.volIcon}/>
-          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color:grey[50]}}/>
+          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#ffffff'}}/>
           <img src={VolumeUp} className={styles.volIcon}/>
         </Stack>
      </Box>
@@ -120,7 +106,7 @@ export function TimeSlider() {
           color="secondary"
           onChange={(_, value) => setPosition(value)}
           sx={{
-            color:grey[50],
+            color: "#ffffff",
             height: 4,
             '& .MuiSlider-thumb': {
               width: 8,

@@ -35,7 +35,7 @@
 .banner {
 	grid-row: 1 / 1;
 	grid-column: 1 / 3;
-	border-radius: 10px;
+	border-radius: 4px;
 	height: auto;
 	position: relative;
 	background-size: cover;
@@ -104,15 +104,19 @@
 
 .nowplaying {
 	background-color: #e9dcf1;
-	padding: 20px;
+	padding: 15px;
 	grid-row: 2 / 2;
 	grid-column: 1 / 2;
-	border-radius: 10px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
 }
 
 .songselection {
 	grid-row: 2 / 2;
 	grid-column: 2 / 2;
+	display: flex;
+	flex-direction: column;
 }
 
 .chat {
@@ -120,43 +124,53 @@
 	grid-row-start: 1;
 	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
 	grid-column: 3 / 3;
-	border-radius: 10px;
+	border-radius: 4px;
 }
 
 
 .controlPanel {
 	background-image: linear-gradient(180deg,#B03EEE, #E640F8);
-	border-radius: 10px;
+	border-radius: 4px;
 	padding: 5px;
 }
 
 .changeSongBtn {
-	height: 30px;
+	height: 20px;
 	padding: 5px 0px 5px 0px;
 }
 
+.changeSongBtn:hover {
+	cursor: pointer;
+}
+
 .playBtn {
-	height: 40px;
+	height: 30px;
 	margin: 0px 25px 0px 25px;
 }
 
-.playbackCntrls {
-	padding: 5px 0px 5px 10px;
+.playBtn:hover {
+	cursor: pointer;
 }
 
+.playbackCntrls {
+	padding: 5px 0px 5px 0px;
+}
 
 .albumArtwork {
-	margin: 20px;
-	flex-grow: 1;
-	height: 140px;
-	background-color: #606060;
+	border-radius: 4px;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	padding: 15px 0px 15px 0px;
 }
 
 .song {
 	text-align: left;
 	color: grey;
-	font-size: 18px;
+	font-size: 24px;
 	font-weight: bold;
+	display: flex;
+	margin: 10px 0px 10px 0px;
 }
 
 .artistImg {
@@ -166,6 +180,7 @@
 .artist {
 	text-align: left;
 	display: flex;
+	margin: 10px 0px 10px 0px;
 }
 
 .artistName {
@@ -177,10 +192,6 @@
 	padding: 6px 0px 0px 6px;
 }
 
-.song, .artwork {
-	display: block;
-  }
-
 .time {
 	padding: 0px 15px 0px 15px;
 }
@@ -191,4 +202,8 @@
 
 .volIcon {
 	height: 16px;
+}
+
+.songSection {
+	flex-grow: 1;
 }
