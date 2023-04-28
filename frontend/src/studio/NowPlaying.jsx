@@ -13,6 +13,29 @@ import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { Icon } from "@mui/material";
+
+const StyledSlider = styled(Slider) ({
+  color: "#ffffff",
+  height: 4,
+  '& .MuiSlider-thumb': {
+    width: 8,
+    height: 8,
+    transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+    '&:before': {
+      boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
+    },
+    '&:hover, &.Mui-focusVisible': {
+    },
+    '&.Mui-active': {
+      width: 20,
+      height: 20,
+    },
+  },
+  '& .MuiSlider-rail': {
+    opacity: 0.28,
+  },
+});
 
 export default function NowPlaying() {
   return (
@@ -96,7 +119,12 @@ export function VolumeSlider() {
               className={styles.controlBtn}
               onClick={() => setMute(!isMute)}/>
           }
-          <Slider disabled={isMute} className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#ffffff'}}/>
+          <StyledSlider 
+            disabled={isMute} 
+            className={styles.slider} 
+            aria-label="Volume" 
+            value={value} 
+            onChange={handleChange}/>
         </Stack>
      </Box>
     </div>
@@ -124,7 +152,7 @@ export function TimeSlider() {
 
   return (
     <div className={styles.time}>
-      <Slider
+      <StyledSlider
           aria-label="time-indicator"
           size="small"
           value={position}
@@ -132,29 +160,7 @@ export function TimeSlider() {
           step={1}
           max={duration}
           color="secondary"
-          onChange={(_, value) => setPosition(value)}
-          sx={{
-            color: "#ffffff",
-            height: 4,
-            '& .MuiSlider-thumb': {
-              width: 8,
-              height: 8,
-              transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-              '&:before': {
-                boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
-              },
-              '&:hover, &.Mui-focusVisible': {
-              },
-              '&.Mui-active': {
-                width: 20,
-                height: 20,
-              },
-            },
-            '& .MuiSlider-rail': {
-              opacity: 0.28,
-            },
-          }}
-        />
+          onChange={(_, value) => setPosition(value)} />
         <Box
           sx={{
             display: 'flex',
