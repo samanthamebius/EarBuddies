@@ -28,7 +28,6 @@ export default function useGet(url) {
       setLoading(true);
       const response = await axios.get(full_url)
         .catch((err) => {
-          console.log("useGet error: " + err)
           setError(err);
           return error;
         });

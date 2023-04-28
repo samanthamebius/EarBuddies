@@ -48,7 +48,6 @@ router.get("/:id", async (req, res) => {
     //check for spotify api connection
     const api = getSpotifyApi();
     if (!api) {
-      console.log("No Spotify API connection")
       return res.status(403).json({ msg: "No Spotify API connection" });
     }
     const studio = await getStudio(id);
