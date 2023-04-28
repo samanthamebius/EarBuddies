@@ -9,7 +9,7 @@
 }
 
 .greyheading {
-	color: grey;
+	color: #606060;;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -17,7 +17,7 @@
 }
 
 .songGreyHeading {
-	color: grey;
+	color: #606060;;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -25,7 +25,7 @@
 }
 
 .queueGreyHeading {
-	color: grey;
+	color: #606060;;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -151,7 +151,7 @@
 
 .song {
 	text-align: left;
-	color: grey;
+	color: #606060;;
 	font-size: 24px;
 	font-weight: bold;
 	display: flex;
@@ -171,7 +171,7 @@
 .artistName {
 	font-size: 18px;
 	text-align: left;
-	color: grey;
+	color: #606060;;
 	font-size: 18px;
 	font-weight: bold;
 	padding: 6px 0px 0px 6px;
