@@ -1,10 +1,6 @@
 import styles from "./StudioPage.module.css";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
-
-import TaylorSwiftImg from "../assets/taylorswift.png";
-
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -12,27 +8,21 @@ import ProfilePicImg4 from "../assets/profilepic4.png";
 import ProfilePicImg5 from "../assets/profilepic5.png";
 import ProfilePicImg6 from "../assets/profilepic6.png";
 import ListenerIcons from "../shared/ListenerIcons";
-
 import AddListenerIcon from "../assets/addListenerIcon.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
-import KebabIcon from "../assets/studio/kebabMenuIcon.png";
-
-import LeaveGroupIcon from "../assets/studio/leaveGroupIcon.png";
-import EditNicknameIcon from "../assets/studio/editIcon.png";
-import RemoveMemberIcon from "../assets/studio/removeMemberIcon.png";
-import AssignNewHostIcon from "../assets/studio/hostCrownIcon.png";
-
-import DisableControlIcon from "../assets/studio/disableControlIcon.png";
-import EnableControlIcon from "../assets/studio/enableControlIcon.png";
-
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
+import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
+import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
+import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
 import useGet from "../hooks/useGet.js"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// const studioName = "Software Swifties";
-// const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
 const isListening = true;
 
@@ -128,54 +118,76 @@ export default function Banner({id, studio}) {
 }
 
 export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelete }) {
-	const [isOpen, setOpen] = React.useState(null);
+	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
-	const handleClick = (event) => {
-		setOpen(event.currentTarget);
-	};
-	const handleClose = () => {
-		setOpen(null);
-	};
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
-	const handleLeaveOpen = () => {
-		setIsLeaveOpen(!isLeaveOpen);
-	};
+	
+	const [isInLeave, setInLeave] = useState(false);
+	const [isInEdit, setInEdit] = useState(false);
+	const [isInRemove, setInRemove] = useState(false);
+	const [isInAssign, setInAssign] = useState(false);
+	const [isInEnable, setInEnable] = useState(false);
+	const [isInDelete, setInDelete] = useState(false);
+
+	const toggleLeave = () => { setInLeave(!isInLeave) };
+	const toggleEdit = () => { setInEdit(!isInEdit) };
+	const toggleRemove = () => { setInRemove(!isInRemove) };
+	const toggleAssign = () => { setInAssign(!isInAssign) };
+	const toggleEnable = () => { setInEnable(!isInEnable) };
+	const toggleDelete = () => { setInDelete(!isInDelete) };
+		
+	const handleClick = (event) => { setOpen(event.currentTarget); };
+	const handleClose = () => { setOpen(null); };
+	const handleLeaveOpen = () => { setIsLeaveOpen(!isLeaveOpen); };
 
 	return (
 		<div>
-			<div onClick={handleClick} className={styles.dropdownButton}>
-				<img src={KebabIcon} className={styles.kebabIcon} />
-			</div>
-
-			<Menu
-				autoFocus={false}
-				anchorEl={isOpen}
-				open={open}
-				onClose={handleClose}
-			>
-				<MenuItem className={styles.menu_item} onClick={handleLeaveOpen}>
-					<img src={LeaveGroupIcon} className={styles.icon} />
-					<span> Leave Group</span>
-				</MenuItem>
-				<LeaveStudioDialog
+			<LeaveStudioDialog
 					isDialogOpened={isLeaveOpen}
 					handleCloseDialog={() => setIsLeaveOpen(false)}
 					listeners={listeners}
 				/>
-
-				<MenuItem className={styles.menu_item} onClick={handleClose}>
-					<img src={EditNicknameIcon} className={styles.icon} />
-					<span>Edit Nickname </span>
+			<div onClick={handleClick} className={styles.dropdownButton}>
+				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
+			</div>
+			<Menu
+				autoFocus={false}
+				anchorEl={isOpen}
+				open={open}
+				onClose={handleClose}>
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={handleLeaveOpen}
+					onMouseEnter={toggleLeave} 
+                    onMouseLeave={toggleLeave}>
+					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Leave Group</p>
+				</MenuItem>
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={handleClose}
+					onMouseEnter={toggleEdit} 
+                    onMouseLeave={toggleEdit}>
+					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
 
-				<MenuItem className={styles.menu_item} onClick={handleClose}>
-					<img src={RemoveMemberIcon} className={styles.icon} />
-					<span>Remove a Member</span>
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={handleClose}
+					onMouseEnter={toggleRemove} 
+                    onMouseLeave={toggleRemove}>
+					<PersonRemoveAlt1RoundedIcon className={styles.icon} style={{ color: isInRemove ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Remove a Member</p>
 				</MenuItem>
 
-				<MenuItem className={styles.menu_item} onClick={handleClose}>
-					<img src={AssignNewHostIcon} className={styles.icon} />
-					<span>Assign a New Host</span>
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={handleClose}
+					onMouseEnter={toggleAssign} 
+                    onMouseLeave={toggleAssign}>
+					<StarRoundedIcon className={styles.icon} style={{ color: isInAssign ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
 
 				<MenuItem
@@ -184,20 +196,27 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 						handleClose;
 						handleControlToggle();
 					}}
-				>
-					<img
-						src={controlEnabled ? DisableControlIcon : EnableControlIcon}
-						className={styles.icon}
-					/>
+					onMouseEnter={toggleEnable} 
+                    onMouseLeave={toggleEnable}>
 					{controlEnabled ? (
-						<span>Disable Control</span>
+						<>
+							<VideogameAssetOffRoundedIcon className={styles.icon} style={{ color: isInEnable ? "#B03EEE" : "#757575" }} />
+							<p className={styles.menu_title}>Disable Control</p>
+						</>
 					) : (
-						<span>Enable Control</span>
+						<>
+							<VideogameAssetRoundedIcon className={styles.icon} style={{ color: isInEnable ? "#B03EEE" : "#757575" }} />
+							<p className={styles.menu_title}>Enable Control</p>
+						</>
 					)}
 				</MenuItem>
-				<MenuItem className={styles.menu_item} onClick={() => {handleClose; handleDelete();}}>
-					{/* <img src={DeleteGroupIcon} className={styles.icon} /> */}
-					<span>Delete Group</span>
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={() => {handleClose; handleDelete();}}
+					onMouseEnter={toggleDelete} 
+                    onMouseLeave={toggleDelete}>
+					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Delete Group</p>
 				</MenuItem>
 			</Menu>
 		</div>
