@@ -11,7 +11,11 @@ import useGet from "../hooks/useGet";
 
 function StudioPage({ socket }) {
 	const { id } = useParams();
-	const { data: studio, isLoading: studioIsLoading } = useGet(`/api/studio/${id}`);
+	const { data: studio, isLoading: studioIsLoading, error: studioError } = useGet(`/api/studio/${id}`);
+	if (studioError) {
+		console.log("studio error: " + studioError);
+		return <p>Could not load studio</p>;
+	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
 	} else if (!studio) {

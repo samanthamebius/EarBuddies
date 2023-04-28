@@ -1,6 +1,7 @@
 import express from "express";
-import { createStudio, getStudio, deleteStudio } from "../../database/studio_dao.js";
-import { getUserId, getStudios, updateStudios } from "../../database/user_dao.js";
+import { createStudio, getStudio, deleteStudio } from "../../dao/studio_dao.js";
+import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
+import { getSpotifyApi } from "../../dao/spotify_dao.js";
 
 const router = express.Router();
 
@@ -43,6 +44,12 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({ msg: "No studio id provided" });
+    }
+    //check for spotify api connection
+    const api = getSpotifyApi();
+    if (!api) {
+      console.log("No Spotify API connection")
+      return res.status(403).json({ msg: "No Spotify API connection" });
     }
     const studio = await getStudio(id);
     res.json(studio);
