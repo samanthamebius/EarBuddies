@@ -13,7 +13,7 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  IconButton,
+  Button,
   Avatar,
   Menu,
   MenuItem,
@@ -53,31 +53,34 @@ function SearchBar({ label }) {
   };
 
   useEffect(() => {
+    console.log(searchTerm.length);
     if (searchTerm.trim().length > 0) {
+      console.log("refresh token in search bar", localStorage.getItem("refresh_token"));
       try {
         axios
           .post(
             `${BASE_URL}/api/spotify/search/${searchTerm}`,
-            localStorage.getItem("refresh_token")
-          )
+            {
+              refreshToken: localStorage.getItem("refresh_token"),
+            })
           .then((response) => {
             setSearchResults(response.data);
           });
       } catch (error) {
         console.log(error);
       }
-    } else {
+    } else if (searchTerm.length === 0) {
       setSearchResults([]);
     }
   }, [searchTerm]);
 
   function displayText(result) {
     if (result.type === "audiobook") {
-      return `${result.name} - ${result.authors}`;
+      return `${result.name} - ${result.authors} - Audiobook`;
     } else if (result.type === "track") {
-      return `${result.name} - ${result.artists}`;
+      return `${result.name} - ${result.artists} - Song`;
     } else {
-      return `${result.name}`;
+      return `${result.name} - Podcast`;
     }
   }
 
@@ -117,17 +120,17 @@ function SearchBar({ label }) {
           style: { marginLeft: searchTerm || focused ? 0 : 30 },
         }}
       />
-      {searchResults.length > 0 && <List className={styles.listContainer}>
+      {searchResults?.length > 0 && <List className={styles.listContainer}>
         {searchResults.map((result) => (
           <ListItem
             secondaryAction={
-              <IconButton
+              <Button
                 edge="end"
                 aria-label="more options"
                 onClick={handleOpenMenu}
               >
                 <MoreHorizIcon />
-              </IconButton>
+              </Button>
             }
           >
             <StyledMenu
