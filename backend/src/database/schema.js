@@ -30,12 +30,14 @@ const chatSchema = new Schema({
 			message: String,
 			isReply: Boolean,
 			replyMessage: String,
+			reactions: [
+				{ id: String, label: String, username: String, displayName: String },
+			],
 		},
 	],
 	pinnedMessages: [
 		{ id: String, message: String, username: String, displayName: String },
 	],
-	// reactions
 });
 
 const User = mongoose.model("User", userSchema);

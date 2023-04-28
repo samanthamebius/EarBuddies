@@ -19,6 +19,8 @@ const defaultReactions = [
 	{ label: "love", reaction: "❤️" },
 ];
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function ChatMessage(props) {
 	const {
 		newMessage,
@@ -31,10 +33,10 @@ function ChatMessage(props) {
 	const {
 		message,
 		isReply: isPastReply,
-		messageReply: messageReplyHistory,
 		username: messageUsername,
 		displayName: messageDisplayName,
 		id: currentMessageId,
+		reactions: currentChatReactions,
 	} = newMessage;
 	const [isReacting, setIsReacting] = useState(false);
 	const [reactions, setReactions] = useState([]);
@@ -124,15 +126,26 @@ function ChatMessage(props) {
 	};
 
 	// send the chat reactions
-	const handleReactions = (selectedReaction) => {
+	const handleReactions = async (selectedReaction) => {
+		const reactionId = uuid();
 		socket.emit("send_message_reaction", {
 			room,
-			reactionId: uuid(),
+			reactionId: reactionId,
 			messageId: currentMessageId,
 			username,
 			displayName,
 			selectedReaction,
 			reactions,
+		});
+		const reaction = {
+			id: reactionId,
+			label: selectedReaction,
+			username: username,
+			displayName: displayName,
+		};
+		axios.put(`${BASE_URL}/api/chat/new-reaction/${room.id}`, {
+			messageId: currentMessageId,
+			reaction,
 		});
 	};
 
@@ -143,6 +156,7 @@ function ChatMessage(props) {
 				reactionId,
 				selectedReaction,
 				username: reactionUsername,
+				displayName: reactionDisplayName,
 				reactions: messageReactions,
 				messageId,
 			} = data;
@@ -155,17 +169,16 @@ function ChatMessage(props) {
 
 				// check if the user has already reacted
 				const reactionExists = messageReactions.find(
-					(reaction) => reaction.by === reactionUsername
+					(reaction) => reaction.username === reactionUsername
 				);
 
 				if (reactionExists) {
 					// update the reaction
 					const currentReactionIndex = messageReactions.findIndex(
-						(reaction) => reaction.by === reactionUsername
+						(reaction) => reaction.username === reactionUsername
 					);
 					const updatedReaction = {
 						...messageReactions[currentReactionIndex],
-						id: reactionId,
 						label: selectedReaction,
 						node: reactionIcon.reaction,
 					};
@@ -180,10 +193,11 @@ function ChatMessage(props) {
 					setReactions((reactions) => [
 						...reactions,
 						{
+							id: reactionId,
 							label: selectedReaction,
 							node: reactionIcon.reaction,
-							by: reactionUsername,
-							id: reactionId,
+							username: reactionUsername,
+							displayName: reactionDisplayName,
 						},
 					]);
 				}
@@ -191,7 +205,26 @@ function ChatMessage(props) {
 		});
 	}, [socket]);
 
-	console.log(replyMessage);
+	// set past message reactions
+	useEffect(() => {
+		if (currentChatReactions?.length > 0) {
+			currentChatReactions.map((currentReaction) => {
+				const reactionIcon = defaultReactions.find(
+					(reaction) => reaction.label === currentReaction.label
+				);
+				setReactions((reactions) => [
+					...reactions,
+					{
+						id: currentReaction.id,
+						label: currentReaction.label,
+						node: reactionIcon.reaction,
+						username: currentReaction.username,
+						displayName: currentReaction.displayName,
+					},
+				]);
+			});
+		}
+	}, []);
 
 	return (
 		<div
