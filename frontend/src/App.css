@@ -44,3 +44,8 @@
   margin: 0;
   padding: 5px;
 }
+
+.MuiSlider-root.Mui-disabled {
+  opacity: 50%;
+  color: white !important;
+}

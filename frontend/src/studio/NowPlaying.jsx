@@ -96,7 +96,7 @@ export function VolumeSlider() {
               className={styles.controlBtn}
               onClick={() => setMute(!isMute)}/>
           }
-          <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#ffffff'}}/>
+          <Slider disabled={isMute} className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#ffffff'}}/>
         </Stack>
      </Box>
     </div>

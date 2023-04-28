@@ -192,3 +192,11 @@
 .songSection {
 	flex-grow: 1;
 }
+
+.slider:disabled {
+	background: red;
+}
+
+.MuiSlider-root.Mui-disabled {
+	opacity: 50%;
+}
