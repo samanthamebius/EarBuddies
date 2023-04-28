@@ -1,18 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from './StudioPage.module.css'
-import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
-import pause_btn from '../assets/now_playing/pause_btn.png'
-import play_btn from '../assets/now_playing/play_btn.png'
-import next_btn from '../assets/now_playing/next_btn.png'
-import prev_btn from '../assets/now_playing/prev_btn.png'
-import VolumeDown from '../assets/now_playing/volume_down.png'
-import VolumeUp from '../assets/now_playing/volume_up.png'
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
+import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
+import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
+import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
+import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
 import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
-import { styled } from '@mui/material/styles';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 export default function NowPlaying() {
@@ -42,12 +41,29 @@ function ControlPanel() {
 
   return (
     <div className={styles.controlPanel}>
-      <div className={styles.playbackCntrls}>
-        <img className={styles.changeSongBtn} src={prev_btn}/>
-        <img className={styles.playBtn} src={isPlaying ? pause_btn : play_btn }
-              onClick={() => setPlaying(!isPlaying)} />
-        <img className={styles.changeSongBtn} src={next_btn}/>
-      </div>
+        <div className={styles.playbackCntrls}>
+          <SkipPreviousRoundedIcon 
+            sx={{"&:hover": { cursor: "pointer" }}} 
+            style={{color: "white", fontSize: "40px" }} 
+            className={styles.controlBtn}/>
+          {isPlaying ? 
+            <PlayCircleFilledRoundedIcon 
+              sx={{"&:hover": { cursor: "pointer" }}} 
+              style={{color: "white", fontSize: "40px" }} 
+              className={styles.controlBtn} 
+              onClick={() => setPlaying(!isPlaying)}/>
+          :
+            <PauseCircleRoundedIcon 
+              sx={{"&:hover": { cursor: "pointer" }}} 
+              style={{color: "white", fontSize: "40px" }} 
+              className={styles.controlBtn} 
+              onClick={() => setPlaying(!isPlaying)}/>
+          }
+          <SkipNextRoundedIcon 
+            sx={{"&:hover": { cursor: "pointer" }}} 
+            style={{color: "white", fontSize: "40px" }} 
+            className={styles.controlBtn}/>
+        </div>    
       <TimeSlider/>
       <VolumeSlider/>
       
@@ -56,7 +72,8 @@ function ControlPanel() {
 }
 
 export function VolumeSlider() {
-  const [value, setValue] = React.useState(30);
+  const [value, setValue] = useState(30);
+  const [isMute, setMute] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -66,9 +83,20 @@ export function VolumeSlider() {
     <div className={styles.volume}>
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
-          <img src={VolumeDown} className={styles.volIcon}/>
+          {isMute ? 
+            <VolumeOffRoundedIcon 
+              sx={{"&:hover": { cursor: "pointer" }}} 
+              style={{color: "white", fontSize: "25px" }} 
+              className={styles.controlBtn}
+              onClick={() => setMute(!isMute)}/>
+          :
+            <VolumeUpRoundedIcon 
+              sx={{"&:hover": { cursor: "pointer" }}} 
+              style={{color: "white", fontSize: "25px" }} 
+              className={styles.controlBtn}
+              onClick={() => setMute(!isMute)}/>
+          }
           <Slider className={styles.slider} aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#ffffff'}}/>
-          <img src={VolumeUp} className={styles.volIcon}/>
         </Stack>
      </Box>
     </div>
@@ -78,7 +106,7 @@ export function VolumeSlider() {
 export function TimeSlider() {
 
   const duration = 200; //seconds
-  const [position, setPosition] = React.useState(32);
+  const [position, setPosition] = useState(32);
 
   const TinyText = styled(Typography)({
     fontSize: '0.75rem',
