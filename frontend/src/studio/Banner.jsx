@@ -23,6 +23,9 @@ import useGet from "../hooks/useGet.js"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+// TO DO: get if user is host or not
+const isHost = true;
+
 const hostImage = ProfilePicImg1;
 const isListening = true;
 
@@ -155,7 +158,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				anchorEl={isOpen}
 				open={open}
 				onClose={handleClose}>
-				<MenuItem 
+				<MenuItem
 					className={styles.menu_item} 
 					onClick={handleLeaveOpen}
 					onMouseEnter={toggleLeave} 
@@ -173,6 +176,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				</MenuItem>
 
 				<MenuItem 
+					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={handleClose}
 					onMouseEnter={toggleRemove} 
@@ -182,6 +186,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				</MenuItem>
 
 				<MenuItem 
+					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={handleClose}
 					onMouseEnter={toggleAssign} 
@@ -191,6 +196,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				</MenuItem>
 
 				<MenuItem
+					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item}
 					onClick={() => {
 						handleClose;
@@ -211,6 +217,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					)}
 				</MenuItem>
 				<MenuItem 
+					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={() => {handleClose; handleDelete();}}
 					onMouseEnter={toggleDelete} 
