@@ -58,8 +58,13 @@ async function getUserId(username) {
   return user._id;
 }
 
+async function getUserbyId(id) {
+	const user = await User.findOne({ _id: id });
+	return user;
+}
+
 async function getStudios(username) {
-  const user = await getUser(username);
+  const user = await getUserbyId(username);
   return user.userStudios;
 }
 
@@ -70,6 +75,10 @@ async function updateStudios(username, studios) {
   );
 }
 
+async function deleteUser(username) {
+	return await User.deleteOne({ username: username });
+} 
+
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId };

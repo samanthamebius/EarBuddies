@@ -27,8 +27,12 @@ import AssignNewHostIcon from "../assets/studio/hostCrownIcon.png";
 import DisableControlIcon from "../assets/studio/disableControlIcon.png";
 import EnableControlIcon from "../assets/studio/enableControlIcon.png";
 
-const studioName = "Software Swifties";
-const backgroundImage = TaylorSwiftImg;
+import useGet from "../hooks/useGet.js"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+// const studioName = "Software Swifties";
+// const backgroundImage = TaylorSwiftImg;
 const hostImage = ProfilePicImg1;
 const isListening = true;
 
@@ -57,10 +61,18 @@ const listeners = [
 	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
 ];
 
-export default function Banner() {
+export default function Banner({id, studio}) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
+	const navigate = useNavigate();
+
+	if (!studio) {
+		return <p>Could not load studio</p>;
+	}
+
+	const studioName = studio.studioName;
+	const backgroundImage = studio.backgroundImage;
 
 	useEffect(() => {
 		if (isAddIcon == false) {
@@ -73,6 +85,16 @@ export default function Banner() {
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
 	};
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const handleDelete = () => {
+		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
+			console.log(res);
+		});
+		navigate("/");
+
+	};
+
+	const users = studio.studioUsers;
 
 	return (
 		<div
@@ -87,6 +109,7 @@ export default function Banner() {
 
 			<div className={styles.bannerlisteners}>
 				<ListenerIcons
+					studioUsers={users}
 					isListening={isListening}
 					profileImages={listenersImages}
 					profileStatus={listenersActive}
@@ -97,13 +120,14 @@ export default function Banner() {
 				<DropdownKebab
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
+					handleDelete={handleDelete}
 				/>
 			</div>
 		</div>
 	);
 }
 
-export function DropdownKebab({ controlEnabled, handleControlToggle }) {
+export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelete }) {
 	const [isOpen, setOpen] = React.useState(null);
 	const open = Boolean(isOpen);
 	const handleClick = (event) => {
@@ -170,6 +194,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle }) {
 					) : (
 						<span>Enable Control</span>
 					)}
+				</MenuItem>
+				<MenuItem className={styles.menu_item} onClick={() => {handleClose; handleDelete();}}>
+					{/* <img src={DeleteGroupIcon} className={styles.icon} /> */}
+					<span>Delete Group</span>
 				</MenuItem>
 			</Menu>
 		</div>

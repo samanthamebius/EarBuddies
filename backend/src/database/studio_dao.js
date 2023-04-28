@@ -23,6 +23,10 @@ async function getStudio(id) {
     return await Studio.find({ _id: id });
 }
 
+async function deleteStudio(id) {
+    return await Studio.deleteOne({ _id: id });
+}
+
 async function getStudios() {
     return await Studio.find();
 }
@@ -44,5 +48,14 @@ async function updateStudioHost(id, host) {
 }
 
 await mongoose.disconnect;
-export { createStudio, getStudio, getStudios, updateStudioControlHostOnly, updateStudioIsActive, updateStudioUsers, updateStudioHost };
+export { 
+    createStudio, 
+    getStudio, 
+    getStudios, 
+    updateStudioControlHostOnly, 
+    updateStudioIsActive, 
+    updateStudioUsers, 
+    updateStudioHost,
+    deleteStudio 
+};
 
