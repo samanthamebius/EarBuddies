@@ -189,7 +189,6 @@ export function DropdownMenu() {
             <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575" }} />
             <p className={styles.menu_title}>Log Out</p>
           </MenuItem>
-
         </Menu>
       </div>
     </>

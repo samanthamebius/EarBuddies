@@ -22,6 +22,8 @@ import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
 import useGet from "../hooks/useGet.js"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ConfirmationDialog from '../shared/ConfirmationDialog';
+
 
 // TO DO: get if user is host or not
 const isHost = true;
@@ -124,6 +126,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -165,7 +168,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setInEnable(false);
 		setInDelete(false);
 	};
-	const handleLeaveOpen = () => { setIsLeaveOpen(!isLeaveOpen); };
+	const handleLeaveOpen = () => { setIsLeaveOpen(true); };
+	const handleConfirmDeleteOpen = () => { setConfirmDeleteOpen(true);	};
 
 	return (
 		<div>
@@ -173,7 +177,14 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					isDialogOpened={isLeaveOpen}
 					handleCloseDialog={() => setIsLeaveOpen(false)}
 					listeners={listeners}
-				/>
+			/>
+			<ConfirmationDialog 
+                isOpen={isConfirmDeleteOpen}
+                handleClose={() => setConfirmDeleteOpen(false)}
+                handleAction={() => {handleClose; handleDelete();}} //TO DO: replace with delete functionality
+                message={"Are you sure you want to delete this studio?"}
+                actionText={"Delete"}
+            />
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
 			</div>
@@ -243,7 +254,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				<MenuItem 
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
-					onClick={() => {handleClose; handleDelete();}}
+					onClick={handleConfirmDeleteOpen}
 					onMouseEnter={enterDelete} 
                     onMouseLeave={leaveDelete}>
 					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
