@@ -29,7 +29,7 @@ router.post("/new", async (req, res) => {
       studios.push(newStudio._id);
       updateStudios(listener, studios);
     });
-    
+
     // Respond with the newly created studio
     res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
   } catch (err) {

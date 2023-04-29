@@ -36,8 +36,8 @@ export default function useAuth(accessToken, code, current_user) {
 					window.location = "/";
 				}
 			};
-      	fetchData();
-    }
+			fetchData();
+		}
 	}, [access_token, code, current_user]);
 
 
@@ -47,7 +47,7 @@ export default function useAuth(accessToken, code, current_user) {
 		const fetchData = async () => {
 			try {
 				const response = await axios.post("http://localhost:3000/api/refresh", {
-				refresh_token,
+					refresh_token,
 				});
 				const { access_token, expires_in } = response.data;
 				setaccess_token(access_token);
@@ -61,7 +61,7 @@ export default function useAuth(accessToken, code, current_user) {
 		const interval = setInterval(fetchData, (expires_in - 60) * 1000);
 
 		return () => clearInterval(interval);
-  	}, [
+	}, [
 		access_token,
 		code,
 		refresh_token,
