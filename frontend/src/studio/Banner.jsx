@@ -132,14 +132,30 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 
-	const toggleLeave = () => { setInLeave(!isInLeave) };
-	const toggleEdit = () => { setInEdit(!isInEdit) };
-	const toggleRemove = () => { setInRemove(!isInRemove) };
-	const toggleAssign = () => { setInAssign(!isInAssign) };
-	const toggleEnable = () => { setInEnable(!isInEnable) };
-	const toggleDelete = () => { setInDelete(!isInDelete) };
+	const enterLeave = () => { setInLeave(true) };
+	const enterEdit = () => { setInEdit(true) };
+	const enterRemove = () => { setInRemove(true) };
+	const enterAssign = () => { setInAssign(true) };
+	const enterEnable = () => { setInEnable(true) };
+	const enterDelete = () => { setInDelete(true) };
+
+	const leaveLeave = () => { setInLeave(false) };
+	const leaveEdit = () => { setInEdit(false) };
+	const leaveRemove = () => { setInRemove(false) };
+	const leaveAssign = () => { setInAssign(false) };
+	const leaveEnable = () => { setInEnable(false) };
+	const leaveDelete = () => { setInDelete(false) };
 		
-	const handleClick = (event) => { setOpen(event.currentTarget); };
+	const handleClick = (event) => { 
+		setOpen(event.currentTarget); 
+		setInLeave(false);
+		setInEdit(false);
+		setInRemove(false);
+		setInAssign(false);
+		setInEnable(false);
+		setInDelete(false);
+	};
+	
 	const handleClose = () => { 
 		setOpen(null); 
 		setInLeave(false);
@@ -169,16 +185,16 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				<MenuItem
 					className={styles.menu_item} 
 					onClick={handleLeaveOpen}
-					onMouseEnter={toggleLeave} 
-                    onMouseLeave={toggleLeave}>
+					onMouseEnter={enterLeave} 
+                    onMouseLeave={leaveLeave}>
 					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Leave Group</p>
 				</MenuItem>
 				<MenuItem 
 					className={styles.menu_item} 
 					onClick={handleClose}
-					onMouseEnter={toggleEdit} 
-                    onMouseLeave={toggleEdit}>
+					onMouseEnter={enterEdit} 
+                    onMouseLeave={leaveEdit}>
 					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
@@ -187,8 +203,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={handleClose}
-					onMouseEnter={toggleRemove} 
-                    onMouseLeave={toggleRemove}>
+					onMouseEnter={enterRemove} 
+                    onMouseLeave={leaveRemove}>
 					<PersonRemoveAlt1RoundedIcon className={styles.icon} style={{ color: isInRemove ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Remove a Member</p>
 				</MenuItem>
@@ -197,8 +213,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={handleClose}
-					onMouseEnter={toggleAssign} 
-                    onMouseLeave={toggleAssign}>
+					onMouseEnter={enterAssign} 
+                    onMouseLeave={leaveAssign}>
 					<StarRoundedIcon className={styles.icon} style={{ color: isInAssign ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
@@ -210,8 +226,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 						handleClose;
 						handleControlToggle();
 					}}
-					onMouseEnter={toggleEnable} 
-                    onMouseLeave={toggleEnable}>
+					onMouseEnter={enterEnable} 
+                    onMouseLeave={leaveEnable}>
 					{controlEnabled ? (
 						<>
 							<VideogameAssetOffRoundedIcon className={styles.icon} style={{ color: isInEnable ? "#B03EEE" : "#757575" }} />
@@ -228,8 +244,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={() => {handleClose; handleDelete();}}
-					onMouseEnter={toggleDelete} 
-                    onMouseLeave={toggleDelete}>
+					onMouseEnter={enterDelete} 
+                    onMouseLeave={leaveDelete}>
 					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Delete Group</p>
 				</MenuItem>
