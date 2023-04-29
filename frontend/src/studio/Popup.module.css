@@ -1,66 +1,53 @@
 .heading {
-    font-weight: 800;
-    margin: 10px 0 0 0;
-	color: #606060;
-	font-size: 32px;
-	position: relative;
+  font-weight: 800;
+  color: #757575;
+  font-size: 32px;
+  position: relative;
+  margin: 0px;
+  padding: 0px 24px 0px 24px
 }
 
-.subheading {
-    font-weight: 800;
-	color: #606060;
-	font-size: 20px;
-	position: relative;
-    display:flex;
-    margin: 0 20px 20px 20px;
+.subHeading {
+  font-weight: 800;
+  color: #757575;
+  font-size: 16px;
+  margin: 0px 0px 0px 24px;
+  padding: 0px 0px 20px 0px;
+  display: flex;
 }
 
 .dialogHeader {
-    margin: 20px;
-    display: flex;
-}
-
-.headerIcon {
-    height: 30px;
-    padding: 10px;
-    margin: 10px 0 0 20px;
-    position: relative;
+  margin: 20px;
+  display: flex;
+  padding-left: 24px;
+  align-items: center;
 }
 
 .helperText{
-    color:rgb(218, 0, 0);
+  color:rgb(218, 0, 0);
 }
 
-.purpleButton {
-    background: linear-gradient(#B03EEE, #E640F8);
-    font-weight: 700;
-    width: 200px;
-}
-
-.greyButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
-    font-weight: 700;
-    text-align: center;
-    width: 200px;
+.secondaryButton {
+  background: linear-gradient(#BEBEBE, #EDEDED);
 }
 
 .dialogContent {
-    text-align: center;
-    padding: 0;
+  text-align: center;
+  padding: 0;
 }
 
 .listenerList {
-    display: flex;
-    flex-wrap: wrap;
-    border: #ABABAB solid 1px;
-    border-radius: 10px;
-    height: calc(100vh - 460px);
-    overflow: scroll;
-    margin: 0 20px 20px 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    overflow-x: hidden;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  display: flex;
+  flex-wrap: wrap;
+  border: #ABABAB solid 1px;
+  border-radius: 10px;
+  height: calc(100vh - 460px);
+  overflow: scroll;
+  margin: 0 20px 20px 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  overflow-x: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .listenerList::-webkit-scrollbar {
@@ -68,36 +55,36 @@
 }
 
 .listenerListItem {
-    display: flex;
-    align-items: center;
-    border-top: #ABABAB solid 1px;
-    width: 100%;
-    padding: 10px;
-    background-color: #FFF;
-    cursor: pointer;
-  }
+  display: flex;
+  align-items: center;
+  border-top: #ABABAB solid 1px;
+  width: 100%;
+  padding: 10px;
+  background-color: #FFF;
+  cursor: pointer;
+}
 
-  .listenerListItem:hover {
-    background-color: #f1f1f1;
-  }
+.listenerListItem:hover {
+  background-color: #f1f1f1;
+}
 
-  .listenerListItem:hover p {
-    color: #B03EEE;
-  }
-  
-  .listenerListItem img {
-    height: 35px;
-    margin-right: 10px;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  
-  .listenerListItem p {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .listenerListItemCrown {
-    margin-left: auto;
-  }
+.listenerListItem:hover p {
+  color: #B03EEE;
+}
+
+.listenerListItem img {
+  height: 35px;
+  margin-right: 10px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.listenerListItem p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.hostIcon {
+  margin-left: auto;
+}

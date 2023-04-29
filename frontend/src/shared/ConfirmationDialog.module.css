@@ -25,11 +25,6 @@
     justify-content: center;
 }
 
-.primaryButton {
-    font-weight: 700;
-}
-
 .secondaryButton {
     background: linear-gradient(#BEBEBE, #EDEDED);
-    font-weight: 700;
 }
