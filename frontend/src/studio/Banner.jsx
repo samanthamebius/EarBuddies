@@ -28,6 +28,7 @@ const isHost = true;
 
 const hostImage = ProfilePicImg1;
 const isListening = true;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const listenersImgs = [
 	ProfilePicImg1,
@@ -74,11 +75,11 @@ export default function Banner({id, studio}) {
 		}
 	}, [isAddIcon]);
 
-	const [controlEnabled, toggleControl] = useState(false);
+	const [controlEnabled, toggleControl] = useState(studio.studioControlHostOnly);
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
+		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`)
 	};
-	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const handleDelete = () => {
 		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
 			console.log(res);
