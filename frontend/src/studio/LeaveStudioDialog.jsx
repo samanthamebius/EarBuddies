@@ -12,29 +12,27 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 
 export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, listeners }) {
+    const navigate = useNavigate();
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-	const handleConfirmOpen = () => { setIsConfirmOpen(true); };
     const handleClose = () => { handleCloseDialog(false) };
+    const [ newHost, setNewHost] = useState(null);
 
     const handleSubmit = () => {
         if (newHost === null) {
             setIsHostErrorMessage(true);
         } else {
             setIsHostErrorMessage(false);
-            handleConfirmOpen();
+            setIsConfirmOpen(true);
         }
     };
-
-    const [ newHost, setNewHost] = useState(null);
 
     const handleSubmitConfirm = () => { 
         setIsConfirmOpen(false)
         handleClose()
         navigate('/', { replace: true });
     };
-    
+
     return(
         <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
             <div className={styles.dialogHeader}>
@@ -61,7 +59,7 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
                 <ConfirmationDialog 
                     isOpen={isConfirmOpen}
                     handleClose={() => setIsConfirmOpen(false)}
-                    handleAction={() => handleSubmitConfirm}
+                    handleAction={() => handleSubmitConfirm()} 
                     message={"Are you sure you want to leave this studio?"}
                     actionText={"Leave"}/>
             </DialogContent>
@@ -85,4 +83,4 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
         }
       </div>
     );
-  };
+};
