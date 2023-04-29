@@ -12,6 +12,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import logo from "./assets/shared/earBuddiesLogo.png";
 import useGet from "./hooks/useGet";
 import { AppContext } from "./AppContextProvider";
+import ConfirmationDialog from "./shared/ConfirmationDialog";
 
 export default function PageLayout() {
 	return (
@@ -102,6 +103,7 @@ export function DropdownMenu() {
   const [isInProfle, setInProfile] = useState(false);
   const [isInDarkMode, setInDarkMode] = useState(false);
   const [isInLogOut, setInLogOut] = useState(false);
+  const [isConfirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
 
   const navigate = useNavigate();
   const open = Boolean(isOpen);
@@ -127,9 +129,9 @@ export function DropdownMenu() {
     navigate("/login");
   };
 
-  const handleViewProfileOpen = () => {
-		setIsViewProfileOpen(!isViewProfileOpen);
-	};
+  const handleViewProfileOpen = () => { setIsViewProfileOpen(true);	};
+
+  const handleConfirmLogoutOpen = () => { setConfirmLogoutOpen(true); };
 
   login();
   const toggleProfile = () => { setInProfile(!isInProfle) };
@@ -141,6 +143,13 @@ export function DropdownMenu() {
       <ViewProfileDialog
         isViewProfileOpen={isViewProfileOpen}
         handleViewProfileClose={() => setIsViewProfileOpen(false)}
+      />
+      <ConfirmationDialog 
+        isOpen={isConfirmLogoutOpen}
+        handleClose={() => setConfirmLogoutOpen(false)}
+        handleAction={() => handleLogout()}
+        message={"Are you sure you want to logout?"}
+        actionText={"Log Out"}
       />
       <div className={styles.dropdown}>
         <Button sx={{ fontWeight: 600 }}
@@ -174,7 +183,7 @@ export function DropdownMenu() {
           </MenuItem>
 
           <MenuItem className={styles.menu_item} 
-                    onClick={handleLogout} 
+                    onClick={handleConfirmLogoutOpen} 
                     onMouseEnter={toggleLogOut} 
                     onMouseLeave={toggleLogOut}>
             <LogoutRoundedIcon className={styles.icon} style={{ color: isInLogOut ? "#B03EEE" : "#757575" }} />
