@@ -9,22 +9,14 @@ import styles from './Popup.module.css';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-
-import leaveIcon from "../assets/studio/leaveGroupIcon.png"
-import crownedIcon from "../assets/studio/hostCrownIcon.png";
-import uncrownedIcon from "../assets/studio/hollowCrownIcon.png";
+import ConfirmationDialog from '../shared/ConfirmationDialog';
 
 export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, listeners }) {
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-	const handleConfirmOpen = () => {
-		setIsConfirmOpen(!isConfirmOpen);
-	};
-
-    const handleClose = () => { 
-        handleCloseDialog(false) 
-    };
+	const handleConfirmOpen = () => { setIsConfirmOpen(true); };
+    const handleClose = () => { handleCloseDialog(false) };
 
     const handleSubmit = () => {
         if (newHost === null) {
@@ -33,8 +25,15 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
             setIsHostErrorMessage(false);
             handleConfirmOpen();
         }
-      };
+    };
+
     const [ newHost, setNewHost] = useState(null);
+
+    const handleSubmitConfirm = () => { 
+        setIsConfirmOpen(false)
+        handleClose()
+        navigate('/', { replace: true });
+    };
     
     return(
         <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
@@ -45,7 +44,6 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
             
             <DialogContent className={styles.dialogContent}>
                 <h2 className={styles.subHeading}>Assign a new host before leaving</h2>
-
                 <div className={styles.listenerList}>
                     {listeners.map((listener) => (
                         <ListenerListItem key={listener.id} 
@@ -60,10 +58,12 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
                     <Button variant="contained" sx={{ fontWeight: 600, color: '#757575'  }} className={styles.secondaryButton} onClick={() => { setNewHost(null); handleClose(); }}>Cancel</Button>
                     <Button variant="contained" sx={{ fontWeight: 600 }} className={styles.purpleButton} onClick={handleSubmit}>Leave Studio</Button>
                 </DialogActions>
-                <ConfirmLeave 
-                    isConfirmDialogOpened={isConfirmOpen}
-					handleCloseConfirmDialog={() => setIsConfirmOpen(false)}
-                    handleClose={handleClose}/>
+                <ConfirmationDialog 
+                    isOpen={isConfirmOpen}
+                    handleClose={() => setIsConfirmOpen(false)}
+                    handleAction={() => handleSubmitConfirm}
+                    message={"Are you sure you want to leave this studio?"}
+                    actionText={"Leave"}/>
             </DialogContent>
         </Dialog>
     )
@@ -73,8 +73,6 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     const handleClick = () => {
       setNewHost(listener.id);
     };
-  
-    const crownIcon = isNewHost ? crownedIcon : uncrownedIcon;
   
     return (
       <div className={styles.listenerListItem} onClick={handleClick}>
@@ -88,31 +86,3 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
       </div>
     );
   };
-
-function ConfirmLeave ({ isConfirmDialogOpened, handleCloseConfirmDialog, handleClose}) {
-    const navigate = useNavigate();
-    const handleCloseConfirm = () => { handleCloseConfirmDialog(false) };
-    const handleSubmitConfirm = () => { 
-        handleCloseConfirm()
-        handleClose()
-        navigate('/', { replace: true });
-    };
-
-    return (
-    <Dialog  open={isConfirmDialogOpened} onClose={handleCloseConfirm} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
-            <div className={styles.dialogHeader}>
-                <img className={styles.headerIcon} src={leaveIcon}/>
-                <h1 className={styles.heading}>Leave Studio</h1>
-            </div>
-            
-            <DialogContent className={styles.dialogContent}>
-                <h2 className={styles.subheading}>Are you sure you want to leave</h2>
-
-                <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
-                    <Button variant="contained" sx={{ color: '#606060'}} className={styles.greyButton} onClick={handleCloseConfirm}>Cancel</Button>
-                    <Button variant="contained" className={styles.purpleButton} onClick={handleSubmitConfirm}>Leave Studio</Button>
-                </DialogActions>
-            </DialogContent>
-        </Dialog>
-    );
-}

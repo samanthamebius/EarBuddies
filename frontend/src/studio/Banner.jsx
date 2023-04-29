@@ -199,7 +199,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					onMouseEnter={enterLeave} 
                     onMouseLeave={leaveLeave}>
 					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Leave Group</p>
+					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
 				<MenuItem 
 					className={styles.menu_item} 
@@ -258,7 +258,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					onMouseEnter={enterDelete} 
                     onMouseLeave={leaveDelete}>
 					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Delete Group</p>
+					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
 			</Menu>
 		</div>
