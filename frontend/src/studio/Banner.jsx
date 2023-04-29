@@ -140,7 +140,15 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const toggleDelete = () => { setInDelete(!isInDelete) };
 		
 	const handleClick = (event) => { setOpen(event.currentTarget); };
-	const handleClose = () => { setOpen(null); };
+	const handleClose = () => { 
+		setOpen(null); 
+		setInLeave(false);
+		setInEdit(false);
+		setInRemove(false);
+		setInAssign(false);
+		setInEnable(false);
+		setInDelete(false);
+	};
 	const handleLeaveOpen = () => { setIsLeaveOpen(!isLeaveOpen); };
 
 	return (
