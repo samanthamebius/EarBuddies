@@ -16,6 +16,9 @@ router.get("/search/:query", async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
         res.status(500).json(err);
     }
 });
