@@ -1,0 +1,35 @@
+.icon {
+    background-color: #E2BFF6;
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.sectionHeading {
+    font-weight: 800;
+	color: #757575;
+	font-size: 16px;
+	position: relative;
+    margin: 0px;
+    padding: 20px 0px 10px 0px
+}
+
+.buttons {
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.primaryButton {
+    font-weight: 700;
+}
+
+.secondaryButton {
+    background: linear-gradient(#BEBEBE, #EDEDED);
+    font-weight: 700;
+}

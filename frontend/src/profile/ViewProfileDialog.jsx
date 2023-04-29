@@ -28,7 +28,7 @@ import SheepAvatar from '../assets/profile/sheep.png';
 import SnailAvatar from '../assets/profile/snail.png';
 import TurtleAvatar from '../assets/profile/turtle.png';
 import WhaleAvatar from '../assets/profile/whale.png';
-import DeleteAccountDialog from './DeleteAccountDialog';
+import ConfirmationDialog from '../shared/ConfirmationDialog';
 
 export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
     // temporary - change AnacondaAvatar with actual profile image
@@ -38,10 +38,10 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
     const [isInDisplayName, setInDisplayName] = useState(false);
     const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
     const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
-    const [isDeleteAccountOpen, setDeleteAccountOpen] = useState(false);
+    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-	const handleDeleteAccountOpen = () => {
-		setDeleteAccountOpen(true);
+	const handleConfirmDeleteOpen = () => {
+		setConfirmDeleteOpen(true);
 	};
 
     const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
@@ -62,9 +62,12 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
 
     return(
         <>
-            <DeleteAccountDialog 
-                isDeleteAccountOpen={isDeleteAccountOpen}
-                handleDeleteAccountClose={() => setDeleteAccountOpen(false)}
+            <ConfirmationDialog 
+                isOpen={isConfirmDeleteOpen}
+                handleClose={() => setConfirmDeleteOpen(false)}
+                handleAction={() => setConfirmDeleteOpen(false)} //TO DO: replace with delete functionality
+                message={"Are you sure you want to delete your Ear Buddies Account?"}
+                actionText={"Delete"}
             />
             <div>
                 <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
@@ -122,7 +125,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                         <h2 className={styles.sectionHeading}></h2>
                         <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={onClose}>Link To Spotify Account</Button>
                         <h2 className={styles.sectionHeading}></h2>
-                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleDeleteAccountOpen}>Delete Ear Buddies Account</Button>
+                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleConfirmDeleteOpen}>Delete Ear Buddies Account</Button>
                     </DialogContent>
                     <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
                     <Button sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.cancelButton} onClick={onClose}>Close</Button>
