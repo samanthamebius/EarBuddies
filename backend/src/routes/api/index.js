@@ -11,6 +11,9 @@ router.use('/refresh', refresh);
 import user from './user';
 router.use('/user', user);
 
+import spotify from './spotify';
+router.use('/spotify', spotify);
+
 import studio from './studio';
 router.use('/studio', studio);
 

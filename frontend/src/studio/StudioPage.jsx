@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
 
@@ -11,7 +11,16 @@ import useGet from "../hooks/useGet";
 
 function StudioPage({ socket }) {
 	const { id } = useParams();
-	const { data: studio, isLoading: studioIsLoading } = useGet(`/api/studio/${id}`);
+	const navigate = useNavigate();
+	const { data: studio, isLoading: studioIsLoading, error: studioError } = useGet(`/api/studio/${id}`);
+	if (studioError) {
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		localStorage.removeItem("expires_in");
+		localStorage.removeItem("current_user_id");
+		navigate("/login");
+		return <p>Could not load studio</p>;
+	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
 	} else if (!studio) {

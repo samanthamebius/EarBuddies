@@ -1,5 +1,5 @@
 import express from "express";
-import {getUser, getUserbyId} from "../../database/user_dao";
+import {getUser, getUserbyId} from "../../dao/user_dao";
 
 const router = express.Router();
 
