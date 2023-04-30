@@ -71,12 +71,23 @@ async function getStudiosId(id) {
 
 async function searchStudios(id) {
 	const studiosId = await getStudiosId(id);
-	const studioObjects = [];
+	var studioObjects = [];
 	for (var i = 0; i < studiosId.length; i++) {
 		const studio = await getStudio(studiosId[i]._id);
 		studioObjects[i] = studio;
 	}
 	return studioObjects;
+}
+
+async function searchActiveStudios(id) {
+	const studioObjects = await searchStudios(id);
+	var studiosActive = [];
+	for (var i = 0; i < studioObjects.length; i++) {
+		if (studioObjects[i].isActive) {
+			studiosActive[i] = studioObjects[i];
+		}
+	}
+	return studiosActive;
 }
 
 
@@ -93,4 +104,16 @@ async function deleteUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudiosId, updateStudios, getUserId, deleteUser, getUserbyId, searchStudios };
+export {
+	createUser,
+	updateUser,
+	getUser,
+	loginUser,
+	getStudiosId,
+	updateStudios,
+	getUserId,
+	deleteUser,
+	getUserbyId,
+	searchStudios,
+	searchActiveStudios
+};
