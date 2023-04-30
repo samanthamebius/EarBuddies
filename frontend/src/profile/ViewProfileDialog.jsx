@@ -47,24 +47,18 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
 		setConfirmDeleteOpen(true);
 	};
 
-    //get user info
-    // const current_user_id = localStorage.getItem("current_user_id");
-	// const id = JSON.parse(current_user_id);
-    // const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
-    // console.log(user)
-    // console.log(id)
-    // useEffect(() => {
-    //     if (user) {
-    //         setDisplayName(user.userDisplayName);
-    //         setDisplayPhoto(user.profilePic);
-    //     }
-    // }, [user]);
-
-    // if (userIsLoading) {
-    //     return <p> Loading... </p>;
-    // } else if (!user) {
-    //     return <p> User not found </p>;
-    // }
+    // get user info
+    const current_user_id = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user_id);
+    const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
+    console.log(user)
+    console.log(id)
+    useEffect(() => {
+        if (user) {
+            setDisplayName(user.userDisplayName);
+            setDisplayPhoto(user.profilePic);
+        }
+    }, [user]);
 
     const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
         CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar, 
@@ -92,6 +86,10 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         localStorage.removeItem("expires_in");
         localStorage.removeItem("current_user_id");
 		navigate("/");
+    }
+
+    const handleAccountLink = () => {
+        window.open("https://www.spotify.com/us/account/overview/", "_blank");
     }
 
     return(
@@ -157,7 +155,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                             </div>
                         </div>
                         <h2 className={styles.sectionHeading}></h2>
-                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={onClose}>Link To Spotify Account</Button>
+                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleAccountLink}>Link To Spotify Account</Button>
                         <h2 className={styles.sectionHeading}></h2>
                         <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleConfirmDeleteOpen}>Delete Ear Buddies Account</Button>
                     </DialogContent>

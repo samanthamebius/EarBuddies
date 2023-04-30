@@ -22,8 +22,10 @@ async function loginUser(spotifyApi, data) {
 			.getMe()
 			.then(async function (data) {
 				const user = await getUser(data.body.id);
+				console.log("user in login: " + user)
 				// check to see if user in db
-				if (user.length === 0) {
+				if (!user) {
+					console.log("user not in db")
 					await createUser(
 						data.body.id,
 						data.body.display_name,
@@ -49,6 +51,7 @@ async function updateUser(username) {
 }
 
 async function getUser(username) {
+	console.log("username in getUser: " + username)
 	const user = await User.findOne({ username: username });
 	return user;
 }
