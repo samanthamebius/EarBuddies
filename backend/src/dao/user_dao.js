@@ -49,6 +49,10 @@ async function updateUser(username) {
 	);
 }
 
+async function getUsers() {
+	return await User.find({});
+}
+
 async function getUser(username) {
 	const user = await User.findOne({ username: username });
 	return user;
@@ -115,5 +119,6 @@ export {
 	deleteUser,
 	getUserbyId,
 	searchStudios,
-	searchActiveStudios
+	searchActiveStudios,
+	getUsers
 };
