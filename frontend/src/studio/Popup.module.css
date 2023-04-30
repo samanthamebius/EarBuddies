@@ -16,6 +16,11 @@
   display: flex;
 }
 
+.headerIcon {
+  height: 25px;
+  padding: 10px
+}
+
 .dialogHeader {
   margin: 20px;
   display: flex;
@@ -33,7 +38,12 @@
 
 .dialogContent {
   text-align: center;
-  padding: 0;
+font-weight: 800;
+color: #757575;
+font-size: 32px;
+position: relative;
+margin: 0px;
+padding: 0px 24px 0px 24px
 }
 
 .listenerList {
@@ -87,4 +97,21 @@
 
 .hostIcon {
   margin-left: auto;
+}
+
+.purpleButton {
+  background: linear-gradient(#B03EEE, #E640F8);
+  font-weight: 700;
+  width: 200px;
+}
+
+.greyButton {
+  background: linear-gradient(#BEBEBE, #EDEDED);
+  font-weight: 700;
+  text-align: center;
+  width: 200px;
+}
+
+.secondaryButton {
+  background: linear-gradient(#BEBEBE, #EDEDED);
 }
