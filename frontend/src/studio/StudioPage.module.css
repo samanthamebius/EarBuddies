@@ -57,10 +57,6 @@
 	cursor: pointer;
 }
 
-.kebabIcon {
-	height: 25px;
-}
-
 .icon {
 	height: 20px;
 	width: 20px;
@@ -68,12 +64,18 @@
 	pointer-events: none;
 }
 
-.menu_item span {
+.menu_item {
 	color: #606060;
 }
 
-.menu_item:hover span {
-	color: #b03eee;
+.menu_item:hover .menu_title {
+    color: #B03EEE;
+}
+
+.menu_title {
+	color: #757575;
+    margin: 5px 0px 5px 10px;
+	font-size: 16px;
 }
 
 .bannerStudioName {
@@ -126,4 +128,9 @@
 	.bannerlisteners {
 		transform: scale(0.9);
 	}
+}
+
+.icon {
+    height: 30px;
+    pointer-events: none;
 }
