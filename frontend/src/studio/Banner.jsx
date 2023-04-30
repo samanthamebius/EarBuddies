@@ -22,9 +22,11 @@ import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
 import useGet from "../hooks/useGet.js"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ConfirmationDialog from '../shared/ConfirmationDialog';
+
 
 // TO DO: get if user is host or not
-const isHost = true;
+const isHost = false;
 
 const hostImage = ProfilePicImg1;
 const isListening = true;
@@ -125,6 +127,8 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -166,15 +170,28 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setInEnable(false);
 		setInDelete(false);
 	};
-	const handleLeaveOpen = () => { setIsLeaveOpen(!isLeaveOpen); };
+	const handleLeaveOpen = () => { setIsLeaveOpen(true); };
+	const handleConfirmDeleteOpen = () => { setConfirmDeleteOpen(true);	};
+	const handleLeaveConfirmation = () => { setConfirmleaveOpen(true);	};
 
 	return (
 		<div>
 			<LeaveStudioDialog
 					isDialogOpened={isLeaveOpen}
 					handleCloseDialog={() => setIsLeaveOpen(false)}
-					listeners={listeners}
-				/>
+					listeners={listeners} />
+			<ConfirmationDialog 
+                isOpen={isConfirmDeleteOpen}
+                handleClose={() => setConfirmDeleteOpen(false)}
+                handleAction={() => {handleClose; handleDelete();}} //TO DO: replace with delete functionality
+                message={"Are you sure you want to delete this studio?"}
+                actionText={"Delete"} />
+			<ConfirmationDialog 
+                isOpen={isConfirmLeaveOpen}
+                handleClose={() => setConfirmleaveOpen(false)}
+                handleAction={() => {handleClose;}} //TO DO: replace with leave functionality
+                message={"Are you sure you want to leave this studio?"}
+                actionText={"Leave"} />
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
 			</div>
@@ -185,11 +202,11 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				onClose={handleClose}>
 				<MenuItem
 					className={styles.menu_item} 
-					onClick={handleLeaveOpen}
+					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave} 
                     onMouseLeave={leaveLeave}>
 					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Leave Group</p>
+					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
 				<MenuItem 
 					className={styles.menu_item} 
@@ -244,11 +261,11 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				<MenuItem 
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
-					onClick={() => {handleClose; handleDelete();}}
+					onClick={handleConfirmDeleteOpen}
 					onMouseEnter={enterDelete} 
                     onMouseLeave={leaveDelete}>
 					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Delete Group</p>
+					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
 			</Menu>
 		</div>
