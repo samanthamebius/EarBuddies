@@ -13,6 +13,13 @@ router.use(cors())
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
+const spotifyApi = new SpotifyWebApi({
+  redirectUri: process.env.REDIRECT_URI,
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+});
+
+
 /**
  * @route POST api/login
  * @desc Login to Spotify and add user to database if not already in it
@@ -22,17 +29,14 @@ await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
  */
 router.post("/", async (req, res) => {
   const code = req.body.code;
-  const spotifyApi = new SpotifyWebApi({
-    redirectUri: process.env.REDIRECT_URI,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-  });
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const access_token = data.body.access_token;
     const refresh_token = data.body.refresh_token;
-    const expires_in = data.body.expires_in;
+    const expires_in = 5;
 
+    spotifyApi.setRefreshToken(refresh_token);
+    console.log("refresh token in login: " + refresh_token)
     spotifyApi.setAccessToken(access_token);
     spotifyApi.setRefreshToken(refresh_token);
     setSpotifyApi(spotifyApi);
@@ -51,3 +55,4 @@ router.post("/", async (req, res) => {
 });
 
 export default router;
+export { spotifyApi };
