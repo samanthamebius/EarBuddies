@@ -38,7 +38,7 @@ function SearchBar({label}) {
         fullWidth
         InputProps={{
           startAdornment: (
-            <SearchRoundedIcon color="action" position="start" className={styles.searchIcon}/>
+            <SearchRoundedIcon style={{ color: "#757575" }} position="start" className={styles.searchIcon}/>
           ),
         }}
         InputLabelProps={{
