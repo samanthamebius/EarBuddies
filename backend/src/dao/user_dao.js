@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { User } from "../database/schema.js";
+import { getStudio } from "./studio_dao.js";
 import mongoose from "mongoose";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
@@ -54,8 +55,8 @@ async function getUser(username) {
 }
 
 async function getUserId(username) {
-  const user = await getUser(username);
-  return user._id;
+	const user = await getUser(username);
+	return user._id;
 }
 
 async function getUserbyId(id) {
@@ -63,22 +64,33 @@ async function getUserbyId(id) {
 	return user;
 }
 
-async function getStudios(username) {
-  const user = await getUserbyId(username);
-  return user.userStudios;
+async function getStudiosId(id) {
+	const user = await getUserbyId(id);
+	return user.userStudios;
 }
 
+async function searchStudios(id) {
+	const studiosId = await getStudiosId(id);
+	const studioObjects = [];
+	for (var i = 0; i < studiosId.length; i++) {
+		const studio = await getStudio(studiosId[i]._id);
+		studioObjects[i] = studio;
+	}
+	return studioObjects;
+}
+
+
 async function updateStudios(username, studios) {
-  return await User.findOneAndUpdate(
-    { username: username },
-    { userStudios: studios }
-  );
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userStudios: studios }
+	);
 }
 
 async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
-} 
+}
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId };
+export { createUser, updateUser, getUser, loginUser, getStudiosId, updateStudios, getUserId, deleteUser, getUserbyId, searchStudios };
