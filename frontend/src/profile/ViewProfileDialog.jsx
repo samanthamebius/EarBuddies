@@ -92,6 +92,17 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         window.open("https://www.spotify.com/us/account/overview/", "_blank");
     }
 
+    const handleSave = () => {
+        axios.put(`${BASE_URL}/api/user/${id}`, {
+            userDisplayName: displayName,
+            profilePic: displayPhoto
+        }).then((res) => {
+            console.log(res);
+        });
+        setAvatarOptionsOpen(false);
+        handleViewProfileClose();
+    }
+
     return(
         <>
             <ConfirmationDialog 
@@ -161,7 +172,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                     </DialogContent>
                     <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
                     <Button sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.cancelButton} onClick={onClose}>Close</Button>
-                    <Button sx={{ fontWeight: 600 }} variant='contained' className={styles.createButton} onClick={onClose}>Save</Button>
+                    <Button sx={{ fontWeight: 600 }} variant='contained' className={styles.createButton} onClick={handleSave}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>

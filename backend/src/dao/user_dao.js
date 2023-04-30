@@ -50,6 +50,13 @@ async function updateUser(username) {
 	);
 }
 
+async function updateUserInfo(username, userDisplayName, profilePic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userDisplayName: userDisplayName, profilePic: profilePic }
+	);
+}
+
 async function getUser(username) {
 	console.log("username in getUser: " + username)
 	const user = await User.findOne({ username: username });
@@ -84,4 +91,4 @@ async function deleteUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo };
