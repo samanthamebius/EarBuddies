@@ -16,7 +16,8 @@ const studioSchema = new Schema({
     studioUsers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
     studioHost: { type: Schema.Types.ObjectId, ref: 'User' },
     studioGenres: [String],
-    studioPicture: String
+    studioPicture: String,
+    studioControlHostOnly: Boolean,
 });
 
 const User = mongoose.model('User', userSchema);

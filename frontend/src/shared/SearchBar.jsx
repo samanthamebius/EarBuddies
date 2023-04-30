@@ -1,6 +1,7 @@
 // Credit to https://frontendshape.com/post/react-mui-5-search-bar-example
 
 import { Container, InputAdornment, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRounded from "@mui/icons-material/ClearRounded";
@@ -28,6 +29,7 @@ const StyledMenu = styled(Menu)({
 });
 
 function SearchBar({ label }) {
+  const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -53,22 +55,24 @@ function SearchBar({ label }) {
   };
 
   useEffect(() => {
-    console.log(searchTerm.length);
     if (searchTerm.trim().length > 0) {
-      console.log("refresh token in search bar", localStorage.getItem("refresh_token"));
       try {
         axios
-          .post(
-            `${BASE_URL}/api/spotify/search/${searchTerm}`,
-            {
-              refreshToken: localStorage.getItem("refresh_token"),
-              accessToken: localStorage.getItem("access_token"),
-            })
+          .get(
+            `${BASE_URL}/api/spotify/search/${searchTerm}`)
           .then((response) => {
             setSearchResults(response.data);
+          })
+          .catch((error) => {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("expires_in");
+            localStorage.removeItem("current_user_id");
+            navigate("/login");
+            return <p>Could not load search</p>;
           });
       } catch (error) {
-        console.log(error);
+        console.log(error.msg);
       }
     } else {
       setSearchResults([]);

@@ -40,7 +40,7 @@
 }
 
 .cancelButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#EDEDED, #BEBEBE);
     font-weight: 700;
 }
 

@@ -1,26 +1,20 @@
-import { spotifyApi } from '../api/login'
 import dotenv from 'dotenv';
 dotenv.config();
-import { refreshAccessToken } from '../api/refresh';
 
-var thisSpotifyApi = null;
+var spotifyApi = null;
 
-async function setAccessToken(spotifyApi, access_token, refresh_token) {
-    console.log("setting token")
-    thisSpotifyApi = spotifyApi;
-    thisSpotifyApi.setRefreshToken(refresh_token);
-    thisSpotifyApi.setAccessToken(access_token);
+function setSpotifyApi(api) {
+    spotifyApi = api;
+    console.log("set api " + spotifyApi);
 }
 
-async function searchSpotify(query, refresh_token) {
-    if (thisSpotifyApi == null) {
-        thisSpotifyApi = spotifyApi;
-        thisSpotifyApi.setRefreshToken(refresh_token);
-        console.log(refresh_token.replace(/['"]+/g, ''));
-        console.log("spotify api not set")
-        refreshAccessToken(thisSpotifyApi, refresh_token.replace(/['"]+/g, ''));
-    }
+function getSpotifyApi() {
+    return spotifyApi;
+}
+
+async function searchSpotify(query, thisSpotifyApi) {
     return new Promise((resolve, reject) => {
+        console.log(thisSpotifyApi)
         thisSpotifyApi.search(query, ['track', 'episode', 'audiobook'])
             .then(function (data) {
                 const results = [];
@@ -64,14 +58,10 @@ async function searchSpotify(query, refresh_token) {
                 resolve(results);
             })
             .catch(function (err) {
-                if (err.statusCode == 401) {
-                    console.log("refreshing token");
-                    refreshAccessToken(thisSpotifyApi, refresh_token.replace(/['"]+/g, ''));
-                }
                 console.log("Something went wrong!", err);
                 reject(err);
             });
     });
 }
 
-export { searchSpotify, setAccessToken };
+export { searchSpotify, setSpotifyApi, getSpotifyApi };
