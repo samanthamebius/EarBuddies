@@ -1,5 +1,5 @@
 import styles from './ViewProfileDialog.module.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -29,11 +29,14 @@ import SnailAvatar from '../assets/profile/snail.png';
 import TurtleAvatar from '../assets/profile/turtle.png';
 import WhaleAvatar from '../assets/profile/whale.png';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
+import useGet from '../hooks/useGet';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
-    // temporary - change AnacondaAvatar with actual profile image
     const [displayPhoto, setDisplayPhoto] = useState(AnacondaAvatar); 
-    
     const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
     const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
@@ -43,6 +46,25 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
 	const handleConfirmDeleteOpen = () => {
 		setConfirmDeleteOpen(true);
 	};
+
+    //get user info
+    // const current_user_id = localStorage.getItem("current_user_id");
+	// const id = JSON.parse(current_user_id);
+    // const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
+    // console.log(user)
+    // console.log(id)
+    // useEffect(() => {
+    //     if (user) {
+    //         setDisplayName(user.userDisplayName);
+    //         setDisplayPhoto(user.profilePic);
+    //     }
+    // }, [user]);
+
+    // if (userIsLoading) {
+    //     return <p> Loading... </p>;
+    // } else if (!user) {
+    //     return <p> User not found </p>;
+    // }
 
     const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
         CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar, 
@@ -59,13 +81,25 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         setAvatarOptionsOpen(false);
         handleViewProfileClose();
     }
+    const navigate = useNavigate();
+
+    const handleDelete = () => {
+        axios.delete(`${BASE_URL}/api/user/${id}`).then((res) => {
+			console.log(res);
+		});
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("expires_in");
+        localStorage.removeItem("current_user_id");
+		navigate("/");
+    }
 
     return(
         <>
             <ConfirmationDialog 
                 isOpen={isConfirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleAction={() => setConfirmDeleteOpen(false)} //TO DO: replace with delete functionality
+                handleAction={() => {setConfirmDeleteOpen(false); handleDelete();}} //TO DO: replace with delete functionality
                 message={"Are you sure you want to delete your Ear Buddies Account?"}
                 actionText={"Delete"}
             />

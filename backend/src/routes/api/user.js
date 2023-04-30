@@ -1,5 +1,5 @@
 import express from "express";
-import {getUser, getUserbyId} from "../../dao/user_dao";
+import {getUser, getUserbyId, deleteUser} from "../../dao/user_dao";
 
 const router = express.Router();
 
@@ -16,6 +16,19 @@ router.get("/:id", async (req, res) => {
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    const {id} = req.params;
+    if (!id) {
+        return res.status(400).json({msg: "No user id provided"});
+    }
+    try {
+        await deleteUser(id);
+        res.status(204).json({msg: "User deleted"});
+    } catch (err) {
+        res.status(500).json(err);
     }
 });
 
