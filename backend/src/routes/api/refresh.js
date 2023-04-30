@@ -4,7 +4,6 @@ import express from 'express';
 import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
-import { setAccessToken } from '../dao/spotify_dao';
 
 const router = express.Router();
 router.use(cors())
