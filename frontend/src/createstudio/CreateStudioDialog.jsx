@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import React, { useState } from 'react';
+import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip } from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
@@ -11,7 +8,7 @@ import SearchBar from "../shared/SearchBar";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { tooltipClasses } from '@mui/material/Tooltip';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -151,13 +148,23 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     }
   }
 
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        main: '#CA3FF3',
+      },
+    },
+  });
+
   return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
             <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
-            <TextField 
+            <ThemeProvider theme={theme}>
+              <TextField 
+                color="secondary"
                 value={studioNameInput}
                 error={isStudioNameErrorMessage ? true : false}
                 helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
@@ -170,8 +177,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 variant="outlined"
                 onChange={event => setStudioNameInput(event.target.value)}
                 className={styles.textfield}
-                autoComplete="off"
-            />
+                autoComplete="off" />  
+            </ThemeProvider>
             
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
             <FileDropZone onFileChange={handleFileChange} />
@@ -180,21 +187,24 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
                                                                 : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/>)}
             <div className={styles.addGenreSection}>
+              <ThemeProvider theme={theme}>
+                
+              </ThemeProvider>
               <TextField 
-                  margin="dense"
-                  id="name"
-                  label="Add your own genres ..."
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={genreInput}
-                  onChange={event => setGenreInput(event.target.value)}
-                  className={styles.textfield}
-                  autoComplete="off"
-                  onKeyDown={event => handleKeyPress(event, genreInput)} 
-                  error={isGenreInputErrorMessage ? true : false}
-                  helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
-              />
+                color="secondary"
+                margin="dense"
+                id="name"
+                label="Add your own genres ..."
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={genreInput}
+                onChange={event => setGenreInput(event.target.value)}
+                className={styles.textfield}
+                autoComplete="off"
+                onKeyDown={event => handleKeyPress(event, genreInput)} 
+                error={isGenreInputErrorMessage ? true : false}
+                helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""} />
               <span className={styles.spacing}></span>
               <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>              
             </div>

@@ -2,6 +2,7 @@ import styles from './ViewProfileDialog.module.css';
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -60,6 +61,14 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         handleViewProfileClose();
     }
 
+    const theme = createTheme({
+        palette: {
+          secondary: {
+            main: '#CA3FF3',
+          },
+        },
+      });
+
     return(
         <>
             <DeleteAccountDialog 
@@ -71,7 +80,9 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                     <h1 className={styles.heading}>View Profile</h1>
                     <DialogContent>
                         <h2 className={styles.sectionHeading}>Display Name</h2>
-                        <TextField 
+                        <ThemeProvider theme={theme}>
+                            <TextField 
+                            color="secondary"
                             onMouseEnter={toggleInDisplayName} 
                             onMouseLeave={toggleInDisplayName}
                             value={displayName}
@@ -88,8 +99,8 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                                 endAdornment: <InputAdornment position='end'>
                                     <EditRoundedIcon style={{ color: isInDisplayName ? '#B03EEE' : '#757575'}}/>
                                     </InputAdornment>,
-                            }}
-                        />
+                            }} />
+                        </ThemeProvider>
                         <h2 className={styles.sectionHeading}>Display Photo</h2>
                         
                         <div 
