@@ -74,71 +74,41 @@ router.put("/new-reaction/:id", async (req, res) => {
 	const { id } = req.params;
 	const { messageId, reaction } = req.body;
 
-	console.log(reaction);
-
-	// check if a reaction by the given username exists
-	// const dbReaction = await Chat.findOne({
-	// 	roomId: id.toString(),
-	// 	"messages.id": messageId,
-	// 	"messages.reactions.username": reaction.username,
-	// });
-
-	const dbReaction = await Chat.find({
+	const dbReaction = await Chat.findOne({
 		roomId: id.toString(),
-		"messages.id": messageId,
-	}).where("messages.reactions.username");
+		messages: {
+			$elemMatch: { id: messageId, "reactions.username": reaction.username },
+		},
+	});
 
 	var success = {};
 
-	success = await Chat.findOneAndUpdate(
-		{ roomId: id.toString(), "messages.id": messageId },
-		{ $push: { "messages.$.reactions": reaction } }
-	);
-
-	// if (!dbReaction) {
-	// 	// add a new reaction if one doesn't already exist
-	// 	success = await Chat.findOneAndUpdate(
-	// 		{ roomId: id.toString(), "messages.id": messageId },
-	// 		{ $push: { "messages.$.reactions": reaction } }
-	// 	);
-	// } else {
-	// 	console.log("existing");
-	// 	// update the existing reaction
-	// 	// success = await Chat.findOneAndUpdate(
-	// 	// 	{
-	// 	// 		roomId: id.toString(),
-	// 	// 		"messages.id": messageId,
-	// 	// 		"messages.reactions.username": reaction.username,
-	// 	// 	},
-	// 	// 	{
-	// 	// 		$set: {
-	// 	// 			"messages.$.reactions": {
-	// 	// 				id: reaction.id,
-	// 	// 				label: reaction.label,
-	// 	// 				username: reaction.username,
-	// 	// 				displayName: reaction.displayName,
-	// 	// 			},
-	// 	// 		},
-	// 	// 	}
-	// 	// );
-
-	// 	success = await Chat.find({
-	// 		roomId: id.toString(),
-	// 		"messages.id": messageId,
-	// 	})
-	// 		.where("messages.reactions.username")
-	// 		.equals(reaction.username)
-	// 		.updateOne({
-	// 			$set: {
-	// 				"messages.$.reactions": {
-	// 					id: reaction.id,
-	// 					label: reaction.label,
-	// 					username: reaction.username,
-	// 					displayName: reaction.displayName,
-	// 				},
-	// 			},
-	// 		});
-	// }
+	if (!dbReaction) {
+		// add the reaction
+		success = await Chat.findOneAndUpdate(
+			{ roomId: id.toString(), "messages.id": messageId },
+			{ $push: { "messages.$.reactions": reaction } }
+		);
+	} else {
+		// update the reaction
+		success = await Chat.updateOne(
+			{
+				roomId: id.toString(),
+				"messages.id": messageId,
+			},
+			{
+				$set: {
+					"messages.$[message].reactions.$[reaction].label": reaction.label,
+				},
+			},
+			{
+				arrayFilters: [
+					{ "message.id": messageId },
+					{ "reaction.username": reaction.username },
+				],
+			}
+		);
+	}
 
 	res.sendStatus(success ? 204 : 404);
 });
