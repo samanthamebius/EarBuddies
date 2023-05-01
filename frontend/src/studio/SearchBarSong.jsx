@@ -28,7 +28,7 @@ const StyledMenu = styled(Menu)({
   },
 });
 
-function SearchBarSong() {
+function SearchBarSong({studio}) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,6 +55,7 @@ function SearchBarSong() {
   const handleAddToQueue = (result) => {
     console.log("add to queue")
     console.log(result)
+    console.log(studio)
     handleCloseMenu();
   };
 
