@@ -197,6 +197,7 @@ export default function Chat(props) {
 							room={room}
 							socket={socket}
 							pinnedMessages={pinnedMessages}
+							inputRef={textInput}
 						/>
 					))}
 				</div>

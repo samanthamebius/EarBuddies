@@ -29,6 +29,7 @@ function ChatMessage(props) {
 		room,
 		socket,
 		pinnedMessages,
+		inputRef,
 	} = props;
 	const {
 		message,
@@ -123,6 +124,7 @@ function ChatMessage(props) {
 				isCurrentUser ? "yourself" : messageDisplayName
 			}: ${message}`
 		);
+		inputRef.current.focus();
 	};
 
 	// send the chat reactions
