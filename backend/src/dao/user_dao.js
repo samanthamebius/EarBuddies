@@ -68,6 +68,11 @@ async function getUserbyId(id) {
 	return user;
 }
 
+async function getUsername(id) {
+	const user = await getUserbyId(id);
+	return user.username;
+}
+
 async function getStudiosId(username) {
 	const user = await getUser(username);
 	return user.userStudios;
@@ -120,5 +125,6 @@ export {
 	getUserbyId,
 	searchStudios,
 	searchActiveStudios,
-	getUsers
+	getUsers,
+	getUsername,
 };

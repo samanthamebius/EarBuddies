@@ -15,7 +15,7 @@ function SongSearch() {
 	return (
 		<div>
 			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBar label={"Search Spotify"}></SearchBar>
+			<SearchBar searchType={"spotify"} label={"Search Spotify"}></SearchBar>
 		</div>
 	);
 }

@@ -40,12 +40,6 @@ router.post("/", async (req, res) => {
     spotifyApi.setRefreshToken(refresh_token);
     setSpotifyApi(spotifyApi);
     const username = await loginUser(spotifyApi, data);
-    const studios = await searchStudios(username);
-    const activeStudios = await searchActiveStudios(username);
-    const users = await getUsers();
-    console.log("all user studios" + studios);
-    console.log("active user studios" + activeStudios);
-    // console.log("all users" + users);
 
     res.json({
       access_token: access_token,

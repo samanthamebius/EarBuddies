@@ -28,13 +28,35 @@ const StyledMenu = styled(Menu)({
   },
 });
 
-function SearchBar({ label }) {
+function SearchBar({ label, searchType }) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const searchSongs = () => {
+    // search spotify for songs
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/spotify/search/${searchTerm}`)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          localStorage.removeItem("expires_in");
+          localStorage.removeItem("current_user_id");
+          navigate("/login");
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,23 +78,14 @@ function SearchBar({ label }) {
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
-      try {
-        axios
-          .get(
-            `${BASE_URL}/api/spotify/search/${searchTerm}`)
-          .then((response) => {
-            setSearchResults(response.data);
-          })
-          .catch((error) => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("expires_in");
-            localStorage.removeItem("current_user_id");
-            navigate("/login");
-            return <p>Could not load search</p>;
-          });
-      } catch (error) {
-        console.log(error.msg);
+      if (searchType === "spotify") {
+        searchSongs();
+      } else if (searchType === "users") {
+
+      } else if (searchType === "studios") {
+
+      } else if (searchType === "activeStudios") {
+
       }
     } else {
       setSearchResults([]);
