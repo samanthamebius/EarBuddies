@@ -12,19 +12,18 @@ import ListenerIcons from "../shared/ListenerIcons";
 import AddListenerIcon from "../assets/addListenerIcon.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
-import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
-import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
-import useGet from "../hooks/useGet.js"
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
+import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRenameOutlineRounded";
+import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
+import VideogameAssetOffRoundedIcon from "@mui/icons-material/VideogameAssetOffRounded";
+import GroupRemoveRoundedIcon from "@mui/icons-material/GroupRemoveRounded";
+import useGet from "../hooks/useGet.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ConfirmationDialog from '../shared/ConfirmationDialog';
-
+import ConfirmationDialog from "../shared/ConfirmationDialog";
 
 // TO DO: get if user is host or not
 const isHost = false;
@@ -58,7 +57,9 @@ const listeners = [
 	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
 ];
 
-export default function Banner({id, studio}) {
+const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
+
+export default function Banner({ id, studio }) {
 	const [listenersImages, setListenersImages] = useState(listenersImgs);
 	const [listenersActive, setListenersActive] = useState(allListenersActive);
 	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
@@ -69,7 +70,7 @@ export default function Banner({id, studio}) {
 	}
 
 	const studioName = studio.studioName;
-	const backgroundImage = studio.backgroundImage;
+	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
 	useEffect(() => {
 		if (isAddIcon == false) {
@@ -78,17 +79,18 @@ export default function Banner({id, studio}) {
 		}
 	}, [isAddIcon]);
 
-	const [controlEnabled, toggleControl] = useState(studio.studioControlHostOnly);
+	const [controlEnabled, toggleControl] = useState(
+		studio.studioControlHostOnly
+	);
 	const handleControlToggle = () => {
 		toggleControl((current) => !current);
-		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`)
+		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
 	};
 	const handleDelete = () => {
 		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
 			console.log(res);
 		});
 		navigate("/");
-
 	};
 
 	const users = studio.studioUsers;
@@ -124,14 +126,18 @@ export default function Banner({id, studio}) {
 	);
 }
 
-export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelete }) {
+export function DropdownKebab({
+	controlEnabled,
+	handleControlToggle,
+	handleDelete,
+}) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
-    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
+	const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+	const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
-	
+
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
 	const [isInRemove, setInRemove] = useState(false);
@@ -139,22 +145,46 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 
-	const enterLeave = () => { setInLeave(true) };
-	const enterEdit = () => { setInEdit(true) };
-	const enterRemove = () => { setInRemove(true) };
-	const enterAssign = () => { setInAssign(true) };
-	const enterEnable = () => { setInEnable(true) };
-	const enterDelete = () => { setInDelete(true) };
+	const enterLeave = () => {
+		setInLeave(true);
+	};
+	const enterEdit = () => {
+		setInEdit(true);
+	};
+	const enterRemove = () => {
+		setInRemove(true);
+	};
+	const enterAssign = () => {
+		setInAssign(true);
+	};
+	const enterEnable = () => {
+		setInEnable(true);
+	};
+	const enterDelete = () => {
+		setInDelete(true);
+	};
 
-	const leaveLeave = () => { setInLeave(false) };
-	const leaveEdit = () => { setInEdit(false) };
-	const leaveRemove = () => { setInRemove(false) };
-	const leaveAssign = () => { setInAssign(false) };
-	const leaveEnable = () => { setInEnable(false) };
-	const leaveDelete = () => { setInDelete(false) };
-		
-	const handleClick = (event) => { 
-		setOpen(event.currentTarget); 
+	const leaveLeave = () => {
+		setInLeave(false);
+	};
+	const leaveEdit = () => {
+		setInEdit(false);
+	};
+	const leaveRemove = () => {
+		setInRemove(false);
+	};
+	const leaveAssign = () => {
+		setInAssign(false);
+	};
+	const leaveEnable = () => {
+		setInEnable(false);
+	};
+	const leaveDelete = () => {
+		setInDelete(false);
+	};
+
+	const handleClick = (event) => {
+		setOpen(event.currentTarget);
 		setInLeave(false);
 		setInEdit(false);
 		setInRemove(false);
@@ -162,9 +192,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setInEnable(false);
 		setInDelete(false);
 	};
-	
-	const handleClose = () => { 
-		setOpen(null); 
+
+	const handleClose = () => {
+		setOpen(null);
 		setInLeave(false);
 		setInEdit(false);
 		setInRemove(false);
@@ -172,105 +202,150 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setInEnable(false);
 		setInDelete(false);
 	};
-	const handleLeaveOpen = () => { setIsLeaveOpen(true); };
-	const handleConfirmDeleteOpen = () => { setConfirmDeleteOpen(true);	};
-	const handleLeaveConfirmation = () => { setConfirmleaveOpen(true);	};
-	const handleNicknameOpen = () => { setIsNicknameOpen(true); };
+	const handleLeaveOpen = () => {
+		setIsLeaveOpen(true);
+	};
+	const handleConfirmDeleteOpen = () => {
+		setConfirmDeleteOpen(true);
+	};
+	const handleLeaveConfirmation = () => {
+		setConfirmleaveOpen(true);
+	};
+	const handleNicknameOpen = () => {
+		setIsNicknameOpen(true);
+	};
 
 	return (
 		<div>
 			<LeaveStudioDialog
-					isLeaveDialogOpened={isLeaveOpen}
-					handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
-					listeners={listeners} />
-			<ConfirmationDialog 
-                isOpen={isConfirmDeleteOpen}
-                handleClose={() => setConfirmDeleteOpen(false)}
-                handleAction={() => {handleClose; handleDelete();}} //TO DO: replace with delete functionality
-                message={"Are you sure you want to delete this studio?"}
-                actionText={"Delete"} />
-			<ConfirmationDialog 
-                isOpen={isConfirmLeaveOpen}
-                handleClose={() => setConfirmleaveOpen(false)}
-                handleAction={() => {handleClose;}} //TO DO: replace with leave functionality
-                message={"Are you sure you want to leave this studio?"}
-                actionText={"Leave"} />
+				isLeaveDialogOpened={isLeaveOpen}
+				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
+				listeners={listeners}
+			/>
+			<ConfirmationDialog
+				isOpen={isConfirmDeleteOpen}
+				handleClose={() => setConfirmDeleteOpen(false)}
+				handleAction={() => {
+					handleClose;
+					handleDelete();
+				}} //TO DO: replace with delete functionality
+				message={"Are you sure you want to delete this studio?"}
+				actionText={"Delete"}
+			/>
+			<ConfirmationDialog
+				isOpen={isConfirmLeaveOpen}
+				handleClose={() => setConfirmleaveOpen(false)}
+				handleAction={() => {
+					handleClose;
+				}} //TO DO: replace with leave functionality
+				message={"Are you sure you want to leave this studio?"}
+				actionText={"Leave"}
+			/>
 			<NicknameDialog
-					isNicknameDialogOpened={isNicknameOpen}
-					handleCloseNicknameDialog={() => setIsNicknameOpen(false)} />
+				isNicknameDialogOpened={isNicknameOpen}
+				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
+			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
-				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
+				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
 			</div>
 			<Menu
 				autoFocus={false}
 				anchorEl={isOpen}
 				open={open}
-				onClose={handleClose}>
+				onClose={handleClose}
+			>
 				<MenuItem
-					className={styles.menu_item} 
+					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
-					onMouseEnter={enterLeave} 
-                    onMouseLeave={leaveLeave}>
-					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterLeave}
+					onMouseLeave={leaveLeave}
+				>
+					<ExitToAppRoundedIcon
+						className={styles.icon}
+						style={{ color: isInLeave ? "#B03EEE" : "#757575" }}
+					/>
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
-				<MenuItem 
-					className={styles.menu_item} 
+				<MenuItem
+					className={styles.menu_item}
 					onClick={handleNicknameOpen}
-					onMouseEnter={enterEdit} 
-                    onMouseLeave={leaveEdit}>
-					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterEdit}
+					onMouseLeave={leaveEdit}
+				>
+					<DriveFileRenameOutlineRoundedIcon
+						className={styles.icon}
+						style={{ color: isInEdit ? "#B03EEE" : "#757575" }}
+					/>
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
 
-				<MenuItem 
-					style={{display: isHost ? "flex" : "none"}}
-					className={styles.menu_item} 
+				<MenuItem
+					style={{ display: isHost ? "flex" : "none" }}
+					className={styles.menu_item}
 					onClick={handleClose}
-					onMouseEnter={enterRemove} 
-                    onMouseLeave={leaveRemove}>
-					<PersonRemoveAlt1RoundedIcon className={styles.icon} style={{ color: isInRemove ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterRemove}
+					onMouseLeave={leaveRemove}
+				>
+					<PersonRemoveAlt1RoundedIcon
+						className={styles.icon}
+						style={{ color: isInRemove ? "#B03EEE" : "#757575" }}
+					/>
 					<p className={styles.menu_title}>Remove a Member</p>
 				</MenuItem>
 
-				<MenuItem 
-					style={{display: isHost ? "flex" : "none"}}
-					className={styles.menu_item} 
+				<MenuItem
+					style={{ display: isHost ? "flex" : "none" }}
+					className={styles.menu_item}
 					onClick={handleClose}
-					onMouseEnter={enterAssign} 
-                    onMouseLeave={leaveAssign}>
-					<StarRoundedIcon className={styles.icon} style={{ color: isInAssign ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterAssign}
+					onMouseLeave={leaveAssign}
+				>
+					<StarRoundedIcon
+						className={styles.icon}
+						style={{ color: isInAssign ? "#B03EEE" : "#757575" }}
+					/>
 					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{display: isHost ? "flex" : "none"}}
+					style={{ display: isHost ? "flex" : "none" }}
 					className={styles.menu_item}
 					onClick={() => {
 						handleClose;
 						handleControlToggle();
 					}}
-					onMouseEnter={enterEnable} 
-                    onMouseLeave={leaveEnable}>
+					onMouseEnter={enterEnable}
+					onMouseLeave={leaveEnable}
+				>
 					{controlEnabled ? (
 						<>
-							<VideogameAssetOffRoundedIcon className={styles.icon} style={{ color: isInEnable ? "#B03EEE" : "#757575" }} />
+							<VideogameAssetOffRoundedIcon
+								className={styles.icon}
+								style={{ color: isInEnable ? "#B03EEE" : "#757575" }}
+							/>
 							<p className={styles.menu_title}>Disable Control</p>
 						</>
 					) : (
 						<>
-							<VideogameAssetRoundedIcon className={styles.icon} style={{ color: isInEnable ? "#B03EEE" : "#757575" }} />
+							<VideogameAssetRoundedIcon
+								className={styles.icon}
+								style={{ color: isInEnable ? "#B03EEE" : "#757575" }}
+							/>
 							<p className={styles.menu_title}>Enable Control</p>
 						</>
 					)}
 				</MenuItem>
-				<MenuItem 
-					style={{display: isHost ? "flex" : "none"}}
-					className={styles.menu_item} 
+				<MenuItem
+					style={{ display: isHost ? "flex" : "none" }}
+					className={styles.menu_item}
 					onClick={handleConfirmDeleteOpen}
-					onMouseEnter={enterDelete} 
-                    onMouseLeave={leaveDelete}>
-					<GroupRemoveRoundedIcon className={styles.icon} style={{ color: isInDelete ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterDelete}
+					onMouseLeave={leaveDelete}
+				>
+					<GroupRemoveRoundedIcon
+						className={styles.icon}
+						style={{ color: isInDelete ? "#B03EEE" : "#757575" }}
+					/>
 					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
 			</Menu>

@@ -23,7 +23,7 @@ async function loginUser(spotifyApi, data) {
 			.then(async function (data) {
 				const user = await getUser(data.body.id);
 				// check to see if user in db
-				if (user.length === 0) {
+				if (!user) {
 					await createUser(
 						data.body.id,
 						data.body.display_name,
@@ -45,6 +45,13 @@ async function updateUser(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
 		{ userIsActive: true }
+	);
+}
+
+async function updateUserInfo(username, userDisplayName, profilePic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userDisplayName: userDisplayName, profilePic: profilePic }
 	);
 }
 
@@ -81,4 +88,4 @@ async function deleteUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo };
