@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { Studio } from "./schema.js";
+import { Studio } from "../database/schema.js";
 import mongoose from "mongoose";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
