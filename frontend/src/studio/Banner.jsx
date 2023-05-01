@@ -1,6 +1,7 @@
 import styles from "./StudioPage.module.css";
 import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
+import NicknameDialog from "./NicknameDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -129,6 +130,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
     const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
+	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
 	
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -173,12 +175,13 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const handleLeaveOpen = () => { setIsLeaveOpen(true); };
 	const handleConfirmDeleteOpen = () => { setConfirmDeleteOpen(true);	};
 	const handleLeaveConfirmation = () => { setConfirmleaveOpen(true);	};
+	const handleNicknameOpen = () => { setIsNicknameOpen(true); };
 
 	return (
 		<div>
 			<LeaveStudioDialog
-					isDialogOpened={isLeaveOpen}
-					handleCloseDialog={() => setIsLeaveOpen(false)}
+					isLeaveDialogOpened={isLeaveOpen}
+					handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 					listeners={listeners} />
 			<ConfirmationDialog 
                 isOpen={isConfirmDeleteOpen}
@@ -192,6 +195,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
                 handleAction={() => {handleClose;}} //TO DO: replace with leave functionality
                 message={"Are you sure you want to leave this studio?"}
                 actionText={"Leave"} />
+			<NicknameDialog
+					isNicknameDialogOpened={isNicknameOpen}
+					handleCloseNicknameDialog={() => setIsNicknameOpen(false)} />
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
 			</div>
@@ -210,7 +216,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 				</MenuItem>
 				<MenuItem 
 					className={styles.menu_item} 
-					onClick={handleClose}
+					onClick={handleNicknameOpen}
 					onMouseEnter={enterEdit} 
                     onMouseLeave={leaveEdit}>
 					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
