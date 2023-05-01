@@ -162,14 +162,16 @@ export default function Chat(props) {
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
 				<div className={styles.pinnedMessages}>
-					{displayedPinnedMessages.map((message, index) => (
-						<PinnedMessage
-							key={index}
-							pinnedMessage={message}
-							room={room}
-							socket={socket}
-						/>
-					))}
+					<div className={styles.pinnedMessagesContent}>
+						{displayedPinnedMessages.map((message, index) => (
+							<PinnedMessage
+								key={index}
+								pinnedMessage={message}
+								room={room}
+								socket={socket}
+							/>
+						))}
+					</div>
 					{pinnedMessages.length > 1 && (
 						<div
 							className={styles.expandPinnedMessages}

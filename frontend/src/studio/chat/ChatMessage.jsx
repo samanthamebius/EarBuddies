@@ -105,15 +105,22 @@ function ChatMessage(props) {
 			room,
 			pinnedMessages,
 		});
-		await axios.put(
-			`http://localhost:3000/api/chat/pinned-messages/${room.id}`,
-			{
-				id: newMessage.id,
-				message: newMessage.message,
-				username: newMessage.username,
-				displayName: newMessage.displayName,
-			}
+
+		const messageExists = pinnedMessages.find(
+			(message) => message.id === newMessage.id
 		);
+
+		if (!messageExists) {
+			await axios.put(
+				`http://localhost:3000/api/chat/pinned-messages/${room.id}`,
+				{
+					id: newMessage.id,
+					message: newMessage.message,
+					username: newMessage.username,
+					displayName: newMessage.displayName,
+				}
+			);
+		}
 	};
 
 	// set the reply message
