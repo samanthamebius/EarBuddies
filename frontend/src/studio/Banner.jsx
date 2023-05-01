@@ -2,6 +2,7 @@ import styles from "./StudioPage.module.css";
 import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
 import NicknameDialog from "./NicknameDialog";
+import ManageListenersDialog from "./ManageListenersDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -16,7 +17,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import GroupsIcon from '@mui/icons-material/Groups';
 import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
 import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
 import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
@@ -131,25 +132,23 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
     const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
+	const [isManListOpen, setIsManListOpen] = useState(false);
 	
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
-	const [isInRemove, setInRemove] = useState(false);
-	const [isInAssign, setInAssign] = useState(false);
+	const [isInManList, setInManList] = useState(false);
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 
 	const enterLeave = () => { setInLeave(true) };
 	const enterEdit = () => { setInEdit(true) };
-	const enterRemove = () => { setInRemove(true) };
-	const enterAssign = () => { setInAssign(true) };
+	const enterManList = () => { setInManList(true) };
 	const enterEnable = () => { setInEnable(true) };
 	const enterDelete = () => { setInDelete(true) };
 
 	const leaveLeave = () => { setInLeave(false) };
 	const leaveEdit = () => { setInEdit(false) };
-	const leaveRemove = () => { setInRemove(false) };
-	const leaveAssign = () => { setInAssign(false) };
+	const leaveManList = () => { setInManList(false) };
 	const leaveEnable = () => { setInEnable(false) };
 	const leaveDelete = () => { setInDelete(false) };
 		
@@ -157,8 +156,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setOpen(event.currentTarget); 
 		setInLeave(false);
 		setInEdit(false);
-		setInRemove(false);
-		setInAssign(false);
+		setInManList(false);
 		setInEnable(false);
 		setInDelete(false);
 	};
@@ -167,8 +165,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 		setOpen(null); 
 		setInLeave(false);
 		setInEdit(false);
-		setInRemove(false);
-		setInAssign(false);
+		setInManList(false);
 		setInEnable(false);
 		setInDelete(false);
 	};
@@ -176,6 +173,7 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 	const handleConfirmDeleteOpen = () => { setConfirmDeleteOpen(true);	};
 	const handleLeaveConfirmation = () => { setConfirmleaveOpen(true);	};
 	const handleNicknameOpen = () => { setIsNicknameOpen(true); };
+	const handleManListOpen = () => { setIsManListOpen(true); };
 
 	return (
 		<div>
@@ -198,6 +196,9 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 			<NicknameDialog
 					isNicknameDialogOpened={isNicknameOpen}
 					handleCloseNicknameDialog={() => setIsNicknameOpen(false)} />
+			<ManageListenersDialog
+					isManListDialogOpened={isManListOpen}
+					handleCloseManListDialog={() => setIsManListOpen(false)} />
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px"}}/>
 			</div>
@@ -214,11 +215,12 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					<ExitToAppRoundedIcon className={styles.icon} style={{ color: isInLeave ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
+
 				<MenuItem 
 					className={styles.menu_item} 
-					onClick={handleNicknameOpen}
-					onMouseEnter={enterEdit} 
-                    onMouseLeave={leaveEdit}>
+					onClick={handleManListOpen}
+					onMouseEnter={enterManList} 
+                    onMouseLeave={leaveManList}>
 					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
@@ -227,20 +229,10 @@ export function DropdownKebab({ controlEnabled, handleControlToggle, handleDelet
 					style={{display: isHost ? "flex" : "none"}}
 					className={styles.menu_item} 
 					onClick={handleClose}
-					onMouseEnter={enterRemove} 
-                    onMouseLeave={leaveRemove}>
-					<PersonRemoveAlt1RoundedIcon className={styles.icon} style={{ color: isInRemove ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Remove a Member</p>
-				</MenuItem>
-
-				<MenuItem 
-					style={{display: isHost ? "flex" : "none"}}
-					className={styles.menu_item} 
-					onClick={handleClose}
-					onMouseEnter={enterAssign} 
-                    onMouseLeave={leaveAssign}>
-					<StarRoundedIcon className={styles.icon} style={{ color: isInAssign ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Assign a New Host</p>
+					onMouseEnter={enterManList} 
+                    onMouseLeave={leaveManList}>
+					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
 
 				<MenuItem
