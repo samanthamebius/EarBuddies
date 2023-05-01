@@ -69,9 +69,7 @@ export default function Banner({ id, studio }) {
 	}
 
 	const studioName = studio.studioName;
-	// const backgroundImage = studio.studioPicture;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
-	console.log(backgroundImage);
 
 	useEffect(() => {
 		if (isAddIcon == false) {
