@@ -47,13 +47,15 @@ function useStudioPost() {
 			imgUploadConfig
 		);
 
+		const studioBannerImageUrl = imgUploadResponse.headers["location"];
+
 		try {
 			const response = await axios.post(`${url}/new`, {
 				name,
 				listeners,
 				host,
 				genres,
-				coverPhoto,
+				studioBannerImageUrl,
 				isHostOnly,
 			});
 			navigate(`/studio/${response.data._id}`);

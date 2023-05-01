@@ -12,7 +12,11 @@ import useGet from "../hooks/useGet";
 function StudioPage({ socket }) {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const { data: studio, isLoading: studioIsLoading, error: studioError } = useGet(`/api/studio/${id}`);
+	const {
+		data: studio,
+		isLoading: studioIsLoading,
+		error: studioError,
+	} = useGet(`/api/studio/${id}`);
 	if (studioError) {
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
@@ -28,14 +32,13 @@ function StudioPage({ socket }) {
 	} else {
 		return (
 			<div className={styles.studio}>
-				<Banner id={id} studio={studio[0]}/>
+				<Banner id={id} studio={studio[0]} />
 				<NowPlaying />
 				<SongSelection />
 				<Chat socket={socket} />
 			</div>
 		);
 	}
-	
 }
 
 export default StudioPage;

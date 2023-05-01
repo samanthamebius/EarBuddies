@@ -15,7 +15,14 @@ const upload = multer({
 //create studio
 router.post("/new", async (req, res) => {
 	try {
-		const { name, listeners, host, genres, coverPhoto, isHostOnly } = req.body;
+		const {
+			name,
+			listeners,
+			host,
+			genres,
+			studioBannerImageUrl: coverPhoto,
+			isHostOnly,
+		} = req.body;
 
 		// Get the user IDs for the host and listeners
 		const hostUserId = await getUserId(host);
@@ -99,9 +106,23 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 	// do something
 	console.log("file path");
 	console.log(req.file.path);
-	const oldPath = req.file.path;
 	console.log("original name");
 	console.log(req.file.originalname);
+
+	const oldPath = req.file.path;
+	const extension = req.file.originalname.substring(
+		req.file.originalname.lastIndexOf(".")
+	);
+	const newFileName = `${uuid()}${extension}`;
+	const newPath = `./public/images/${newFileName}`;
+
+	fs.renameSync(oldPath, newPath);
+
+	res
+		.status(201)
+		.header("Location", `/images/${newFileName}`)
+		.header("Access-Control-Expose-Headers", "Location")
+		.send();
 });
 
 export default router;
