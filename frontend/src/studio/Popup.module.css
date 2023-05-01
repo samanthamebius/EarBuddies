@@ -16,15 +16,9 @@
   display: flex;
 }
 
-.headerIcon {
-  height: 25px;
-  padding: 10px
-}
-
 .dialogHeader {
-  margin: 20px;
+  margin: 20px 20px 0px 20px;
   display: flex;
-  padding-left: 24px;
   align-items: center;
 }
 
@@ -114,4 +108,13 @@ padding: 0px 24px 0px 24px
 
 .secondaryButton {
   background: linear-gradient(#BEBEBE, #EDEDED);
+}
+
+.createButton {
+  font-weight: 700;
+}
+
+.cancelButton {
+  background: linear-gradient(#EDEDED, #BEBEBE);
+  font-weight: 700;
 }

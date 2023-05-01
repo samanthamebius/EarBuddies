@@ -2,6 +2,7 @@ import React from "react";
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import styles from './Popup.module.css';
 import TextField from '@mui/material/TextField';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
@@ -17,7 +18,7 @@ export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNick
         <Dialog  open={isNicknameDialogOpened} onClose={handleCloseNicknameDialog} fullWidth maxWidth="sm"
         PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
         <div className={styles.dialogHeader}>
-            <DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color:  "#757575" }} />
+            <DriveFileRenameOutlineRoundedIcon style={{ color:  "#757575", fontSize:40}} />
             <h1 className={styles.heading}>Edit Nickname</h1>
         </div>
         
@@ -29,12 +30,10 @@ export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNick
                     type="text"
                     fullWidth/>
             </div>
-            <div >
-                <Button onClick={handleClose} className={styles.greyButton}
-                sx={{mt: 2, mr: 1, p: 1}}>Cancel</Button>
-                <Button onClick={handleSubmit} className={styles.purpleButton}
-                sx={{mt: 2, ml: 1, p: 1}} >Submit</Button>
-            </div>
+            <DialogActions sx={{ display: 'flex', justifyContent: 'center', mt: 1.5 }}>
+                <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
+                <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleSubmit}>Submit</Button>
+            </DialogActions>
         </DialogContent>
     </Dialog>
     )
