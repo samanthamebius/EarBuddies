@@ -13,7 +13,6 @@ import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Icon } from "@mui/material";
 
 const StyledSlider = styled(Slider) ({
   color: "#ffffff",
@@ -67,25 +66,21 @@ function ControlPanel() {
         <div className={styles.playbackCntrls}>
           <SkipPreviousRoundedIcon 
             sx={{"&:hover": { cursor: "pointer" }}} 
-            style={{color: "white", fontSize: "40px" }} 
-            className={styles.controlBtn}/>
+            style={{color: "white", fontSize: "40px" }}/>
           {isPlaying ? 
             <PlayCircleFilledRoundedIcon 
               sx={{"&:hover": { cursor: "pointer" }}} 
               style={{color: "white", fontSize: "40px" }} 
-              className={styles.controlBtn} 
               onClick={() => setPlaying(!isPlaying)}/>
           :
             <PauseCircleRoundedIcon 
               sx={{"&:hover": { cursor: "pointer" }}} 
               style={{color: "white", fontSize: "40px" }} 
-              className={styles.controlBtn} 
               onClick={() => setPlaying(!isPlaying)}/>
           }
           <SkipNextRoundedIcon 
             sx={{"&:hover": { cursor: "pointer" }}} 
-            style={{color: "white", fontSize: "40px" }} 
-            className={styles.controlBtn}/>
+            style={{color: "white", fontSize: "40px" }} />
         </div>    
       <TimeSlider/>
       <VolumeSlider/>
