@@ -68,13 +68,13 @@ async function getUserbyId(id) {
 	return user;
 }
 
-async function getStudiosId(id) {
-	const user = await getUserbyId(id);
+async function getStudiosId(username) {
+	const user = await getUser(username);
 	return user.userStudios;
 }
 
-async function searchStudios(id) {
-	const studiosId = await getStudiosId(id);
+async function searchStudios(username) {
+	const studiosId = await getStudiosId(username);
 	var studioObjects = [];
 	for (var i = 0; i < studiosId.length; i++) {
 		const studio = await getStudio(studiosId[i]._id);
@@ -83,12 +83,12 @@ async function searchStudios(id) {
 	return studioObjects;
 }
 
-async function searchActiveStudios(id) {
-	const studioObjects = await searchStudios(id);
+async function searchActiveStudios(username) {
+	const studioObjects = await searchStudios(username);
 	var studiosActive = [];
 	for (var i = 0; i < studioObjects.length; i++) {
-		if (studioObjects[i].isActive) {
-			studiosActive[i] = studioObjects[i];
+		if (studioObjects[i][0].studioIsActive) {
+			studiosActive[i] = studioObjects[i][0];
 		}
 	}
 	return studiosActive;
