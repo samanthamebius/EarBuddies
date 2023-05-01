@@ -45,7 +45,7 @@ router.post("/new", async (req, res) => {
           listenerUserIds,
           hostUserId,
           genres,
-          photo,
+          coverPhoto,
           isHostOnly,
           playlist_id
         );
