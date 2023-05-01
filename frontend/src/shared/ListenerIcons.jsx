@@ -1,4 +1,7 @@
+import useGet from "../hooks/useGet";
 import styles from "./ListenerIcons.module.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
     
@@ -23,11 +26,28 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 };
 
 export default function StudioCard({
+	studioUsers,
 	isListening,
 	profileImages,
 	profileStatus,
     isHomeCard
 }) {
+	const [userList, setUserList] = useState([]);
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	useEffect(() => {
+		if (!studioUsers || !Array.isArray(studioUsers)) {
+			console.log("no studio users")
+			return;
+		}
+		async function fetchUserData() {
+		const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
+		const userDataList = await Promise.all(promises);
+		setUserList(userDataList.map(response => response.data));
+		}
+		fetchUserData();
+	}, [studioUsers]);
+	profileImages = userList.map(user => user.profilePic);
+	profileStatus = userList.map(user => user.userIsActive);
 	return (
 		<div className={styles.listenersImages}>
 			{Array.isArray(profileImages)

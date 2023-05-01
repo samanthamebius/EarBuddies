@@ -2,8 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import styles from "./FileDropZone.module.css";
-import photoIcon from '../assets/create_studio/photoicon.png';
-import closeIcon from '../assets/create_studio/closeicon.png';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 
 export default function FileDropZone(props) {
   const [files, setFiles] = useState([]);
@@ -14,6 +14,7 @@ export default function FileDropZone(props) {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
+      props.onFileChange(acceptedFiles)
     }
   });
 
@@ -43,7 +44,7 @@ export default function FileDropZone(props) {
         <div className={styles.dropBox}>
             <div style={{ display: acceptedFiles.length == 0 ? '' : 'none'}} className={styles.uploadView}>
                 <input {...getInputProps()} />
-                <img src={photoIcon} className={styles.photoIcon}></img>
+                <ImageRoundedIcon className={styles.photoIcon} color="disabled"/>
                 <p><span className={styles.focusText}>Upload a file</span> or drag and drop</p>
                 <p style={{margin: '0px'}}>(Only 1 *.jpeg or *.png image will be accepted)</p>
             </div>
@@ -51,7 +52,7 @@ export default function FileDropZone(props) {
                 <input {...getInputProps()} />
                 {thumbs}
                 {acceptedFileItems}
-                <img src={closeIcon} className={styles.closeIcon}></img>
+                <ClearRoundedIcon className={styles.closeIcon} color="disabled"/>
             </div>
         </div>
       </div> 

@@ -1,10 +1,10 @@
 .genreButton {
-    background: linear-gradient(#B03EEE, #E640F8);
+    background: linear-gradient(#E640F8, #B03EEE);
 }
 
 .genreLabel {
     margin: 0px;
-    font-weight: 700;
+    font-weight: 600;
     color: white;
 }
 

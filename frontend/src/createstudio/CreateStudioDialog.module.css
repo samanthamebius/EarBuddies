@@ -1,6 +1,6 @@
 .heading {
     font-weight: 800;
-	color: #606060;
+	color: #757575;
 	font-size: 32px;
 	position: relative;
     margin: 0px;
@@ -9,7 +9,7 @@
 
 .sectionHeading {
     font-weight: 800;
-	color: #606060;
+	color: #757575;
 	font-size: 16px;
 	position: relative;
     margin: 0px;
@@ -36,16 +36,11 @@
 }
 
 .createButton {
-    background: linear-gradient(#B03EEE, #E640F8);
     font-weight: 700;
 }
 
-.addButton {
-    background: linear-gradient(#B03EEE, #E640F8);
-}
-
 .cancelButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#EDEDED, #BEBEBE);
     font-weight: 700;
 }
 

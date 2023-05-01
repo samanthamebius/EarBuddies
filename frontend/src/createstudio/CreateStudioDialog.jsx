@@ -12,8 +12,42 @@ import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function SwitchWithTooltip() {
+function useStudioPost() {
+  const postStudio = async (navigate, name, genres, coverPhoto, listeners, isHostOnly) => {
+
+    const host = JSON.parse(localStorage.getItem("current_user_id"));
+    listeners.push(host);
+    //add dummy listener pending search bar completion
+    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+
+    //todo: add cover photo
+    coverPhoto = '';
+
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const url = `${BASE_URL}/api/studio/new`;
+
+    try {
+      const response = await axios.post(url, {
+        name,
+        listeners,
+        host,
+        genres,
+        coverPhoto,
+        isHostOnly
+      });
+      navigate(`/studio/${response.data._id}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return { postStudio };
+}
+
+function SwitchWithTooltip({ checked, onChange }) {
   const ToolTip = styled(({ className, ...props }) => (
       <Tooltip {...props} classes={{ popper: className }} />
     ))(({ theme }) => ({
@@ -29,25 +63,23 @@ function SwitchWithTooltip() {
         maxWidth: '70%'
       },
     })); 
-  
-  const [switchOn, setSwitchOn] = useState(false);
 
-  const title = switchOn
+  const title = checked
     ? 'Only you can queue, skip, and pause songs.'
     : 'Other users can queue, skip, and pause songs.';
 
   return (
     <ToolTip title={title} placement="right-end" arrow>
       <div className={styles.switchContainer}>
-        <ControlSwitch checked={switchOn} onChange={() => setSwitchOn(!switchOn)} />
+        <ControlSwitch checked={checked} onChange={(e) => onChange(e.target.checked)} />
       </div>
     </ToolTip>
   );
 }
 
 export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }) {
-   
-    
+  const navigate = useNavigate();
+  const { postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false); 
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false); 
   const [genreInput, setGenreInput] = useState(''); 
@@ -60,6 +92,14 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                                           {name: "R&B", isSelected: false},
                                           {name: "Jazz", isSelected: false}, 
                                           {name: "Pop", isSelected: false}]);
+  const [file, setFile] = useState(null);
+  const handleFileChange = (selectedFile) => {
+    setFile(selectedFile);
+  };
+  const [isHostOnly, setIsHostOnly] = useState(false);
+  const handleSwitchToggle = (isChecked) => {
+    setIsHostOnly(isChecked);
+  };
 
   function toggleGenre(genre) {
     const newGenres = genres.map((obj, i) => {
@@ -92,7 +132,15 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       setIsStudioNameErrorMessage(true);
     } else {
       setIsStudioNameErrorMessage(false);
+      const selecetedGenres = getSelectedGenres();
+      postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
     }
+  }
+
+  function getSelectedGenres() {
+    const selectedGenres = genres.filter(obj => obj.isSelected);
+    const selectedGenreNames = selectedGenres.map(obj => obj.name);
+    return selectedGenreNames;
   }
   
   const handleClose = () => { handleCloseDialog(false) };
@@ -126,7 +174,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             />
             
             <h2 className={styles.sectionHeading}>Cover Photo</h2>
-            <FileDropZone />
+            <FileDropZone onFileChange={handleFileChange} />
             
             <h2 className={styles.sectionHeading}>Genres</h2>
             {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)}/> 
@@ -148,20 +196,20 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
               />
               <span className={styles.spacing}></span>
-              <Button variant="contained" className={styles.addButton} onClick={() => addGenre(genreInput)}>Add</Button>              
+              <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>              
             </div>
 
             <div className={styles.controlSection}>
                 <h2 className={styles.sectionHeading}>Only I Have Control</h2>
-                <SwitchWithTooltip />
+                <SwitchWithTooltip  checked={isHostOnly} onChange={handleSwitchToggle}/>
             </div>
             
             <h2 className={styles.sectionHeading}>Add Listeners</h2>
             <SearchBar label={"Search using Spotify username ..."}/>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-          <Button variant="contained" sx={{ color: '#606060'}} className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
+          <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
+          <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleSubmit}>Create Studio</Button>
         </DialogActions>
       </Dialog>
     </div>
