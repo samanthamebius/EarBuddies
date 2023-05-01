@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
@@ -8,11 +8,24 @@ import Chat from "./chat/Chat";
 import NowPlaying from "./NowPlaying";
 import SongSelection from "./SongSelection";
 import useGet from "../hooks/useGet";
+import axios from "axios";
 
 function StudioPage({ socket }) {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const { data: studio, isLoading: studioIsLoading, error: studioError } = useGet(`/api/studio/${id}`);
+	const {
+		data: studio,
+		isLoading: studioIsLoading,
+		error: studioError,
+	} = useGet(`/api/studio/${id}`);
+
+	useEffect(() => {
+		socket.connect("http://localhost:3000");
+		socket.emit("join_room", { id });
+		// create the chat in the DB if it doesn't already exist
+		axios.post(`http://localhost:3000/api/chat/${id}`);
+	}, []);
+
 	if (studioError) {
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
@@ -28,14 +41,13 @@ function StudioPage({ socket }) {
 	} else {
 		return (
 			<div className={styles.studio}>
-				<Banner id={id} studio={studio[0]}/>
+				<Banner id={id} studio={studio[0]} />
 				<NowPlaying />
 				<SongSelection />
 				<Chat socket={socket} />
 			</div>
 		);
 	}
-	
 }
 
 export default StudioPage;
