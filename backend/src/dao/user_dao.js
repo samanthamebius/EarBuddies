@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { User } from "./schema.js";
+import { User } from "../database/schema.js";
 import mongoose from "mongoose";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
@@ -23,7 +23,7 @@ async function loginUser(spotifyApi, data) {
 			.then(async function (data) {
 				const user = await getUser(data.body.id);
 				// check to see if user in db
-				if (user.length === 0) {
+				if (!user) {
 					await createUser(
 						data.body.id,
 						data.body.display_name,
@@ -48,6 +48,13 @@ async function updateUser(username) {
 	);
 }
 
+async function updateUserInfo(username, userDisplayName, profilePic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userDisplayName: userDisplayName, profilePic: profilePic }
+	);
+}
+
 async function getUser(username) {
 	const user = await User.findOne({ username: username });
 	return user;
@@ -58,8 +65,13 @@ async function getUserId(username) {
   return user._id;
 }
 
+async function getUserbyId(id) {
+	const user = await User.findOne({ _id: id });
+	return user;
+}
+
 async function getStudios(username) {
-  const user = await getUser(username);
+  const user = await getUserbyId(username);
   return user.userStudios;
 }
 
@@ -70,6 +82,10 @@ async function updateStudios(username, studios) {
   );
 }
 
+async function deleteUser(username) {
+	return await User.deleteOne({ username: username });
+} 
+
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo };

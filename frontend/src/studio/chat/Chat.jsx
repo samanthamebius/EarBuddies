@@ -14,6 +14,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppContext } from "../../AppContextProvider";
 import axios from "axios";
 
+// DELETE this when the real data goes in
 const mockStudios = [
 	{
 		id: 1,
@@ -63,7 +64,7 @@ export default function Chat(props) {
 		: pinnedMessages.slice(0, 1);
 	const { username, displayName } = useContext(AppContext);
 	const { id } = useParams();
-	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
+	const room = id;
 	const textInput = useRef(null);
 
 	// Set previous messages

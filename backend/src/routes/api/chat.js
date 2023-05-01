@@ -9,7 +9,7 @@ import {
 	removePinnedMessage,
 	addANewReaction,
 	updateReaction,
-} from "../../database/chat_dao";
+} from "../../dao/chat_dao";
 
 const router = express.Router();
 

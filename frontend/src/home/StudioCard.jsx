@@ -34,13 +34,7 @@ export default function StudioCard(props) {
 	const room = studio.id; // will be the id of the studio
 	const navigate = useNavigate();
 
-	const handleJoinStudio = async () => {
-		socket.connect("http://localhost:3000");
-		socket.emit("join_room", { room });
-
-		// create the chat in the DB if it doesn't already exist
-		await axios.post(`http://localhost:3000/api/chat/${room}`);
-
+	const handleJoinStudio = () => {
 		navigate(`studio/${room}`);
 	};
 

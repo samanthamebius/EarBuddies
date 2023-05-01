@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Chat } from "./schema";
+import { Chat } from "../database/schema";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 

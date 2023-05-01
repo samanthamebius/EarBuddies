@@ -12,6 +12,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import logo from "./assets/shared/earBuddiesLogo.png";
 import useGet from "./hooks/useGet";
 import { AppContext } from "./AppContextProvider";
+import ConfirmationDialog from "./shared/ConfirmationDialog";
 
 export default function PageLayout() {
 	return (
@@ -47,13 +48,7 @@ function UserInfo() {
 		return <p>Could not load user</p>;
 	}
 
-	const access_token = localStorage.getItem("access_token");
-
-	const { data: user, isLoading: userIsLoading } = useGet(
-		`/api/user/${id}`,
-		[],
-		access_token
-	);
+	const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
 
 	useEffect(() => {
 		if (!userIsLoading && user) {
@@ -108,6 +103,7 @@ export function DropdownMenu() {
 	const [isInProfle, setInProfile] = useState(false);
 	const [isInDarkMode, setInDarkMode] = useState(false);
 	const [isInLogOut, setInLogOut] = useState(false);
+	const [isConfirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
 
 	const navigate = useNavigate();
 	const open = Boolean(isOpen);
@@ -134,7 +130,11 @@ export function DropdownMenu() {
 	};
 
 	const handleViewProfileOpen = () => {
-		setIsViewProfileOpen(!isViewProfileOpen);
+		setIsViewProfileOpen(true);
+	};
+
+	const handleConfirmLogoutOpen = () => {
+		setConfirmLogoutOpen(true);
 	};
 
 	login();
@@ -152,7 +152,17 @@ export function DropdownMenu() {
 		<>
 			<ViewProfileDialog
 				isViewProfileOpen={isViewProfileOpen}
-				handleViewProfileClose={() => setIsViewProfileOpen(false)}
+				handleViewProfileClose={() => {
+					setIsViewProfileOpen(false);
+					window.location.reload(); //kinda janky code but i couldn't get it working any other way
+				}}
+			/>
+			<ConfirmationDialog
+				isOpen={isConfirmLogoutOpen}
+				handleClose={() => setConfirmLogoutOpen(false)}
+				handleAction={() => handleLogout()}
+				message={"Are you sure you want to logout?"}
+				actionText={"Log Out"}
 			/>
 			<div className={styles.dropdown}>
 				<Button
@@ -191,10 +201,9 @@ export function DropdownMenu() {
 						/>
 						<p className={styles.menu_title}>Dark Mode</p>
 					</MenuItem>
-
 					<MenuItem
 						className={styles.menu_item}
-						onClick={handleLogout}
+						onClick={handleConfirmLogoutOpen}
 						onMouseEnter={toggleLogOut}
 						onMouseLeave={toggleLogOut}
 					>
