@@ -103,12 +103,6 @@ router.post("/:id/toggle", async (req, res) => {
 
 // upload the image for the studio banner
 router.post("/upload-image", upload.single("image"), (req, res) => {
-	// do something
-	console.log("file path");
-	console.log(req.file.path);
-	console.log("original name");
-	console.log(req.file.originalname);
-
 	const oldPath = req.file.path;
 	const extension = req.file.originalname.substring(
 		req.file.originalname.lastIndexOf(".")

@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly) {
-	console.log(photo);
 	const newStudio = new Studio({
 		studioName: name,
 		studioIsActive: true,
