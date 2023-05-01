@@ -142,7 +142,10 @@ export function DropdownMenu() {
     <>
       <ViewProfileDialog
         isViewProfileOpen={isViewProfileOpen}
-        handleViewProfileClose={() => setIsViewProfileOpen(false)}
+        handleViewProfileClose={() => { 
+          setIsViewProfileOpen(false); 
+          window.location.reload(); //kinda janky code but i couldn't get it working any other way 
+        }}
       />
       <ConfirmationDialog 
         isOpen={isConfirmLogoutOpen}
@@ -157,7 +160,7 @@ export function DropdownMenu() {
                 size="large"
                 onClick={handleClick} 
                 className={styles.button}>
-          <UserInfo />
+          <UserInfo/>
         </Button>
 
         <Menu
