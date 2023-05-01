@@ -4,13 +4,13 @@ export const AppContext = React.createContext({});
 
 export function AppContextProvider({ children }) {
 	const [username, setUsername] = useState("");
-	const [spotifyUsername, setSpotifyUsername] = useState("");
+	const [displayName, setDisplayName] = useState("");
 
 	const context = {
 		username,
-		spotifyUsername,
+		displayName,
 		setUsername,
-		setSpotifyUsername,
+		setDisplayName,
 	};
 	return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 }

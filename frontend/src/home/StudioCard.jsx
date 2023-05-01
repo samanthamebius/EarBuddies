@@ -10,8 +10,7 @@ import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AppContext } from "../AppContextProvider";
+import axios from "axios";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
@@ -36,8 +35,6 @@ export default function StudioCard(props) {
 	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
-		socket.connect("http://localhost:3000");
-		socket.emit("join_room", { room });
 		navigate(`studio/${room}`);
 	};
 
