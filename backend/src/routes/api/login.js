@@ -31,14 +31,11 @@ router.post("/", async (req, res) => {
   const code = req.body.code;
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
-    console.log("data in login: " + data.body.access_token)
-    console.log("data in login: " + data.body.id)
     const access_token = data.body.access_token;
     const refresh_token = data.body.refresh_token;
     const expires_in = data.body.expires_in;
 
     spotifyApi.setRefreshToken(refresh_token);
-    console.log("refresh token in login: " + refresh_token)
     spotifyApi.setAccessToken(access_token);
     spotifyApi.setRefreshToken(refresh_token);
     setSpotifyApi(spotifyApi);

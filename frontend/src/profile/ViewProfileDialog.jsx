@@ -51,8 +51,6 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
     const current_user_id = localStorage.getItem("current_user_id");
 	const id = JSON.parse(current_user_id);
     const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
-    console.log(user)
-    console.log(id)
     useEffect(() => {
         if (user) {
             setDisplayName(user.userDisplayName);
@@ -96,8 +94,6 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         axios.put(`${BASE_URL}/api/user/${id}`, {
             userDisplayName: displayName,
             profilePic: displayPhoto
-        }).then((res) => {
-            console.log(res);
         });
         setAvatarOptionsOpen(false);
         handleViewProfileClose();
