@@ -18,6 +18,7 @@ const studioSchema = new Schema({
     studioGenres: [String],
     studioPicture: String,
     studioControlHostOnly: Boolean,
+    studioPlaylist: String,
 });
 
 const User = mongoose.model('User', userSchema);

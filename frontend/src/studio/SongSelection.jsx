@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./StudioPage.module.css";
-import SearchBar from "../shared/SearchBar";
+import SearchBarSong from "./SearchBarSong";
 
 export default function SongSelection() {
 	return (
@@ -15,7 +15,7 @@ function SongSearch() {
 	return (
 		<div>
 			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBar label={"Search Spotify"}></SearchBar>
+			<SearchBarSong ></SearchBarSong>
 		</div>
 	);
 }

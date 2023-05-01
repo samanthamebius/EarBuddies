@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
-async function createStudio(name, listeners, host, genres, photo, isHostOnly) {
+async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
   const newStudio = new Studio({
     studioName: name,
     studioIsActive: true,
@@ -14,6 +14,7 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly) {
     studioGenres: genres,
     studioPicture: photo,
     studioControlHostOnly: isHostOnly,
+    studioPlaylist: playlist,
   });
   const studio = await newStudio.save();
   return studio;
