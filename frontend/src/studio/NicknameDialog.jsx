@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,9 +9,16 @@ import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRena
 
 export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog }) {
     const handleClose = () => { handleCloseNicknameDialog(false) };
+    const [nicknameInput, setNicknameInput] = useState('');  
+    const [isNicknameErrorMessage, setIsNicknameErrorMessage] = useState(false); 
 
     const handleSubmit = () => {
-        handleClose()
+        if(nicknameInput == '') {
+            setIsNicknameErrorMessage(true);
+          } else {
+            setIsNicknameErrorMessage(false);
+            handleClose()
+          }
     };
 
     return (
@@ -25,10 +32,15 @@ export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNick
         <DialogContent className={styles.dialogContent}>
             <div>
                 <TextField 
+                    value={nicknameInput}
+                    error={isNicknameErrorMessage ? true : false}
+                    required
                     id="nickname"
-                    label="Enter your nickname in this studio"
+                    label="Enter your new nickname in this studio"
                     type="text"
-                    fullWidth/>
+                    fullWidth
+                    onChange={event => setNicknameInput(event.target.value)}
+                    helperText={isNicknameErrorMessage ? "Enter a new nickname or cancel" : ""}/>
             </div>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center', mt: 1.5 }}>
                 <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
