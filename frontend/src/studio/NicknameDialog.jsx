@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import styles from './Popup.module.css';
 import TextField from '@mui/material/TextField';
 
-export default function NicknameDialog({ isDialogOpened, handleCloseDialog }) {
+export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog }) {
     const handleClose = () => { handleCloseDialog(false) };
 
     const handleSubmit = () => {
@@ -13,7 +13,7 @@ export default function NicknameDialog({ isDialogOpened, handleCloseDialog }) {
     };
 
     return (
-        <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="sm"
+        <Dialog  open={isNicknameDialogOpened} onClose={handleCloseNicknameDialog} fullWidth maxWidth="sm"
         PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
         <div className={styles.dialogHeader}>
             <h1 className={styles.heading}>Edit Nickname</h1>
@@ -26,6 +26,12 @@ export default function NicknameDialog({ isDialogOpened, handleCloseDialog }) {
                     label="Enter your nickname in this studio"
                     type="text"
                     fullWidth/>
+            </div>
+            <div >
+                <Button onClick={handleClose} className={styles.greyButton}
+                sx={{mt: 2, mr: 1, p: 1}}>Cancel</Button>
+                <Button onClick={handleSubmit} className={styles.purpleButton}
+                sx={{mt: 2, ml: 1, p: 1}} >Submit</Button>
             </div>
         </DialogContent>
     </Dialog>
