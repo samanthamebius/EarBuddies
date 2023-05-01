@@ -24,7 +24,7 @@ async function loginUser(spotifyApi, data) {
 			.then(async function (data) {
 				const user = await getUser(data.body.id);
 				// check to see if user in db
-				if (user.length === 0) {
+				if (!user) {
 					await createUser(
 						data.body.id,
 						data.body.display_name,
@@ -95,9 +95,9 @@ async function searchActiveStudios(id) {
 }
 
 
-async function updateStudios(username, studios) {
+async function updateStudios(id, studios) {
 	return await User.findOneAndUpdate(
-		{ username: username },
+		{ _id: id },
 		{ userStudios: studios }
 	);
 }

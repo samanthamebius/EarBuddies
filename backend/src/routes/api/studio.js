@@ -1,6 +1,6 @@
 import express from "express";
 import { createStudio, getStudio, deleteStudio } from "../../dao/studio_dao.js";
-import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
+import { getUserId, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 
 
@@ -26,7 +26,7 @@ router.post("/new", async (req, res) => {
     );
 
     listenerUserIds.forEach(async (listener) => {
-      const studios = await getStudios(listener);
+      const studios = await getStudiosId(listener);
       studios.push(newStudio._id);
       updateStudios(listener, studios);
     });
@@ -73,7 +73,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.post("/:id/toggle", async (req, res) => {
-  
+
   try {
     const { id } = req.params;
     if (!id) {
