@@ -4,9 +4,10 @@ import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import styles from './Popup.module.css';
 import TextField from '@mui/material/TextField';
+import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 
 export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog }) {
-    const handleClose = () => { handleCloseDialog(false) };
+    const handleClose = () => { handleCloseNicknameDialog(false) };
 
     const handleSubmit = () => {
         handleClose()
@@ -16,6 +17,7 @@ export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNick
         <Dialog  open={isNicknameDialogOpened} onClose={handleCloseNicknameDialog} fullWidth maxWidth="sm"
         PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
         <div className={styles.dialogHeader}>
+            <DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color:  "#757575" }} />
             <h1 className={styles.heading}>Edit Nickname</h1>
         </div>
         
