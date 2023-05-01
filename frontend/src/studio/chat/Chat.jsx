@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
@@ -64,6 +64,7 @@ export default function Chat(props) {
 	const { username, displayName } = useContext(AppContext);
 	const { id } = useParams();
 	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
+	const textInput = useRef(null);
 
 	// Set previous messages
 	useEffect(() => {
@@ -200,7 +201,10 @@ export default function Chat(props) {
 					))}
 				</div>
 			</div>
-			<div className={styles.chatInput}>
+			<div
+				className={styles.chatInput}
+				onClick={() => textInput.current.focus()}
+			>
 				<div className={styles.inputContent}>
 					{replyMessage !== "" && (
 						<div className={styles.replyMessage}>
@@ -213,6 +217,7 @@ export default function Chat(props) {
 						</div>
 					)}
 					<StyledTextField
+						inputRef={textInput}
 						variant="standard"
 						multiline
 						placeholder="Message ..."
