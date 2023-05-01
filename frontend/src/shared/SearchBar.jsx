@@ -33,10 +33,12 @@ function SearchBar({ label }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedResult, setSelectedResult] = useState(null); 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, result) => {
+    setSelectedResult(result);
     setAnchorEl(event.currentTarget);
   };
 
@@ -46,6 +48,12 @@ function SearchBar({ label }) {
 
   const handleMenuItemClick = (event) => {
     // handle menu item click
+    handleCloseMenu();
+  };
+
+  const handleAddToQueue = (result) => {
+    console.log("add to queue")
+    console.log(result)
     handleCloseMenu();
   };
 
@@ -132,7 +140,7 @@ function SearchBar({ label }) {
               <Button
                 edge="end"
                 aria-label="more options"
-                onClick={handleOpenMenu}
+                onClick={(event) => handleOpenMenu(event, result)}
               >
                 <MoreHorizIcon />
               </Button>
@@ -143,7 +151,7 @@ function SearchBar({ label }) {
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}
             >
-              <MenuItem onClick={handleMenuItemClick}>Add to queue</MenuItem>
+              <MenuItem onClick={() => handleAddToQueue(selectedResult)}>Add to queue</MenuItem>
               <MenuItem onClick={handleMenuItemClick}>Play</MenuItem>
             </StyledMenu>
             <ListItemAvatar>
