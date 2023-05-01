@@ -53,11 +53,6 @@ function SearchBarSong({studio}) {
   };
 
   const handleAddToQueue = (result) => {
-    console.log("add to queue")
-    console.log(result)
-    console.log(studio)
-    console.log("studio playlist: " + studio.studioPlaylist)
-    console.log("track: " + result.id)
     axios.put(`${BASE_URL}/api/spotify/queue`, {playlist_id: studio.studioPlaylist, track_id: result.id})
     handleCloseMenu();
   };

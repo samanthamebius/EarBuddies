@@ -24,11 +24,8 @@ router.post("/new", async (req, res) => {
     }
     api.createPlaylist(playlist_name, {'public': true})
       .then(async function(data) {
-        console.log('Created playlist!');
-        console.log(data)
         const playlist_id = data.body.id;
 
-        console.log("playlist_id: " + playlist_id)
         // Create the new studio
         const newStudio = await createStudio(
           name,
@@ -45,16 +42,12 @@ router.post("/new", async (req, res) => {
           studios.push(newStudio._id);
           updateStudios(listener, studios);
         });
-
-        console.log("newStudio: " + newStudio)
         // Respond with the newly created studio
         res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
 
       }, function(err) {
         console.log('Something went wrong!', err);
       });
-
-      // console.log("playlist_id: " + playlist_id)
     
   } catch (err) {
     console.log(err);
