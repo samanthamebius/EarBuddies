@@ -1,5 +1,5 @@
 // Credit to https://frontendshape.com/post/react-mui-5-search-bar-example
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Container, InputAdornment, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,17 +9,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./SearchBar.module.css";
 import { sizing } from "@mui/system";
 import axios from "axios";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Button,
-  Avatar,
-  Menu,
-  MenuItem,
-  styled,
-} from "@mui/material";
+import { List, ListItem, ListItemText, ListItemAvatar, Button, Avatar, Menu, MenuItem, styled } from "@mui/material";
 import React from "react";
 
 const StyledMenu = styled(Menu)({
@@ -32,6 +22,15 @@ function SearchBar({ label }) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        main: '#CA3FF3',
+      },
+    },
+  });
+  
   const [searchResults, setSearchResults] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null); 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -99,7 +98,9 @@ function SearchBar({ label }) {
 
   return (
     <Container disableGutters={true} className={styles.searchBar}>
-      <TextField
+      <ThemeProvider theme={theme}>
+        <TextField
+        color="secondary"
         id="search"
         type="text"
         label={label}
@@ -110,11 +111,7 @@ function SearchBar({ label }) {
         fullWidth
         InputProps={{
           startAdornment: (
-            <SearchRoundedIcon
-              color="action"
-              position="start"
-              className={styles.searchIcon}
-            />
+            <SearchRoundedIcon style={{ color: "#757575" }} position="start" className={styles.searchIcon}/>
           ),
           endAdornment: (
             <InputAdornment position="end">
@@ -130,9 +127,9 @@ function SearchBar({ label }) {
         }}
         InputLabelProps={{
           shrink: focused || searchTerm.length > 0,
-          style: { marginLeft: searchTerm || focused ? 0 : 30 },
-        }}
-      />
+          style: {marginLeft: searchTerm || focused  ? 0 : 30 }
+        }} />
+      </ThemeProvider>
       {searchResults?.length > 0 && <List className={styles.listContainer}>
         {searchResults.map((result) => (
           <ListItem
