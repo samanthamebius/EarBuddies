@@ -10,9 +10,13 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import logo from "./assets/shared/earBuddiesLogo.png";
+import defaultProfilePic from "./assets/home/defaultprofilepic.png";
 import useGet from "./hooks/useGet";
+import axios from 'axios';
 import { AppContext } from "./AppContextProvider";
 import ConfirmationDialog from "./shared/ConfirmationDialog";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function PageLayout() {
 	return (
@@ -70,6 +74,14 @@ function UserInfo() {
 		} catch (error) {
 			console.log(error);
 		}
+		// If Spotify account doesn't have a profile picture, set to default
+		if (profilePicture === "") {
+			axios.put(`${BASE_URL}/api/user/${id}`, {
+				profilePic: defaultProfilePic
+			});
+			window.location.reload(false);
+		}
+
 		return (
 			<div className={styles.profile_layout}>
 				<img src={profilePicture} className={styles.profile_picture} />
