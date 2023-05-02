@@ -58,6 +58,57 @@ function SearchBar({ label, searchType }) {
     }
   };
 
+  const searchUsers = () => {
+    // search users
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/user/users`)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
+
+  const searchStudios = () => {
+    // search users
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/user/${localStorage.getItem("current_user_id")}/studios`)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
+
+  const searchActiveStudios = () => {
+    // search users
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/user/${localStorage.getItem("current_user_id")}/active`)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
+
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -81,11 +132,11 @@ function SearchBar({ label, searchType }) {
       if (searchType === "spotify") {
         searchSongs();
       } else if (searchType === "users") {
-
+        searchUsers();
       } else if (searchType === "studios") {
-
+        searchStudios();
       } else if (searchType === "activeStudios") {
-
+        searchActiveStudios();
       }
     } else {
       setSearchResults([]);
