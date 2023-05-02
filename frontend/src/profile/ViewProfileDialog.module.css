@@ -102,14 +102,3 @@
     border: solid 2px #C4C4C4;
 }
 
-.icon {
-    background-color: #E2BFF6;
-    width: 40px;
-    height: 40px;
-    padding: 4px;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-}

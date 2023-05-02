@@ -1,5 +1,5 @@
 // Credit to https://frontendshape.com/post/react-mui-5-search-bar-example
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Container, InputAdornment, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,17 +9,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./SearchBar.module.css";
 import { sizing } from "@mui/system";
 import axios from "axios";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Button,
-  Avatar,
-  Menu,
-  MenuItem,
-  styled,
-} from "@mui/material";
+import { List, ListItem, ListItemText, ListItemAvatar, Button, Avatar, Menu, MenuItem, styled } from "@mui/material";
 import React from "react";
 
 const StyledMenu = styled(Menu)({
@@ -32,7 +22,17 @@ function SearchBar({ label, searchType, studioId }) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        main: '#CA3FF3',
+      },
+    },
+  });
+  
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedResult, setSelectedResult] = useState(null); 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const username = localStorage.getItem("current_user_id");
@@ -127,7 +127,8 @@ function SearchBar({ label, searchType, studioId }) {
     }
   };
 
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, result) => {
+    setSelectedResult(result);
     setAnchorEl(event.currentTarget);
   };
 
@@ -137,6 +138,12 @@ function SearchBar({ label, searchType, studioId }) {
 
   const handleMenuItemClick = (event) => {
     // handle menu item click
+    handleCloseMenu();
+  };
+
+  const handleAddToQueue = (result) => {
+    console.log("add to queue")
+    console.log(result)
     handleCloseMenu();
   };
 
@@ -191,7 +198,9 @@ function SearchBar({ label, searchType, studioId }) {
 
   return (
     <Container disableGutters={true} className={styles.searchBar}>
-      <TextField
+      <ThemeProvider theme={theme}>
+        <TextField
+        color="secondary"
         id="search"
         type="text"
         label={label}
@@ -202,11 +211,7 @@ function SearchBar({ label, searchType, studioId }) {
         fullWidth
         InputProps={{
           startAdornment: (
-            <SearchRoundedIcon
-              color="action"
-              position="start"
-              className={styles.searchIcon}
-            />
+            <SearchRoundedIcon style={{ color: "#757575" }} position="start" className={styles.searchIcon}/>
           ),
           endAdornment: (
             <InputAdornment position="end">
@@ -222,9 +227,9 @@ function SearchBar({ label, searchType, studioId }) {
         }}
         InputLabelProps={{
           shrink: focused || searchTerm.length > 0,
-          style: { marginLeft: searchTerm || focused ? 0 : 30 },
-        }}
-      />
+          style: {marginLeft: searchTerm || focused  ? 0 : 30 }
+        }} />
+      </ThemeProvider>
       {searchResults?.length > 0 && <List className={styles.listContainer}>
         {searchResults.map((result) => (
           <ListItem
@@ -232,7 +237,7 @@ function SearchBar({ label, searchType, studioId }) {
               <Button
                 edge="end"
                 aria-label="more options"
-                onClick={handleOpenMenu}
+                onClick={(event) => handleOpenMenu(event, result)}
               >
                 <MoreHorizIcon />
               </Button>
@@ -243,7 +248,7 @@ function SearchBar({ label, searchType, studioId }) {
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}
             >
-              <MenuItem onClick={handleMenuItemClick}>Add to queue</MenuItem>
+              <MenuItem onClick={() => handleAddToQueue(selectedResult)}>Add to queue</MenuItem>
               <MenuItem onClick={handleMenuItemClick}>Play</MenuItem>
             </StyledMenu>
             <ListItemAvatar>

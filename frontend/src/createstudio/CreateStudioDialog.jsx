@@ -1,50 +1,76 @@
-import React, { useEffect, useState, useRef } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip } from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
+import React, { useEffect, useState, useRef } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
 import SearchBar from "../shared/SearchBar";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { tooltipClasses } from '@mui/material/Tooltip';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function useStudioPost() {
-  const postStudio = async (navigate, name, genres, coverPhoto, listeners, isHostOnly) => {
+	const postStudio = async (
+		navigate,
+		name,
+		genres,
+		coverPhoto,
+		listeners,
+		isHostOnly
+	) => {
+		const host = JSON.parse(localStorage.getItem("current_user_id"));
+		listeners.push(host);
+		//add dummy listener pending search bar completion
+		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
-    const host = JSON.parse(localStorage.getItem("current_user_id"));
-    listeners.push(host);
-    //add dummy listener pending search bar completion
-    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+		const url = `${BASE_URL}/api/studio`;
+		let studioBannerImageUrl = "/images/defaultBanner.png";
 
-    //todo: add cover photo
-    coverPhoto = '';
+		if (coverPhoto) {
+			// upload the image
+			const imgUploadConfig = {
+				headers: {
+					"content-type": "multipart/form-data",
+				},
+			};
+			const imgFormData = new FormData();
+			imgFormData.append("image", coverPhoto[0]);
 
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const url = `${BASE_URL}/api/studio/new`;
+			const imgUploadResponse = await axios.post(
+				`${url}/upload-image`,
+				imgFormData,
+				imgUploadConfig
+			);
 
-    try {
-      const response = await axios.post(url, {
-        name,
-        listeners,
-        host,
-        genres,
-        coverPhoto,
-        isHostOnly
-      });
-      navigate(`/studio/${response.data._id}`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+			studioBannerImageUrl = imgUploadResponse.headers["location"];
+		}
 
-  return { postStudio };
+		try {
+			const response = await axios.post(`${url}/new`, {
+				name,
+				listeners,
+				host,
+				genres,
+				studioBannerImageUrl,
+				isHostOnly,
+			});
+			navigate(`/studio/${response.data._id}`);
+		} catch (err) {
+			console.error(err);
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("expires_in");
+      localStorage.removeItem("current_user_id");
+      navigate("/login");
+      return <p>Could not load studio</p>;
+		}
+	};
+
+	return { postStudio };
 }
 
 function SwitchWithTooltip({ checked, onChange }) {
@@ -151,28 +177,37 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     }
   }
 
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        main: '#CA3FF3',
+      },
+    },
+  });
+
   return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
           <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
-          <TextField
-            value={studioNameInput}
-            error={isStudioNameErrorMessage ? true : false}
-            helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
-            required
-            margin="dense"
-            id="name"
-            label="Enter a Studio Name ..."
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={event => setStudioNameInput(event.target.value)}
-            className={styles.textfield}
-            autoComplete="off"
-          />
-
+          <ThemeProvider theme={theme}>
+            <TextField
+              color="secondary"
+              value={studioNameInput}
+              error={isStudioNameErrorMessage ? true : false}
+              helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
+              required
+              margin="dense"
+              id="name"
+              label="Enter a Studio Name ..."
+              type="text"
+              fullWidth
+              variant="outlined"
+              onChange={event => setStudioNameInput(event.target.value)}
+              className={styles.textfield}
+              autoComplete="off" />
+          </ThemeProvider>
           <h2 className={styles.sectionHeading}>Cover Photo</h2>
           <FileDropZone onFileChange={handleFileChange} />
 
@@ -180,21 +215,23 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
           {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />
             : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />)}
           <div className={styles.addGenreSection}>
-            <TextField
-              margin="dense"
-              id="name"
-              label="Add your own genres ..."
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={genreInput}
-              onChange={event => setGenreInput(event.target.value)}
-              className={styles.textfield}
-              autoComplete="off"
-              onKeyDown={event => handleKeyPress(event, genreInput)}
-              error={isGenreInputErrorMessage ? true : false}
-              helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""}
-            />
+            <ThemeProvider theme={theme}>
+              <TextField
+                color="secondary"
+                margin="dense"
+                id="name"
+                label="Add your own genres ..."
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={genreInput}
+                onChange={event => setGenreInput(event.target.value)}
+                className={styles.textfield}
+                autoComplete="off"
+                onKeyDown={event => handleKeyPress(event, genreInput)}
+                error={isGenreInputErrorMessage ? true : false}
+                helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""} />
+            </ThemeProvider>
             <span className={styles.spacing}></span>
             <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>
           </div>

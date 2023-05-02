@@ -57,6 +57,13 @@ async function getUsers() {
 async function searchUsers(query, username) {
 	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
+  }
+
+async function updateUserInfo(username, userDisplayName, profilePic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userDisplayName: userDisplayName, profilePic: profilePic }
+	);
 }
 
 async function getUser(username) {
@@ -130,4 +137,5 @@ export {
 	getUsers,
 	getUsername,
 	searchStudioUsers,
+  updateUserInfo
 };
