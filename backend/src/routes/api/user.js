@@ -3,6 +3,16 @@ import { getUser, getUserbyId, getUsers, searchActiveStudios, searchStudios } fr
 
 const router = express.Router();
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await getUsers();
+    console.log(users);
+    res.json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -25,7 +35,7 @@ router.get("/:username/studios", async (req, res) => {
     return res.status(400).json({ msg: "No username provided" });
   }
   try {
-    const studios = searchStudios(username);
+    const studios = await searchStudios(username);
     res.json(studios);
   } catch (err) {
     res.status(500).json(err);
@@ -40,15 +50,6 @@ router.get("/:username/active", async (req, res) => {
   try {
     const studios = await searchActiveStudios(username);
     res.json(studios);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("users", async (req, res) => {
-  try {
-    const users = await getUsers();
-    res.json(users);
   } catch (err) {
     res.status(500).json(err);
   }

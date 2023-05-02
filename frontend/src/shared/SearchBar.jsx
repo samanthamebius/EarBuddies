@@ -35,6 +35,7 @@ function SearchBar({ label, searchType }) {
   const [searchResults, setSearchResults] = useState([]);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
+  const username = localStorage.getItem("current_user_id");
 
   const searchSongs = () => {
     // search spotify for songs
@@ -65,6 +66,7 @@ function SearchBar({ label, searchType }) {
         .get(
           `${BASE_URL}/api/user/users`)
         .then((response) => {
+          console.log(response.data)
           setSearchResults(response.data);
         })
         .catch((error) => {
@@ -80,8 +82,9 @@ function SearchBar({ label, searchType }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/${localStorage.getItem("current_user_id")}/studios`)
+          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/studios`)
         .then((response) => {
+          console.log(response.data)
           setSearchResults(response.data);
         })
         .catch((error) => {
@@ -97,7 +100,7 @@ function SearchBar({ label, searchType }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/${localStorage.getItem("current_user_id")}/active`)
+          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/active`)
         .then((response) => {
           setSearchResults(response.data);
         })
@@ -154,7 +157,9 @@ function SearchBar({ label, searchType }) {
       }
     } else if (searchType === "users") {
       return `${result.displayName}`;
-    } else if (searchType === "studios" || searchType === "activeStudios") {
+    } else if (searchType === "studios") {
+      return `${result[0].studioName}`;
+    } else if (searchType === "activeStudios") {
       return `${result.studioName}`;
     }
   }
@@ -164,7 +169,9 @@ function SearchBar({ label, searchType }) {
       return result.image;
     } else if (searchType === "users") {
       return result.profilePic;
-    } else if (searchType === "studios" || searchType === "activeStudios") {
+    } else if (searchType === "studios") {
+      return result[0].studioPicture;
+    } else if (searchType === "activeStudios") {
       return result.studioPicture;
     }
   }

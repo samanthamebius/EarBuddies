@@ -50,7 +50,9 @@ async function updateUser(username) {
 }
 
 async function getUsers() {
-	return await User.find({});
+	const users = await User.find();
+	console.log(users);
+	return users;
 }
 
 async function getUser(username) {
@@ -93,7 +95,7 @@ async function searchActiveStudios(username) {
 	var studiosActive = [];
 	for (var i = 0; i < studioObjects.length; i++) {
 		if (studioObjects[i][0].studioIsActive) {
-			studiosActive[i] = studioObjects[i][0];
+			studiosActive.push(studioObjects[i][0]);
 		}
 	}
 	return studiosActive;
