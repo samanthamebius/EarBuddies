@@ -87,6 +87,7 @@
 	display: flex;
 	color: #a49da5;
 	justify-content: space-between;
+	box-sizing: border-box;
 }
 
 .dismissReply {

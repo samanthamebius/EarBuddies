@@ -227,7 +227,17 @@ export default function Chat(props) {
 				<div className={styles.inputContent}>
 					{replyMessage !== "" && (
 						<div className={styles.replyMessage}>
-							<div>{replyMessage}</div>
+							<div
+								style={{
+									width: "auto",
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									overflowWrap: "anywhere",
+									textAlign: "left",
+								}}
+							>
+								{replyMessage}
+							</div>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}

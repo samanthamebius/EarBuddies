@@ -66,6 +66,9 @@ function ChatMessage(props) {
 				isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
 			}`,
 			marginBottom: "-10px",
+			overflow: "hidden",
+			textOverflow: "ellipsis",
+			width: "20%",
 		};
 
 		return message;
