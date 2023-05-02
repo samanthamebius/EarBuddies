@@ -30,6 +30,8 @@ import SnailAvatar from '../assets/profile/snail.png';
 import TurtleAvatar from '../assets/profile/turtle.png';
 import WhaleAvatar from '../assets/profile/whale.png';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
+import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import useGet from '../hooks/useGet';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -37,20 +39,20 @@ import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
-    const [displayPhoto, setDisplayPhoto] = useState(AnacondaAvatar); 
+    const [displayPhoto, setDisplayPhoto] = useState(AnacondaAvatar);
     const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
     const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
     const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
     const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-	const handleConfirmDeleteOpen = () => {
-		setConfirmDeleteOpen(true);
-	};
+    const handleConfirmDeleteOpen = () => {
+        setConfirmDeleteOpen(true);
+    };
 
     // get user info
     const current_user_id = localStorage.getItem("current_user_id");
-	const id = JSON.parse(current_user_id);
+    const id = JSON.parse(current_user_id);
     const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
     useEffect(() => {
         if (user) {
@@ -60,17 +62,17 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
     }, [user]);
 
     const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
-        CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar, 
+        CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar,
         PenguinAvatar, ScorpionAvatar, SharkAvatar, SheepAvatar, SnailAvatar, TurtleAvatar, WhaleAvatar
     ]
-    
+
     const toggleInDisplayName = () => { setInDisplayName(!isInDisplayName) };
     const toggleInDisplayPhoto = () => { setInDisplayPhoto(!isInDisplayPhoto) };
 
-    const openAvatarOptions = () => { setAvatarOptionsOpen(true)};
-    const closeAvatarOptions = () => { setAvatarOptionsOpen(false)};
+    const openAvatarOptions = () => { setAvatarOptionsOpen(true) };
+    const closeAvatarOptions = () => { setAvatarOptionsOpen(false) };
 
-    const onClose= () => {
+    const onClose = () => {
         setAvatarOptionsOpen(false);
         handleViewProfileClose();
     }
@@ -78,13 +80,13 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
 
     const handleDelete = () => {
         axios.delete(`${BASE_URL}/api/user/${id}`).then((res) => {
-			console.log(res);
-		});
+            console.log(res);
+        });
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("expires_in");
         localStorage.removeItem("current_user_id");
-		navigate("/");
+        navigate("/");
     }
 
     const handleAccountLink = () => {
@@ -102,84 +104,90 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
 
     const theme = createTheme({
         palette: {
-          secondary: {
-            main: '#CA3FF3',
-          },
+            secondary: {
+                main: '#CA3FF3',
+            },
         },
-      });
+    });
 
-    return(
+    return (
         <>
-            <ConfirmationDialog 
+            <ConfirmationDialog
                 isOpen={isConfirmDeleteOpen}
                 handleClose={() => setConfirmDeleteOpen(false)}
-                handleAction={() => {setConfirmDeleteOpen(false); handleDelete();}} //TO DO: replace with delete functionality
+                handleAction={() => { setConfirmDeleteOpen(false); handleDelete(); }} //TO DO: replace with delete functionality
                 message={"Are you sure you want to delete your Ear Buddies Account?"}
                 actionText={"Delete"}
             />
             <div>
-                <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+                <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
                     <h1 className={styles.heading}>View Profile</h1>
                     <DialogContent>
                         <h2 className={styles.sectionHeading}>Display Name</h2>
                         <ThemeProvider theme={theme}>
-                            <TextField 
-                            color="secondary"
-                            onMouseEnter={toggleInDisplayName} 
-                            onMouseLeave={toggleInDisplayName}
-                            value={displayName}
-                            required
-                            margin='dense'
-                            id='name'
-                            type='text'
-                            fullWidth
-                            variant='outlined'
-                            onChange={event => setDisplayName(event.target.value)}
-                            className={styles.textfield}
-                            autoComplete='off'
-                            InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <EditRoundedIcon style={{ color: isInDisplayName ? '#B03EEE' : '#757575'}}/>
+                            <TextField
+                                color="secondary"
+                                onMouseEnter={toggleInDisplayName}
+                                onMouseLeave={toggleInDisplayName}
+                                value={displayName}
+                                required
+                                margin='dense'
+                                id='name'
+                                type='text'
+                                fullWidth
+                                variant='outlined'
+                                onChange={event => setDisplayName(event.target.value)}
+                                className={styles.textfield}
+                                autoComplete='off'
+                                InputProps={{
+                                    endAdornment: <InputAdornment position='end'>
+                                        <EditRoundedIcon style={{ color: isInDisplayName ? '#B03EEE' : '#757575' }} />
                                     </InputAdornment>,
-                            }} />
+                                }} />
                         </ThemeProvider>
                         <h2 className={styles.sectionHeading}>Display Photo</h2>
-                        
-                        <div 
+
+                        <div
                             className={styles.displayPhotoContainer}
-                            onMouseEnter={toggleInDisplayPhoto} 
+                            onMouseEnter={toggleInDisplayPhoto}
                             onMouseLeave={toggleInDisplayPhoto}
                         >
                             <div onClick={isAvatarOptionsOpen ? closeAvatarOptions : openAvatarOptions} className={styles.currentDisplayPhotoContainter} >
-                                <img src={displayPhoto} className={styles.displayPhoto}/>
+                                <img src={displayPhoto} className={styles.displayPhoto} />
                                 <div className={styles.editIconContainer}>
-                                    <EditRoundedIcon style={{ color: isInDisplayPhoto ?  '#B03EEE' : '#757575'}}/>
+                                    <EditRoundedIcon style={{ color: isInDisplayPhoto ? '#B03EEE' : '#757575' }} />
                                 </div>
                             </div>
-                            <div className={styles.hiddenPhotoSection} style={{display: isAvatarOptionsOpen ? '' : 'none'}}>
+                            <div className={styles.hiddenPhotoSection} style={{ display: isAvatarOptionsOpen ? '' : 'none' }}>
                                 <div className={styles.avatars} >
                                     {Array.isArray(avatars)
-                                    ? avatars.map((avatar, i) => (
+                                        ? avatars.map((avatar, i) => (
                                             <img
-                                                style={{border: avatar === displayPhoto ? 'solid 2px #CA3FF3' : '' }}
-                                                key={i} 
+                                                style={{ border: avatar === displayPhoto ? 'solid 2px #CA3FF3' : '' }}
+                                                key={i}
                                                 src={avatar}
                                                 className={styles.avatarOption}
                                                 onClick={() => setDisplayPhoto(avatar)}
                                             />
-                                    ))
-                                    : null}
+                                        ))
+                                        : null}
                                 </div>
                             </div>
                         </div>
                         <h2 className={styles.sectionHeading}></h2>
-                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleAccountLink}>Link To Spotify Account</Button>
+                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleAccountLink}>
+                            <OpenInNewRoundedIcon className={styles.buttonIcon} />
+                            Link To Spotify Account
+                        </Button>
                         <h2 className={styles.sectionHeading}></h2>
-                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleConfirmDeleteOpen}>Delete Ear Buddies Account</Button>
+                        <Button size={'large'} sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.linkButton} onClick={handleConfirmDeleteOpen}>
+                            <DeleteRoundedIcon className={styles.buttonIcon} />
+                            Delete Ear Buddies Account
+                        </Button>
                     </DialogContent>
                     <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
-                    <Button sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.cancelButton} onClick={onClose}>Close</Button>
-                    <Button sx={{ fontWeight: 600 }} variant='contained' className={styles.createButton} onClick={handleSave}>Save</Button>
+                        <Button sx={{ fontWeight: 600, color: '#757575' }} variant='contained' className={styles.cancelButton} onClick={onClose}>Close</Button>
+                        <Button sx={{ fontWeight: 600 }} variant='contained' className={styles.createButton} onClick={handleSave}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>
