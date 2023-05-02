@@ -93,12 +93,18 @@ function SearchBar({ label, searchType }) {
   }, [searchTerm]);
 
   function displayText(result) {
-    if (result.type === "audiobook") {
-      return `${result.name} - ${result.authors} - Audiobook`;
-    } else if (result.type === "track") {
-      return `${result.name} - ${result.artists} - Song`;
-    } else {
-      return `${result.name} - Podcast`;
+    if (searchType === "spotify") {
+      if (result.type === "audiobook") {
+        return `${result.name} - ${result.authors} - Audiobook`;
+      } else if (result.type === "track") {
+        return `${result.name} - ${result.artists} - Song`;
+      } else {
+        return `${result.name} - Podcast`;
+      }
+    } else if (searchType === "users") {
+      return `${result.displayName}`;
+    } else if (searchType === "studios" || searchType === "activeStudios") {
+      return `${result.studioName}`;
     }
   }
 
