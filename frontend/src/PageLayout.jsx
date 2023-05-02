@@ -66,9 +66,11 @@ function UserInfo() {
 	} else if (!user) {
 		return <p>Could not load user</p>;
 	} else {
+		var spotifyPicture = "";
 		var profilePicture = "";
 		var username = "";
 		try {
+			spotifyPicture = user.spotifyPic;
 			profilePicture = user.profilePic;
 			username = user.userDisplayName;
 		} catch (error) {
@@ -77,7 +79,8 @@ function UserInfo() {
 		// If Spotify account doesn't have a profile picture, set to default
 		if (profilePicture === "") {
 			axios.put(`${BASE_URL}/api/user/${id}`, {
-				profilePic: defaultProfilePic
+				profilePic: defaultProfilePic,
+				spotifyPic: defaultProfilePic
 			});
 			window.location.reload(false);
 		}

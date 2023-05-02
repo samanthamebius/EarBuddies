@@ -39,12 +39,13 @@ import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
-    const [displayPhoto, setDisplayPhoto] = useState(AnacondaAvatar);
+    const [displayPhoto, setDisplayPhoto] = useState();
     const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
     const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
     const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
     const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [spotifyPhoto, setSpotifyPhoto] = useState("");
 
     const handleConfirmDeleteOpen = () => {
         setConfirmDeleteOpen(true);
@@ -58,10 +59,12 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         if (user) {
             setDisplayName(user.userDisplayName);
             setDisplayPhoto(user.profilePic);
+            console.log(user.spotifyPic);
+            setSpotifyPhoto(user.spotifyPic);
         }
     }, [user]);
 
-    const avatars = [AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar, ElephantAvatar,
+    const avatars = [spotifyPhoto, AnacondaAvatar, BeaverAvatar, BoarAvatar, BunnyAvatar, CatAvatar, ClownFishAvatar,
         CowAvatar, GiraffeAvatar, JaguarAvatar, JellyfishAvatar, MonkeyAvatar, PandaAvatar, PelicanAvatar,
         PenguinAvatar, ScorpionAvatar, SharkAvatar, SheepAvatar, SnailAvatar, TurtleAvatar, WhaleAvatar
     ]
