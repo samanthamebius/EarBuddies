@@ -155,6 +155,8 @@ function SearchBar({ label, searchType, studioId }) {
         searchStudios();
       } else if (searchType === "activeStudios") {
         searchActiveStudios();
+      } else if (searchType === "studioUsers") {
+        searchStudioUsers();
       }
     } else {
       setSearchResults([]);
@@ -170,11 +172,9 @@ function SearchBar({ label, searchType, studioId }) {
       } else {
         return `${result.name} - Podcast`;
       }
-    } else if (searchType === "users") {
+    } else if (searchType === "users" || searchType === "studioUsers") {
       return `${result.userDisplayName}`;
-    } else if (searchType === "studios") {
-      return `${result.studioName}`;
-    } else if (searchType === "activeStudios") {
+    } else if (searchType === "studios" || searchType === "activeStudios") {
       return `${result.studioName}`;
     }
   }
@@ -182,11 +182,9 @@ function SearchBar({ label, searchType, studioId }) {
   function displayImage(result) {
     if (searchType === "spotify") {
       return result.image;
-    } else if (searchType === "users") {
+    } else if (searchType === "users" || searchType === "studioUsers") {
       return result.profilePic;
-    } else if (searchType === "studios") {
-      return result.studioPicture;
-    } else if (searchType === "activeStudios") {
+    } else if (searchType === "studios" || searchType === "activeStudios") {
       return result.studioPicture;
     }
   }
