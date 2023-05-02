@@ -29,7 +29,6 @@ import ConfirmationDialog from "../shared/ConfirmationDialog";
 const isHost = false;
 
 const hostImage = ProfilePicImg1;
-const isListening = true;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const listenersImgs = [
@@ -94,6 +93,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
+	const isListening = studio.studioIsActive;
 
 	return (
 		<div
@@ -106,8 +106,6 @@ export default function Banner({ id, studio }) {
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
-					profileImages={listenersImages}
-					profileStatus={listenersActive}
 					isHomeCard={false}
 				/>
 			</div>

@@ -28,8 +28,6 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 export default function StudioCard({
 	studioUsers,
 	isListening,
-	profileImages,
-	profileStatus,
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
@@ -46,8 +44,8 @@ export default function StudioCard({
 		}
 		fetchUserData();
 	}, [studioUsers]);
-	profileImages = userList.map(user => user.profilePic);
-	profileStatus = userList.map(user => user.userIsActive);
+	const profileImages = userList.map(user => user.profilePic);
+	const profileStatus = userList.map(user => user.userIsActive);
 	return (
 		<div className={styles.listenersImages}>
 			{Array.isArray(profileImages)
