@@ -108,6 +108,16 @@ function SearchBar({ label, searchType }) {
     }
   }
 
+  function displayImage(result) {
+    if (searchType === "spotify") {
+      return result.image;
+    } else if (searchType === "users") {
+      return result.profilePic;
+    } else if (searchType === "studios" || searchType === "activeStudios") {
+      return result.studioPicture;
+    }
+  }
+
   return (
     <Container disableGutters={true} className={styles.searchBar}>
       <TextField
@@ -167,7 +177,7 @@ function SearchBar({ label, searchType }) {
             </StyledMenu>
             <ListItemAvatar>
               <Avatar>
-                <img className={styles.image} src={result.image} />
+                <img className={styles.image} src={displayImage(result)} />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={displayText(result)} />
