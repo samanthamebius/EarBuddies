@@ -144,7 +144,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                                 autoComplete='off'
                                 InputProps={{
                                     endAdornment: <InputAdornment position='end'>
-                                        <EditRoundedIcon style={{ color: isInDisplayName ? '#B03EEE' : '#757575' }} />
+                                        <EditRoundedIcon style={{ pointerEvents: "none", color: isInDisplayName ? '#B03EEE' : '#757575' }} />
                                     </InputAdornment>,
                                 }} />
                         </ThemeProvider>
