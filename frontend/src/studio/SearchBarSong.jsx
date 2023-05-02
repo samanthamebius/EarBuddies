@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRounded from "@mui/icons-material/ClearRounded";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import styles from "./SearchBar.module.css";
+import styles from "../shared/SearchBar.module.css";
 import { sizing } from "@mui/system";
 import axios from "axios";
 import {
@@ -28,7 +28,7 @@ const StyledMenu = styled(Menu)({
   },
 });
 
-function SearchBar({ label }) {
+function SearchBarSong({studio}) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,6 +36,7 @@ function SearchBar({ label }) {
   const [selectedResult, setSelectedResult] = useState(null); 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
+  const label = "Search Spotify";
 
   const handleOpenMenu = (event, result) => {
     setSelectedResult(result);
@@ -52,8 +53,7 @@ function SearchBar({ label }) {
   };
 
   const handleAddToQueue = (result) => {
-    console.log("add to queue")
-    console.log(result)
+    axios.put(`${BASE_URL}/api/spotify/queue`, {playlist_id: studio.studioPlaylist, track_id: result.id})
     handleCloseMenu();
   };
 
@@ -167,4 +167,4 @@ function SearchBar({ label }) {
   );
 }
 
-export default SearchBar;
+export default SearchBarSong;

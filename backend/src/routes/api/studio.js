@@ -28,28 +28,44 @@ router.post("/new", async (req, res) => {
 		const hostUserId = await getUserId(host);
 		const listenerUserIds = await Promise.all(listeners.map(getUserId));
 
-		// Create the new studio
-		const newStudio = await createStudio(
-			name,
-			listenerUserIds,
-			hostUserId,
-			genres,
-			coverPhoto,
-			isHostOnly
-		);
+    //create studio playlist
+    const playlist_name = "Earbuddies - " + name;
+    const api = getSpotifyApi();
+    if (!api) {
+      console.log("No Spotify API connection")
+      return res.status(403).json({ msg: "No Spotify API connection" });
+    }
+    api.createPlaylist(playlist_name, {'public': true})
+      .then(async function(data) {
+        const playlist_id = data.body.id;
 
-		listenerUserIds.forEach(async (listener) => {
-			const studios = await getStudios(listener);
-			studios.push(newStudio._id);
-			updateStudios(listener, studios);
-		});
+        // Create the new studio
+        const newStudio = await createStudio(
+          name,
+          listenerUserIds,
+          hostUserId,
+          genres,
+          coverPhoto,
+          isHostOnly,
+          playlist_id
+        );
+        //add studios to user
+        listenerUserIds.forEach(async (listener) => {
+          const studios = await getStudios(listener);
+          studios.push(newStudio._id);
+          updateStudios(listener, studios);
+        });
+        // Respond with the newly created studio
+        res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
 
-		// Respond with the newly created studio
-		res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
-	} catch (err) {
-		console.log(err);
-		res.status(500).json(err);
-	}
+      }, function(err) {
+        console.log('Something went wrong!', err);
+      });
+    
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
 //get studio by id
