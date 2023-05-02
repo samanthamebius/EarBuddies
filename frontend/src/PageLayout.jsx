@@ -201,7 +201,7 @@ export function DropdownMenu() {
 							className={styles.icon}
 							style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
 						/>
-						<p className={styles.menu_title}>View Profile</p>
+						<p className={styles.menu_title}>My Profile</p>
 					</MenuItem>
 
 					<MenuItem

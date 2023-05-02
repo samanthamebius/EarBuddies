@@ -124,7 +124,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
             />
             <div>
                 <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
-                    <h1 className={styles.heading}>View Profile</h1>
+                    <h1 className={styles.heading}>My Profile</h1>
                     <DialogContent>
                         <h2 className={styles.sectionHeading}>Display Name</h2>
                         <ThemeProvider theme={theme}>
