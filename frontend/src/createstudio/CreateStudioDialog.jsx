@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
+import React, { useEffect, useState, useRef } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
 import SearchBar from "../shared/SearchBar";
@@ -13,35 +13,61 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function useStudioPost() {
-  const postStudio = async (navigate, name, genres, coverPhoto, listeners, isHostOnly) => {
+	const postStudio = async (
+		navigate,
+		name,
+		genres,
+		coverPhoto,
+		listeners,
+		isHostOnly
+	) => {
+		const host = JSON.parse(localStorage.getItem("current_user_id"));
+		listeners.push(host);
+		//add dummy listener pending search bar completion
+		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
-    const host = JSON.parse(localStorage.getItem("current_user_id"));
-    listeners.push(host);
-    //add dummy listener pending search bar completion
-    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+		const url = `${BASE_URL}/api/studio`;
 
-    //todo: add cover photo
-    coverPhoto = '';
+		// upload the image
+		const imgUploadConfig = {
+			headers: {
+				"content-type": "multipart/form-data",
+			},
+		};
+		const imgFormData = new FormData();
+		imgFormData.append("image", coverPhoto[0]);
 
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const url = `${BASE_URL}/api/studio/new`;
+		const imgUploadResponse = await axios.post(
+			`${url}/upload-image`,
+			imgFormData,
+			imgUploadConfig
+		);
 
-    try {
-      const response = await axios.post(url, {
-        name,
-        listeners,
-        host,
-        genres,
-        coverPhoto,
-        isHostOnly
-      });
-      navigate(`/studio/${response.data._id}`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+		const studioBannerImageUrl = imgUploadResponse.headers["location"];
 
-  return { postStudio };
+		try {
+			const response = await axios.post(`${url}/new`, {
+				name,
+				listeners,
+				host,
+				genres,
+				studioBannerImageUrl,
+				isHostOnly,
+			});
+			navigate(`/studio/${response.data._id}`);
+		} catch (err) {
+			console.error(err);
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("expires_in");
+      localStorage.removeItem("current_user_id");
+      navigate("/login");
+      return <p>Could not load studio</p>;
+		}
+	};
+
+	return { postStudio };
 }
 
 function SwitchWithTooltip({ checked, onChange }) {
