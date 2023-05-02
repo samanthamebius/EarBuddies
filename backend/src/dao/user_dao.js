@@ -54,8 +54,8 @@ async function getUsers() {
 	return users;
 }
 
-async function searchUsers(query) {
-	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" } });
+async function searchUsers(query, username) {
+	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
 }
 
@@ -96,8 +96,8 @@ async function searchActiveStudios(username, query) {
 	return studios;
 }
 
-async function searchStudioUsers(studioId, query) {
-	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" } });
+async function searchStudioUsers(studioId, query, username) {
+	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
 }
 

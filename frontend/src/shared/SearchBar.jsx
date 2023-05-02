@@ -64,7 +64,7 @@ function SearchBar({ label, searchType, studioId }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/users/${searchTerm}`)
+          `${BASE_URL}/api/user/users/${username.replace(/['"]+/g, '')}/${searchTerm}`)
         .then((response) => {
           setSearchResults(response.data);
         })
@@ -81,7 +81,7 @@ function SearchBar({ label, searchType, studioId }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/users/${searchTerm}/${studioId}`)
+          `${BASE_URL}/api/user/users/${username.replace(/['"]+/g, '')}/${searchTerm}/${studioId}`)
         .then((response) => {
           setSearchResults(response.data);
         })

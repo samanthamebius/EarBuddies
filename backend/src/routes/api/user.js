@@ -3,20 +3,20 @@ import { getUser, getUserbyId, searchActiveStudios, searchStudioUsers, searchStu
 
 const router = express.Router();
 
-router.get("/users/:query", async (req, res) => {
-  const { query } = req.params;
+router.get("/users/:username/:query", async (req, res) => {
+  const { username, query } = req.params;
   try {
-    const users = await searchUsers(query);
+    const users = await searchUsers(query, username);
     res.json(users);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get("/users/:query/:studioId", async (req, res) => {
-  const { query, studioId } = req.params;
+router.get("/users/:username/:query/:studioId", async (req, res) => {
+  const { username, query, studioId } = req.params;
   try {
-    const users = await searchStudioUsers(studioId, query);
+    const users = await searchStudioUsers(studioId, query, username);
     res.json(users);
   } catch (err) {
     res.status(500).json(err);
