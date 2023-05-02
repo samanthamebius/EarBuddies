@@ -81,7 +81,7 @@ function SearchBar({ label, searchType }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/studios`)
+          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/studios/${searchTerm}`)
         .then((response) => {
           console.log(response.data)
           setSearchResults(response.data);
@@ -99,7 +99,7 @@ function SearchBar({ label, searchType }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/active`)
+          `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/active/${searchTerm}`)
         .then((response) => {
           setSearchResults(response.data);
         })
@@ -157,7 +157,7 @@ function SearchBar({ label, searchType }) {
     } else if (searchType === "users") {
       return `${result.userDisplayName}`;
     } else if (searchType === "studios") {
-      return `${result[0].studioName}`;
+      return `${result.studioName}`;
     } else if (searchType === "activeStudios") {
       return `${result.studioName}`;
     }
@@ -169,7 +169,7 @@ function SearchBar({ label, searchType }) {
     } else if (searchType === "users") {
       return result.profilePic;
     } else if (searchType === "studios") {
-      return result[0].studioPicture;
+      return result.studioPicture;
     } else if (searchType === "activeStudios") {
       return result.studioPicture;
     }

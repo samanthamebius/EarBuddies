@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { User } from "../database/schema.js";
+import { User, Studio } from "../database/schema.js";
 import { getStudio } from "./studio_dao.js";
 import mongoose from "mongoose";
 
@@ -84,25 +84,16 @@ async function getStudiosId(username) {
 	return user.userStudios;
 }
 
-async function searchStudios(username) {
+async function searchStudios(username, query) {
 	const studiosId = await getStudiosId(username);
-	var studioObjects = [];
-	for (var i = 0; i < studiosId.length; i++) {
-		const studio = await getStudio(studiosId[i]._id);
-		studioObjects[i] = studio;
-	}
-	return studioObjects;
+	const studios = await Studio.find({ _id: { $in: studiosId }, studioName: { $regex: query, $options: "i" } });
+	return studios;
 }
 
-async function searchActiveStudios(username) {
-	const studioObjects = await searchStudios(username);
-	var studiosActive = [];
-	for (var i = 0; i < studioObjects.length; i++) {
-		if (studioObjects[i][0].studioIsActive) {
-			studiosActive.push(studioObjects[i][0]);
-		}
-	}
-	return studiosActive;
+async function searchActiveStudios(username, query) {
+	const studiosId = await getStudiosId(username);
+	const studios = await Studio.find({ _id: { $in: studiosId }, studioName: { $regex: query, $options: "i" }, studioIsActive: true });
+	return studios;
 }
 
 

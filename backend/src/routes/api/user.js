@@ -29,26 +29,26 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/:username/studios", async (req, res) => {
-  const { username } = req.params;
+router.get("/:username/studios/:query", async (req, res) => {
+  const { username, query } = req.params;
   if (!username) {
     return res.status(400).json({ msg: "No username provided" });
   }
   try {
-    const studios = await searchStudios(username);
+    const studios = await searchStudios(username, query);
     res.json(studios);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get("/:username/active", async (req, res) => {
-  const { username } = req.params;
+router.get("/:username/active/:query", async (req, res) => {
+  const { username, query } = req.params;
   if (!username) {
     return res.status(400).json({ msg: "No username provided" });
   }
   try {
-    const studios = await searchActiveStudios(username);
+    const studios = await searchActiveStudios(username, query);
     res.json(studios);
   } catch (err) {
     res.status(500).json(err);
