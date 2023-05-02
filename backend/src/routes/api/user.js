@@ -1,12 +1,12 @@
 import express from "express";
-import { getUser, getUserbyId, getUsers, searchActiveStudios, searchStudios } from "../../dao/user_dao";
+import { getUser, getUserbyId, getUsers, searchActiveStudios, searchStudios, searchUsers } from "../../dao/user_dao";
 
 const router = express.Router();
 
-router.get("/users", async (req, res) => {
+router.get("/users/:query", async (req, res) => {
+  const { query } = req.params;
   try {
-    const users = await getUsers();
-    console.log(users);
+    const users = await searchUsers(query);
     res.json(users);
   } catch (err) {
     res.status(500).json(err);

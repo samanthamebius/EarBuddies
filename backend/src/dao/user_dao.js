@@ -51,7 +51,11 @@ async function updateUser(username) {
 
 async function getUsers() {
 	const users = await User.find();
-	console.log(users);
+	return users;
+}
+
+async function searchUsers(query) {
+	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" } });
 	return users;
 }
 
@@ -127,6 +131,7 @@ export {
 	getUserbyId,
 	searchStudios,
 	searchActiveStudios,
+	searchUsers,
 	getUsers,
 	getUsername,
 };

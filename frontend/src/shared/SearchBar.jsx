@@ -64,9 +64,8 @@ function SearchBar({ label, searchType }) {
     try {
       axios
         .get(
-          `${BASE_URL}/api/user/users`)
+          `${BASE_URL}/api/user/users/${searchTerm}`)
         .then((response) => {
-          console.log(response.data)
           setSearchResults(response.data);
         })
         .catch((error) => {
@@ -156,7 +155,7 @@ function SearchBar({ label, searchType }) {
         return `${result.name} - Podcast`;
       }
     } else if (searchType === "users") {
-      return `${result.displayName}`;
+      return `${result.userDisplayName}`;
     } else if (searchType === "studios") {
       return `${result[0].studioName}`;
     } else if (searchType === "activeStudios") {
