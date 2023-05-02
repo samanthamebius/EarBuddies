@@ -1,5 +1,5 @@
 import express from "express";
-import { getUser, getUserbyId, getUsers, searchActiveStudios, searchStudios, searchUsers } from "../../dao/user_dao";
+import { getUser, getUserbyId, searchActiveStudios, searchStudioUsers, searchStudios, searchUsers } from "../../dao/user_dao";
 
 const router = express.Router();
 
@@ -7,6 +7,16 @@ router.get("/users/:query", async (req, res) => {
   const { query } = req.params;
   try {
     const users = await searchUsers(query);
+    res.json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/users/:query/:studioId", async (req, res) => {
+  const { query, studioId } = req.params;
+  try {
+    const users = await searchStudioUsers(studioId, query);
     res.json(users);
   } catch (err) {
     res.status(500).json(err);

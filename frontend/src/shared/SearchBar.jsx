@@ -28,7 +28,7 @@ const StyledMenu = styled(Menu)({
   },
 });
 
-function SearchBar({ label, searchType }) {
+function SearchBar({ label, searchType, studioId }) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -76,14 +76,30 @@ function SearchBar({ label, searchType }) {
     }
   };
 
-  const searchStudios = () => {
+  const searchStudioUsers = () => {
     // search users
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/user/users/${searchTerm}/${studioId}`)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
+
+  const searchStudios = () => {
+    // search studios
     try {
       axios
         .get(
           `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/studios/${searchTerm}`)
         .then((response) => {
-          console.log(response.data)
           setSearchResults(response.data);
         })
         .catch((error) => {
@@ -95,7 +111,7 @@ function SearchBar({ label, searchType }) {
   };
 
   const searchActiveStudios = () => {
-    // search users
+    // search active studios
     try {
       axios
         .get(

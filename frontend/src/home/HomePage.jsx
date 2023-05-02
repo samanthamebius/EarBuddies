@@ -65,7 +65,7 @@ function HomePage(props) {
 						</Button>
 					</div>
 				</div>
-				<SearchBar searchType={"studios"} label={"Search My Studios ..."} />
+				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === false)
@@ -86,7 +86,7 @@ function HomePage(props) {
 						<img src={SoundWavesGradient} className={styles.soundWaves}></img>
 					</div>
 				</div>
-				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} />
+				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} studioId={""} />
 				<div className={styles.cardContainer}>
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === true)

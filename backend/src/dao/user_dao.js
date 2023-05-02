@@ -96,6 +96,10 @@ async function searchActiveStudios(username, query) {
 	return studios;
 }
 
+async function searchStudioUsers(studioId, query) {
+	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" } });
+	return users;
+}
 
 async function updateStudios(id, studios) {
 	return await User.findOneAndUpdate(
@@ -125,4 +129,5 @@ export {
 	searchUsers,
 	getUsers,
 	getUsername,
+	searchStudioUsers,
 };
