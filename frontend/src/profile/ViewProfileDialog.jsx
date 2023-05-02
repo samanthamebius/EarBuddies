@@ -15,7 +15,6 @@ import BunnyAvatar from '../assets/profile/bunny.png';
 import CatAvatar from '../assets/profile/cat.png';
 import ClownFishAvatar from '../assets/profile/clown-fish.png';
 import CowAvatar from '../assets/profile/cow.png';
-import ElephantAvatar from '../assets/profile/elephant.png';
 import GiraffeAvatar from '../assets/profile/giraffe.png';
 import JaguarAvatar from '../assets/profile/jaguar.png';
 import JellyfishAvatar from '../assets/profile/jellyfish.png';
