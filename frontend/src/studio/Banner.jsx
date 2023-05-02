@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
 
 // TO DO: get if user is host or not
-const isHost = false;
+// const isHost = false;
 
 const hostImage = ProfilePicImg1;
 const isListening = true;
@@ -71,6 +71,7 @@ export default function Banner({ id, studio }) {
 
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
+	const isHost = studio.studioHost == localStorage.getItem("current_user_id");
 
 	useEffect(() => {
 		if (isAddIcon == false) {
@@ -116,6 +117,7 @@ export default function Banner({ id, studio }) {
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
+					isHost={isHost}
 				/>
 			</div>
 		</div>
@@ -126,6 +128,7 @@ export function DropdownKebab({
 	controlEnabled,
 	handleControlToggle,
 	handleDelete,
+	isHost,
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);

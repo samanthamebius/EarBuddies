@@ -24,8 +24,8 @@ router.post("/new", async (req, res) => {
 			isHostOnly,
 		} = req.body;
 
-		// Get the user IDs for the host and listeners
-		const hostUserId = await getUserId(host);
+		console.log("host_name: " + host)
+		const host_name = JSON.stringify(host);
 		const listenerUserIds = await Promise.all(listeners.map(getUserId));
 
     //create studio playlist
@@ -43,7 +43,7 @@ router.post("/new", async (req, res) => {
         const newStudio = await createStudio(
           name,
           listenerUserIds,
-          hostUserId,
+          host_name,
           genres,
           coverPhoto,
           isHostOnly,
