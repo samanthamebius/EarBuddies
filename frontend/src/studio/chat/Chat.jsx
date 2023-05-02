@@ -66,6 +66,7 @@ export default function Chat(props) {
 	const { id } = useParams();
 	const room = id;
 	const textInput = useRef(null);
+	const messagesRef = useRef(null);
 
 	// Set previous messages
 	useEffect(() => {
@@ -132,11 +133,22 @@ export default function Chat(props) {
 		};
 	}, []);
 
+	// scroll to the bottom of the chat container when it overflows
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
+
+	// scroll to the bottom of chat container
+	const scrollToBottom = () => {
+		messagesRef.current?.scrollIntoView({ behaviour: "smooth" });
+	};
+
 	// send the message
 	const handleSendMessage = async () => {
 		const isReply = replyMessage !== "";
 		const messageId = uuid();
 		if (message !== "") {
+			// send the message
 			socket.emit("send_message", {
 				room,
 				id: messageId,
@@ -146,6 +158,8 @@ export default function Chat(props) {
 				isReply,
 				replyMessage,
 			});
+
+			// save the image to DB
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
@@ -203,6 +217,7 @@ export default function Chat(props) {
 							inputRef={textInput}
 						/>
 					))}
+					<div ref={messagesRef} />
 				</div>
 			</div>
 			<div
