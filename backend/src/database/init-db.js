@@ -14,12 +14,12 @@ const users = [
 ];
 
 const studios = [
-    { studioName: 'Software Swifties', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'softwareswifties.png', studioUsers: [] },
-    { studioName: 'Country Crew', studioIsActive: false, studioGenres: ['country'], studioPicture: 'countrycrew.png', studioUsers: [] },
-    { studioName: 'Tune Team', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: 'tuneteam.png', studioUsers: [] },
-    { studioName: 'Sad Club', studioIsActive: false, studioGenres: ['pop'], studioPicture: 'sadclub.png', studioUsers: [] },
-    { studioName: 'Sound Scholars', studioIsActive: true, studioGenres: ['Lo-Fi'], studioPicture: 'soundscholars.png', studioUsers: [] },
-    { studioName: 'BLINKS', studioIsActive: false, studioGenres: ['K-Pop'], studioPicture: 'blinks.png', studioUsers: [] }
+    { studioName: 'Software Swifties', studioIsActive: false, studioGenres: ['country', 'pop'], studioPicture: '/src/assets/softwareswifties.png', studioUsers: [], studioControlHostOnly: false, studioPlaylist: '' },
+    { studioName: 'Country Crew', studioIsActive: true, studioGenres: ['country'], studioPicture: '/src/assets/countrycrew.png', studioUsers: [], studioControlHostOnly: false, studioPlaylist: '' },
+    { studioName: 'Tune Team', studioIsActive: true, studioGenres: ['country', 'pop'], studioPicture: '/src/assets/tuneteam.png', studioUsers: [], studioControlHostOnly: true, studioPlaylist: '' },
+    { studioName: 'Sad Club', studioIsActive: false, studioGenres: ['pop'], studioPicture: '/src/assets/sadclub.png', studioUsers: [], studioControlHostOnly: false, studioPlaylist: '' },
+    { studioName: 'Sound Scholars', studioIsActive: true, studioGenres: ['Lo-Fi'], studioPicture: '/src/assets/soundscholars.png', studioUsers: [], studioControlHostOnly: true, studioPlaylist: '' },
+    { studioName: 'BLINKS', studioIsActive: false, studioGenres: ['K-Pop'], studioPicture: '/src/assets/blinks.png', studioUsers: [], studioControlHostOnly: true, studioPlaylist: '' }
 ];
 
 main();
