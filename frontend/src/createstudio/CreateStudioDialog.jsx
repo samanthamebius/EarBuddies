@@ -31,23 +31,26 @@ function useStudioPost() {
 
 		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 		const url = `${BASE_URL}/api/studio`;
+		let studioBannerImageUrl = "/images/defaultBanner.png";
 
-		// upload the image
-		const imgUploadConfig = {
-			headers: {
-				"content-type": "multipart/form-data",
-			},
-		};
-		const imgFormData = new FormData();
-		imgFormData.append("image", coverPhoto[0]);
+		if (coverPhoto) {
+			// upload the image
+			const imgUploadConfig = {
+				headers: {
+					"content-type": "multipart/form-data",
+				},
+			};
+			const imgFormData = new FormData();
+			imgFormData.append("image", coverPhoto[0]);
 
-		const imgUploadResponse = await axios.post(
-			`${url}/upload-image`,
-			imgFormData,
-			imgUploadConfig
-		);
+			const imgUploadResponse = await axios.post(
+				`${url}/upload-image`,
+				imgFormData,
+				imgUploadConfig
+			);
 
-		const studioBannerImageUrl = imgUploadResponse.headers["location"];
+			studioBannerImageUrl = imgUploadResponse.headers["location"];
+		}
 
 		try {
 			const response = await axios.post(`${url}/new`, {
