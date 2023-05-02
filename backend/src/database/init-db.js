@@ -5,12 +5,12 @@ import mongoose from 'mongoose';
 import { User, Studio } from './schema';
 
 const users = [
-    { username: 'smeb123', userDisplayName: "Samantha Mebius", profilePic: "avatar1.png", userIsActive: true, userStudios: [] },
-    { username: 'bre123', userDisplayName: "Breanna Jury", profilePic: "avatar2.png", userIsActive: false, userStudios: [] },
-    { username: 'ananya456', userDisplayName: "Ananya Ahluwalia", profilePic: "avatar3.png", userIsActive: true, userStudios: [] },
-    { username: 'amy456', userDisplayName: "Amy Rimmer", profilePic: "avatar4.png", userIsActive: false, userStudios: [] },
-    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "avatar5.png", userIsActive: true, userStudios: [] },
-    { username: 'yuewen789', userDisplayName: "Yuewen Zheng", profilePic: "avatar6.png", userIsActive: false, userStudios: [] }
+    { username: 'smeb123', userDisplayName: "Samantha Mebius", profilePic: "/src/assets/profile/anaconda.png", userIsActive: true, userStudios: [] },
+    { username: 'bre123', userDisplayName: "Breanna Jury", profilePic: "/src/assets/profile/bunny.png", userIsActive: false, userStudios: [] },
+    { username: 'ananya456', userDisplayName: "Ananya Ahluwalia", profilePic: "/src/assets/profile/cat.png", userIsActive: true, userStudios: [] },
+    { username: 'amy456', userDisplayName: "Amy Rimmer", profilePic: "/src/assets/profile/giraffe.png", userIsActive: false, userStudios: [] },
+    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "/src/assets/profile/jaguar.png", userIsActive: true, userStudios: [] },
+    { username: 'yuewen789', userDisplayName: "Yuewen Zheng", profilePic: "/src/assets/profile/penguin.png", userIsActive: false, userStudios: [] }
 ];
 
 const studios = [
