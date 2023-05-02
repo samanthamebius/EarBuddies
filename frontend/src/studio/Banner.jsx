@@ -98,11 +98,7 @@ export default function Banner({ id, studio }) {
 	return (
 		<div
 			className={styles.banner}
-			style={
-				backgroundImage
-					? { backgroundImage: `url(${backgroundImage})` }
-					: { backgroundColor: "#797979" }
-			}
+			style={{ backgroundImage: `url(${backgroundImage})` }}
 		>
 			<h1 className={styles.bannerStudioName}>{studioName}</h1>
 
