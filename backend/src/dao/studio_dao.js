@@ -54,6 +54,10 @@ async function updateStudioHost(id, host) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
 }
 
+async function updateStudioNames(id, newNames) {
+	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
+}
+
 await mongoose.disconnect;
 export {
 	createStudio,

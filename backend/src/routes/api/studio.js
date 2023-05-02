@@ -135,4 +135,15 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 		.send();
 });
 
+// update nickname for user in studio
+router.put("/:studioId/:userId/nickname", async (req, res) => {
+	try {
+		const { studioId, userId } = req.params;
+		
+	} catch(err) {
+		res.status(500).json(err);
+	}
+	
+});
+
 export default router;
