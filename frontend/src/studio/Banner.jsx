@@ -9,7 +9,6 @@ import ProfilePicImg4 from "../assets/profilepic4.png";
 import ProfilePicImg5 from "../assets/profilepic5.png";
 import ProfilePicImg6 from "../assets/profilepic6.png";
 import ListenerIcons from "../shared/ListenerIcons";
-import AddListenerIcon from "../assets/addListenerIcon.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
@@ -29,18 +28,7 @@ import ConfirmationDialog from "../shared/ConfirmationDialog";
 const isHost = false;
 
 const hostImage = ProfilePicImg1;
-const isListening = true;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const listenersImgs = [
-	ProfilePicImg1,
-	ProfilePicImg2,
-	ProfilePicImg3,
-	ProfilePicImg4,
-	ProfilePicImg5,
-	ProfilePicImg6,
-];
-const allListenersActive = [true, true, false, false, true, false];
 
 const listeners = [
 	{ id: 1, username: "breannajury", icon: ProfilePicImg1 },
@@ -60,9 +48,6 @@ const listeners = [
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 
 export default function Banner({ id, studio }) {
-	const [listenersImages, setListenersImages] = useState(listenersImgs);
-	const [listenersActive, setListenersActive] = useState(allListenersActive);
-	const isAddIcon = listenersImages.includes("/src/assets/addListenerIcon.png");
 	const navigate = useNavigate();
 
 	if (!studio) {
@@ -71,13 +56,6 @@ export default function Banner({ id, studio }) {
 
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
-
-	useEffect(() => {
-		if (isAddIcon == false) {
-			setListenersActive([...listenersActive, true]);
-			setListenersImages([...listenersImages, AddListenerIcon]);
-		}
-	}, [isAddIcon]);
 
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
@@ -94,6 +72,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
+	const isListening = studio.studioIsActive;
 
 	return (
 		<div
@@ -106,8 +85,6 @@ export default function Banner({ id, studio }) {
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
-					profileImages={listenersImages}
-					profileStatus={listenersActive}
 					isHomeCard={false}
 				/>
 			</div>

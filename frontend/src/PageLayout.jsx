@@ -84,7 +84,7 @@ function UserInfo() {
 
 		return (
 			<div className={styles.profile_layout}>
-				<img src={profilePicture} className={styles.profile_picture} />
+				<img src={profilePicture} className={styles.profilePic} />
 				<p className={styles.username}>{username} </p>
 			</div>
 		);

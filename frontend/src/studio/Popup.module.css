@@ -32,12 +32,12 @@
 
 .dialogContent {
   text-align: center;
-font-weight: 800;
-color: #757575;
-font-size: 32px;
-position: relative;
-margin: 0px;
-padding: 0px 24px 0px 24px
+  font-weight: 800;
+  color: #757575;
+  font-size: 32px;
+  position: relative;
+  margin: 0px;
+  padding: 0px 24px 0px 24px
 }
 
 .listenerList {
