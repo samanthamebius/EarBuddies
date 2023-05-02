@@ -56,8 +56,12 @@
 }
 
 .hostImage {
-    height: 25px;
     margin-left: auto;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+	border: 2px solid #FFFFFF;
+    pointer-events: none;
 }
 
 .greyOutImage {
