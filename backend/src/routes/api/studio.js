@@ -139,8 +139,17 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 router.put("/:studioId/:userId/nickname", async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
-		
-	} catch(err) {
+		const nickname = req.body.nickname;
+
+		const studio = await getStudio(studioId);
+		const users = studio[0].users;
+		const userPos = users.indexOf(userId);
+
+		const nicknames = studio[0].nicknames;
+		nicknames[userPos] = nickname;
+		const updated_studio = await updateStudioNickname(studioId, nicknames);
+		res.status(200).json(updated_studio);
+	} catch (err) {
 		res.status(500).json(err);
 	}
 	
