@@ -159,14 +159,12 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
 // get nickname for user in studio
 router.get("/:studioId/:userId/nickname", async (req, res) => {
 	try {
-		const { studioId, userId } = req.params;
+		const { studioId: id, userId } = req.params;
 		const mongoId = await getUserId(userId);
-		const studio = await getStudio(studioId);
+		const studio = await getStudio(id);
 		const users = studio[0].studioUsers;
 		const userPos = users.indexOf(mongoId);
-		console.log(studioNames);
-		const nickname = studio.studioNames[userPos];
-		console.log(nickname);
+		const nickname = studio[0].studioNames[userPos];
 
 		res.status(200).json(nickname);
 	} catch (err) {

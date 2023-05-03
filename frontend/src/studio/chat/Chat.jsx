@@ -67,8 +67,8 @@ export default function Chat(props) {
 	const room = id;
 	const textInput = useRef(null);
 	const userId = localStorage.getItem("current_user_id");
-	const nickname = axios.get(`${BASE_URL}/api/studio/${id}/${userId.replace(/['"]+/g, '')}/nickname`)
-	console.log(nickname)
+	const nickname = axios.get(`${BASE_URL}/api/studio/${id}/${userId.replace(/['"]+/g, '')}/nickname`);
+	console.log(nickname);
 
 	// Set previous messages
 	useEffect(() => {
