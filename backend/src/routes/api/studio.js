@@ -90,6 +90,7 @@ router.delete("/:id", async (req, res) => {
 			return res.status(400).json({ msg: "No studio id provided" });
 		}
 		const studio = await deleteStudio(id);
+		//TODO: remove studio from users
 		res.status(204).json(studio);
 	} catch (err) {
 		res.status(500).json(err);
@@ -149,8 +150,9 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
 
     //remove studio from user
     const studios = await getStudiosId(JSON.parse(user));
-    const newStudios = studios.filter((studio) => studio !== studio_id);
-    updateStudiosUsername(user, newStudios);
+    const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
+	console.log(newStudios)
+    updateStudiosUsername(JSON.parse(user), newStudios);
 
     res.status(200);
   } catch (err) {
