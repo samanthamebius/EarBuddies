@@ -53,7 +53,9 @@ router.post("/new", async (req, res) => {
         );
         //add studios to user
         listeners.forEach(async (listener) => {
-          const studios = await getStudios(listener);
+			console.log("listener: " + listener)
+			const studios = await getStudios(listener);
+        //   const studios = await getStudios(listener);
           studios.push(newStudio._id);
           updateStudios(listener, studios);
         });
@@ -159,7 +161,7 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
     const studios = await getStudios(user);
     const newStudios = studios.filter((studio) => studio !== studio_id);
     updateStudios(user, newStudios);
-	
+
     res.status(200);
   } catch (err) {
     res.status(500).json(err);

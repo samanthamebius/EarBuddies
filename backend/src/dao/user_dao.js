@@ -73,7 +73,7 @@ async function getUserbyId(id) {
 }
 
 async function getStudios(username) {
-  const user = await getUserbyId(username);
+  const user = await getUser(username);
   return user.userStudios;
 }
 
