@@ -61,13 +61,6 @@ export default function Banner({ id, studio }) {
 	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
 	const isHost = false;
 
-	useEffect(() => {
-		if (isAddIcon == false) {
-			setListenersActive([...listenersActive, true]);
-			setListenersImages([...listenersImages, AddListenerIcon]);
-		}
-	}, [isAddIcon]);
-
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
 	);

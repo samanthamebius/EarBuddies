@@ -84,10 +84,6 @@ async function getUserbyId(id) {
 	return user;
 }
 
-async function getStudios(username) {
-  const user = await getUser(username);
-  return user.userStudios;
-
 async function getUsername(id) {
 	const user = await getUserbyId(id);
 	return user.username;
@@ -122,6 +118,10 @@ async function updateStudios(id, studios) {
 	);
 }
 
+async function updateStudiosUsername(username, studios) {
+  return await User.findOneAndUpdate({ username: username }, { userStudios: studios });
+}
+
 async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
 }
@@ -144,5 +144,6 @@ export {
 	getUsers,
 	getUsername,
 	searchStudioUsers,
-  updateUserInfo
+  	updateUserInfo,
+	updateStudiosUsername			
 };
