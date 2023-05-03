@@ -3,7 +3,7 @@ import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio } from "../../dao/studio_dao.js";
-import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
+import { getUserId, getStudiosId, updateStudios, getUsername } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 
 const router = express.Router();
@@ -49,15 +49,16 @@ router.post("/new", async (req, res) => {
           isHostOnly,
           playlist_id
         );
+        
         //add studios to user
         listenerUserIds.forEach(async (listener) => {
-          const studios = await getStudios(listener);
+          const username = await getUsername(listener);
+          const studios = await getStudiosId(username);
           studios.push(newStudio._id);
           updateStudios(listener, studios);
         });
         // Respond with the newly created studio
         res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
-
       }, function(err) {
         console.log('Something went wrong!', err);
       });
