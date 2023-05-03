@@ -30,34 +30,12 @@ function SearchBar({ label, searchType, studioId }) {
       },
     },
   });
-  
+
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedResult, setSelectedResult] = useState(null); 
+  const [selectedResult, setSelectedResult] = useState(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const username = localStorage.getItem("current_user_id");
-
-  const searchSongs = () => {
-    // search spotify for songs
-    try {
-      axios
-        .get(
-          `${BASE_URL}/api/spotify/search/${searchTerm}`)
-        .then((response) => {
-          setSearchResults(response.data);
-        })
-        .catch((error) => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          localStorage.removeItem("expires_in");
-          localStorage.removeItem("current_user_id");
-          navigate("/login");
-          return <p>Could not load search</p>;
-        });
-    } catch (error) {
-      console.log(error.msg);
-    }
-  };
 
   const searchUsers = () => {
     // search users
@@ -154,9 +132,7 @@ function SearchBar({ label, searchType, studioId }) {
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
-      if (searchType === "spotify") {
-        searchSongs();
-      } else if (searchType === "users") {
+      if (searchType === "users") {
         searchUsers();
       } else if (searchType === "studios") {
         searchStudios();
@@ -171,15 +147,7 @@ function SearchBar({ label, searchType, studioId }) {
   }, [searchTerm]);
 
   function displayText(result) {
-    if (searchType === "spotify") {
-      if (result.type === "audiobook") {
-        return `${result.name} - ${result.authors} - Audiobook`;
-      } else if (result.type === "track") {
-        return `${result.name} - ${result.artists} - Song`;
-      } else {
-        return `${result.name} - Podcast`;
-      }
-    } else if (searchType === "users" || searchType === "studioUsers") {
+    if (searchType === "users" || searchType === "studioUsers") {
       return `${result.userDisplayName}`;
     } else if (searchType === "studios" || searchType === "activeStudios") {
       return `${result.studioName}`;
@@ -187,9 +155,7 @@ function SearchBar({ label, searchType, studioId }) {
   }
 
   function displayImage(result) {
-    if (searchType === "spotify") {
-      return result.image;
-    } else if (searchType === "users" || searchType === "studioUsers") {
+    if (searchType === "users" || searchType === "studioUsers") {
       return result.profilePic;
     } else if (searchType === "studios" || searchType === "activeStudios") {
       return result.studioPicture;
@@ -200,35 +166,35 @@ function SearchBar({ label, searchType, studioId }) {
     <Container disableGutters={true} className={styles.searchBar}>
       <ThemeProvider theme={theme}>
         <TextField
-        color="secondary"
-        id="search"
-        type="text"
-        label={label}
-        value={searchTerm}
-        onChange={(event) => setSearchTerm(event.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <SearchRoundedIcon style={{ color: "#757575" }} position="start" className={styles.searchIcon}/>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">
-              {searchTerm.length > 0 && (
-                <ClearRounded
-                  color="action"
-                  className={styles.clearIcon}
-                  onClick={handleCancel}
-                />
-              )}
-            </InputAdornment>
-          ),
-        }}
-        InputLabelProps={{
-          shrink: focused || searchTerm.length > 0,
-          style: {marginLeft: searchTerm || focused  ? 0 : 30 }
-        }} />
+          color="secondary"
+          id="search"
+          type="text"
+          label={label}
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <SearchRoundedIcon style={{ color: "#757575" }} position="start" className={styles.searchIcon} />
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                {searchTerm.length > 0 && (
+                  <ClearRounded
+                    color="action"
+                    className={styles.clearIcon}
+                    onClick={handleCancel}
+                  />
+                )}
+              </InputAdornment>
+            ),
+          }}
+          InputLabelProps={{
+            shrink: focused || searchTerm.length > 0,
+            style: { marginLeft: searchTerm || focused ? 0 : 30 }
+          }} />
       </ThemeProvider>
       {searchResults?.length > 0 && <List className={styles.listContainer}>
         {searchResults.map((result) => (
