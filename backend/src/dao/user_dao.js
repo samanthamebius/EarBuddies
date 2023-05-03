@@ -6,11 +6,12 @@ import mongoose from "mongoose";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
-async function createUser(username, userDisplayName, profilePic) {
+async function createUser(username, userDisplayName, spotifyPic) {
 	const newUser = new User({
 		username: username,
 		userDisplayName: userDisplayName,
-		profilePic: profilePic,
+		spotifyPic: spotifyPic,
+		profilePic: spotifyPic,
 		userIsActive: true,
 		userStudios: [],
 	});
@@ -59,10 +60,10 @@ async function searchUsers(query, username) {
 	return users;
   }
 
-async function updateUserInfo(username, userDisplayName, profilePic) {
+async function updateUserInfo(username, userDisplayName, spotifyPic, profilePic) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userDisplayName: userDisplayName, profilePic: profilePic }
+		{ userDisplayName: userDisplayName, spotifyPic: spotifyPic, profilePic: profilePic }
 	);
 }
 
@@ -80,6 +81,7 @@ async function getUserbyId(id) {
 	const user = await User.findOne({ _id: id });
 	return user;
 }
+
 
 async function getUsername(id) {
 	const user = await getUserbyId(id);
