@@ -68,14 +68,14 @@ export default function Chat(props) {
 	const textInput = useRef(null);
 	const messagesRef = useRef(null);
 
-	// scroll to the bottom of chat container
-	const scrollToBottom = () => {
-		messagesRef.current?.scrollIntoView({ behaviour: "smooth" });
-	};
-
-	// scroll to the bottom of the chat container when it overflows
+	// scroll to the bottom of the chat container when it's overflowed
 	useEffect(() => {
-		scrollToBottom();
+		setTimeout(() => {
+			messagesRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}, 100);
 	}, [messages]);
 
 	// Set previous messages
