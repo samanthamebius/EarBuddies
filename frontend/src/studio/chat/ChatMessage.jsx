@@ -139,7 +139,7 @@ function ChatMessage(props) {
 			username: username,
 			displayName: displayName,
 		};
-		axios.put(`${BASE_URL}/api/chat/new-reaction/${room.id}`, {
+		axios.put(`${BASE_URL}/api/chat/new-reaction/${room}`, {
 			messageId: currentMessageId,
 			reaction,
 		});

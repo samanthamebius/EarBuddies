@@ -24,7 +24,7 @@
 	padding: 12px;
 	border-radius: 16px 16px 0 16px;
 	margin-bottom: -10px;
-	width: calc(0.15 * 100vw);
+	max-width: calc(0.2 * 100vw);
 }
 
 .messageReplyContent {
@@ -34,7 +34,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	display: "inline-block";
 }
 
 .messageDecoration {

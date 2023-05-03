@@ -68,6 +68,16 @@ export default function Chat(props) {
 	const textInput = useRef(null);
 	const messagesRef = useRef(null);
 
+	// scroll to the bottom of chat container
+	const scrollToBottom = () => {
+		messagesRef.current?.scrollIntoView({ behaviour: "smooth" });
+	};
+
+	// scroll to the bottom of the chat container when it overflows
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
+
 	// Set previous messages
 	useEffect(() => {
 		axios.get(`${BASE_URL}/api/chat/all-messages/${id}`).then((response) => {
@@ -132,16 +142,6 @@ export default function Chat(props) {
 			socket.emit("leave_room", { displayName, room });
 		};
 	}, []);
-
-	// scroll to the bottom of the chat container when it overflows
-	useEffect(() => {
-		scrollToBottom();
-	}, [messages]);
-
-	// scroll to the bottom of chat container
-	const scrollToBottom = () => {
-		messagesRef.current?.scrollIntoView({ behaviour: "smooth" });
-	};
 
 	// send the message
 	const handleSendMessage = async () => {
@@ -217,7 +217,7 @@ export default function Chat(props) {
 							inputRef={textInput}
 						/>
 					))}
-					<div ref={messagesRef} />
+					<div ref={messagesRef}></div>
 				</div>
 			</div>
 			<div
@@ -227,17 +227,7 @@ export default function Chat(props) {
 				<div className={styles.inputContent}>
 					{replyMessage !== "" && (
 						<div className={styles.replyMessage}>
-							<div
-								style={{
-									overflow: "hidden",
-									textOverflow: "ellipsis",
-									whiteSpace: "nowrap",
-									textAlign: "left",
-									display: "inline-block",
-								}}
-							>
-								{replyMessage}
-							</div>
+							<p className={styles.replyMessageText}>{replyMessage}</p>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}
