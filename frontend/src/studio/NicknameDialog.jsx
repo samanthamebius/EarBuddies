@@ -7,8 +7,12 @@ import DialogActions from '@mui/material/DialogActions';
 import styles from './Popup.module.css';
 import TextField from '@mui/material/TextField';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
+import axios from 'axios';
 
-export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog }) {
+export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog, studioId}) {
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const userId = localStorage.getItem("current_user_id");
+
     const handleClose = () => { handleCloseNicknameDialog(false) };
     const [nicknameInput, setNicknameInput] = useState('');
     const [isNicknameErrorMessage, setIsNicknameErrorMessage] = useState(false);
@@ -18,6 +22,8 @@ export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNick
             setIsNicknameErrorMessage(true);
         } else {
             setIsNicknameErrorMessage(false);
+            const nickname = nicknameInput
+            const nicknameResponse = axios.put(`${BASE_URL}/api/studio/${studioId}/${userId.replace(/['"]+/g, '')}/nickname`, {nickname: nickname})
             handleClose()
         }
     };

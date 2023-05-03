@@ -93,6 +93,7 @@ export default function Banner({ id, studio }) {
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
+					id={id}
 				/>
 			</div>
 		</div>
@@ -103,6 +104,7 @@ export function DropdownKebab({
 	controlEnabled,
 	handleControlToggle,
 	handleDelete,
+	id,
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -217,6 +219,7 @@ export function DropdownKebab({
 			<NicknameDialog
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
+				studioId={id}
 			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />

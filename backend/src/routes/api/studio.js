@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio } from "../../dao/studio_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioNames } from "../../dao/studio_dao.js";
 import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 
@@ -140,14 +140,15 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const nickname = req.body.nickname;
-
+		const mongoId = await getUserId(userId)
+		
 		const studio = await getStudio(studioId);
-		const users = studio[0].users;
-		const userPos = users.indexOf(userId);
-
-		const nicknames = studio[0].nicknames;
+		const users = studio[0].studioUsers;
+		const userPos = users.indexOf(mongoId);
+		
+		const nicknames = studio[0].studioNames;
 		nicknames[userPos] = nickname;
-		const updated_studio = await updateStudioNickname(studioId, nicknames);
+		const updated_studio = await updateStudioNames(studioId, nicknames);
 		res.status(200).json(updated_studio);
 	} catch (err) {
 		res.status(500).json(err);

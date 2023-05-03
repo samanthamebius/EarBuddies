@@ -70,6 +70,11 @@ async function getUserbyId(id) {
 	return user;
 }
 
+async function getUsername(id) {
+	const user = await getUserbyId(id);
+	return user.username;
+}
+
 async function getStudios(username) {
   const user = await getUserbyId(username);
   return user.userStudios;
@@ -88,4 +93,4 @@ async function deleteUser(username) {
 
 await mongoose.disconnect;
 
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo };
+export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo, getUsername };
