@@ -22,7 +22,9 @@ async function loginUser(spotifyApi, data) {
 		spotifyApi
 			.getMe()
 			.then(async function (data) {
+				console.log("Some information about the authenticated user", data.body);
 				const user = await getUser(data.body.id);
+				console.log(data)
 				// check to see if user in db
 				if (!user) {
 					await createUser(
@@ -57,7 +59,7 @@ async function getUsers() {
 async function searchUsers(query, username) {
 	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
-  }
+}
 
 async function updateUserInfo(username, userDisplayName, profilePic) {
 	return await User.findOneAndUpdate(
@@ -137,5 +139,5 @@ export {
 	getUsers,
 	getUsername,
 	searchStudioUsers,
-  updateUserInfo
+	updateUserInfo
 };

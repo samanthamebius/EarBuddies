@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styles from './StudioPage.module.css'
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -13,8 +13,9 @@ import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import WebPlayback from "./WebPlayback";
 
-const StyledSlider = styled(Slider) ({
+const StyledSlider = styled(Slider)({
   color: "#ffffff",
   height: 4,
   '& .MuiSlider-thumb': {
@@ -37,10 +38,12 @@ const StyledSlider = styled(Slider) ({
 });
 
 export default function NowPlaying() {
+  const accessToken = localStorage.getItem("access_token");
   return (
     <div className={styles.nowplaying}>
-      <SongInfo/>
-      <ControlPanel/>
+      {/* <SongInfo/>
+      <ControlPanel/> */}
+      <WebPlayback token={accessToken} />
     </div>
   );
 }
@@ -50,10 +53,10 @@ function SongInfo() {
     <div className={styles.songSection}>
       <h3 className={styles.song}>champagne problems</h3>
       <div className={styles.artist}>
-        <img className={styles.artistImg} src={artist_profile}/>
+        <img className={styles.artistImg} src={artist_profile} />
         <div className={styles.artistName}>Taylor Swift</div>
       </div>
-      <img className={styles.albumArtwork} src={album_artwork}/>
+      <img className={styles.albumArtwork} src={album_artwork} />
     </div>
   )
 }
@@ -63,28 +66,28 @@ function ControlPanel() {
 
   return (
     <div className={styles.controlPanel}>
-        <div className={styles.playbackCntrls}>
-          <SkipPreviousRoundedIcon 
-            sx={{"&:hover": { cursor: "pointer" }}} 
-            style={{color: "white", fontSize: "40px" }}/>
-          {isPlaying ? 
-            <PlayCircleFilledRoundedIcon 
-              sx={{"&:hover": { cursor: "pointer" }}} 
-              style={{color: "white", fontSize: "40px" }} 
-              onClick={() => setPlaying(!isPlaying)}/>
+      <div className={styles.playbackCntrls}>
+        <SkipPreviousRoundedIcon
+          sx={{ "&:hover": { cursor: "pointer" } }}
+          style={{ color: "white", fontSize: "40px" }} />
+        {isPlaying ?
+          <PlayCircleFilledRoundedIcon
+            sx={{ "&:hover": { cursor: "pointer" } }}
+            style={{ color: "white", fontSize: "40px" }}
+            onClick={() => setPlaying(!isPlaying)} />
           :
-            <PauseCircleRoundedIcon 
-              sx={{"&:hover": { cursor: "pointer" }}} 
-              style={{color: "white", fontSize: "40px" }} 
-              onClick={() => setPlaying(!isPlaying)}/>
-          }
-          <SkipNextRoundedIcon 
-            sx={{"&:hover": { cursor: "pointer" }}} 
-            style={{color: "white", fontSize: "40px" }} />
-        </div>    
-      <TimeSlider/>
-      <VolumeSlider/>
-      
+          <PauseCircleRoundedIcon
+            sx={{ "&:hover": { cursor: "pointer" } }}
+            style={{ color: "white", fontSize: "40px" }}
+            onClick={() => setPlaying(!isPlaying)} />
+        }
+        <SkipNextRoundedIcon
+          sx={{ "&:hover": { cursor: "pointer" } }}
+          style={{ color: "white", fontSize: "40px" }} />
+      </div>
+      <TimeSlider />
+      <VolumeSlider />
+
     </div>
   )
 }
@@ -101,27 +104,27 @@ export function VolumeSlider() {
     <div className={styles.volume}>
       <Box fullwidth>
         <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
-          {isMute ? 
-            <VolumeOffRoundedIcon 
-              sx={{"&:hover": { cursor: "pointer" }}} 
-              style={{color: "white", fontSize: "25px" }} 
+          {isMute ?
+            <VolumeOffRoundedIcon
+              sx={{ "&:hover": { cursor: "pointer" } }}
+              style={{ color: "white", fontSize: "25px" }}
               className={styles.controlBtn}
-              onClick={() => setMute(!isMute)}/>
-          :
-            <VolumeUpRoundedIcon 
-              sx={{"&:hover": { cursor: "pointer" }}} 
-              style={{color: "white", fontSize: "25px" }} 
+              onClick={() => setMute(!isMute)} />
+            :
+            <VolumeUpRoundedIcon
+              sx={{ "&:hover": { cursor: "pointer" } }}
+              style={{ color: "white", fontSize: "25px" }}
               className={styles.controlBtn}
-              onClick={() => setMute(!isMute)}/>
+              onClick={() => setMute(!isMute)} />
           }
-          <StyledSlider 
-            disabled={isMute} 
-            className={styles.slider} 
-            aria-label="Volume" 
-            value={value} 
-            onChange={handleChange}/>
+          <StyledSlider
+            disabled={isMute}
+            className={styles.slider}
+            aria-label="Volume"
+            value={value}
+            onChange={handleChange} />
         </Stack>
-     </Box>
+      </Box>
     </div>
   );
 }
@@ -148,33 +151,33 @@ export function TimeSlider() {
   return (
     <div className={styles.time}>
       <StyledSlider
-          aria-label="time-indicator"
-          size="small"
-          value={position}
-          min={0}
-          step={1}
-          max={duration}
-          color="secondary"
-          onChange={(_, value) => setPosition(value)} />
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mt: -2,
-          }}
-        >
-          <TinyText>{formatDuration(position)}</TinyText>
-          <TinyText>-{formatDuration(duration - position)}</TinyText>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mt: -1,
-          }}
-        ></Box>
+        aria-label="time-indicator"
+        size="small"
+        value={position}
+        min={0}
+        step={1}
+        max={duration}
+        color="secondary"
+        onChange={(_, value) => setPosition(value)} />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mt: -2,
+        }}
+      >
+        <TinyText>{formatDuration(position)}</TinyText>
+        <TinyText>-{formatDuration(duration - position)}</TinyText>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: -1,
+        }}
+      ></Box>
     </div>
   )
 }

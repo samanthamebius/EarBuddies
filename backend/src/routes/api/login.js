@@ -5,9 +5,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 import mongoose from 'mongoose';
-import { getUsers, loginUser } from '../../dao/user_dao';
+import { loginUser } from '../../dao/user_dao';
 import { setSpotifyApi } from '../../dao/spotify_dao';
-import { searchActiveStudios, searchStudios } from '../../dao/user_dao';
 
 const router = express.Router();
 router.use(cors())
@@ -40,6 +39,8 @@ router.post("/", async (req, res) => {
     spotifyApi.setRefreshToken(refresh_token);
     setSpotifyApi(spotifyApi);
     const username = await loginUser(spotifyApi, data);
+
+
 
     res.json({
       access_token: access_token,
