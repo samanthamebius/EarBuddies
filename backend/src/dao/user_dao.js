@@ -60,11 +60,13 @@ async function getUser(username) {
 	return user;
 }
 
+//TODO: deprecate
 async function getUserId(username) {
   const user = await getUser(username);
   return user._id;
 }
 
+//TODO: deprecate
 async function getUserbyId(id) {
 	const user = await User.findOne({ _id: id });
 	return user;

@@ -10,13 +10,17 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
+import axios from "axios";
 
-export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, listeners }) {
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseDialog, listeners, studio_id }) {
     const navigate = useNavigate();
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const handleClose = () => { handleCloseDialog(false) };
     const [ newHost, setNewHost] = useState(null);
+    const user_id = localStorage.getItem('current_user_id');
 
     const handleSubmit = () => {
         if (newHost === null) {
@@ -28,8 +32,10 @@ export default function LeaveStudioDialog({ isDialogOpened, handleCloseDialog, l
     };
 
     const handleSubmitConfirm = () => { 
+        console.log("yes i want to leave")
         setIsConfirmOpen(false)
         handleClose()
+        axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
         navigate('/', { replace: true });
     };
 

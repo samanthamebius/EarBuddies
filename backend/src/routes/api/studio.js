@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio } from "../../dao/studio_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers } from "../../dao/studio_dao.js";
 import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 
@@ -26,7 +26,9 @@ router.post("/new", async (req, res) => {
 
 		console.log("host_name: " + host)
 		const host_name = JSON.stringify(host);
-		const listenerUserIds = await Promise.all(listeners.map(getUserId));
+		// const listenerUserIds = await Promise.all(listeners.map(getUserId));
+		// console.log("listenerUserIds: " + listenerUserIds)
+		console.log("listerners: " + listeners)
 
     //create studio playlist
     const playlist_name = "Earbuddies - " + name;
@@ -42,7 +44,7 @@ router.post("/new", async (req, res) => {
         // Create the new studio
         const newStudio = await createStudio(
           name,
-          listenerUserIds,
+          listeners,
           host_name,
           genres,
           coverPhoto,
@@ -50,7 +52,7 @@ router.post("/new", async (req, res) => {
           playlist_id
         );
         //add studios to user
-        listenerUserIds.forEach(async (listener) => {
+        listeners.forEach(async (listener) => {
           const studios = await getStudios(listener);
           studios.push(newStudio._id);
           updateStudios(listener, studios);
@@ -133,6 +135,35 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 		.header("Location", `/images/${newFileName}`)
 		.header("Access-Control-Expose-Headers", "Location")
 		.send();
+});
+
+router.put("/:studio_id/leave/:user", async (req, res) => {
+  try {
+    const { studio_id, user } = req.params;
+    if (!studio_id) {
+      return res.status(400).json({ msg: "No studio id provided" });
+    }
+    if (!user) {
+      return res.status(400).json({ msg: "No user id provided" });
+    }
+    const studio = await getStudio(studio_id);
+    const listeners = studio[0].studioUsers;
+    console.log("listeners: " + listeners);
+    console.log("user: " + user);
+
+    //remove user from studio
+    const newListeners = listeners.filter((listener) => listener !== user);
+    await updateStudioUsers(studio_id, newListeners);
+
+    //remove studio from user
+    const studios = await getStudios(user);
+    const newStudios = studios.filter((studio) => studio !== studio_id);
+    updateStudios(user, newStudios);
+	
+    res.status(200);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 export default router;

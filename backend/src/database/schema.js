@@ -13,7 +13,7 @@ const userSchema = new Schema({
 const studioSchema = new Schema({
     studioName: String,
     studioIsActive: Boolean,
-    studioUsers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+    studioUsers: [{ type: String, required: true }],
     studioHost: String,
     studioGenres: [String],
     studioPicture: String,
