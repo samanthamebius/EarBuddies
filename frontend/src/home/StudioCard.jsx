@@ -18,16 +18,6 @@ const genres = ["Pop", "Country"];
 const hostImage = ProfilePicImg1;
 const isListening = true;
 
-const listenersImages = [
-	ProfilePicImg1,
-	ProfilePicImg2,
-	ProfilePicImg3,
-	ProfilePicImg4,
-	ProfilePicImg5,
-	ProfilePicImg6,
-];
-const listenersActive = [true, true, false, false, true, false];
-
 export default function StudioCard(props) {
 	const { socket, studio } = props;
 	// studio will be gotten from backend when set up
@@ -64,10 +54,10 @@ export default function StudioCard(props) {
 						))}
 					</div>
 					<div className={styles.listeners}>
+						{/* TODO: This is currently broken since not synced with backend - fix following banner structure */}
 						<ListenerIcons
+							// studioUsers={users} --> ADD IN ONCE BACKEND SYNCED
 							isListening={isListening}
-							profileImages={listenersImages}
-							profileStatus={listenersActive}
 							isHomeCard={true}
 						/>
 						<img className={styles.hostImage} src={hostImage} />

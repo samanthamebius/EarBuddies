@@ -1,5 +1,6 @@
 import useGet from "../hooks/useGet";
 import styles from "./ListenerIcons.module.css";
+import AddIcon from "../assets/addListenerIcon.png";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,8 +29,6 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 export default function StudioCard({
 	studioUsers,
 	isListening,
-	profileImages,
-	profileStatus,
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
@@ -46,8 +45,14 @@ export default function StudioCard({
 		}
 		fetchUserData();
 	}, [studioUsers]);
-	profileImages = userList.map(user => user.profilePic);
-	profileStatus = userList.map(user => user.userIsActive);
+	const profileImages = userList.map(user => user.profilePic);
+	const profileStatus = userList.map(user => user.userIsActive);
+
+	if (!isHomeCard) {
+		profileImages.push(AddIcon);
+		profileStatus.push(true);
+	}
+	
 	return (
 		<div className={styles.listenersImages}>
 			{Array.isArray(profileImages)

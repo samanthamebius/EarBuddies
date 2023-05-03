@@ -3,8 +3,11 @@
 	position: relative;
 }
 .listenerImage {
-	height: 25px;
 	margin-left: 10px;
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	border: 2px solid #FFFFFF;
 	position: relative;
 	-webkit-user-drag: none;
 	-webkit-user-select: none;
