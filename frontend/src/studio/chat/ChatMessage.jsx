@@ -58,22 +58,6 @@ function ChatMessage(props) {
 		return message;
 	};
 
-	const setReplyMessageStyle = () => {
-		const message = {
-			backgroundColor: "#f6f9fa",
-			padding: "12px",
-			borderRadius: `${
-				isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
-			}`,
-			marginBottom: "-10px",
-			overflow: "hidden",
-			textOverflow: "ellipsis",
-			width: "20%",
-		};
-
-		return message;
-	};
-
 	const setMessageBodyStyle = () => {
 		const message = {
 			backgroundColor: `${isCurrentUser ? "#E640F8" : "#B03EEE"}`,
@@ -247,7 +231,7 @@ function ChatMessage(props) {
 			<h4 className={styles.username}>{messageDisplayName}</h4>
 			{/* Message Reply */}
 			{(replyMessage || isPastReply) && (
-				<div style={setReplyMessageStyle()}>
+				<div className={styles.messageReply}>
 					<p className={styles.messageReplyContent}>{replyMessage}</p>
 				</div>
 			)}

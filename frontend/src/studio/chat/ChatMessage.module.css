@@ -19,10 +19,22 @@
 	font-size: 14px;
 }
 
+.messageReply {
+	background-color: #f6f9fa;
+	padding: 12px;
+	border-radius: 16px 16px 0 16px;
+	margin-bottom: -10px;
+	width: calc(0.15 * 100vw);
+}
+
 .messageReplyContent {
 	margin: 0;
 	font-size: 12px;
-	color: "grey";
+	color: grey;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: "inline-block";
 }
 
 .messageDecoration {

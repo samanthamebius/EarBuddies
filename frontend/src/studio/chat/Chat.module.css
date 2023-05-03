@@ -70,11 +70,11 @@
 }
 
 .inputContent {
-	width: 88%;
+	width: calc(0.32 * 100vw);
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	padding: 10px 0 0 10px;
+	padding: 12px 0 0 10px;
 }
 
 .replyMessage {
@@ -83,7 +83,7 @@
 	background-color: #f8e9fc;
 	padding: 4px;
 	border-radius: 10px;
-	width: 100%;
+	width: calc(0.32 * 100vw);
 	display: flex;
 	color: #a49da5;
 	justify-content: space-between;

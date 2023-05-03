@@ -229,11 +229,11 @@ export default function Chat(props) {
 						<div className={styles.replyMessage}>
 							<div
 								style={{
-									width: "auto",
 									overflow: "hidden",
 									textOverflow: "ellipsis",
-									overflowWrap: "anywhere",
+									whiteSpace: "nowrap",
 									textAlign: "left",
+									display: "inline-block",
 								}}
 							>
 								{replyMessage}
@@ -270,6 +270,7 @@ export default function Chat(props) {
 						cursor: "pointer",
 						position: "sticky",
 						top: "0",
+						justifySelf: "end",
 					}}
 					fontSize="small"
 				/>
