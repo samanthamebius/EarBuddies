@@ -72,16 +72,17 @@ async function getUser(username) {
 	return user;
 }
 
+//TODO: deprecate
 async function getUserId(username) {
 	const user = await getUser(username);
 	return user._id;
 }
 
+//TODO: deprecate
 async function getUserbyId(id) {
 	const user = await User.findOne({ _id: id });
 	return user;
 }
-
 
 async function getUsername(id) {
 	const user = await getUserbyId(id);
@@ -117,6 +118,10 @@ async function updateStudios(id, studios) {
 	);
 }
 
+async function updateStudiosUsername(username, studios) {
+  return await User.findOneAndUpdate({ username: username }, { userStudios: studios });
+}
+
 async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
 }
@@ -139,5 +144,6 @@ export {
 	getUsers,
 	getUsername,
 	searchStudioUsers,
-  updateUserInfo
+  	updateUserInfo,
+	updateStudiosUsername			
 };

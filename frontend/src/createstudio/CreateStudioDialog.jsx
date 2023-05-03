@@ -23,6 +23,7 @@ function useStudioPost() {
 	) => {
 		const host = JSON.parse(localStorage.getItem("current_user_id"));
 		listeners.push(host);
+    console.log(listeners)
 		//add dummy listener pending search bar completion
 		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
