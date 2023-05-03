@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers } from "../../dao/studio_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
 import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 

@@ -72,7 +72,7 @@ export default function Banner({ id, studio }) {
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
-	const isHost = false;
+	const isHost = true;
 
 	useEffect(() => {
 		if (isAddIcon == false) {
