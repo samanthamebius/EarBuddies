@@ -22,9 +22,7 @@ async function loginUser(spotifyApi, data) {
 		spotifyApi
 			.getMe()
 			.then(async function (data) {
-				console.log("Some information about the authenticated user", data.body);
 				const user = await getUser(data.body.id);
-				console.log(data)
 				// check to see if user in db
 				if (!user) {
 					await createUser(
