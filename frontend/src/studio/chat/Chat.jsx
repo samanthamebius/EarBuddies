@@ -62,10 +62,13 @@ export default function Chat(props) {
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
-	const { username, displayName } = useContext(AppContext);
+	const { username } = useContext(AppContext);
 	const { id } = useParams();
 	const room = id;
 	const textInput = useRef(null);
+	const userId = localStorage.getItem("current_user_id");
+	const nickname = axios.get(`${BASE_URL}/api/studio/${id}/${userId.replace(/['"]+/g, '')}/nickname`)
+	console.log(nickname)
 
 	// Set previous messages
 	useEffect(() => {
@@ -84,7 +87,7 @@ export default function Chat(props) {
 				{
 					id: data.id,
 					username: data.username,
-					displayName: data.displayName,
+					displayName: nickname,
 					message: data.message,
 					isReply: data.isReply,
 					replyMessage: data?.replyMessage,
@@ -109,7 +112,7 @@ export default function Chat(props) {
 						id: newMessage.id,
 						message: newMessage.message,
 						username: newMessage.username,
-						displayName: newMessage.displayName,
+						displayName: newMessage.nickname,
 					},
 				]);
 			}
@@ -128,7 +131,7 @@ export default function Chat(props) {
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
-			socket.emit("leave_room", { displayName, room });
+			socket.emit("leave_room", { nickname, room });
 		};
 	}, []);
 
@@ -141,7 +144,7 @@ export default function Chat(props) {
 				room,
 				id: messageId,
 				username,
-				displayName,
+				nickname,
 				message,
 				isReply,
 				replyMessage,
@@ -149,7 +152,7 @@ export default function Chat(props) {
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
-				displayName: displayName,
+				displayName: nickname,
 				message: message,
 				isReply: isReply,
 				replyMessage: replyMessage,
