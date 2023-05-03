@@ -1,5 +1,6 @@
 import express from "express";
 import { getUser, getUserbyId, deleteUser, updateUserInfo, searchActiveStudios, searchStudioUsers, searchStudios, searchUsers } from "../../dao/user_dao";
+import { deleteUserFromStudio } from "../../dao/studio_dao";
 
 const router = express.Router();
 
@@ -84,7 +85,18 @@ router.delete("/:id", async (req, res) => {
     return res.status(400).json({ msg: "No user id provided" });
   }
   try {
-    await deleteUser(id);
+    //delete from all studios
+    console.log("deleting user from all studios")
+    console.log("id is " + id)
+    const user = await getUser(id);
+    console.log("user is " + user)
+    const studios = user.userStudios;
+    console.log("studios are " + studios)
+    for (var i = 0; i < studios.length; i++) {
+      console.log("deleting user from studio " + studios[i])
+      await deleteUserFromStudio(studios[i], id);
+    }
+    // await deleteUser(id);
     res.status(204).json({ msg: "User deleted" });
   } catch (err) {
     res.status(500).json(err);
