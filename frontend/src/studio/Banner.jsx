@@ -147,6 +147,7 @@ export function DropdownKebab({
 	const [isInAssign, setInAssign] = useState(false);
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
+	const navigate = useNavigate();
 
 	const enterLeave = () => {
 		setInLeave(true);
@@ -218,6 +219,13 @@ export function DropdownKebab({
 		setIsNicknameOpen(true);
 	};
 
+	const handleLeaveStudio = () => {
+		console.log("leave studio");
+		const user_id = localStorage.getItem("current_user_id");
+		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+        navigate('/', { replace: true });
+	};
+
 	return (
 		<div>
 			<LeaveStudioDialog
@@ -242,6 +250,7 @@ export function DropdownKebab({
 				handleClose={() => setConfirmleaveOpen(false)}
 				handleAction={() => {
 					handleClose;
+					handleLeaveStudio();
 				}} //TO DO: replace with leave functionality
 				message={"Are you sure you want to leave this studio?"}
 				actionText={"Leave"}

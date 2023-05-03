@@ -23,6 +23,7 @@ export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseD
     const user_id = localStorage.getItem('current_user_id');
 
     const handleSubmit = () => {
+        console.log("submitting")
         if (newHost === null) {
             setIsHostErrorMessage(true);
         } else {
@@ -33,10 +34,10 @@ export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseD
 
     const handleSubmitConfirm = () => { 
         console.log("yes i want to leave")
-        setIsConfirmOpen(false)
-        handleClose()
-        axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
-        navigate('/', { replace: true });
+        // setIsConfirmOpen(false)
+        // handleClose()
+        // axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+        // navigate('/', { replace: true });
     };
 
     return(
@@ -65,9 +66,9 @@ export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseD
                 <ConfirmationDialog 
                     isOpen={isConfirmOpen}
                     handleClose={() => setIsConfirmOpen(false)}
-                    handleAction={() => handleSubmitConfirm()} 
+                    handleAction={handleSubmitConfirm} 
                     message={"Are you sure you want to leave this studio?"}
-                    actionText={"Leave"}/>
+                    actionText={"Leave!!!"}/>
             </DialogContent>
         </Dialog>
     )

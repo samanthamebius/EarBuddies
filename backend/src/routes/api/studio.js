@@ -25,7 +25,7 @@ router.post("/new", async (req, res) => {
 		} = req.body;
 
 		console.log("host_name: " + host)
-		const host_name = JSON.stringify(host);
+		const host_name = host;
 		// const listenerUserIds = await Promise.all(listeners.map(getUserId));
 		// console.log("listenerUserIds: " + listenerUserIds)
 		console.log("listerners: " + listeners)
@@ -139,6 +139,7 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 		.send();
 });
 
+//leave studio
 router.put("/:studio_id/leave/:user", async (req, res) => {
   try {
     const { studio_id, user } = req.params;
@@ -150,15 +151,13 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
     }
     const studio = await getStudio(studio_id);
     const listeners = studio[0].studioUsers;
-    console.log("listeners: " + listeners);
-    console.log("user: " + user);
 
     //remove user from studio
-    const newListeners = listeners.filter((listener) => listener !== user);
+    const newListeners = listeners.filter((listener) => listener !== JSON.parse(user));
     await updateStudioUsers(studio_id, newListeners);
 
     //remove studio from user
-    const studios = await getStudios(user);
+    const studios = await getStudios(JSON.parse(user));
     const newStudios = studios.filter((studio) => studio !== studio_id);
     updateStudios(user, newStudios);
 
