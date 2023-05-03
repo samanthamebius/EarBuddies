@@ -99,7 +99,7 @@ function ChatMessage(props) {
 
 		if (!messageExists) {
 			await axios.put(
-				`http://localhost:3000/api/chat/pinned-messages/${room.id}`,
+				`http://localhost:3000/api/chat/pinned-messages/${room}`,
 				{
 					id: newMessage.id,
 					message: newMessage.message,
