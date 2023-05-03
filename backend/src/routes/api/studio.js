@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
 import { getUserId, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { deleteChat } from "../../dao/chat_dao.js";
 
 const router = express.Router();
 
@@ -97,6 +98,8 @@ router.delete("/:id", async (req, res) => {
 			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
 			updateStudiosUsername(listener, newStudios);
 		});
+		//delete all chats
+		deleteChat(id);
 		await deleteStudio(id);
 		res.status(204);
 	} catch (err) {
