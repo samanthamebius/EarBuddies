@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
 	username: String,
 	userDisplayName: String,
+	spotifyPic: String,
 	profilePic: String,
 	userIsActive: Boolean,
 	userStudios: [{ type: Schema.Types.ObjectId, ref: "Studio" }],
