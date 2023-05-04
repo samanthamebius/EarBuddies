@@ -38,4 +38,17 @@ async function searchSpotify(query, thisSpotifyApi) {
   });
 }
 
+async function playSpotify(uri, thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.play({ uris: [uri] })
+      .then(function (data) {
+        resolve(data);
+      })
+      .catch(function (err) {
+        console.log("Something went wrong!", err);
+        reject(err);
+      });
+  });
+}
+
 export { searchSpotify, setSpotifyApi, getSpotifyApi };

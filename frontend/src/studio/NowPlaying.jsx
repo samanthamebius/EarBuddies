@@ -39,7 +39,6 @@ const StyledSlider = styled(Slider)({
 
 export default function NowPlaying() {
   const accessToken = localStorage.getItem("access_token");
-  console.log(accessToken);
   return (
     <div className={styles.nowplaying}>
       {/* <SongInfo/>
