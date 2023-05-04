@@ -35,23 +35,25 @@ async function getStudios() {
 async function updateStudioControlHostOnly(id, isHostOnly) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioControlHostOnly: isHostOnly }
+		{ studioControlHostOnly: isHostOnly },
+		{ new: true }
 	);
 }
 
 async function updateStudioIsActive(id, isActive) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioIsActive: isActive }
+		{ studioIsActive: isActive },
+		{ new: true }
 	);
 }
 
 async function updateStudioUsers(id, listeners) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners }, { new: true });
 }
 
 async function updateStudioHost(id, host) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host }, { new: true });
 }
 
 // await mongoose.disconnect;
