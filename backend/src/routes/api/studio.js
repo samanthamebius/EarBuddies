@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
 import { getUserId, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { deleteChat } from "../../dao/chat_dao.js";
 
 const router = express.Router();
 
@@ -89,9 +90,18 @@ router.delete("/:id", async (req, res) => {
 		if (!id) {
 			return res.status(400).json({ msg: "No studio id provided" });
 		}
-		const studio = await deleteStudio(id);
-		//TODO: remove studio from users
-		res.status(204).json(studio);
+		//remove studio from users
+		const studio = await getStudio(id);
+		const listeners = studio[0].studioUsers;
+		listeners.forEach(async (listener) => {
+			const studios = await getStudiosId(listener);
+			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
+			await updateStudiosUsername(listener, newStudios);
+		});
+		//delete all chats
+		await deleteChat(id);
+		await deleteStudio(id);
+		res.status(204);
 	} catch (err) {
 		res.status(500).json(err);
 	}
