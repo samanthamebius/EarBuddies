@@ -15,7 +15,7 @@ import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 
-const [deviceId, setDeviceId] = useState("");
+var deviceId = '';
 
 const StyledSlider = styled(Slider)({
     color: "#ffffff",
@@ -196,7 +196,7 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                setDeviceId(device_id);
+                deviceId(device_id);
             });
 
             player.addListener('not_ready', ({ device_id }) => {
