@@ -111,6 +111,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const { postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false);
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false);
+  const [isHostOnly, setIsHostOnly] = useState(false);
+  const [listenerSearchResults, setListenerSearchResults] = useState([]);
+  const [listeners, setListeners] = useState([]);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
   const [genres, setGenres] = useState([
@@ -124,15 +127,14 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     { name: "Pop", isSelected: false }
   ]);
   const [file, setFile] = useState(null);
-  const [listenerSearchResults, setListenerSearchResults] = useState([]);
-  const [listeners, setListeners] = useState([]);
-  const handleFileChange = (selectedFile) => {
-    setFile(selectedFile);
-  };
-  const [isHostOnly, setIsHostOnly] = useState(false);
-  const handleSwitchToggle = (isChecked) => {
-    setIsHostOnly(isChecked);
-  };
+
+  const listenerSearchResultsDisplayed = listenerSearchResults.filter(function (e) {
+    return listeners.indexOf(e) < 0;
+  });
+
+  const handleFileChange = (selectedFile) => { setFile(selectedFile); };
+
+  const handleSwitchToggle = (isChecked) => { setIsHostOnly(isChecked); };
 
   function toggleGenre(genre) {
     const newGenres = genres.map((obj, i) => {
@@ -215,6 +217,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
+          {/* Studio name */}
           <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
           <ThemeProvider theme={theme}>
             <TextField
@@ -233,6 +236,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               className={styles.textfield}
               autoComplete="off" />
           </ThemeProvider>
+
+          {/* Cover photo */}
           <h2 className={styles.sectionHeading}>Cover Photo</h2>
           <FileDropZone onFileChange={handleFileChange} />
           <h2 className={styles.sectionHeading}>Genres</h2>
@@ -260,11 +265,13 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>
           </div>
 
+          {/* Control Setting */}
           <div className={styles.controlSection}>
             <h2 className={styles.sectionHeading}>Only I Have Control</h2>
             <SwitchWithTooltip checked={isHostOnly} onChange={handleSwitchToggle} />
           </div>
 
+          {/* Add Listeners */}
           <h2 className={styles.sectionHeading}>Add Listeners</h2>
           <SearchBar
             searchType={"users"}
@@ -273,8 +280,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             setResults={setListenerSearchResults} />
 
           {/* Map search results */}
-          {listenerSearchResults.length > 0 ? <List className={styles.searchResults}>
-            {listenerSearchResults.map((listener, i) => (
+          {listenerSearchResultsDisplayed.length > 0 ? <List className={styles.searchResults}>
+            {listenerSearchResultsDisplayed.map((listener, i) => (
               <ListItem
                 secondaryAction={
                   <Button
@@ -320,8 +327,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                   </ListItem>
                 ))}
               </List>
-            </>
-            : null}
+            </> : null}
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
