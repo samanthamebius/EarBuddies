@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
@@ -55,6 +55,15 @@ export default function NicknameDialog(props) {
 		},
 	});
 
+	// set the initial nickname
+	useEffect(() => {
+		if (username) {
+			axios
+				.get(`${BASE_URL}/api/studio/${studioId}/${username}/nickname`)
+				.then((response) => setNicknameInput(response.data));
+		}
+	}, [username]);
+
 	return (
 		<Dialog
 			open={isNicknameDialogOpened}
@@ -86,6 +95,12 @@ export default function NicknameDialog(props) {
 							helperText={
 								isNicknameErrorMessage ? "Enter a new nickname or cancel" : ""
 							}
+							onKeyDown={(event) => {
+								if (event.key === "Enter") {
+									event.preventDefault();
+									handleSubmit();
+								}
+							}}
 						/>
 					</ThemeProvider>
 				</div>
