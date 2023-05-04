@@ -78,6 +78,23 @@ async function updateReaction(id, messageId, reaction) {
 	);
 }
 
+async function updateChatMessageDisplayName(username, studioId, nickname) {
+	await Chat.updateMany(
+		{
+			roomId: studioId.toString(),
+			"messages.username": username,
+		},
+		{
+			$set: {
+				"messages.$[message].displayName": nickname,
+			},
+		},
+		{
+			arrayFilters: [{ "message.username": username }],
+		}
+	);
+}
+
 export {
 	getChat,
 	createChat,
@@ -88,4 +105,5 @@ export {
 	getReactionWithUsername,
 	addANewReaction,
 	updateReaction,
+	updateChatMessageDisplayName,
 };

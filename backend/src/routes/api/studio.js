@@ -2,9 +2,15 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioNames } from "../../dao/studio_dao.js";
+import {
+	createStudio,
+	getStudio,
+	deleteStudio,
+	updateStudioNames,
+} from "../../dao/studio_dao.js";
 import { getUserId, getStudios, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { updateChatMessageDisplayName } from "../../dao/chat_dao.js";
 
 const router = express.Router();
 
@@ -28,44 +34,47 @@ router.post("/new", async (req, res) => {
 		const hostUserId = await getUserId(host);
 		const listenerUserIds = await Promise.all(listeners.map(getUserId));
 
-    //create studio playlist
-    const playlist_name = "Earbuddies - " + name;
-    const api = getSpotifyApi();
-    if (!api) {
-      console.log("No Spotify API connection")
-      return res.status(403).json({ msg: "No Spotify API connection" });
-    }
-    api.createPlaylist(playlist_name, {'public': true})
-      .then(async function(data) {
-        const playlist_id = data.body.id;
+		//create studio playlist
+		const playlist_name = "Earbuddies - " + name;
+		const api = getSpotifyApi();
+		if (!api) {
+			console.log("No Spotify API connection");
+			return res.status(403).json({ msg: "No Spotify API connection" });
+		}
+		api.createPlaylist(playlist_name, { public: true }).then(
+			async function (data) {
+				const playlist_id = data.body.id;
 
-        // Create the new studio
-        const newStudio = await createStudio(
-          name,
-          listenerUserIds,
-          hostUserId,
-          genres,
-          coverPhoto,
-          isHostOnly,
-          playlist_id
-        );
-        //add studios to user
-        listenerUserIds.forEach(async (listener) => {
-          const studios = await getStudios(listener);
-          studios.push(newStudio._id);
-          updateStudios(listener, studios);
-        });
-        // Respond with the newly created studio
-        res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
-
-      }, function(err) {
-        console.log('Something went wrong!', err);
-      });
-    
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
+				// Create the new studio
+				const newStudio = await createStudio(
+					name,
+					listenerUserIds,
+					hostUserId,
+					genres,
+					coverPhoto,
+					isHostOnly,
+					playlist_id
+				);
+				//add studios to user
+				listenerUserIds.forEach(async (listener) => {
+					const studios = await getStudios(listener);
+					studios.push(newStudio._id);
+					updateStudios(listener, studios);
+				});
+				// Respond with the newly created studio
+				res
+					.status(201)
+					.location(`/api/studio/${newStudio._id}`)
+					.json(newStudio);
+			},
+			function (err) {
+				console.log("Something went wrong!", err);
+			}
+		);
+	} catch (err) {
+		console.log(err);
+		res.status(500).json(err);
+	}
 });
 
 //get studio by id
@@ -140,20 +149,22 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const nickname = req.body.nickname;
-		const mongoId = await getUserId(userId)
-		
+		const mongoId = await getUserId(userId);
 		const studio = await getStudio(studioId);
 		const users = studio[0].studioUsers;
 		const userPos = users.indexOf(mongoId);
-		
+
 		const nicknames = studio[0].studioNames;
 		nicknames[userPos] = nickname;
 		const updated_studio = await updateStudioNames(studioId, nicknames);
+
+		// update the nickname for chat messages
+		await updateChatMessageDisplayName(userId, studioId, nickname);
+
 		res.status(200).json(updated_studio);
 	} catch (err) {
 		res.status(500).json(err);
 	}
-	
 });
 
 // get nickname for user in studio
@@ -170,7 +181,6 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 	} catch (err) {
 		res.status(500).json(err);
 	}
-	
 });
 
 export default router;

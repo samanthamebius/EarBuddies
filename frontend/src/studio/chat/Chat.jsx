@@ -59,6 +59,7 @@ export default function Chat(props) {
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyMessage, setReplyMessage] = useState("");
+	const [nickname, setNickname] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
@@ -66,9 +67,14 @@ export default function Chat(props) {
 	const { id } = useParams();
 	const room = id;
 	const textInput = useRef(null);
-	const userId = localStorage.getItem("current_user_id");
-	const nickname = axios.get(`${BASE_URL}/api/studio/${id}/${userId.replace(/['"]+/g, '')}/nickname`);
-	console.log(nickname);
+
+	// Set the nickname of the user
+	useEffect(() => {
+		axios
+			.get(`${BASE_URL}/api/studio/${id}/${username}/nickname`)
+			.then((response) => setNickname(response.data));
+		console.log(nickname);
+	});
 
 	// Set previous messages
 	useEffect(() => {
@@ -87,7 +93,7 @@ export default function Chat(props) {
 				{
 					id: data.id,
 					username: data.username,
-					displayName: nickname,
+					displayName: data.nickname,
 					message: data.message,
 					isReply: data.isReply,
 					replyMessage: data?.replyMessage,
