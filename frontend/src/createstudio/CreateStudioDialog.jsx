@@ -273,7 +273,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             setResults={setListenerSearchResults} />
 
           {/* Map search results */}
-          <List className={styles.searchResults}>
+          {listenerSearchResults.length > 0 ? <List className={styles.searchResults}>
             {listenerSearchResults.map((listener, i) => (
               <ListItem
                 secondaryAction={
@@ -294,29 +294,34 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 <ListItemText primary={listener.userDisplayName} />
               </ListItem>
             ))}
-          </List>
+          </List> : null}
+
 
           {/* Map Listeners */}
-          <h2 className={styles.sectionHeading}>Listeners</h2>
-          <List className={styles.listeners}>
-            {listeners.map((listener, i) => (
-              <ListItem
-                secondaryAction={
-                  <ClearRounded
-                    edge="end"
-                    style={{ color: "#757575" }}
-                    className={styles.clearIcon}
-                    onClick={() => removeListener(listener)} />
-                }>
-                <ListItemAvatar>
-                  <Avatar>
-                    <img className={styles.image} src={listener.profilePicture} />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={listener.userDisplayName} />
-              </ListItem>
-            ))}
-          </List>
+          {listeners.length > 0 ?
+            <>
+              <h2 className={styles.sectionHeading}>Listeners</h2>
+              <List className={styles.listeners}>
+                {listeners.map((listener, i) => (
+                  <ListItem
+                    secondaryAction={
+                      <ClearRounded
+                        edge="end"
+                        style={{ color: "#757575" }}
+                        className={styles.clearIcon}
+                        onClick={() => removeListener(listener)} />
+                    }>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <img className={styles.image} src={listener.profilePicture} />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={listener.userDisplayName} />
+                  </ListItem>
+                ))}
+              </List>
+            </>
+            : null}
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>

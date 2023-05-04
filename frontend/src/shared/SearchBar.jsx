@@ -114,6 +114,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
     <Container disableGutters={true} className={styles.searchBar}>
       <ThemeProvider theme={theme}>
         <TextField
+          autoComplete="off"
           color="secondary"
           id="search"
           type="text"
