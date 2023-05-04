@@ -77,6 +77,7 @@ export default function Chat(props) {
 		}
 	}, [username]);
 
+	// reload the chat messages if the nickname of a user changes
 	useEffect(() => {
 		socket.on("receive_reload_chat_messages", (data) => {
 			setMessages(data.messages);

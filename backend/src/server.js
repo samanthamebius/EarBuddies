@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_message_reaction", data);
 	});
 
-	// reload the chat messages if the nickname of users in studio is changes
+	// reload the chat messages if the nickname of users in the studio changes
 	socket.on("reload_chat_messages", (data) => {
 		const { room } = data;
 		io.in(room).emit("receive_reload_chat_messages", data);
