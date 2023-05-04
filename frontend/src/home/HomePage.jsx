@@ -37,13 +37,7 @@ const mockStudios = [
 function HomePage(props) {
 	const { socket } = props;
 	const [isOpen, setIsOpen] = useState(false);
-	// the initial state should be all the studios
-	// when the search term is empty set this back to all studios
-	const [activeStudioSearchResults, setActiveStudioSearchResults] = useState(
-		[]
-	);
 
-	console.log(activeStudioSearchResults);
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
 	};
@@ -69,21 +63,13 @@ function HomePage(props) {
 						</Button>
 					</div>
 				</div>
-				<SearchBar
-					searchType={"studios"}
-					label={"Search My Studios ..."}
-					studioId={""}
-					setActiveStudioSearchResults={setActiveStudioSearchResults}
-				/>
+				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					{/* {mockStudios
+					{mockStudios
 						.filter((studio) => studio.studioIsActive === false)
 						.map((studio) => (
 							<StudioCard key={studio.id} socket={socket} studio={studio} />
-						))} */}
-					{activeStudioSearchResults.map((studio) => (
-						<StudioCard key={studio.id} socket={socket} studio={studio} />
-					))}
+						))}
 				</div>
 			</div>
 			<div className={styles.containerChild}>
@@ -93,11 +79,7 @@ function HomePage(props) {
 						<img src={SoundWavesGradient} className={styles.soundWaves}></img>
 					</div>
 				</div>
-				<SearchBar
-					searchType={"activeStudios"}
-					label={"Search Studios Listening Now ..."}
-					studioId={""}
-				/>
+				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} studioId={""} />
 				<div className={styles.cardContainer}>
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === true)
