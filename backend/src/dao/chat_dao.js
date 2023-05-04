@@ -1,7 +1,4 @@
-import mongoose from "mongoose";
 import { Chat } from "../database/schema";
-
-// await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function getChat(id) {
 	return await Chat.findOne({ roomId: id.toString() });

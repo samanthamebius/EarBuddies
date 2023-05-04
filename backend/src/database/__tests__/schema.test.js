@@ -68,6 +68,12 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
+      await User.deleteMany({});
+      await Studio.deleteMany({});
+      await Chat.deleteMany({});
+      await User.insertMany(mockUsers);
+      await Studio.insertMany(mockStudios);
+      await Chat.insertMany(mockChats);
     await mongoose.connection.db.dropDatabase();
     const userColl = await mongoose.connection.db.createCollection("users");
     await userColl.insertMany(mockUsers);

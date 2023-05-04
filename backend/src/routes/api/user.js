@@ -1,93 +1,143 @@
 import express from "express";
-import { getUser, getUserbyId, deleteUser, updateUserInfo, searchActiveStudios, searchStudioUsers, searchStudios, searchUsers } from "../../dao/user_dao";
+import {
+  getUser,
+  deleteUser,
+  searchStudios,
+  searchActiveStudios,
+  searchUsers,
+  searchStudioUsers,
+  updateUserDisplayName,
+  updateUserProfilePic,
+} from "../../dao/user_dao";
 
 const router = express.Router();
 
+// User methods
+
+//Get a single user
+router.get("/:username", async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//update a user
+router.put("/:username", async (req, res) => {
+  const { username } = req.params;
+  const { userDisplayName, profilePic } = req.body;
+  try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
+    if (userDisplayName) {
+      await updateUserDisplayName(username, userDisplayName);
+    }
+    if (profilePic) {
+      await updateUserProfilePic(username, profilePic);
+    }
+    return res.status(204).json({ msg: "User updated" });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//delete a user
+router.delete("/:username", async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
+    await deleteUser(username);
+    return res.status(204).json({ msg: "User deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+// Search methods
+
+//serch for users
 router.get("/users/:username/:query", async (req, res) => {
   const { username, query } = req.params;
   try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
     const users = await searchUsers(query, username);
-    res.json(users);
+    return res.status(200).json(users);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
+//search for users in a studio
 router.get("/users/:username/:query/:studioId", async (req, res) => {
   const { username, query, studioId } = req.params;
   try {
-    const users = await searchStudioUsers(studioId, query, username);
-    res.json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id) {
-    return res.status(400).json({ msg: "No user id provided" });
-  }
-  try {
-    var user = await getUser(id);
+    const user = await getUser(username);
     if (!user) {
-      user = await getUserbyId(id);
+      return res.status(404).json({ msg: "No user found" });
     }
-    res.json(user);
+    const users = await searchStudioUsers(studioId, query, username);
+    return res.status(200).json(users);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
+//search for studios
 router.get("/:username/studios/:query", async (req, res) => {
   const { username, query } = req.params;
-  if (!username) {
-    return res.status(400).json({ msg: "No username provided" });
-  }
   try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
     const studios = await searchStudios(username, query);
-    res.json(studios);
+    if (!studios) {
+      return res.status(404).json({ msg: "No studios found" });
+    }
+    return res.json(studios);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
+//search for active studios
 router.get("/:username/active/:query", async (req, res) => {
   const { username, query } = req.params;
-  if (!username) {
-    return res.status(400).json({ msg: "No username provided" });
-  }
   try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
     const studios = await searchActiveStudios(username, query);
-    res.json(studios);
+    if (!studios) {
+      return res.status(404).json({ msg: "No active studios found" });
+    }
+    return res.json(studios);
   } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id) {
-    return res.status(400).json({ msg: "No user id provided" });
-  }
-  try {
-    await updateUserInfo(id, req.body.userDisplayName, req.body.spotifyPic, req.body.profilePic);
-    res.status(204).json({ msg: "User updated" });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id) {
-    return res.status(400).json({ msg: "No user id provided" });
-  }
-  try {
-    await deleteUser(id);
-    res.status(204).json({ msg: "User deleted" });
-  } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

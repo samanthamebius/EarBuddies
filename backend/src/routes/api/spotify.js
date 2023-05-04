@@ -12,7 +12,7 @@ router.get("/search/:query", async (req, res) => {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
         const results = await searchSpotify(query, thisSpotifyApi);
-        res.json(results);
+        return res.status(200).json(results);
     }
     catch (err) {
         console.log(err);
@@ -43,6 +43,7 @@ router.put("/queue", async (req, res) => {
             console.log("Something went wrong!", err);
           }
         );
+        return res.status(200).json({ msg: "Added track to playlist" });
     }
     catch (err) {
         console.log(err);
@@ -62,7 +63,7 @@ router.get("/queue/:playlist_id", async (req, res) => {
         }
         thisSpotifyApi.getPlaylist(playlist_id)
             .then(function(data) {
-                res.status(200).json(data.body);
+                return res.status(200).json(data.body);
             }, function(err) {
                 console.log('Something went wrong!', err);
             });
@@ -89,7 +90,7 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
           .removeTracksFromPlaylist(playlist_id, [{uri: "spotify:track:" + track_id}], {snapshot_id: snapshot_id})
           .then(
             function (data) {
-              console.log("Tracks removed from playlist!");
+              return res.status(200).json({ msg: "Removed track from playlist" });
             },
             function (err) {
               console.log("Something went wrong!", err);

@@ -3,22 +3,19 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import { User, Studio, Chat } from "../../database/schema.js";
 import {
   createUser,
-  updateUser,
+  setUserActive,
   getUser,
   loginUser,
   getStudiosId,
   updateStudios,
-  getUserId,
   deleteUser,
-  getUserbyId,
   searchStudios,
   searchActiveStudios,
   searchUsers,
   getUsers,
-  getUsername,
   searchStudioUsers,
-  updateUserInfo,
-  updateStudiosUsername,
+  updateUserDisplayName,
+  updateUserProfilePic,
 } from "../user_dao.js";
 
 let mongod;
@@ -148,25 +145,12 @@ test('update user is successful', async () => {
         userStudios: [],
     };
     const username = "testUser1";
-    const createdUser = await updateUser(username);
-    expectUser(createdUser, updatedUser);
-});
-
-test('update user info is successful', async () => {
-    const updatedUser = {
-        username: "testUser1",
-        userDisplayName: "testUser2",
-        spotifyPic: "testUser2",
-        profilePic: "testUser2",
-        userIsActive: false,
-        userStudios: [],
-    };
-    const createdUser = await updateUserInfo("testUser1", "testUser2", "testUser2", "testUser2");
+    const createdUser = await setUserActive(username);
     expectUser(createdUser, updatedUser);
 });
 
 test('delete user is successful', async () => {
     const deletedUser = await deleteUser("testUser1");
-    const user = await getUserbyId(deletedUser._id);
+    const user = await getUser("testUser1");
     expect(user).toBe(null);
 });
