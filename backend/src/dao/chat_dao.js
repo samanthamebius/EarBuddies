@@ -79,7 +79,7 @@ async function updateReaction(id, messageId, reaction) {
 }
 
 async function updateChatMessageDisplayName(username, studioId, nickname) {
-	await Chat.updateMany(
+	await Chat.findOneAndUpdate(
 		{
 			roomId: studioId.toString(),
 			"messages.username": username,
@@ -93,6 +93,8 @@ async function updateChatMessageDisplayName(username, studioId, nickname) {
 			arrayFilters: [{ "message.username": username }],
 		}
 	);
+
+	return await getChat(studioId);
 }
 
 export {

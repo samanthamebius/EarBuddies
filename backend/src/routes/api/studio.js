@@ -156,12 +156,16 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
 
 		const nicknames = studio[0].studioNames;
 		nicknames[userPos] = nickname;
-		const updated_studio = await updateStudioNames(studioId, nicknames);
+		await updateStudioNames(studioId, nicknames);
 
 		// update the nickname for chat messages
-		await updateChatMessageDisplayName(userId, studioId, nickname);
+		const updatedMessages = await updateChatMessageDisplayName(
+			userId,
+			studioId,
+			nickname
+		);
 
-		res.status(200).json(updated_studio);
+		res.status(200).json(updatedMessages);
 	} catch (err) {
 		res.status(500).json(err);
 	}

@@ -47,7 +47,7 @@ const listeners = [
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 
-export default function Banner({ id, studio }) {
+export default function Banner({ id, studio, socket }) {
 	const navigate = useNavigate();
 
 	if (!studio) {
@@ -94,18 +94,16 @@ export default function Banner({ id, studio }) {
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
 					id={id}
+					socket={socket}
 				/>
 			</div>
 		</div>
 	);
 }
 
-export function DropdownKebab({
-	controlEnabled,
-	handleControlToggle,
-	handleDelete,
-	id,
-}) {
+export function DropdownKebab(props) {
+	const { controlEnabled, handleControlToggle, handleDelete, id, socket } =
+		props;
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false);
@@ -220,6 +218,7 @@ export function DropdownKebab({
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
 				studioId={id}
+				socket={socket}
 			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />

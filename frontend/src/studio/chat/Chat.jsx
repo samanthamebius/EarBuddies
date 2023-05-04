@@ -70,11 +70,18 @@ export default function Chat(props) {
 
 	// Set the nickname of the user
 	useEffect(() => {
-		axios
-			.get(`${BASE_URL}/api/studio/${id}/${username}/nickname`)
-			.then((response) => setNickname(response.data));
-		console.log(nickname);
-	});
+		if (username) {
+			axios
+				.get(`${BASE_URL}/api/studio/${id}/${username}/nickname`)
+				.then((response) => setNickname(response.data));
+		}
+	}, [username]);
+
+	useEffect(() => {
+		socket.on("receive_reload_chat_messages", (data) => {
+			setMessages(data.messages);
+		});
+	}, [socket]);
 
 	// Set previous messages
 	useEffect(() => {

@@ -10,11 +10,13 @@ import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRena
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
 
-export default function NicknameDialog({
-	isNicknameDialogOpened,
-	handleCloseNicknameDialog,
-	studioId,
-}) {
+export default function NicknameDialog(props) {
+	const {
+		isNicknameDialogOpened,
+		handleCloseNicknameDialog,
+		studioId,
+		socket,
+	} = props;
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const { username } = useContext(AppContext);
 
@@ -30,12 +32,19 @@ export default function NicknameDialog({
 		} else {
 			setIsNicknameErrorMessage(false);
 			const nickname = nicknameInput;
-			await axios.put(
-				`${BASE_URL}/api/studio/${studioId}/${username}/nickname`,
-				{ nickname: nickname }
-			);
+			await axios
+				.put(`${BASE_URL}/api/studio/${studioId}/${username}/nickname`, {
+					nickname: nickname,
+				})
+				.then((response) => handleSetChatMessages(response.data));
+
 			handleClose();
 		}
+	};
+
+	const handleSetChatMessages = (data) => {
+		const { roomId, messages } = data;
+		socket.emit("reload_chat_messages", { room: roomId, messages });
 	};
 
 	const theme = createTheme({
