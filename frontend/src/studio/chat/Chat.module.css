@@ -24,7 +24,7 @@
 	background-color: white;
 	border-radius: 10px;
 	height: 16%;
-	width: 100%;
+	width: calc(0.4 * 100vw);
 	display: flex;
 	justify-content: space-between;
 	overflow-y: auto;
@@ -74,7 +74,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	padding: 10px 0 0 10px;
+	padding: 12px 0 0 10px;
 }
 
 .replyMessage {
@@ -83,10 +83,20 @@
 	background-color: #f8e9fc;
 	padding: 4px;
 	border-radius: 10px;
-	width: 100%;
+	width: calc(100%);
 	display: flex;
 	color: #a49da5;
 	justify-content: space-between;
+	box-sizing: border-box;
+}
+
+.replyMessageText {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+	margin: 0;
+	color: grey;
 }
 
 .dismissReply {
