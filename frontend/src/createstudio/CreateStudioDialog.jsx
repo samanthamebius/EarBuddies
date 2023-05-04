@@ -1,7 +1,7 @@
-import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip } from "@mui/material";
+import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip, List } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
 import SearchBar from "../shared/SearchBar";
@@ -11,67 +11,69 @@ import { styled } from '@mui/material/styles';
 import { tooltipClasses } from '@mui/material/Tooltip';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ListItem, ListItemText, ListItemAvatar, Avatar, Menu, MenuItem } from "@mui/material";
+import ClearRounded from "@mui/icons-material/ClearRounded";
 
 function useStudioPost() {
-	const postStudio = async (
-		navigate,
-		name,
-		genres,
-		coverPhoto,
-		listeners,
-		isHostOnly
-	) => {
-		const host = JSON.parse(localStorage.getItem("current_user_id"));
-		listeners.push(host);
+  const postStudio = async (
+    navigate,
+    name,
+    genres,
+    coverPhoto,
+    listeners,
+    isHostOnly
+  ) => {
+    const host = JSON.parse(localStorage.getItem("current_user_id"));
+    listeners.push(host);
     console.log(listeners)
-		//add dummy listener pending search bar completion
-		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+    //add dummy listener pending search bar completion
+    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
-		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-		const url = `${BASE_URL}/api/studio`;
-		let studioBannerImageUrl = "/images/defaultBanner.png";
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const url = `${BASE_URL}/api/studio`;
+    let studioBannerImageUrl = "/images/defaultBanner.png";
 
-		if (coverPhoto) {
-			// upload the image
-			const imgUploadConfig = {
-				headers: {
-					"content-type": "multipart/form-data",
-				},
-			};
-			const imgFormData = new FormData();
-			imgFormData.append("image", coverPhoto[0]);
+    if (coverPhoto) {
+      // upload the image
+      const imgUploadConfig = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      const imgFormData = new FormData();
+      imgFormData.append("image", coverPhoto[0]);
 
-			const imgUploadResponse = await axios.post(
-				`${url}/upload-image`,
-				imgFormData,
-				imgUploadConfig
-			);
+      const imgUploadResponse = await axios.post(
+        `${url}/upload-image`,
+        imgFormData,
+        imgUploadConfig
+      );
 
-			studioBannerImageUrl = imgUploadResponse.headers["location"];
-		}
+      studioBannerImageUrl = imgUploadResponse.headers["location"];
+    }
 
-		try {
-			const response = await axios.post(`${url}/new`, {
-				name,
-				listeners,
-				host,
-				genres,
-				studioBannerImageUrl,
-				isHostOnly,
-			});
-			navigate(`/studio/${response.data._id}`);
-		} catch (err) {
-			console.error(err);
+    try {
+      const response = await axios.post(`${url}/new`, {
+        name,
+        listeners,
+        host,
+        genres,
+        studioBannerImageUrl,
+        isHostOnly,
+      });
+      navigate(`/studio/${response.data._id}`);
+    } catch (err) {
+      console.error(err);
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("expires_in");
       localStorage.removeItem("current_user_id");
       navigate("/login");
       return <p>Could not load studio</p>;
-		}
-	};
+    }
+  };
 
-	return { postStudio };
+  return { postStudio };
 }
 
 function SwitchWithTooltip({ checked, onChange }) {
@@ -111,15 +113,19 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
-  const [genres, setGenres] = useState([{ name: "Rap", isSelected: false },
-  { name: "Rock", isSelected: false },
-  { name: "K-Pop", isSelected: false },
-  { name: "Country", isSelected: false },
-  { name: "Classical", isSelected: false },
-  { name: "R&B", isSelected: false },
-  { name: "Jazz", isSelected: false },
-  { name: "Pop", isSelected: false }]);
+  const [genres, setGenres] = useState([
+    { name: "Rap", isSelected: false },
+    { name: "Rock", isSelected: false },
+    { name: "K-Pop", isSelected: false },
+    { name: "Country", isSelected: false },
+    { name: "Classical", isSelected: false },
+    { name: "R&B", isSelected: false },
+    { name: "Jazz", isSelected: false },
+    { name: "Pop", isSelected: false }
+  ]);
   const [file, setFile] = useState(null);
+  const [listenerSearchResults, setListenerSearchResults] = useState([]);
+  const [listeners, setListeners] = useState([]);
   const handleFileChange = (selectedFile) => {
     setFile(selectedFile);
   };
@@ -186,6 +192,24 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     },
   });
 
+  function addListener(listener) {
+    const isFound = listeners.some(obj => {
+      if (obj === listener) {
+        return true;
+      }
+    });
+
+    if (!isFound) {
+      setListeners(oldListeners => [...oldListeners, listener]);
+    }
+  }
+
+  function removeListener(listener) {
+    setListeners((oldListeners) =>
+      oldListeners.filter((oldListener) => oldListener !== listener)
+    );
+  }
+
   return (
     <div>
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
@@ -211,7 +235,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
           </ThemeProvider>
           <h2 className={styles.sectionHeading}>Cover Photo</h2>
           <FileDropZone onFileChange={handleFileChange} />
-
           <h2 className={styles.sectionHeading}>Genres</h2>
           {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />
             : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />)}
@@ -243,7 +266,57 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
           </div>
 
           <h2 className={styles.sectionHeading}>Add Listeners</h2>
-          <SearchBar searchType={"users"} label={"Search using Spotify username ..."} studioId={""} />
+          <SearchBar
+            searchType={"users"}
+            label={"Search using Spotify username ..."}
+            studioId={""}
+            setResults={setListenerSearchResults} />
+
+          {/* Map search results */}
+          <List className={styles.searchResults}>
+            {listenerSearchResults.map((listener, i) => (
+              <ListItem
+                secondaryAction={
+                  <Button
+                    edge="end"
+                    aria-label="more options"
+                    sx={{ fontWeight: 600 }}
+                    variant="contained"
+                    onClick={() => addListener(listener)}>
+                    Add
+                  </ Button>
+                }>
+                <ListItemAvatar>
+                  <Avatar>
+                    <img className={styles.image} src={listener.profilePicture} />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={listener.userDisplayName} />
+              </ListItem>
+            ))}
+          </List>
+
+          {/* Map Listeners */}
+          <h2 className={styles.sectionHeading}>Listeners</h2>
+          <List className={styles.listeners}>
+            {listeners.map((listener, i) => (
+              <ListItem
+                secondaryAction={
+                  <ClearRounded
+                    edge="end"
+                    style={{ color: "#757575" }}
+                    className={styles.clearIcon}
+                    onClick={() => removeListener(listener)} />
+                }>
+                <ListItemAvatar>
+                  <Avatar>
+                    <img className={styles.image} src={listener.profilePicture} />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={listener.userDisplayName} />
+              </ListItem>
+            ))}
+          </List>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
