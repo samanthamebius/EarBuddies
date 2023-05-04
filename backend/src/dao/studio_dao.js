@@ -3,7 +3,7 @@ dotenv.config();
 import { Studio } from "../database/schema.js";
 import mongoose from "mongoose";
 
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
+// await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
   const newStudio = new Studio({
@@ -54,7 +54,7 @@ async function updateStudioHost(id, host) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
 }
 
-await mongoose.disconnect;
+// await mongoose.disconnect;
 export {
 	createStudio,
 	getStudio,

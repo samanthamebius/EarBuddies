@@ -4,7 +4,7 @@ import { User, Studio } from "../database/schema.js";
 import { getStudio } from "./studio_dao.js";
 import mongoose from "mongoose";
 
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
+// await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createUser(username, userDisplayName, spotifyPic) {
 	const newUser = new User({
@@ -46,7 +46,8 @@ async function loginUser(spotifyApi, data) {
 async function updateUser(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userIsActive: true }
+		{ userIsActive: true },
+		{ new: true}
 	);
 }
 
@@ -63,7 +64,8 @@ async function searchUsers(query, username) {
 async function updateUserInfo(username, userDisplayName, spotifyPic, profilePic) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userDisplayName: userDisplayName, spotifyPic: spotifyPic, profilePic: profilePic }
+		{ userDisplayName: userDisplayName, spotifyPic: spotifyPic, profilePic: profilePic },
+		{ new: true }
 	);
 }
 
@@ -126,7 +128,7 @@ async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
 }
 
-await mongoose.disconnect;
+// await mongoose.disconnect;
 
 export {
 	createUser,
