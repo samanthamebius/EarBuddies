@@ -96,10 +96,10 @@ router.delete("/:id", async (req, res) => {
 		listeners.forEach(async (listener) => {
 			const studios = await getStudiosId(listener);
 			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
-			updateStudiosUsername(listener, newStudios);
+			await updateStudiosUsername(listener, newStudios);
 		});
 		//delete all chats
-		deleteChat(id);
+		await deleteChat(id);
 		await deleteStudio(id);
 		res.status(204);
 	} catch (err) {
