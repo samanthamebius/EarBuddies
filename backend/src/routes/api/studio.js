@@ -2,8 +2,8 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
-import { getUserId, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
+import { getUser, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 import { deleteChat } from "../../dao/chat_dao.js";
 
@@ -172,19 +172,14 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
 
 // assign new host
 router.put("/:studio_id/newHost/:host_name", async (req, res) => {
+	console.log("new host");
   	try {
 		const { studio_id, host_name } = req.params;
-		if (!studio_id) {
-		return res.status(400).json({ msg: "No studio id provided" });
+		const host = await getUser(host_name)
+		if (!host) {
+			return res.status(404).json({ msg: "Invalid host provided" });
 		}
-		
-		if (!host_name) {
-		return res.status(400).json({ msg: "No host provided" });
-		}
-
-		host = getUser(host_name)
-		
-		await updateStudioHost(studio_id, host);
+		await updateStudioHost(studio_id, host_name);
 		res.status(204).json({ msg: "Host Updated" })
 	} catch (err) {
 		res.status(500).json(err);
