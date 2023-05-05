@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
@@ -14,13 +14,28 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleCloseLeaveDialog, listeners, studio_id }) {
+export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleCloseLeaveDialog, studioUsers, studio_id }) {
     const navigate = useNavigate();
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const handleClose = () => { handleCloseLeaveDialog(false) };
     const [ newHost, setNewHost] = useState(null);
     const user_id = localStorage.getItem('current_user_id');
+    const [listeners, setListeners] = useState([]);
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    useEffect(() => {
+		if (!studioUsers || !Array.isArray(studioUsers)) {
+			console.log("no studio users")
+			return;
+		}
+		async function fetchUserData() {
+		const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
+		const userDataList = await Promise.all(promises);
+		setListeners(userDataList.map(response => response.data));
+		}
+		fetchUserData();
+	}, [studioUsers]);
 
     const handleSubmit = () => {
         console.log("submitting")
@@ -50,10 +65,11 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
             <DialogContent className={styles.dialogContent}>
                 <h2 className={styles.subHeading}>Assign a new host before leaving</h2>
                 <div className={styles.listenerList}>
+
                     {listeners.map((listener) => (
-                        <ListenerListItem key={listener.id} 
+                        <ListenerListItem key={listener.username} 
                             listener={listener} 
-                            isNewHost={listener.id === newHost}
+                            isNewHost={listener.username === newHost}
                             setNewHost={setNewHost}
                         />
                     ))}
@@ -76,12 +92,12 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
 
 function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     const handleClick = () => {
-      setNewHost(listener.id);
+      setNewHost(listener.username);
     };
   
     return (
       <div className={styles.listenerListItem} onClick={handleClick}>
-        <img src={listener.icon}/>
+        <img src={listener.profilePic}/>
         <p>{listener.username}</p>
         {isNewHost ?
             <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
