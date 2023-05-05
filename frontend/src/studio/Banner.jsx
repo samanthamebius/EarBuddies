@@ -74,6 +74,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
+	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
 
 	return (
@@ -98,6 +99,7 @@ export default function Banner({ id, studio }) {
 					isHost={isHost}
 					studio_id={id}
 					studioUsers={users}
+					isAloneInStudio={isAlone}
 				/>
 			</div>
 		</div>
@@ -110,7 +112,8 @@ export function DropdownKebab({
 	handleDelete,
 	isHost,
 	studio_id,
-	studioUsers
+	studioUsers,
+	isAloneInStudio
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -256,6 +259,7 @@ export function DropdownKebab({
 				onClose={handleClose}
 			>
 				<MenuItem
+					style={{ display: isAloneInStudio ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave}
@@ -281,7 +285,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={handleClose}
 					onMouseEnter={enterRemove}
@@ -295,7 +299,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
@@ -309,7 +313,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={() => {
 						handleClose;
