@@ -1,13 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import styles from "./StudioPage.module.css";
-import SearchBarSong from "./SearchBarSong";
 import useGet from "../hooks/useGet";
 import list_styles from "../shared/SearchBar.module.css";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import ClearRounded from "@mui/icons-material/ClearRounded";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SearchBar from "../shared/SearchBar";
 import axios from "axios";
+import QueueMusicRoundedIcon from '@mui/icons-material/QueueMusicRounded';
+import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
+import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
+import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import {
 	List,
 	ListItem,
@@ -27,30 +29,52 @@ const StyledMenu = styled(Menu)({
 });
 
 export default function SongSelection({ studio }) {
+	const [songSearchResults, setSongSearchResults] = useState([]);
 	return (
 		<div className={styles.songselection}>
-			<SongSearch studio={studio} />
+			<SearchBar
+				searchType={"songs"}
+				label={"Search Spotify..."}
+				studioId={""}
+				setResults={setSongSearchResults}
+				studio={studio} />
+			{songSearchResults.length > 0 ? <List className={styles.searchResults}>
+				{songSearchResults.map((result, i) => (
+					<ListItem
+						key={i}
+						secondaryAction={
+							<QueueMusicRoundedIcon
+								edge="end"
+								style={{ color: "#757575" }} />
+						}>
+						<img className={styles.resultImg} src={result.image} />
+						{displayIcon(result)}
+						<ListItemText className={styles.resultTitle} primary={displayText(result)} />
+					</ListItem>
+				))}
+			</List> : null}
 			<Queue studio={studio} />
 		</div>
 	);
 }
 
-function SongSearch({ studio }) {
-	return (
-		<div>
-			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBarSong studio={studio}></SearchBarSong>
-		</div>
-	);
+function displayIcon(result) {
+	if (result.type === "audiobook") {
+		return <AutoStoriesRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
+	} else if (result.type === "track") {
+		return <MusicNoteRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
+	} else {
+		return <PodcastsRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
+	}
 }
 
 function displayText(result) {
 	if (result.type === "audiobook") {
-		return `${result.name} - ${result.authors[0].name} - Audiobook`;
+		return `${result.name} - ${result.authors}`;
 	} else if (result.type === "track") {
-		return `${result.name} - ${result.artists[0].name} - Song`;
+		return `${result.name} - ${result.artists}`;
 	} else {
-		return `${result.name} - Podcast`;
+		return `${result.name}`;
 	}
 }
 
@@ -94,7 +118,7 @@ function Queue({ studio }) {
 		return (
 			<div>
 				<label className={styles.queueGreyHeading}>Coming Up:</label>
-				{songs?.length > 0 && <List className={list_styles.listContainer}>
+				{/* {songs?.length > 0 && <List className={list_styles.listContainer}>
 					{songs.map((result) => (
 						<ListItem key={result.track.id}
 							secondaryAction={
@@ -123,7 +147,7 @@ function Queue({ studio }) {
 							<ListItemText primary={displayText(result.track)} />
 						</ListItem>
 					))}
-				</List>}
+				</List>} */}
 			</div>
 		);
 	}

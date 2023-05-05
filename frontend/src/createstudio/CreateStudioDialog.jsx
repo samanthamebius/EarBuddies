@@ -279,7 +279,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             searchType={"users"}
             label={"Search using Spotify username ..."}
             studioId={""}
-            setResults={setListenerSearchResults} />
+            setResults={setListenerSearchResults}
+            studio={""} />
 
           {/* Map search results */}
           {displayedSearchResults.length > 0 ? <List className={styles.searchResults}>

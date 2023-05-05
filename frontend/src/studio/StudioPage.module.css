@@ -124,7 +124,8 @@
 .chat {
 	background-color: #c68eef;
 	grid-row-start: 1;
-	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
+	grid-row-end: 3;
+	/* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
 	grid-column: 3 / 3;
 	border-radius: 4px;
 }
@@ -216,4 +217,27 @@
 .icon {
 	height: 30px;
 	pointer-events: none;
+}
+
+.searchResults {
+	max-height: 400px;
+	overflow: auto;
+	border: 1px solid #c4c4c4;
+	border-radius: 0px 0px 4px 4px;
+	background-color: white;
+}
+
+.resultImg {
+	width: 10%;
+	border-radius: 4px;
+	margin-right: 15px;
+}
+
+.resultTitle {
+	font-size: 14px;
+	color: #757575;
+}
+
+.resultIcon {
+	padding-right: 5px;
 }
