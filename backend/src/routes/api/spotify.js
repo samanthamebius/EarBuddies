@@ -114,7 +114,9 @@ router.put("/play", async (req, res) => {
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
-        // Play a track
+        // Play a track if not playing already
+        //will need an if statement to check where it finished to pick it up at correct point 
+        //ooh or just called with no uri and it will resume
         thisSpotifyApi.play({ context_uri: uri, device_id: deviceId })
             .then(function () {
                 console.log('Playing track!');
