@@ -10,8 +10,7 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly, pl
 	const displayNames = [];
 
 	for (let i = 0; i < listeners.length; i++) {
-		const userId = listeners[i];
-		const username = await getUsername(userId);
+		const username = listeners[i];
 		const user = await getUser(username);
 		const displayName = user.userDisplayName;
 		displayNames.push(displayName);

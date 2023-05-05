@@ -59,7 +59,7 @@ export default function Banner({ id, studio, socket }) {
 
 	//TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
 	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
-	const isHost = true;
+	const isHost = false;
 
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
@@ -199,7 +199,7 @@ export function DropdownKebab(props) {
 	const handleLeaveStudio = () => {
 		console.log("leave studio");
 		const user_id = localStorage.getItem("current_user_id");
-		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
         navigate('/', { replace: true });
 	};
 
@@ -210,7 +210,7 @@ export function DropdownKebab(props) {
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 				listeners={listeners}
-				studio_id={studio_id}
+				studio_id={id}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
