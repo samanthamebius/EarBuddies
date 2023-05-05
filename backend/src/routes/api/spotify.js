@@ -117,7 +117,7 @@ router.put("/play", async (req, res) => {
         // Play a track if not playing already
         //will need an if statement to check where it finished to pick it up at correct point 
         //ooh or just called with no uri and it will resume
-        thisSpotifyApi.play({ context_uri: uri, device_id: deviceId })
+        thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
             .then(function () {
                 console.log('Playing track!');
             }, function (err) {

@@ -14,6 +14,9 @@ import artist_profile from "../assets/now_playing/artist_profile_PLACEHOLDER.png
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -51,28 +54,7 @@ function SongInfo() {
     );
 }
 
-function spotifyPlayer({ studio, deviceId }) {
-    try {
-        axios
-            .put(`${BASE_URL}/api/spotify/play`, {
-                uri: "spotify:playlist:" + studio.studioPlaylist,
-                deviceId: deviceId,
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                localStorage.removeItem("access_token");
-                localStorage.removeItem("refresh_token");
-                localStorage.removeItem("expires_in");
-                localStorage.removeItem("current_user_id");
-                navigate("/login");
-                return <p>Could not play track</p>;
-            });
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 
 export function VolumeSlider() {
     const [value, setValue] = useState(30);
@@ -169,8 +151,32 @@ export function TimeSlider() {
 
 function ControlPanel({ deviceId, studio }) {
     const [isPlaying, setPlaying] = useState(false);
+    const navigate = useNavigate();
 
-    function playButton({ studio, deviceId }) {
+    function spotifyPlayer({ studio, deviceId }) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/play`, {
+                    uri: "spotify:playlist:" + studio.studioPlaylist,
+                    deviceId: deviceId,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    localStorage.removeItem("expires_in");
+                    localStorage.removeItem("current_user_id");
+                    navigate("/login");
+                    return <p>Could not play track</p>;
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function playButton(studio, deviceId) {
         console.log(deviceId);
         setPlaying(!isPlaying);
         spotifyPlayer({ studio, deviceId });
@@ -188,7 +194,7 @@ function ControlPanel({ deviceId, studio }) {
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
                         onClick={() =>
-                            playButton((studio = { studio }), (deviceId = { deviceId }))
+                            playButton(studio, deviceId)
                         }
                     />
                 ) : (
