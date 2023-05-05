@@ -66,6 +66,17 @@ export default function Chat(props) {
 	const { id } = useParams();
 	const room = id;
 	const textInput = useRef(null);
+	const messagesRef = useRef(null);
+
+	// scroll to the bottom of the chat container when it's overflowed
+	useEffect(() => {
+		setTimeout(() => {
+			messagesRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}, 100);
+	}, [messages]);
 
 	// Set previous messages
 	useEffect(() => {
@@ -137,6 +148,7 @@ export default function Chat(props) {
 		const isReply = replyMessage !== "";
 		const messageId = uuid();
 		if (message !== "") {
+			// send the message
 			socket.emit("send_message", {
 				room,
 				id: messageId,
@@ -146,6 +158,8 @@ export default function Chat(props) {
 				isReply,
 				replyMessage,
 			});
+
+			// save the image to DB
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
@@ -203,6 +217,7 @@ export default function Chat(props) {
 							inputRef={textInput}
 						/>
 					))}
+					<div ref={messagesRef}></div>
 				</div>
 			</div>
 			<div
@@ -212,7 +227,7 @@ export default function Chat(props) {
 				<div className={styles.inputContent}>
 					{replyMessage !== "" && (
 						<div className={styles.replyMessage}>
-							<div>{replyMessage}</div>
+							<p className={styles.replyMessageText}>{replyMessage}</p>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}
@@ -245,6 +260,7 @@ export default function Chat(props) {
 						cursor: "pointer",
 						position: "sticky",
 						top: "0",
+						justifySelf: "end",
 					}}
 					fontSize="small"
 				/>

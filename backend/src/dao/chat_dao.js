@@ -75,6 +75,11 @@ async function updateReaction(id, messageId, reaction) {
 	);
 }
 
+//delete chat of a room
+async function deleteChat(id) {
+	return await Chat.deleteOne({ roomId: id.toString() });
+}
+
 export {
 	getChat,
 	createChat,
@@ -85,4 +90,5 @@ export {
 	getReactionWithUsername,
 	addANewReaction,
 	updateReaction,
+	deleteChat,
 };

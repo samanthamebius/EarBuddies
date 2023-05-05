@@ -9,6 +9,7 @@ import {
   updateStudios,
 } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { deleteChat } from "../../dao/chat_dao.js";
 
 const router = express.Router();
 
@@ -106,9 +107,18 @@ router.delete("/:id", async (req, res) => {
 		if (!studio) {
 			return res.status(404).json({ msg: "Studio not found" });
 		}
+		//remove studio from users
+		const studio = await getStudio(id);
+		const listeners = studio[0].studioUsers;
+		listeners.forEach(async (listener) => {
+			const studios = await getStudiosId(listener);
+			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
+			await updateStudiosUsername(listener, newStudios);
+		});
+		//delete all chats
+		await deleteChat(id);
 		await deleteStudio(id);
-		//TODO: remove studio from users
-		res.status(204).json({ msg: "Studio deleted" });
+		res.status(204).json({msg: "studio deleted});
 	} catch (err) {
 		console.log(err);
     	res.status(500).json({ msg: "Server error" });

@@ -59,7 +59,7 @@ export default function Banner({ id, studio }) {
 
 	//TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
 	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
-	const isHost = false;
+	const isHost = true;
 
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
