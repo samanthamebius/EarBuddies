@@ -96,6 +96,7 @@
 	padding: 10px;
 	cursor: pointer;
 }
+
 .greyOutImage {
 	-webkit-filter: grayscale(100%);
 	-moz-filter: grayscale(100%);
