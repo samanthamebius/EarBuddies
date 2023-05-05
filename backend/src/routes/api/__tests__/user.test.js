@@ -189,3 +189,9 @@ test('searching for studios is successful', (done) => {
         })
 });
 
+test('logging out a user is successful', (done) => {
+    request(app)
+        .put('/testUser1/logout')
+        .send()
+        .expect(204, done)
+});

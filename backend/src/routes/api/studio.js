@@ -3,7 +3,7 @@ import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
-import { getUser, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
+import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 import { deleteChat } from "../../dao/chat_dao.js";
 

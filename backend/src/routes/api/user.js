@@ -8,6 +8,7 @@ import {
   searchStudioUsers,
   updateUserDisplayName,
   updateUserProfilePic,
+  setUserInactive,
 } from "../../dao/user_dao";
 import { deleteUserFromStudio } from "../../dao/studio_dao";
 
@@ -67,6 +68,22 @@ router.delete("/:username", async (req, res) => {
     }
     await deleteUser(username);    
     return res.status(204).json({ msg: "User deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//log out a user
+router.put("/:username/logout", async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
+    await setUserInactive(username);
+    return res.status(204).json({ msg: "User logged out" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
