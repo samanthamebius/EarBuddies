@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
 	username: String,
 	userDisplayName: String,
+	spotifyPic: String,
 	profilePic: String,
 	userIsActive: Boolean,
 	userStudios: [{ type: Schema.Types.ObjectId, ref: "Studio" }],
@@ -13,9 +14,9 @@ const userSchema = new Schema({
 const studioSchema = new Schema({
     studioName: String,
     studioIsActive: Boolean,
-    studioUsers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+    studioUsers: [{ type: String, required: true }],
 	studioNames: [String],
-    studioHost: { type: Schema.Types.ObjectId, ref: 'User' },
+    studioHost: String,
     studioGenres: [String],
     studioPicture: String,
     studioControlHostOnly: Boolean,

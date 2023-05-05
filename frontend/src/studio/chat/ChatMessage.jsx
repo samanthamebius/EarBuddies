@@ -58,19 +58,6 @@ function ChatMessage(props) {
 		return message;
 	};
 
-	const setReplyMessageStyle = () => {
-		const message = {
-			backgroundColor: "#f6f9fa",
-			padding: "12px",
-			borderRadius: `${
-				isCurrentUser ? "16px 16px 0 16px" : "16px 16px 0 16px"
-			}`,
-			marginBottom: "-10px",
-		};
-
-		return message;
-	};
-
 	const setMessageBodyStyle = () => {
 		const message = {
 			backgroundColor: `${isCurrentUser ? "#E640F8" : "#B03EEE"}`,
@@ -112,7 +99,7 @@ function ChatMessage(props) {
 
 		if (!messageExists) {
 			await axios.put(
-				`http://localhost:3000/api/chat/pinned-messages/${room.id}`,
+				`http://localhost:3000/api/chat/pinned-messages/${room}`,
 				{
 					id: newMessage.id,
 					message: newMessage.message,
@@ -152,7 +139,7 @@ function ChatMessage(props) {
 			username: username,
 			displayName: displayName,
 		};
-		axios.put(`${BASE_URL}/api/chat/new-reaction/${room.id}`, {
+		axios.put(`${BASE_URL}/api/chat/new-reaction/${room}`, {
 			messageId: currentMessageId,
 			reaction,
 		});
@@ -244,7 +231,7 @@ function ChatMessage(props) {
 			<h4 className={styles.username}>{messageDisplayName}</h4>
 			{/* Message Reply */}
 			{(replyMessage || isPastReply) && (
-				<div style={setReplyMessageStyle()}>
+				<div className={styles.messageReply}>
 					<p className={styles.messageReplyContent}>{replyMessage}</p>
 				</div>
 			)}

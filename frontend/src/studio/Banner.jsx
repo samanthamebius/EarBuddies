@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
 
 // TO DO: get if user is host or not
-const isHost = false;
+// const isHost = false;
 
 const hostImage = ProfilePicImg1;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -57,6 +57,10 @@ export default function Banner({ id, studio, socket }) {
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
+	//TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
+	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
+	const isHost = true;
+
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
 	);
@@ -72,6 +76,7 @@ export default function Banner({ id, studio, socket }) {
 	};
 
 	const users = studio.studioUsers;
+	console.log(users)
 	const isListening = studio.studioIsActive;
 
 	return (
@@ -95,14 +100,16 @@ export default function Banner({ id, studio, socket }) {
 					handleDelete={handleDelete}
 					id={id}
 					socket={socket}
+					isHost={isHost}
 				/>
 			</div>
 		</div>
 	);
 }
 
+
 export function DropdownKebab(props) {
-	const { controlEnabled, handleControlToggle, handleDelete, id, socket } =
+	const { controlEnabled, handleControlToggle, handleDelete, id, socket, isHost } =
 		props;
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -117,6 +124,7 @@ export function DropdownKebab(props) {
 	const [isInAssign, setInAssign] = useState(false);
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
+	const navigate = useNavigate();
 
 	const enterLeave = () => {
 		setInLeave(true);
@@ -188,12 +196,21 @@ export function DropdownKebab(props) {
 		setIsNicknameOpen(true);
 	};
 
+	const handleLeaveStudio = () => {
+		console.log("leave studio");
+		const user_id = localStorage.getItem("current_user_id");
+		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+        navigate('/', { replace: true });
+	};
+
 	return (
 		<div>
 			<LeaveStudioDialog
+				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 				listeners={listeners}
+				studio_id={studio_id}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -210,6 +227,7 @@ export function DropdownKebab(props) {
 				handleClose={() => setConfirmleaveOpen(false)}
 				handleAction={() => {
 					handleClose;
+					handleLeaveStudio();
 				}} //TO DO: replace with leave functionality
 				message={"Are you sure you want to leave this studio?"}
 				actionText={"Leave"}

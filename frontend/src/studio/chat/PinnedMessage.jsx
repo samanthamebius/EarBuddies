@@ -13,9 +13,9 @@ function PinnedMessage({ pinnedMessage, room, socket }) {
 
 	const handleRemovePin = async () => {
 		socket.emit("remove_pinned_message", { newMessage: pinnedMessage, room });
-		console.log(pinnedMessage);
+
 		await axios.put(
-			`${BASE_URL}/api/chat/remove-pinned-message/${room.id}`,
+			`${BASE_URL}/api/chat/remove-pinned-message/${room}`,
 			pinnedMessage
 		);
 	};

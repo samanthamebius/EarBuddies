@@ -46,6 +46,7 @@ function NavMenu() {
 function UserInfo() {
 	const { setUsername, setDisplayName } = useContext(AppContext);
 	const current_user_id = localStorage.getItem("current_user_id");
+	console.log(current_user_id);
 	const id = JSON.parse(current_user_id);
 
 	if (!current_user_id) {
@@ -66,9 +67,11 @@ function UserInfo() {
 	} else if (!user) {
 		return <p>Could not load user</p>;
 	} else {
+		var spotifyPicture = "";
 		var profilePicture = "";
 		var username = "";
 		try {
+			spotifyPicture = user.spotifyPic;
 			profilePicture = user.profilePic;
 			username = user.userDisplayName;
 		} catch (error) {
@@ -77,7 +80,8 @@ function UserInfo() {
 		// If Spotify account doesn't have a profile picture, set to default
 		if (profilePicture === "") {
 			axios.put(`${BASE_URL}/api/user/${id}`, {
-				profilePic: defaultProfilePic
+				profilePic: defaultProfilePic,
+				spotifyPic: defaultProfilePic
 			});
 			window.location.reload(false);
 		}
@@ -198,7 +202,7 @@ export function DropdownMenu() {
 							className={styles.icon}
 							style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
 						/>
-						<p className={styles.menu_title}>View Profile</p>
+						<p className={styles.menu_title}>My Profile</p>
 					</MenuItem>
 
 					<MenuItem

@@ -95,6 +95,11 @@ async function updateChatMessageDisplayName(username, studioId, nickname) {
 	);
 
 	return await getChat(studioId);
+	}
+
+//delete chat of a room
+async function deleteChat(id) {
+	return await Chat.deleteOne({ roomId: id.toString() });
 }
 
 export {
@@ -108,4 +113,5 @@ export {
 	addANewReaction,
 	updateReaction,
 	updateChatMessageDisplayName,
+	deleteChat,
 };

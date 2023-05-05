@@ -62,6 +62,25 @@ async function updateStudioUsers(id, listeners) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners });
 }
 
+async function deleteUserFromStudio(studio_id, username) {
+	const studio = await getStudio(studio_id);
+	const users = studio[0].studioUsers;
+	const index = users.indexOf(username);
+	if (index > -1) {
+		users.splice(index, 1);
+	}
+	//if user is host, assign new host
+	if (studio[0].studioHost === username) {
+		const newHost = users[0];
+		//if no new host, delete studio
+		if (!newHost) {
+			return await deleteStudio(studio_id);
+		}
+		await updateStudioHost(studio_id, newHost);
+	}
+	return await Studio.findOneAndUpdate({ _id: studio_id }, { studioUsers: users });
+}
+
 async function updateStudioHost(id, host) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
 }
@@ -81,4 +100,5 @@ export {
 	updateStudioHost,
 	deleteStudio,
 	updateStudioNames,
+	deleteUserFromStudio,
 };

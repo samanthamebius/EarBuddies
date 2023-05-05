@@ -23,6 +23,7 @@ function useStudioPost() {
 	) => {
 		const host = JSON.parse(localStorage.getItem("current_user_id"));
 		listeners.push(host);
+    console.log(listeners)
 		//add dummy listener pending search bar completion
 		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
@@ -208,7 +209,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               className={styles.textfield}
               autoComplete="off" />
           </ThemeProvider>
-
           <h2 className={styles.sectionHeading}>Cover Photo</h2>
           <FileDropZone onFileChange={handleFileChange} />
 
@@ -243,7 +243,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
           </div>
 
           <h2 className={styles.sectionHeading}>Add Listeners</h2>
-          <SearchBar label={"Search using Spotify username ..."} />
+          <SearchBar searchType={"users"} label={"Search using Spotify username ..."} studioId={""} />
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
