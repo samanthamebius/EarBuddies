@@ -130,11 +130,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const [listeners, setListeners] = useState([]);
 
   useEffect(() => {
-    const difference = listenerSearchResults.filter(x => !listeners.includes(x));
-    console.log('listenerSearchResults: ', listenerSearchResults);
-    console.log('displayedSearchResults: ', displayedSearchResults);
-    console.log('listeners: ', listeners);
-
+    const difference = listenerSearchResults.filter(x => !listeners.some(y => y._id === x._id));
     setDisplayedSearchResults(difference);
   }, [listenerSearchResults, listeners])
 
