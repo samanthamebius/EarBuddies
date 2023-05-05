@@ -55,7 +55,7 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     return (
       <div className={styles.listenerListItem} onClick={handleClick}>
         <img src={listener.profilePic}/>
-        <p>{listener.username}</p>
+        <p>{listener.userDisplayName}</p>
         {isNewHost ?
             <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
         :
