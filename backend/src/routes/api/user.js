@@ -60,11 +60,10 @@ router.delete("/:username", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
-    const user = await getUser(id);
     const studios = user.userStudios;
     for (var i = 0; i < studios.length; i++) {
       console.log("deleting user from studio " + studios[i])
-      await deleteUserFromStudio(studios[i], id);
+      await deleteUserFromStudio(studios[i], username);
     }
     await deleteUser(username);    
     return res.status(204).json({ msg: "User deleted" });

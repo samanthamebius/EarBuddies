@@ -108,17 +108,16 @@ router.delete("/:id", async (req, res) => {
 			return res.status(404).json({ msg: "Studio not found" });
 		}
 		//remove studio from users
-		const studio = await getStudio(id);
 		const listeners = studio[0].studioUsers;
 		listeners.forEach(async (listener) => {
 			const studios = await getStudiosId(listener);
 			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
-			await updateStudiosUsername(listener, newStudios);
+			await updateStudios(listener, newStudios);
 		});
 		//delete all chats
 		await deleteChat(id);
 		await deleteStudio(id);
-		res.status(204).json({msg: "studio deleted});
+		res.status(204).json({msg: "studio deleted"});
 	} catch (err) {
 		console.log(err);
     	res.status(500).json({ msg: "Server error" });
