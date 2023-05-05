@@ -133,4 +133,29 @@ router.put("/play", async (req, res) => {
     }
 });
 
+router.put("/pause", async (req, res) => {
+    try {
+        const { deviceId } = req.body;
+        console.log(deviceId);
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Pause a track if not paused already
+        thisSpotifyApi.pause({ device_id: deviceId })
+            .then(function () {
+                console.log('Paused track!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
+});
+
 export default router;

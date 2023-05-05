@@ -176,10 +176,38 @@ function ControlPanel({ deviceId, studio }) {
         }
     }
 
+    function spotifyPauser({ deviceId }) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/pause`, {
+                    deviceId: deviceId,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    localStorage.removeItem("expires_in");
+                    localStorage.removeItem("current_user_id");
+                    navigate("/login");
+                    return <p>Could not pause track</p>;
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function playButton(studio, deviceId) {
         console.log(deviceId);
         setPlaying(!isPlaying);
         spotifyPlayer({ studio, deviceId });
+    }
+
+    function pauseButton(deviceId) {
+        console.log(deviceId);
+        setPlaying(!isPlaying);
+        spotifyPauser({ deviceId });
     }
 
     return (
@@ -189,7 +217,7 @@ function ControlPanel({ deviceId, studio }) {
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
                 />
-                {isPlaying ? (
+                {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
@@ -201,7 +229,7 @@ function ControlPanel({ deviceId, studio }) {
                     <PauseCircleRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
-                        onClick={() => setPlaying(!isPlaying)}
+                        onClick={() => pauseButton(deviceId)}
                     />
                 )}
                 <SkipNextRoundedIcon
@@ -227,28 +255,42 @@ function WebPlayback(props) {
         document.body.appendChild(script);
 
         //add try catch around here for access token expiry check
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            const player = new window.Spotify.Player({
-                name: "EarBuddies",
-                getOAuthToken: (cb) => {
-                    cb(props.token);
-                },
-                volume: 0.5,
-            });
+        try {
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const player = new window.Spotify.Player({
+                    name: "EarBuddies",
+                    getOAuthToken: (cb) => {
+                        cb(props.token);
+                    },
+                    volume: 0.5,
+                });
 
-            setPlayer(player);
+                setPlayer(player);
 
-            player.addListener("ready", ({ device_id }) => {
-                console.log("Ready with Device ID", device_id);
-                setDeviceId(device_id);
-            });
+                player.addListener("ready", ({ device_id }) => {
+                    console.log("Ready with Device ID", device_id);
+                    setDeviceId(device_id);
+                });
 
-            player.addListener("not_ready", ({ device_id }) => {
-                console.log("Device ID has gone offline", device_id);
-            });
+                player.addListener("not_ready", ({ device_id }) => {
+                    console.log("Device ID has gone offline", device_id);
+                });
 
-            player.connect();
-        };
+                player.connect();
+            };
+        }
+        catch (error) {
+            console.log(error);
+            if (error.response.status === 401) {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                localStorage.removeItem("expires_in");
+                localStorage.removeItem("current_user_id");
+                navigate("/login");
+            }
+        }
+
+
     }, []);
 
     console.log(myDeviceId);
