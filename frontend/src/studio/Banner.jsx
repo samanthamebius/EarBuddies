@@ -2,6 +2,7 @@ import styles from "./StudioPage.module.css";
 import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
 import NicknameDialog from "./NicknameDialog";
+import AssignNewHostDialog from "./AssignNewHostDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -19,7 +20,6 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import VideogameAssetOffRoundedIcon from "@mui/icons-material/VideogameAssetOffRounded";
 import GroupRemoveRoundedIcon from "@mui/icons-material/GroupRemoveRounded";
-import useGet from "../hooks/useGet.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
@@ -57,9 +57,7 @@ export default function Banner({ id, studio }) {
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
-	// TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
-	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
-	const isHost = true;
+	const isHost = (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
 
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
@@ -76,6 +74,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
+	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
 
 	return (
@@ -100,6 +99,7 @@ export default function Banner({ id, studio }) {
 					isHost={isHost}
 					studio_id={id}
 					studioUsers={users}
+					isAloneInStudio={isAlone}
 				/>
 			</div>
 		</div>
@@ -112,7 +112,8 @@ export function DropdownKebab({
 	handleDelete,
 	isHost,
 	studio_id,
-	studioUsers
+	studioUsers,
+	isAloneInStudio
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -120,6 +121,7 @@ export function DropdownKebab({
 	const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
+	const [isAssignOpen, setIsAssignOpen] = useState(false);
 
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -198,9 +200,11 @@ export function DropdownKebab({
 	const handleNicknameOpen = () => {
 		setIsNicknameOpen(true);
 	};
+	const handleAssignOpen = () => {
+		setIsAssignOpen(true);
+	};
 
 	const handleLeaveStudio = () => {
-		console.log("leave studio");
 		const user_id = localStorage.getItem("current_user_id");
 		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
         navigate('/', { replace: true });
@@ -214,6 +218,12 @@ export function DropdownKebab({
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 				studioUsers={studioUsers}
 				studio_id={studio_id}
+			/>
+			<AssignNewHostDialog 
+				isAssignDialogOpened={isAssignOpen}
+				handleCloseAssignDialog={() => setIsAssignOpen(false)}
+				studioUsers={studioUsers}
+				studio_id={studio_id} 
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -249,6 +259,7 @@ export function DropdownKebab({
 				onClose={handleClose}
 			>
 				<MenuItem
+					style={{ display: isAloneInStudio ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave}
@@ -274,7 +285,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={handleClose}
 					onMouseEnter={enterRemove}
@@ -288,9 +299,9 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
-					onClick={handleClose}
+					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
 					onMouseLeave={leaveAssign}
 				>
@@ -302,7 +313,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={() => {
 						handleClose;

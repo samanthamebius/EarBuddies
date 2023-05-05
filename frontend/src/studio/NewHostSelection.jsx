@@ -1,15 +1,7 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import React, { useState, useEffect } from "react";
 import styles from './Popup.module.css';
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-import ConfirmationDialog from '../shared/ConfirmationDialog';
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -23,10 +15,15 @@ export default function NewHostSelection({ newHost, setNewHost, isHostErrorMessa
 			return;
 		}
 		async function fetchUserData() {
-		const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
-		const userDataList = await Promise.all(promises);
-		setListeners(userDataList.map(response => response.data));
-		}
+            const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
+            const userDataList = await Promise.all(promises);
+
+            const currentUser = localStorage.getItem("current_user_id").replace(/"/g, '');
+            const potentialHosts = userDataList
+                .map(response => response.data)
+                .filter(listener => listener.username !== currentUser);
+            setListeners(potentialHosts);
+        }
 		fetchUserData();
 	}, [studioUsers]);
 
