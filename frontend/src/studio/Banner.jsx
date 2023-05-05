@@ -76,7 +76,6 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
-	console.log(users)
 	const isListening = studio.studioIsActive;
 
 	return (
