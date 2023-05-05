@@ -128,9 +128,13 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   ]);
   const [file, setFile] = useState(null);
 
-  const listenerSearchResultsDisplayed = listenerSearchResults.filter(function (e) {
-    return listeners.indexOf(e) < 0;
-  });
+  // This doesn't seem to work if search term is cleared and re-entered
+  const listenerSearchResultsDisplayed = listenerSearchResults.filter(
+    function (e) {
+      return listeners.indexOf(e) < 0;
+    });
+
+  console.log(listenerSearchResults);
 
   const handleFileChange = (selectedFile) => { setFile(selectedFile); };
 
