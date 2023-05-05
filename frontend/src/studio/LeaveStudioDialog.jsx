@@ -22,23 +22,8 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
     const handleClose = () => { handleCloseLeaveDialog(false) };
     const [ newHost, setNewHost] = useState(null);
     const user_id = localStorage.getItem('current_user_id');
-    // const [listeners, setListeners] = useState([]);
-
-    // useEffect(() => {
-	// 	if (!studioUsers || !Array.isArray(studioUsers)) {
-	// 		console.log("no studio users")
-	// 		return;
-	// 	}
-	// 	async function fetchUserData() {
-	// 	const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
-	// 	const userDataList = await Promise.all(promises);
-	// 	setListeners(userDataList.map(response => response.data));
-	// 	}
-	// 	fetchUserData();
-	// }, [studioUsers]);
 
     const handleSubmit = () => {
-        console.log("submitting")
         if (newHost === null) {
             setIsHostErrorMessage(true);
         } else {
@@ -48,7 +33,6 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
     };
 
     const handleSubmitConfirm = () => { 
-        console.log("yes i want to leave")
         axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
         setIsConfirmOpen(false)
         handleClose()
@@ -70,17 +54,7 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
                     isHostErrorMessage={isHostErrorMessage}
                     studioUsers={studioUsers}
                     studio_id={studio_id} />
-                {/* <div className={styles.listenerList}>
 
-                    {listeners.map((listener) => (
-                        <ListenerListItem key={listener.username} 
-                            listener={listener} 
-                            isNewHost={listener.username === newHost}
-                            setNewHost={setNewHost}
-                        />
-                    ))}
-                </div>
-                {isHostErrorMessage && <p className={styles.helperText}>You must select a host</p> } */}
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
                     <Button variant="contained" sx={{ fontWeight: 600, color: '#757575'  }} className={styles.secondaryButton} onClick={() => { setNewHost(null); handleClose(); }}>Cancel</Button>
                     <Button variant="contained" sx={{ fontWeight: 600 }} className={styles.purpleButton} onClick={handleSubmit}>Leave Studio</Button>
@@ -95,21 +69,3 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
         </Dialog>
     )
 }
-
-// function ListenerListItem ({ listener, isNewHost, setNewHost }) {
-//     const handleClick = () => {
-//       setNewHost(listener.username);
-//     };
-  
-//     return (
-//       <div className={styles.listenerListItem} onClick={handleClick}>
-//         <img src={listener.profilePic}/>
-//         <p>{listener.username}</p>
-//         {isNewHost ?
-//             <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
-//         :
-//             <StarBorderRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
-//         }
-//       </div>
-//     );
-// };

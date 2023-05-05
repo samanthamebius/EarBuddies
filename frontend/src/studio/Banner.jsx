@@ -200,7 +200,6 @@ export function DropdownKebab({
 	};
 
 	const handleLeaveStudio = () => {
-		console.log("leave studio");
 		const user_id = localStorage.getItem("current_user_id");
 		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
         navigate('/', { replace: true });
