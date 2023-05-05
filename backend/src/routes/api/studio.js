@@ -170,4 +170,21 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
   }
 });
 
+// assign new host
+router.put("/:studio_id/newHost/:host", async (req, res) => {
+  	try {
+		const { studio_id, host } = req.params;
+		if (!studio_id) {
+		return res.status(400).json({ msg: "No studio id provided" });
+		}
+		if (!host) {
+		return res.status(400).json({ msg: "No host provided" });
+		}
+		await updateStudioHost(studio_id, host);
+		res.status(204).json({ msg: "Host Updated" })
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
 export default router;

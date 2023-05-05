@@ -50,7 +50,7 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
     const handleSubmitConfirm = () => { 
         console.log("yes i want to leave")
         // const new_host_id = newHost.id
-        // axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
+        axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
 
         // setIsConfirmOpen(false)
         // handleClose()
