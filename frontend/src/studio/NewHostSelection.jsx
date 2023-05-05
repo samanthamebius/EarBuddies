@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from './Popup.module.css';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
@@ -16,10 +15,15 @@ export default function NewHostSelection({ newHost, setNewHost, isHostErrorMessa
 			return;
 		}
 		async function fetchUserData() {
-		const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
-		const userDataList = await Promise.all(promises);
-		setListeners(userDataList.map(response => response.data));
-		}
+            const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
+            const userDataList = await Promise.all(promises);
+
+            const currentUser = localStorage.getItem("current_user_id").replace(/"/g, '');
+            const potentialHosts = userDataList
+                .map(response => response.data)
+                .filter(listener => listener.username !== currentUser);
+            setListeners(potentialHosts);
+        }
 		fetchUserData();
 	}, [studioUsers]);
 
