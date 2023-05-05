@@ -1,10 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
-import mongoose from "mongoose";
 import { getUser } from "./user_dao.js";
 
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
 	const displayNames = [];
@@ -89,8 +87,6 @@ async function updateStudioHost(id, host) {
 async function updateStudioNames(id, newNames) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
 }
-
-await mongoose.disconnect;
 export {
 	createStudio,
 	getStudio,
