@@ -29,11 +29,9 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 export default function StudioCard({
 	studioUsers,
 	isListening,
-	hostInformation,
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
-	// const [host, setHost] = useState([]);
 
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
@@ -49,29 +47,8 @@ export default function StudioCard({
 		fetchUserData();
 	}, [studioUsers]);
 
-	// useEffect(() => {
-	// 	if (!hostInformation ) {
-	// 		console.log("no studio users")
-	// 		return;
-	// 	}
-	// 	async function fetchUserData() {
-	// 	const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
-	// 	const userDataList = await Promise.all(promises);
-	// 	setUserList(userDataList.map(response => response.data));
-	// 	}
-	// 	fetchUserData();
-	// }, [studioUsers]);
-
-	console.log("this is user list ")
-	console.log(userList)
 
 	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
-	// activeFirst.unshift(data.splice((_.findIndex(activeFirst, function(user) {
-	// 	return user === host;
-	// }), 1))[0]);
-
-	console.log("this is ordered user list ")
-	console.log(activeFirst)
 
 	const profileImages = activeFirst.map(user => user.profilePic);
 	const profileStatus = activeFirst.map(user => user.userIsActive);
