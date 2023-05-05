@@ -118,9 +118,6 @@ router.delete("/:id", async (req, res) => {
 router.post("/:id/toggle", async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return res.status(400).json({ msg: "No studio id provided" });
-		}
 		const studio = await getStudio(id);
 		if (!studio) {
 		return res.status(404).json({ msg: "Studio not found" });
