@@ -1,5 +1,5 @@
 .studio {
-	height: calc(100vh - 82px);
+	height: calc(100vh - 45px);
 	display: grid;
 	grid-template-rows: 1fr 5fr;
 	grid-template-columns: 2fr 3fr 4fr;
