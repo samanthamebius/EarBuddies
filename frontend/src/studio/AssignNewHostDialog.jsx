@@ -1,14 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import styles from './Popup.module.css';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 import axios from "axios";
 import NewHostSelection from "./NewHostSelection";

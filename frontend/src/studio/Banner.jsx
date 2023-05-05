@@ -20,7 +20,6 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import VideogameAssetOffRoundedIcon from "@mui/icons-material/VideogameAssetOffRounded";
 import GroupRemoveRoundedIcon from "@mui/icons-material/GroupRemoveRounded";
-import useGet from "../hooks/useGet.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
