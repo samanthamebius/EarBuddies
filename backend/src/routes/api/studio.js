@@ -2,8 +2,8 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
-import { getUserId, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
+import { getUser, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 import { deleteChat } from "../../dao/chat_dao.js";
 
@@ -168,6 +168,22 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+// assign new host
+router.put("/:studio_id/newHost/:host_name", async (req, res) => {
+	console.log("new host");
+  	try {
+		const { studio_id, host_name } = req.params;
+		const host = await getUser(host_name)
+		if (!host) {
+			return res.status(404).json({ msg: "Invalid host provided" });
+		}
+		await updateStudioHost(studio_id, host_name);
+		res.status(204).json({ msg: "Host Updated" })
+	} catch (err) {
+		res.status(500).json(err);
+	}
 });
 
 export default router;

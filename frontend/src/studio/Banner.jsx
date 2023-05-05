@@ -57,7 +57,7 @@ export default function Banner({ id, studio }) {
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
-	//TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
+	// TODO: UNCOMMENT THIS ONCE ALL FUNC IS DONE
 	// const isHost = studio.studioHost == localStorage.getItem("current_user_id");
 	const isHost = true;
 
@@ -99,6 +99,7 @@ export default function Banner({ id, studio }) {
 					handleDelete={handleDelete}
 					isHost={isHost}
 					studio_id={id}
+					studioUsers={users}
 				/>
 			</div>
 		</div>
@@ -110,7 +111,8 @@ export function DropdownKebab({
 	handleControlToggle,
 	handleDelete,
 	isHost,
-	studio_id
+	studio_id,
+	studioUsers
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -210,7 +212,7 @@ export function DropdownKebab({
 				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
-				listeners={listeners}
+				studioUsers={studioUsers}
 				studio_id={studio_id}
 			/>
 			<ConfirmationDialog
