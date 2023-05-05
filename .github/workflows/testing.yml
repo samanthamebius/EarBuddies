@@ -17,6 +17,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
             - name: Install dependencies
-              run: npm install --prefix ../../backend
+              working-directory: /../../backend
+              run: npm install
             - name: Run tests
               run: npm test
