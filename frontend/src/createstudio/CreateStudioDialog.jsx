@@ -1,7 +1,7 @@
 import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip, List } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
 import SearchBar from "../shared/SearchBar";
@@ -112,8 +112,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false);
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false);
   const [isHostOnly, setIsHostOnly] = useState(false);
-  const [listenerSearchResults, setListenerSearchResults] = useState([]);
-  const [listeners, setListeners] = useState([]);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
   const [genres, setGenres] = useState([
@@ -127,14 +125,18 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     { name: "Pop", isSelected: false }
   ]);
   const [file, setFile] = useState(null);
+  const [listenerSearchResults, setListenerSearchResults] = useState([]);
+  const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
+  const [listeners, setListeners] = useState([]);
 
-  // This doesn't seem to work if search term is cleared and re-entered
-  const listenerSearchResultsDisplayed = listenerSearchResults.filter(
-    function (e) {
-      return listeners.indexOf(e) < 0;
-    });
+  useEffect(() => {
+    const difference = listenerSearchResults.filter(x => !listeners.includes(x));
+    console.log('listenerSearchResults: ', listenerSearchResults);
+    console.log('displayedSearchResults: ', displayedSearchResults);
+    console.log('listeners: ', listeners);
 
-  console.log(listenerSearchResults);
+    setDisplayedSearchResults(difference);
+  }, [listenerSearchResults, listeners])
 
   const handleFileChange = (selectedFile) => { setFile(selectedFile); };
 
@@ -284,9 +286,10 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             setResults={setListenerSearchResults} />
 
           {/* Map search results */}
-          {listenerSearchResultsDisplayed.length > 0 ? <List className={styles.searchResults}>
-            {listenerSearchResultsDisplayed.map((listener, i) => (
+          {displayedSearchResults.length > 0 ? <List className={styles.searchResults}>
+            {displayedSearchResults.map((listener, i) => (
               <ListItem
+                key={i}
                 secondaryAction={
                   <Button
                     edge="end"
@@ -307,7 +310,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             ))}
           </List> : null}
 
-
           {/* Map Listeners */}
           {listeners.length > 0 ?
             <>
@@ -315,6 +317,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               <List className={styles.listeners}>
                 {listeners.map((listener, i) => (
                   <ListItem
+                    key={i}
                     secondaryAction={
                       <ClearRounded
                         edge="end"

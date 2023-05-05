@@ -10,7 +10,6 @@ import React from "react";
 function SearchBar({ label, searchType, studioId, setResults }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(setResults);
 
   const theme = createTheme({
     palette: {
