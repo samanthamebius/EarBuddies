@@ -1,10 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { User, Studio } from "../database/schema.js";
-import { getStudio } from "./studio_dao.js";
-import mongoose from "mongoose";
-
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createUser(username, userDisplayName, spotifyPic) {
 	const newUser = new User({
@@ -32,7 +28,7 @@ async function loginUser(spotifyApi, data) {
 						`${data.body.images.length === 0 ? "" : data.body.images[0].url}`
 					);
 				} else {
-					await updateUser(data.body.id);
+					await setUserActive(data.body.id);
 				}
 				resolve(data.body.id);
 			})
@@ -43,11 +39,20 @@ async function loginUser(spotifyApi, data) {
 	});
 }
 
-async function updateUser(username) {
+async function setUserActive(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userIsActive: true }
+		{ userIsActive: true },
+		{ new: true}
 	);
+}
+
+async function setUserInactive(username) {
+  return await User.findOneAndUpdate(
+    { username: username },
+    { userIsActive: false },
+    { new: true }
+  );
 }
 
 async function getUsers() {
@@ -55,40 +60,26 @@ async function getUsers() {
 	return users;
 }
 
-async function searchUsers(query, username) {
-	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
-	return users;
-  }
-
-async function updateUserInfo(username, userDisplayName, spotifyPic, profilePic) {
+async function updateUserDisplayName(username, userDisplayName) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userDisplayName: userDisplayName, spotifyPic: spotifyPic, profilePic: profilePic }
+		{ userDisplayName: userDisplayName },
+		{ new: true }
 	);
+}
+
+async function updateUserProfilePic(username, profilePic) {
+  return await User.findOneAndUpdate(
+    { username: username },
+    { profilePic: profilePic },
+    { new: true }
+  );
 }
 
 async function getUser(username) {
 	const user = await User.findOne({ username: username });
 	return user;
 }
-
-//TODO: deprecate
-async function getUserId(username) {
-	const user = await getUser(username);
-	return user._id;
-}
-
-//TODO: deprecate
-async function getUserbyId(id) {
-	const user = await User.findOne({ _id: id });
-	return user;
-}
-
-async function getUsername(id) {
-	const user = await getUserbyId(id);
-	return user.username;
-}
-
 
 async function getStudios(username) {
   const user = await getUserbyId(username);
@@ -112,45 +103,39 @@ async function searchActiveStudios(username, query) {
 	return studios;
 }
 
+async function searchUsers(query, username) {
+  const users = await User.find({
+    userDisplayName: { $regex: query, $options: "i" },
+    username: { $ne: username },
+  });
+  return users;
+}
+
 async function searchStudioUsers(studioId, query, username) {
 	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
 }
 
-async function updateStudios(id, studios) {
-	return await User.findOneAndUpdate(
-		{ _id: id },
-		{ userStudios: studios }
-	);
-}
-
-async function updateStudiosUsername(username, studios) {
-  return await User.findOneAndUpdate({ username: username }, { userStudios: studios });
+async function updateStudios(username, studios) {
+  return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
 }
 
 async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
 }
 
-await mongoose.disconnect;
-
 export {
 	createUser,
-	updateUser,
+	setUserActive,
+	setUserInactive,
 	getUser,
 	loginUser,
 	getStudiosId,
 	updateStudios,
-	getUserId,
 	deleteUser,
-	getUserbyId,
 	searchStudios,
 	searchActiveStudios,
 	searchUsers,
 	getUsers,
-	getUsername,
-	searchStudioUsers,
-  	updateUserInfo,
-	updateStudiosUsername			
+	searchStudioUsers,		
 };
-

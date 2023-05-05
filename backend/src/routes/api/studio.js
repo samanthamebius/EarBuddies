@@ -2,17 +2,8 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-
-import {
-	createStudio,
-	getStudio,
-	deleteStudio,
-	updateStudioNames,
-	updateStudioUsers,
-	updateStudioControlHostOnly,
-} from "../../dao/studio_dao.js";
-import { getStudiosId, updateStudiosUsername } from "../../dao/user_dao.js";
-
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
+import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 import {
 	deleteChat,
@@ -27,75 +18,83 @@ const upload = multer({
 
 //create studio
 router.post("/new", async (req, res) => {
-	try {
-		const {
-			name,
-			listeners,
-			host: host_name,
-			genres,
-			studioBannerImageUrl: coverPhoto,
-			isHostOnly,
-		} = req.body;
+  try {
+    const {
+      name,
+      listeners,
+      host,
+      genres,
+      studioBannerImageUrl,
+      isHostOnly,
+    } = req.body;
 
-		//create studio playlist
-		const playlist_name = "Earbuddies - " + name;
-		const api = getSpotifyApi();
-		if (!api) {
-			console.log("No Spotify API connection");
-			return res.status(403).json({ msg: "No Spotify API connection" });
+    // Check for required fields
+    if (!name || !listeners || !host) {
+      return res
+        .status(400)
+        .json({ msg: "Please provide all required fields" });
+    }
+
+    // Create studio playlist on Spotify
+    const playlist_name = "Earbuddies - " + name;
+    const api = getSpotifyApi();
+    if (!api) {
+      console.log("No Spotify API connection");
+      return res.status(403).json({ msg: "No Spotify API connection" });
+    }
+    const createPlaylistRes = await api.createPlaylist(playlist_name, {
+      public: true,
+    });
+    const playlist_id = createPlaylistRes.body.id;
+
+    // Create the new studio
+    const newStudio = await createStudio(
+      name,
+      listeners,
+      host,
+      genres,
+      studioBannerImageUrl,
+      isHostOnly,
+      playlist_id
+    );
+
+    // Add studios to user
+    const promises = listeners.map(async (listener) => {
+		const thisListener = await getUser(listener);
+		if (!thisListener) {
+			return res.status(404).json({ msg: "Listener not found" });
 		}
-		api.createPlaylist(playlist_name, { public: true }).then(
-			async function (data) {
-				const playlist_id = data.body.id;
+      const studios = await getStudiosId(listener);
+      studios.push(newStudio._id);
+      await updateStudios(listener, studios);
+    });
+    await Promise.all(promises);
 
-				// Create the new studio
-				const newStudio = await createStudio(
-					name,
-					listeners,
-					host_name,
-					genres,
-					coverPhoto,
-					isHostOnly,
-					playlist_id
-				);
-				//add studios to user
-				listeners.forEach(async (listener) => {
-					const studios = await getStudiosId(listener);
-					studios.push(newStudio._id);
-					updateStudiosUsername(listener, studios);
-				});
-				// Respond with the newly created studio
-				res
-					.status(201)
-					.location(`/api/studio/${newStudio._id}`)
-					.json(newStudio);
-			},
-			function (err) {
-				console.log("Something went wrong!", err);
-			}
-		);
-	} catch (err) {
-		console.log(err);
-		res.status(500).json(err);
-	}
+    // Respond with the newly created studio
+    res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Server error" });
+  }
 });
 
 //get studio by id
 router.get("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return res.status(400).json({ msg: "No studio id provided" });
-		}
 		//check for spotify api connection
 		const api = getSpotifyApi();
 		if (!api) {
 			return res.status(403).json({ msg: "No Spotify API connection" });
 		}
 		const studio = await getStudio(id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
 		res.status(200).json(studio);
 	} catch (err) {
-		res.status(500).json(err);
+		console.log(err);
+    	res.status(500).json({ msg: "Server error" });
 	}
 });
 
@@ -103,41 +102,41 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return res.status(400).json({ msg: "No studio id provided" });
+		const studio = await getStudio(id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
 		}
 		//remove studio from users
-		const studio = await getStudio(id);
 		const listeners = studio[0].studioUsers;
 		listeners.forEach(async (listener) => {
 			const studios = await getStudiosId(listener);
-			const newStudios = studios.filter(
-				(studio) => JSON.parse(JSON.stringify(studio._id)) !== id
-			);
-			await updateStudiosUsername(listener, newStudios);
+			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
+			await updateStudios(listener, newStudios);
 		});
 		//delete all chats
 		await deleteChat(id);
 		await deleteStudio(id);
-		res.status(204);
+		res.status(204).json({msg: "studio deleted"});
 	} catch (err) {
-		res.status(500).json(err);
+		console.log(err);
+    	res.status(500).json({ msg: "Server error" });
 	}
 });
 
 router.post("/:id/toggle", async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return res.status(400).json({ msg: "No studio id provided" });
-		}
 		const studio = await getStudio(id);
+		if (!studio) {
+		return res.status(404).json({ msg: "Studio not found" });
+		}
 		const control = studio[0].studioControlHostOnly;
 		const newControl = !control;
 		const updated_studio = await updateStudioControlHostOnly(id, newControl);
 		res.status(200).json(updated_studio);
 	} catch (err) {
-		res.status(500).json(err);
+		console.log(err);
+    	res.status(500).json({ msg: "Server error" });
 	}
 });
 
@@ -203,44 +202,58 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 });
 
 //leave studio
-router.put("/:studio_id/leave/:user", async (req, res) => {
-	try {
-		const { studio_id, user } = req.params;
-		if (!studio_id) {
-			return res.status(400).json({ msg: "No studio id provided" });
+router.put("/:studio_id/leave/:username", async (req, res) => {
+  try {
+    const { studio_id, username } = req.params;
+    const studio = await getStudio(studio_id);
+	if (!studio) {
+		return res.status(404).json({ msg: "Studio not found" });
+	}
+	const user = await getUser(username);
+	if (!user) {
+		return res.status(404).json({ msg: "User not found" });
+	}
+    const listeners = studio[0].studioUsers;
+
+	//remove user from nickname list
+	const indexToRemove = listeners.indexOf(user.replace(/"/g, ""));
+	console.log(listeners);
+	console.log(user);
+	console.log(indexToRemove);
+	const nicknames = studio[0].studioNames;
+	const newArray = [
+		...nicknames.slice(0, indexToRemove),
+		...nicknames.slice(indexToRemove + 1),
+	];
+	updateStudioNames(studio_id, newArray);
+
+    //remove user from studio
+    const newListeners = listeners.filter((listener) => listener !== JSON.parse(username));
+    await updateStudioUsers(studio_id, newListeners);
+
+    //remove studio from user
+    const studios = await getStudiosId(JSON.parse(username));
+    const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
+    updateStudios(JSON.parse(username), newStudios);
+
+    res.status(200).json({ msg: "User left studio" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+// assign new host
+router.put("/:studio_id/newHost/:host_name", async (req, res) => {
+	console.log("new host");
+  	try {
+		const { studio_id, host_name } = req.params;
+		const host = await getUser(host_name)
+		if (!host) {
+			return res.status(404).json({ msg: "Invalid host provided" });
 		}
-		if (!user) {
-			return res.status(400).json({ msg: "No user id provided" });
-		}
-		const studio = await getStudio(studio_id);
-		const listeners = studio[0].studioUsers;
-
-		//remove user from nickname list
-		const indexToRemove = listeners.indexOf(user.replace(/"/g, ""));
-		console.log(listeners);
-		console.log(user);
-		console.log(indexToRemove);
-		const nicknames = studio[0].studioNames;
-		const newArray = [
-			...nicknames.slice(0, indexToRemove),
-			...nicknames.slice(indexToRemove + 1),
-		];
-		updateStudioNames(studio_id, newArray);
-
-		//remove user from studio
-		const newListeners = listeners.filter(
-			(listener) => listener !== JSON.parse(user)
-		);
-		await updateStudioUsers(studio_id, newListeners);
-
-		//remove studio from user
-		const studios = await getStudiosId(JSON.parse(user));
-		const newStudios = studios.filter(
-			(studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id
-		);
-		updateStudiosUsername(JSON.parse(user), newStudios);
-
-		res.status(200);
+		await updateStudioHost(studio_id, host_name);
+		res.status(204).json({ msg: "Host Updated" })
 	} catch (err) {
 		res.status(500).json(err);
 	}

@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
 import mongoose from "mongoose";
-import { getUsername, getUser } from "./user_dao.js";
+import { getUser } from "./user_dao.js";
 
 await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
@@ -46,19 +46,21 @@ async function getStudios() {
 async function updateStudioControlHostOnly(id, isHostOnly) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioControlHostOnly: isHostOnly }
+		{ studioControlHostOnly: isHostOnly },
+		{ new: true }
 	);
 }
 
 async function updateStudioIsActive(id, isActive) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioIsActive: isActive }
+		{ studioIsActive: isActive },
+		{ new: true }
 	);
 }
 
 async function updateStudioUsers(id, listeners) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners }, { new: true });
 }
 
 async function deleteUserFromStudio(studio_id, username) {
@@ -81,7 +83,7 @@ async function deleteUserFromStudio(studio_id, username) {
 }
 
 async function updateStudioHost(id, host) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host }, { new: true });
 }
 
 async function updateStudioNames(id, newNames) {
