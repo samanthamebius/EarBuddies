@@ -43,8 +43,12 @@ export default function NicknameDialog(props) {
 	};
 
 	const handleSetChatMessages = (data) => {
-		const { roomId, messages } = data;
-		socket.emit("reload_chat_messages", { room: roomId, messages });
+		const { updatedMessages, nickname } = data;
+		socket.emit("reload_chat_messages", {
+			room: studioId,
+			updatedMessages,
+			nickname,
+		});
 	};
 
 	const theme = createTheme({
