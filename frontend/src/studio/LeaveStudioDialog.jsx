@@ -84,7 +84,7 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
                     handleClose={() => setIsConfirmOpen(false)}
                     handleAction={handleSubmitConfirm} 
                     message={"Are you sure you want to leave this studio?"}
-                    actionText={"Leave!!!"}/>
+                    actionText={"Leave"}/>
             </DialogContent>
         </Dialog>
     )
