@@ -2,6 +2,7 @@ import styles from "./StudioPage.module.css";
 import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
 import NicknameDialog from "./NicknameDialog";
+import AssignNewHostDialog from "./AssignNewHostDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -118,6 +119,7 @@ export function DropdownKebab({
 	const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
+	const [isAssignOpen, setIsAssignOpen] = useState(false);
 
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -196,6 +198,9 @@ export function DropdownKebab({
 	const handleNicknameOpen = () => {
 		setIsNicknameOpen(true);
 	};
+	const handleAssignOpen = () => {
+		setIsAssignOpen(true);
+	};
 
 	const handleLeaveStudio = () => {
 		const user_id = localStorage.getItem("current_user_id");
@@ -211,6 +216,12 @@ export function DropdownKebab({
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 				studioUsers={studioUsers}
 				studio_id={studio_id}
+			/>
+			<AssignNewHostDialog 
+				isAssignDialogOpened={isAssignOpen}
+				handleCloseAssignDialog={() => setIsAssignOpen(false)}
+				studioUsers={studioUsers}
+				studio_id={studio_id} 
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -287,7 +298,7 @@ export function DropdownKebab({
 				<MenuItem
 					style={{ display: isHost ? "flex" : "none" }}
 					className={styles.menu_item}
-					onClick={handleClose}
+					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
 					onMouseLeave={leaveAssign}
 				>
