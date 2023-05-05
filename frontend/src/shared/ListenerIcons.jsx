@@ -45,8 +45,18 @@ export default function StudioCard({
 		}
 		fetchUserData();
 	}, [studioUsers]);
-	const profileImages = userList.map(user => user.profilePic);
-	const profileStatus = userList.map(user => user.userIsActive);
+
+	console.log("this is user list ")
+	console.log(userList)
+
+	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
+	
+
+	console.log("this is ordered user list ")
+	console.log(activeFirst)
+
+	const profileImages = activeFirst.map(user => user.profilePic);
+	const profileStatus = activeFirst.map(user => user.userIsActive);
 
 	if (!isHomeCard) {
 		profileImages.push(AddIcon);
