@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { User, Studio, Chat } from "../../database/schema.js";
 import {	
-    createStudio,
+  createStudio,
 	getStudio,
 	getStudios,
 	updateStudioControlHostOnly,

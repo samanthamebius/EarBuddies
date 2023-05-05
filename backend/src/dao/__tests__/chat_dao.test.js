@@ -9,8 +9,7 @@ import {
   addANewPinnedMessage,
   removePinnedMessage,
   getReactionWithUsername,
-  addANewReaction,
-  updateReaction,
+  addANewReaction
 } from "../chat_dao.js";
 
 let mongod;

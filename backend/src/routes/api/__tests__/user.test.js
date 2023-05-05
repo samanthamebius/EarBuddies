@@ -43,7 +43,7 @@ const mockStudio2 = {
   _id: new mongoose.Types.ObjectId(),
   studioName: "testStudio2",
   studioIsActive: true,
-  studioUsers: [],
+  studioUsers: ["testUser2"],
   studioHost: "testUser2",
   studioGenres: ["testGenre2"],
   studioPicture: "testPicture2",
@@ -149,3 +149,43 @@ test('deleting non-existant user is unsuccessful', (done) => {
         .send()
         .expect(404, done)
 });
+
+test('searching for user is successful', (done) => {
+    request(app)
+        .get('/users/testUser1/testUser')
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+            const fromApi = res.body;
+            expect(fromApi.length).toBe(1);
+            return done();
+        })
+});
+
+test('searching for non-existant user is successful', (done) => {
+    request(app)
+        .get('/users/testUser1/thisisnotanexistinguser')
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+            const fromApi = res.body;
+            expect(fromApi.length).toBe(0);
+            return done();
+        })
+});
+
+test('searching for studios is successful', (done) => {
+    request(app)
+        .get('/users/testUser2/testStudio')
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+            const fromApi = res.body;
+            expect(fromApi.length).toBe(0);
+            return done();
+        })
+});
+
