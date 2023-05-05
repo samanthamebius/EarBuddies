@@ -47,15 +47,18 @@ async function setUserActive(username) {
 	);
 }
 
+async function setUserInactive(username) {
+  return await User.findOneAndUpdate(
+    { username: username },
+    { userIsActive: false },
+    { new: true }
+  );
+}
+
 async function getUsers() {
 	const users = await User.find();
 	return users;
 }
-
-async function searchUsers(query, username) {
-	const users = await User.find({ userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
-	return users;
-  }
 
 async function updateUserDisplayName(username, userDisplayName) {
 	return await User.findOneAndUpdate(
@@ -95,13 +98,21 @@ async function searchActiveStudios(username, query) {
 	return studios;
 }
 
+async function searchUsers(query, username) {
+  const users = await User.find({
+    userDisplayName: { $regex: query, $options: "i" },
+    username: { $ne: username },
+  });
+  return users;
+}
+
 async function searchStudioUsers(studioId, query, username) {
 	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
 	return users;
 }
 
 async function updateStudios(username, studios) {
-  return await User.findOneAndUpdate({ username: username }, { userStudios: studios });
+  return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
 }
 
 async function deleteUser(username) {
@@ -111,6 +122,7 @@ async function deleteUser(username) {
 export {
 	createUser,
 	setUserActive,
+	setUserInactive,
 	getUser,
 	loginUser,
 	getStudiosId,
