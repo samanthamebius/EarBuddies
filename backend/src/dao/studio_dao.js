@@ -1,9 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
-import mongoose from "mongoose";
-
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
   const newStudio = new Studio({
@@ -35,19 +32,21 @@ async function getStudios() {
 async function updateStudioControlHostOnly(id, isHostOnly) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioControlHostOnly: isHostOnly }
+		{ studioControlHostOnly: isHostOnly },
+		{ new: true }
 	);
 }
 
 async function updateStudioIsActive(id, isActive) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioIsActive: isActive }
+		{ studioIsActive: isActive },
+		{ new: true }
 	);
 }
 
 async function updateStudioUsers(id, listeners) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners }, { new: true });
 }
 
 async function deleteUserFromStudio(studio_id, username) {
@@ -70,10 +69,9 @@ async function deleteUserFromStudio(studio_id, username) {
 }
 
 async function updateStudioHost(id, host) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host }, { new: true });
 }
 
-await mongoose.disconnect;
 export {
 	createStudio,
 	getStudio,
