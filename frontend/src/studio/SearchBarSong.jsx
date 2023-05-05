@@ -29,7 +29,7 @@ const StyledMenu = styled(Menu)({
 	},
 });
 
-function SearchBarSong({ studio, setPlaylistSongs }) {
+function SearchBarSong({ studio, setReloadPlaylist }) {
 	const navigate = useNavigate();
 	const [focused, setFocused] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -58,14 +58,8 @@ function SearchBarSong({ studio, setPlaylistSongs }) {
 			playlist_id: studio.studioPlaylist,
 			track_id: result.id,
 		});
-
-		const { data: playlist } = useGet(
-			`/api/spotify/queue/${studio.studioPlaylist}`
-		);
-		console.log("hi");
-		console.log(playlist);
 		// add to the frontend queue
-		setPlaylistSongs(playlist);
+		setReloadPlaylist(true);
 		handleCloseMenu();
 	};
 

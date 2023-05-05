@@ -26,25 +26,29 @@ const StyledMenu = styled(Menu)({
 	},
 });
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function SongSelection({ studio }) {
 	const [playlistSongs, setPlaylistSongs] = useState([]);
+	const [reloadPlaylist, setReloadPlaylist] = useState(false);
 	return (
 		<div className={styles.songselection}>
-			<SongSearch studio={studio} setPlaylistSongs={setPlaylistSongs} />
+			<SongSearch studio={studio} setReloadPlaylist={setReloadPlaylist} />
 			<Queue
 				studio={studio}
 				playlistSongs={playlistSongs}
 				setPlaylistSongs={setPlaylistSongs}
+				reloadPlaylist={reloadPlaylist}
 			/>
 		</div>
 	);
 }
 
-function SongSearch({ studio, setPlaylistSongs }) {
+function SongSearch({ studio, setReloadPlaylist }) {
 	return (
 		<div>
 			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBarSong studio={studio} setPlaylistSongs={setPlaylistSongs} />
+			<SearchBarSong studio={studio} setReloadPlaylist={setReloadPlaylist} />
 		</div>
 	);
 }
@@ -60,7 +64,7 @@ function displayText(result) {
 }
 
 function Queue(props) {
-	const { studio, setPlaylistSongs, playlistSongs } = props;
+	const { studio, setPlaylistSongs, playlistSongs, reloadPlaylist } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -82,7 +86,6 @@ function Queue(props) {
 	const handleRemove = (result, snapshot_id) => {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = result.track.id;
-		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`),
 			{ snapshot_id: snapshot_id };
 		handleCloseMenu();
@@ -95,10 +98,16 @@ function Queue(props) {
 	} = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
 
 	useEffect(() => {
-		if (playlist && !songsIsLoading) {
-			setPlaylistSongs(playlist.tracks.items);
-		}
-	}, [playlist, songsIsLoading]);
+		axios
+			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
+			.then((response) => console.log(response));
+	}, [reloadPlaylist]);
+
+	// useEffect(() => {
+	// 	if (playlist && !songsIsLoading) {
+	// 		setPlaylistSongs(playlist.tracks.items);
+	// 	}
+	// }, [playlist, songsIsLoading]);
 
 	if (songsError) {
 		return <p>Could not load songs</p>;
