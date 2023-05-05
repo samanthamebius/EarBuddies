@@ -137,10 +137,13 @@ export function DropdownMenu() {
 
 	const handleLogout = () => {
 		handleClose;
+		const username = JSON.parse(localStorage.getItem("current_user_id"));
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("expires_in");
 		localStorage.removeItem("current_user_id");
+
+		axios.put(`${BASE_URL}/api/user/${username}/logout`);
 
 		navigate("/login");
 	};
