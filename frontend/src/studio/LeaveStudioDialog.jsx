@@ -14,11 +14,11 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseDialog, listeners, studio_id }) {
+export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleCloseLeaveDialog, listeners, studio_id }) {
     const navigate = useNavigate();
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const handleClose = () => { handleCloseDialog(false) };
+    const handleClose = () => { handleCloseLeaveDialog(false) };
     const [ newHost, setNewHost] = useState(null);
     const user_id = localStorage.getItem('current_user_id');
 
@@ -41,7 +41,7 @@ export default function LeaveStudioDialog({ isHost, isDialogOpened, handleCloseD
     };
 
     return(
-        <Dialog  open={isDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
+        <Dialog  open={isLeaveDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
             <div className={styles.dialogHeader}>
                 <ExitToAppRoundedIcon style={{ color: "#757575", fontSize: "30px" }} />
                 <h1 className={styles.heading}>Leave Studio</h1>
