@@ -171,15 +171,19 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
 });
 
 // assign new host
-router.put("/:studio_id/newHost/:host", async (req, res) => {
+router.put("/:studio_id/newHost/:host_name", async (req, res) => {
   	try {
-		const { studio_id, host } = req.params;
+		const { studio_id, host_name } = req.params;
 		if (!studio_id) {
 		return res.status(400).json({ msg: "No studio id provided" });
 		}
-		if (!host) {
+		
+		if (!host_name) {
 		return res.status(400).json({ msg: "No host provided" });
 		}
+
+		host = getUser(host_name)
+		
 		await updateStudioHost(studio_id, host);
 		res.status(204).json({ msg: "Host Updated" })
 	} catch (err) {

@@ -49,7 +49,6 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
 
     const handleSubmitConfirm = () => { 
         console.log("yes i want to leave")
-        // const new_host_id = newHost.id
         axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
 
         // setIsConfirmOpen(false)
@@ -72,7 +71,7 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
                     {listeners.map((listener) => (
                         <ListenerListItem key={listener.username} 
                             listener={listener} 
-                            isNewHost={listener === newHost}
+                            isNewHost={listener.username === newHost}
                             setNewHost={setNewHost}
                         />
                     ))}
@@ -95,7 +94,7 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
 
 function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     const handleClick = () => {
-      setNewHost(listener);
+      setNewHost(listener.username);
     };
   
     return (
