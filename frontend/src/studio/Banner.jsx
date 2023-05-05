@@ -76,7 +76,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
-
+	const host = studio.studioHost;
 	const isListening = studio.studioIsActive;
 
 	return (
@@ -90,6 +90,7 @@ export default function Banner({ id, studio }) {
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
+					hostInformation={host}
 					isHomeCard={false}
 				/>
 			</div>

@@ -29,9 +29,11 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 export default function StudioCard({
 	studioUsers,
 	isListening,
+	hostInformation,
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
+
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
 		if (!studioUsers || !Array.isArray(studioUsers)) {
@@ -50,7 +52,6 @@ export default function StudioCard({
 	console.log(userList)
 
 	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
-	
 
 	console.log("this is ordered user list ")
 	console.log(activeFirst)
@@ -59,8 +60,11 @@ export default function StudioCard({
 	const profileStatus = activeFirst.map(user => user.userIsActive);
 
 	if (!isHomeCard) {
-		profileImages.push(AddIcon);
-		profileStatus.push(true);
+		profileImages.unshift(AddIcon);
+		profileStatus.unshift(true);
+
+		profileImages.reverse();
+		profileStatus.reverse();
 	}
 	
 	return (
