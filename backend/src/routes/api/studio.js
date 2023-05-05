@@ -4,7 +4,7 @@ import multer from "multer";
 import { v4 as uuid } from "uuid";
 
 import { createStudio, getStudio, deleteStudio, updateStudioNames, updateStudioUsers, updateStudioControlHostOnly } from "../../dao/studio_dao.js";
-import { getUserId, getStudiosId, updateStudios, getUsername, updateStudiosUsername } from "../../dao/user_dao.js";
+import { getStudiosId, updateStudiosUsername } from "../../dao/user_dao.js";
 
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
 import { deleteChat, updateChatMessageDisplayName } from "../../dao/chat_dao.js";
@@ -199,6 +199,15 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
     const studio = await getStudio(studio_id);
     const listeners = studio[0].studioUsers;
 
+	//remove user from nickname list
+	const indexToRemove = listeners.indexOf(user.replace(/"/g, ''));
+	console.log(listeners);
+	console.log(user);
+	console.log(indexToRemove);
+	const nicknames = studio[0].studioNames;
+	const newArray = [...nicknames.slice(0, indexToRemove), ...nicknames.slice(indexToRemove + 1)];
+	updateStudioNames(studio_id, newArray)
+
     //remove user from studio
     const newListeners = listeners.filter((listener) => listener !== JSON.parse(user));
     await updateStudioUsers(studio_id, newListeners);
@@ -206,7 +215,6 @@ router.put("/:studio_id/leave/:user", async (req, res) => {
     //remove studio from user
     const studios = await getStudiosId(JSON.parse(user));
     const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
-	console.log(newStudios)
     updateStudiosUsername(JSON.parse(user), newStudios);
 
     res.status(200);
