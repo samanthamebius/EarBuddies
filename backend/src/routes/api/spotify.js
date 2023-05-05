@@ -108,6 +108,8 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 router.put("/play", async (req, res) => {
     try {
         const { uri, deviceId } = req.body;
+        console.log(uri);
+        console.log(deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });

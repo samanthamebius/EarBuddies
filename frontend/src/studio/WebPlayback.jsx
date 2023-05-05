@@ -13,9 +13,9 @@ import album_artwork from '../assets/now_playing/album_artwork_PLACEHOLDER.png'
 import artist_profile from '../assets/now_playing/artist_profile_PLACEHOLDER.png'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
 
-
-var deviceId = '';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const StyledSlider = styled(Slider)({
     color: "#ffffff",
@@ -52,36 +52,27 @@ function SongInfo() {
     )
 }
 
-function ControlPanel() {
-    const [isPlaying, setPlaying] = useState(false);
-
-    return (
-        <div className={styles.controlPanel}>
-            <div className={styles.playbackCntrls}>
-                <SkipPreviousRoundedIcon
-                    sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }} />
-                {isPlaying ?
-                    <PlayCircleFilledRoundedIcon
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
-                        onClick={() => setPlaying(!isPlaying)} />
-                    :
-                    <PauseCircleRoundedIcon
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
-                        onClick={() => setPlaying(!isPlaying)} />
-                }
-                <SkipNextRoundedIcon
-                    sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }} />
-            </div>
-            <TimeSlider />
-            <VolumeSlider />
-
-        </div>
-    )
+function spotifyPlayer({ studio, deviceId }) {
+    try {
+        axios.put(
+            `${BASE_URL}/api/spotify/play`,
+            { uri: 'spotify:playlist:' + studio.studioPlaylist, deviceId: deviceId })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                localStorage.removeItem("expires_in");
+                localStorage.removeItem("current_user_id");
+                navigate("/login");
+                return <p>Could not play track</p>;
+            });
+    } catch (error) {
+        console.log(error)
+    }
 }
+
 
 export function VolumeSlider() {
     const [value, setValue] = useState(30);
@@ -173,9 +164,46 @@ export function TimeSlider() {
     )
 }
 
+function ControlPanel({ deviceId, studio }) {
+    const [isPlaying, setPlaying] = useState(false);
+
+    function playButton({ studio, deviceId }) {
+        console.log(deviceId)
+        setPlaying(!isPlaying)
+        spotifyPlayer({ studio, deviceId })
+    }
+
+    return (
+        <div className={styles.controlPanel}>
+            <div className={styles.playbackCntrls}>
+                <SkipPreviousRoundedIcon
+                    sx={{ "&:hover": { cursor: "pointer" } }}
+                    style={{ color: "white", fontSize: "40px" }} />
+                {isPlaying ?
+                    <PlayCircleFilledRoundedIcon
+                        sx={{ "&:hover": { cursor: "pointer" } }}
+                        style={{ color: "white", fontSize: "40px" }}
+                        onClick={() => playButton(studio = { studio }, deviceId = { deviceId })} />
+                    :
+                    <PauseCircleRoundedIcon
+                        sx={{ "&:hover": { cursor: "pointer" } }}
+                        style={{ color: "white", fontSize: "40px" }}
+                        onClick={() => setPlaying(!isPlaying)} />
+                }
+                <SkipNextRoundedIcon
+                    sx={{ "&:hover": { cursor: "pointer" } }}
+                    style={{ color: "white", fontSize: "40px" }} />
+            </div>
+            <TimeSlider />
+            <VolumeSlider />
+
+        </div>
+    )
+}
+
 function WebPlayback(props) {
     const [player, setPlayer] = useState(undefined);
-
+    const [myDeviceId, setDeviceId] = useState(undefined);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -187,7 +215,7 @@ function WebPlayback(props) {
         window.onSpotifyWebPlaybackSDKReady = () => {
 
             const player = new window.Spotify.Player({
-                name: 'Web Playback SDK',
+                name: 'EarBuddies',
                 getOAuthToken: cb => { cb(props.token); },
                 volume: 0.5
             });
@@ -196,7 +224,8 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                deviceId(device_id);
+                setDeviceId(device_id);
+                console.log(myDeviceId)
             });
 
             player.addListener('not_ready', ({ device_id }) => {
@@ -208,16 +237,18 @@ function WebPlayback(props) {
         };
     }, []);
 
+
     return (
         <>
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel />
+                    <ControlPanel deviceId={myDeviceId} studio={props.studio} />
                 </div>
             </div>
         </>
     );
 }
+
 
 export default WebPlayback

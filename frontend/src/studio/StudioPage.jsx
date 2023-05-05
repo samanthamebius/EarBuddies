@@ -40,12 +40,12 @@ function StudioPage({ socket }) {
 		return <p>Could not load studio</p>;
 	} else {
 		return (
-			<div className={styles.studio}>
+			< div className={styles.studio} >
 				<Banner id={id} studio={studio[0]} />
-				<NowPlaying />
-				<SongSelection studio={studio[0]}/>
+				<NowPlaying studio={studio[0]} />
+				<SongSelection studio={studio[0]} />
 				<Chat socket={socket} />
-			</div>
+			</div >
 		);
 	}
 }
