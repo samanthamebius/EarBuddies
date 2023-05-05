@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styles from "./StudioPage.module.css";
 import SearchBarSong from "./SearchBarSong";
@@ -27,19 +27,24 @@ const StyledMenu = styled(Menu)({
 });
 
 export default function SongSelection({ studio }) {
+	const [playlistSongs, setPlaylistSongs] = useState([]);
 	return (
 		<div className={styles.songselection}>
-			<SongSearch studio={studio} />
-			<Queue studio={studio} />
+			<SongSearch studio={studio} setPlaylistSongs={setPlaylistSongs} />
+			<Queue
+				studio={studio}
+				playlistSongs={playlistSongs}
+				setPlaylistSongs={setPlaylistSongs}
+			/>
 		</div>
 	);
 }
 
-function SongSearch({ studio }) {
+function SongSearch({ studio, setPlaylistSongs }) {
 	return (
 		<div>
 			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBarSong studio={studio}></SearchBarSong>
+			<SearchBarSong studio={studio} setPlaylistSongs={setPlaylistSongs} />
 		</div>
 	);
 }
@@ -54,12 +59,14 @@ function displayText(result) {
 	}
 }
 
-function Queue({ studio }) {
+function Queue(props) {
+	const { studio, setPlaylistSongs, playlistSongs } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedIndex, setSelectedIndex] = useState(null);
+
 	const handleOpenMenu = (event, index) => {
 		setAnchorEl(event.currentTarget);
-		setSelectedIndex(index)
+		setSelectedIndex(index);
 	};
 
 	const handleCloseMenu = () => {
@@ -76,11 +83,23 @@ function Queue({ studio }) {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = result.track.id;
 		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`), { snapshot_id: snapshot_id };
+		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`),
+			{ snapshot_id: snapshot_id };
 		handleCloseMenu();
 	};
 
-	const { data: playlist, isLoading: songsIsLoading, error: songsError } = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
+	const {
+		data: playlist,
+		isLoading: songsIsLoading,
+		error: songsError,
+	} = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
+
+	useEffect(() => {
+		if (playlist && !songsIsLoading) {
+			setPlaylistSongs(playlist.tracks.items);
+		}
+	}, [playlist, songsIsLoading]);
+
 	if (songsError) {
 		return <p>Could not load songs</p>;
 	}
@@ -89,43 +108,54 @@ function Queue({ studio }) {
 	} else if (!playlist) {
 		return <p>Could not load songs</p>;
 	} else {
-		const songs = playlist.tracks.items;
+		console.log(playlist);
 		const snapshot_id = playlist.snapshot_id;
 		return (
 			<div>
 				<label className={styles.queueGreyHeading}>Coming Up:</label>
-				{songs?.length > 0 && <List className={list_styles.listContainer}>
-					{songs.map((result) => (
-						<ListItem key={result.track.id}
-							secondaryAction={
-								<Button
-									edge="end"
-									aria-label="more options"
-									onClick={(event) => handleOpenMenu(event, result)}
-								>
-									<MoreHorizIcon />
-								</Button>
-							}
-						>
-							<StyledMenu
-								anchorEl={anchorEl}
-								open={Boolean(anchorEl)}
-								onClose={handleCloseMenu}
+				{playlistSongs?.length > 0 && (
+					<List className={list_styles.listContainer}>
+						{playlistSongs.map((result) => (
+							<ListItem
+								key={result.track.id}
+								secondaryAction={
+									<Button
+										edge="end"
+										aria-label="more options"
+										onClick={(event) => handleOpenMenu(event, result)}
+									>
+										<MoreHorizIcon />
+									</Button>
+								}
 							>
-								<MenuItem onClick={() => handlePlay(selectedIndex)}>Play</MenuItem>
-								<MenuItem onClick={() => handleRemove(selectedIndex, snapshot_id)}>Remove from queue</MenuItem>
-							</StyledMenu>
-							<ListItemAvatar>
-								<Avatar>
-									<img className={list_styles.image} src={result.track.album.images[0].url} />
-								</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary={displayText(result.track)} />
-						</ListItem>
-					))}
-				</List>}
+								<StyledMenu
+									anchorEl={anchorEl}
+									open={Boolean(anchorEl)}
+									onClose={handleCloseMenu}
+								>
+									<MenuItem onClick={() => handlePlay(selectedIndex)}>
+										Play
+									</MenuItem>
+									<MenuItem
+										onClick={() => handleRemove(selectedIndex, snapshot_id)}
+									>
+										Remove from queue
+									</MenuItem>
+								</StyledMenu>
+								<ListItemAvatar>
+									<Avatar>
+										<img
+											className={list_styles.image}
+											src={result.track.album.images[0].url}
+										/>
+									</Avatar>
+								</ListItemAvatar>
+								<ListItemText primary={displayText(result.track)} />
+							</ListItem>
+						))}
+					</List>
+				)}
 			</div>
 		);
 	}
-
 }
