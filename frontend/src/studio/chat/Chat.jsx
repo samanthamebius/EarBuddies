@@ -59,10 +59,11 @@ export default function Chat(props) {
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyMessage, setReplyMessage] = useState("");
+	const [nickname, setNickname] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
-	const { username, displayName } = useContext(AppContext);
+	const { username } = useContext(AppContext);
 	const { id } = useParams();
 	const room = id;
 	const textInput = useRef(null);
@@ -77,6 +78,23 @@ export default function Chat(props) {
 			});
 		}, 100);
 	}, [messages]);
+
+	// Set the nickname of the user
+	useEffect(() => {
+		if (username) {
+			axios
+				.get(`${BASE_URL}/api/studio/${id}/${username}/nickname`)
+				.then((response) => setNickname(response.data));
+		}
+	}, [username]);
+
+	// reload the chat messages if the nickname of a user changes
+	useEffect(() => {
+		socket.on("receive_reload_chat_messages", (data) => {
+			setMessages(data.updatedMessages.messages);
+			setNickname(data.nickname);
+		});
+	}, [socket]);
 
 	// Set previous messages
 	useEffect(() => {
@@ -95,7 +113,7 @@ export default function Chat(props) {
 				{
 					id: data.id,
 					username: data.username,
-					displayName: data.displayName,
+					displayName: data.nickname,
 					message: data.message,
 					isReply: data.isReply,
 					replyMessage: data?.replyMessage,
@@ -120,7 +138,7 @@ export default function Chat(props) {
 						id: newMessage.id,
 						message: newMessage.message,
 						username: newMessage.username,
-						displayName: newMessage.displayName,
+						displayName: newMessage.nickname,
 					},
 				]);
 			}
@@ -139,7 +157,7 @@ export default function Chat(props) {
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
-			socket.emit("leave_room", { displayName, room });
+			socket.emit("leave_room", { nickname, room });
 		};
 	}, []);
 
@@ -153,7 +171,7 @@ export default function Chat(props) {
 				room,
 				id: messageId,
 				username,
-				displayName,
+				nickname,
 				message,
 				isReply,
 				replyMessage,
@@ -163,7 +181,7 @@ export default function Chat(props) {
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
-				displayName: displayName,
+				displayName: nickname,
 				message: message,
 				isReply: isReply,
 				replyMessage: replyMessage,

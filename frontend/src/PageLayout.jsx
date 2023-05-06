@@ -137,10 +137,13 @@ export function DropdownMenu() {
 
 	const handleLogout = () => {
 		handleClose;
+		const username = JSON.parse(localStorage.getItem("current_user_id"));
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("expires_in");
 		localStorage.removeItem("current_user_id");
+
+		axios.put(`${BASE_URL}/api/user/${username}/logout`);
 
 		navigate("/login");
 	};
@@ -168,9 +171,11 @@ export function DropdownMenu() {
 		<>
 			<ViewProfileDialog
 				isViewProfileOpen={isViewProfileOpen}
+				handleViewProfileSave={() => {
+					window.location.reload();
+				}}
 				handleViewProfileClose={() => {
 					setIsViewProfileOpen(false);
-					window.location.reload(); //kinda janky code but i couldn't get it working any other way
 				}}
 			/>
 			<ConfirmationDialog

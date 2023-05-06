@@ -13,7 +13,7 @@ function getSpotifyApi() {
 
 async function searchSpotify(query, thisSpotifyApi) {
   return new Promise((resolve, reject) => {
-    thisSpotifyApi.search(query, ['track', 'episode', 'audiobook'])
+    thisSpotifyApi.search(query, ['track', 'episode'])
       .then(function (data) {
         const results = [];
         for (var i = 0; i < data.body.tracks.items.length; i++) {
@@ -30,30 +30,28 @@ async function searchSpotify(query, thisSpotifyApi) {
           results.push(track);
         }
         for (var i = 0; i < data.body.episodes.items.length; i++) {
-          const episode = {
+          var episode = {
             name: data.body.episodes.items[i].name,
             image: data.body.episodes.items[i].images[0].url,
             id: data.body.episodes.items[i].id,
             type: "episode"
-          }
+          };
           results.push(episode);
         }
-        for (var i = 0; i < data.body.audiobooks.items.length; i++) {
-          const audiobook = {
-            name: data.body.audiobooks.items[i].name,
-            image: data.body.audiobooks.items[i].images[0].url,
-            id: data.body.audiobooks.items[i].id,
-            authors: [],
-            type: "audiobook"
-          }
-          for (var j = 0; j < data.body.audiobooks.items[i].authors.length; j++) {
-            audiobook.authors.push(data.body.audiobooks.items[i].authors[j].name);
-          }
-          if (!data.body.audiobooks.items[i].explicit) {
-            results.push(audiobook);
-          }
-        }
         resolve(results);
+      })
+      .catch(function (err) {
+        console.log("Something went wrong!", err);
+        reject(err);
+      });
+  });
+}
+
+async function playSpotify(uri, thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.play({ uris: [uri] })
+      .then(function (data) {
+        resolve(data);
       })
       .catch(function (err) {
         console.log("Something went wrong!", err);

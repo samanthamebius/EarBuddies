@@ -1,27 +1,19 @@
-// Credit to https://frontendshape.com/post/react-mui-5-search-bar-example
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Container, InputAdornment, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRounded from "@mui/icons-material/ClearRounded";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./SearchBar.module.css";
-import { sizing } from "@mui/system";
 import axios from "axios";
-import { List, ListItem, ListItemText, ListItemAvatar, Button, Avatar, Menu, MenuItem, styled } from "@mui/material";
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
-const StyledMenu = styled(Menu)({
-  "& .MuiPaper-root": {
-    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-  },
-});
-
-function SearchBar({ label, searchType, studioId }) {
-  const navigate = useNavigate();
+function SearchBar({ label, searchType, studioId, setResults }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const username = localStorage.getItem("current_user_id");
 
   const theme = createTheme({
     palette: {
@@ -31,20 +23,13 @@ function SearchBar({ label, searchType, studioId }) {
     },
   });
 
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const username = localStorage.getItem("current_user_id");
-
   const searchUsers = () => {
-    // search users
     try {
       axios
         .get(
           `${BASE_URL}/api/user/users/${username.replace(/['"]+/g, '')}/${searchTerm}`)
         .then((response) => {
-          setSearchResults(response.data);
+          setResults(response.data);
         })
         .catch((error) => {
           return <p>Could not load search</p>;
@@ -55,13 +40,12 @@ function SearchBar({ label, searchType, studioId }) {
   };
 
   const searchStudioUsers = () => {
-    // search users
     try {
       axios
         .get(
           `${BASE_URL}/api/user/users/${username.replace(/['"]+/g, '')}/${searchTerm}/${studioId}`)
         .then((response) => {
-          setSearchResults(response.data);
+          setResults(response.data);
         })
         .catch((error) => {
           return <p>Could not load search</p>;
@@ -72,13 +56,12 @@ function SearchBar({ label, searchType, studioId }) {
   };
 
   const searchStudios = () => {
-    // search studios
     try {
       axios
         .get(
           `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/studios/${searchTerm}`)
         .then((response) => {
-          setSearchResults(response.data);
+          setResults(response.data);
         })
         .catch((error) => {
           return <p>Could not load search</p>;
@@ -89,13 +72,12 @@ function SearchBar({ label, searchType, studioId }) {
   };
 
   const searchActiveStudios = () => {
-    // search active studios
     try {
       axios
         .get(
           `${BASE_URL}/api/user/${username.replace(/['"]+/g, '')}/active/${searchTerm}`)
         .then((response) => {
-          setSearchResults(response.data);
+          setResults(response.data);
         })
         .catch((error) => {
           return <p>Could not load search</p>;
@@ -105,29 +87,34 @@ function SearchBar({ label, searchType, studioId }) {
     }
   };
 
-  const handleOpenMenu = (event, result) => {
-    setSelectedResult(result);
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (event) => {
-    // handle menu item click
-    handleCloseMenu();
-  };
-
-  const handleAddToQueue = (result) => {
-    console.log("add to queue")
-    console.log(result)
-    handleCloseMenu();
-  };
+  const searchSongs = () => {
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/spotify/search/${searchTerm}`)
+        .then((response) => {
+          setResults(response.data);
+        })
+        .catch((error) => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          localStorage.removeItem("expires_in");
+          localStorage.removeItem("current_user_id");
+          navigate("/login");
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  }
 
   const handleCancel = () => {
     setSearchTerm("");
-    setSearchResults([]);
+    try {
+      setResults([]);
+    } catch (error) {
+      console.log(error.msg);
+    }
   };
 
   useEffect(() => {
@@ -140,32 +127,19 @@ function SearchBar({ label, searchType, studioId }) {
         searchActiveStudios();
       } else if (searchType === "studioUsers") {
         searchStudioUsers();
+      } else if (searchType === "songs") {
+        searchSongs();
       }
     } else {
-      setSearchResults([]);
+      handleCancel();
     }
   }, [searchTerm]);
-
-  function displayText(result) {
-    if (searchType === "users" || searchType === "studioUsers") {
-      return `${result.userDisplayName}`;
-    } else if (searchType === "studios" || searchType === "activeStudios") {
-      return `${result.studioName}`;
-    }
-  }
-
-  function displayImage(result) {
-    if (searchType === "users" || searchType === "studioUsers") {
-      return result.profilePic;
-    } else if (searchType === "studios" || searchType === "activeStudios") {
-      return result.studioPicture;
-    }
-  }
 
   return (
     <Container disableGutters={true} className={styles.searchBar}>
       <ThemeProvider theme={theme}>
         <TextField
+          autoComplete="off"
           color="secondary"
           id="search"
           type="text"
@@ -183,7 +157,7 @@ function SearchBar({ label, searchType, studioId }) {
               <InputAdornment position="end">
                 {searchTerm.length > 0 && (
                   <ClearRounded
-                    color="action"
+                    style={{ color: "#757575" }}
                     className={styles.clearIcon}
                     onClick={handleCancel}
                   />
@@ -196,36 +170,6 @@ function SearchBar({ label, searchType, studioId }) {
             style: { marginLeft: searchTerm || focused ? 0 : 30 }
           }} />
       </ThemeProvider>
-      {searchResults?.length > 0 && <List className={styles.listContainer}>
-        {searchResults.map((result) => (
-          <ListItem
-            secondaryAction={
-              <Button
-                edge="end"
-                aria-label="more options"
-                onClick={(event) => handleOpenMenu(event, result)}
-              >
-                <MoreHorizIcon />
-              </Button>
-            }
-          >
-            <StyledMenu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem onClick={() => handleAddToQueue(selectedResult)}>Add to queue</MenuItem>
-              <MenuItem onClick={handleMenuItemClick}>Play</MenuItem>
-            </StyledMenu>
-            <ListItemAvatar>
-              <Avatar>
-                <img className={styles.image} src={displayImage(result)} />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={displayText(result)} />
-          </ListItem>
-        ))}
-      </List>}
     </Container>
   );
 }

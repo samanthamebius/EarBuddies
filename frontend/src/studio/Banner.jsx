@@ -47,7 +47,7 @@ const listeners = [
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 
-export default function Banner({ id, studio }) {
+export default function Banner({ id, studio, socket }) {
 	const navigate = useNavigate();
 
 	if (!studio) {
@@ -96,8 +96,9 @@ export default function Banner({ id, studio }) {
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
+					id={id}
+					socket={socket}
 					isHost={isHost}
-					studio_id={id}
 					studioUsers={users}
 					isAloneInStudio={isAlone}
 				/>
@@ -111,9 +112,10 @@ export function DropdownKebab({
 	handleControlToggle,
 	handleDelete,
 	isHost,
-	studio_id,
+	id,
 	studioUsers,
-	isAloneInStudio
+	isAloneInStudio,
+	socket
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -206,7 +208,7 @@ export function DropdownKebab({
 
 	const handleLeaveStudio = () => {
 		const user_id = localStorage.getItem("current_user_id");
-		axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
         navigate('/', { replace: true });
 	};
 
@@ -216,14 +218,14 @@ export function DropdownKebab({
 				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
-				studioUsers={studioUsers}
-				studio_id={studio_id}
+				listeners={listeners}
+				studio_id={id}
 			/>
 			<AssignNewHostDialog 
 				isAssignDialogOpened={isAssignOpen}
 				handleCloseAssignDialog={() => setIsAssignOpen(false)}
 				studioUsers={studioUsers}
-				studio_id={studio_id} 
+				studio_id={id} 
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -248,6 +250,8 @@ export function DropdownKebab({
 			<NicknameDialog
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
+				studioId={id}
+				socket={socket}
 			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />

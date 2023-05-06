@@ -1,15 +1,24 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
-import mongoose from "mongoose";
+import { getUser } from "./user_dao.js";
 
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
+	const displayNames = [];
+
+	for (let i = 0; i < listeners.length; i++) {
+		const username = listeners[i];
+		const user = await getUser(username);
+		const displayName = user.userDisplayName;
+		displayNames.push(displayName);
+	}
+	
   const newStudio = new Studio({
     studioName: name,
     studioIsActive: true,
     studioUsers: listeners,
+	studioNames: displayNames,
     studioHost: host,
     studioGenres: genres,
     studioPicture: photo,
@@ -35,19 +44,21 @@ async function getStudios() {
 async function updateStudioControlHostOnly(id, isHostOnly) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioControlHostOnly: isHostOnly }
+		{ studioControlHostOnly: isHostOnly },
+		{ new: true }
 	);
 }
 
 async function updateStudioIsActive(id, isActive) {
 	return await Studio.findOneAndUpdate(
 		{ _id: id },
-		{ studioIsActive: isActive }
+		{ studioIsActive: isActive },
+		{ new: true }
 	);
 }
 
 async function updateStudioUsers(id, listeners) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioUsers: listeners }, { new: true });
 }
 
 async function deleteUserFromStudio(studio_id, username) {
@@ -70,10 +81,12 @@ async function deleteUserFromStudio(studio_id, username) {
 }
 
 async function updateStudioHost(id, host) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host });
+	return await Studio.findOneAndUpdate({ _id: id }, { studioHost: host }, { new: true });
 }
 
-await mongoose.disconnect;
+async function updateStudioNames(id, newNames) {
+	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
+}
 export {
 	createStudio,
 	getStudio,
@@ -83,5 +96,6 @@ export {
 	updateStudioUsers,
 	updateStudioHost,
 	deleteStudio,
+	updateStudioNames,
 	deleteUserFromStudio,
 };

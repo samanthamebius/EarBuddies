@@ -28,12 +28,12 @@ const StyledMenu = styled(Menu)({
   },
 });
 
-function SearchBarSong({studio}) {
+function SearchBarSong({ studio }) {
   const navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedResult, setSelectedResult] = useState(null); 
+  const [selectedResult, setSelectedResult] = useState(null);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const label = "Search Spotify";
@@ -53,7 +53,7 @@ function SearchBarSong({studio}) {
   };
 
   const handleAddToQueue = (result) => {
-    axios.put(`${BASE_URL}/api/spotify/queue`, {playlist_id: studio.studioPlaylist, track_id: result.id})
+    axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id })
     handleCloseMenu();
   };
 
@@ -88,12 +88,10 @@ function SearchBarSong({studio}) {
   }, [searchTerm]);
 
   function displayText(result) {
-    if (result.type === "audiobook") {
-      return `${result.name} - ${result.authors} - Audiobook`;
-    } else if (result.type === "track") {
-      return `${result.name} - ${result.artists} - Song`;
-    } else {
-      return `${result.name} - Podcast`;
+    if (result.type === "track") {
+      return `${result.name} - ${result.artists}`;
+    } else if (result.type === "episode") {
+      return `${result.name}`;
     }
   }
 

@@ -37,7 +37,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose }) {
+export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfileClose, handleViewProfileSave }) {
     const [displayPhoto, setDisplayPhoto] = useState();
     const [displayName, setDisplayName] = useState('username');
     const [isInDisplayName, setInDisplayName] = useState(false);
@@ -102,6 +102,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
         });
         setAvatarOptionsOpen(false);
         handleViewProfileClose();
+        handleViewProfileSave();
     }
 
     const theme = createTheme({
