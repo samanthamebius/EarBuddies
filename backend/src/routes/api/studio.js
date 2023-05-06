@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
 import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { Types as mongooseTypes } from "mongoose";
 import {
 	deleteChat,
 	updateChatMessageDisplayName,
@@ -82,6 +83,10 @@ router.post("/new", async (req, res) => {
 router.get("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
+		if (!mongooseTypes.ObjectId.isValid(id)) {
+		// Invalid ID, return an error response
+			return res.status(400).json({ error: "Invalid ID" });
+		}
 		//check for spotify api connection
 		const api = getSpotifyApi();
 		if (!api) {

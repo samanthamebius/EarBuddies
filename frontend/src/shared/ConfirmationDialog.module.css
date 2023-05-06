@@ -28,3 +28,7 @@
 .secondaryButton {
     background: linear-gradient(#BEBEBE, #EDEDED);
 }
+
+.spacing {
+    margin-top: 100px;
+}
