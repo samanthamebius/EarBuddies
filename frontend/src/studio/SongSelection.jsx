@@ -88,6 +88,9 @@ function Queue(props) {
 		const track_id = result.track.id;
 		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`),
 			{ snapshot_id: snapshot_id };
+
+		// reload the playlist after deleting
+		socket.emit("reload_studio_queue", { room: studio._id });
 		handleCloseMenu();
 	};
 
