@@ -27,12 +27,8 @@ function StudioPage({ socket }) {
 	}, []);
 
 	if (studioError) {
-		localStorage.removeItem("access_token");
-		localStorage.removeItem("refresh_token");
-		localStorage.removeItem("expires_in");
-		localStorage.removeItem("current_user_id");
-		navigate("/login");
-		return <p>Could not load studio</p>;
+		navigate("/404")
+		return;
 	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
@@ -42,7 +38,7 @@ function StudioPage({ socket }) {
 		return (
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
-				<NowPlaying />
+				<NowPlaying studio={studio[0]}/>
 				<SongSelection studio={studio[0]} />
 				<Chat socket={socket} />
 			</div >
