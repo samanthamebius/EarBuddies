@@ -40,6 +40,8 @@ function SongListItem({ result }) {
 	const handleIconMouseEnter = () => { setIconHover(true); };
 	const handleIconMouseLeave = () => { setIconHover(false); };
 
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 	const ToolTip = styled(({ className, ...props }) => (
 		<Tooltip {...props} classes={{ popper: className }} />
 	))(({ theme }) => ({
@@ -56,19 +58,24 @@ function SongListItem({ result }) {
 		},
 	}));
 
+	const handleAddToQueue = (result) => {
+		axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id })
+		handleCloseMenu();
+	};
+
 	return (
 		<ListItem
 			onMouseEnter={handleItemMouseEnter}
 			onMouseLeave={handleItemMouseLeave}
 			className={styles.result}
-			onClick={() => handlePlay()} // TO DO: IMPLEMENT PLAY FROM HERE
+			onClick={null} // TO DO: IMPLEMENT PLAY FROM HERE
 			secondaryAction={
 				<>
 					<ToolTip title={"Add to Queue"} placement="left" arrow>
 						<QueueMusicRoundedIcon
 							onMouseEnter={handleIconMouseEnter}
 							onMouseLeave={handleIconMouseLeave}
-							onClick={null} // TO DO: IMPLEMENT QUEUE FROM HERE
+							onClick={() => handleAddToQueue(result)} // TO DO: IMPLEMENT QUEUE FROM HERE
 							edge="end"
 							style={{ color: isIconHover ? "#B03EEE" : "#757575" }} />
 					</ToolTip>
@@ -135,7 +142,7 @@ function Queue({ studio }) {
 		return (
 			<div>
 				<label className={styles.queueGreyHeading}>Coming Up:</label>
-				{/* {songs?.length > 0 && <List className={list_styles.listContainer}>
+				{songs?.length > 0 && <List className={list_styles.listContainer}>
 					{songs.map((result) => (
 						<ListItem key={result.track.id}
 							secondaryAction={
@@ -164,7 +171,7 @@ function Queue({ studio }) {
 							<ListItemText primary={displayText(result.track)} />
 						</ListItem>
 					))}
-				</List>} */}
+				</List>}
 			</div>
 		);
 	}
