@@ -1,5 +1,5 @@
 .studio {
-	height: calc(100vh - 45px);
+	height: calc(100vh - 56px);
 	display: grid;
 	grid-template-rows: 1fr 5fr;
 	grid-template-columns: 2fr 3fr 4fr;
@@ -80,7 +80,8 @@
 
 .bannerStudioName {
 	color: white;
-	text-shadow: 1px 1px 4px rgba(0,0,0,0.8), 2px 2px 7px rgba(0,0,0,0.5), 0 0 8px rgba(255,255,255,0.7);
+	text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 2px 2px 7px rgba(0, 0, 0, 0.5),
+		0 0 8px rgba(255, 255, 255, 0.7);
 	font-weight: bold;
 	margin: 0px;
 	font-size: 28px;
@@ -239,7 +240,7 @@
 
 .resultImgBox {
 	width: 12%;
-	height: 12%
+	height: 12%;
 }
 
 .resultImg {
