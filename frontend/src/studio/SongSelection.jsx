@@ -5,24 +5,11 @@ import useGet from "../hooks/useGet";
 import SearchBar from "../shared/SearchBar";
 import axios from "axios";
 import QueueMusicRoundedIcon from '@mui/icons-material/QueueMusicRounded';
-import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
-import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
-import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { Box, Icon } from '@mui/material';
-import {
-	List,
-	ListItem,
-	ListItemText,
-	Menu,
-	styled,
-} from "@mui/material";
-
-const StyledMenu = styled(Menu)({
-	"& .MuiPaper-root": {
-		boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-	},
-});
+import { List, ListItem, ListItemText, Tooltip } from "@mui/material";
+import { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 export default function SongSelection({ studio }) {
 	const [songSearchResults, setSongSearchResults] = useState([]);
@@ -45,20 +32,47 @@ export default function SongSelection({ studio }) {
 }
 
 function SongListItem({ result }) {
-	const [isHover, setIsHover] = useState(false);
+	const [isHover, setHover] = useState(false);
+	const [isIconHover, setIconHover] = useState(false);
 
-	const handleMouseEnter = () => { setIsHover(true); };
-	const handleMouseLeave = () => { setIsHover(false); };
+	const handleItemMouseEnter = () => { setHover(true); };
+	const handleItemMouseLeave = () => { setHover(false); };
+	const handleIconMouseEnter = () => { setIconHover(true); };
+	const handleIconMouseLeave = () => { setIconHover(false); };
+
+	const ToolTip = styled(({ className, ...props }) => (
+		<Tooltip {...props} classes={{ popper: className }} />
+	))(({ theme }) => ({
+		[`& .${tooltipClasses.arrow}`]: {
+			color: theme.palette.common.white,
+		},
+		[`& .${tooltipClasses.tooltip}`]: {
+			backgroundColor: theme.palette.common.white,
+			color: 'rgba(0, 0, 0, 0.87)',
+			boxShadow: theme.shadows[1],
+			fontSize: 12,
+			color: '#666666',
+			maxWidth: '80%'
+		},
+	}));
 
 	return (
 		<ListItem
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			onMouseEnter={handleItemMouseEnter}
+			onMouseLeave={handleItemMouseLeave}
 			className={styles.result}
+			onClick={() => handlePlay()} // TO DO: IMPLEMENT PLAY FROM HERE
 			secondaryAction={
-				<QueueMusicRoundedIcon
-					edge="end"
-					style={{ color: "#757575" }} />
+				<>
+					<ToolTip title={"Add to Queue"} placement="left" arrow>
+						<QueueMusicRoundedIcon
+							onMouseEnter={handleIconMouseEnter}
+							onMouseLeave={handleIconMouseLeave}
+							onClick={null} // TO DO: IMPLEMENT QUEUE FROM HERE
+							edge="end"
+							style={{ color: isIconHover ? "#B03EEE" : "#757575" }} />
+					</ToolTip>
+				</>
 			}>
 			<Box className={styles.resultImgBox} position="relative">
 				<img className={styles.resultImg} src={result.image} />
