@@ -154,6 +154,7 @@ function ControlPanel({ deviceId, studio }) {
     const navigate = useNavigate();
 
     function spotifyPlayer({ studio, deviceId }) {
+        console.log("playing in " + studio);
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/play`, {
@@ -246,6 +247,7 @@ function ControlPanel({ deviceId, studio }) {
 function WebPlayback(props) {
     const [player, setPlayer] = useState({});
     const [myDeviceId, setDeviceId] = useState({});
+    const { studio } = props;
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -282,11 +284,7 @@ function WebPlayback(props) {
         catch (error) {
             console.log(error);
             if (error.response.status === 401) {
-                localStorage.removeItem("access_token");
-                localStorage.removeItem("refresh_token");
-                localStorage.removeItem("expires_in");
-                localStorage.removeItem("current_user_id");
-                navigate("/login");
+                navigate("/400")
             }
         }
 
@@ -300,7 +298,7 @@ function WebPlayback(props) {
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel deviceId={myDeviceId} studio={props.studio} />
+                    <ControlPanel deviceId={myDeviceId} studio={studio} />
                 </div>
             </div>
         </>
