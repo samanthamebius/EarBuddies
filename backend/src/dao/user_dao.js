@@ -140,7 +140,4 @@ export {
 	searchStudioUsers,
 	updateUserDisplayName,
 	updateUserProfilePic,
-	getUsername,
-	searchStudioUsers,
-	updateUserInfo
 };
