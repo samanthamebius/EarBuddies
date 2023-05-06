@@ -6,7 +6,7 @@ import styles from "./StudioPage.module.css";
 import Banner from "./Banner";
 import Chat from "./chat/Chat";
 import NowPlaying from "./NowPlaying";
-import SongSelection from "./SongSelection";
+import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";
 
@@ -27,7 +27,7 @@ function StudioPage({ socket }) {
 	}, []);
 
 	if (studioError) {
-		navigate("/404")
+		navigate("/404");
 		return;
 	}
 	if (studioIsLoading) {
@@ -38,10 +38,10 @@ function StudioPage({ socket }) {
 		return (
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
-				<NowPlaying studio={studio[0]}/>
-				<SongSelection studio={studio[0]} />
+				<NowPlaying studio={studio[0]} />
+				<SongSelection studio={studio[0]} socket={socket} />
 				<Chat socket={socket} />
-			</div >
+			</div>
 		);
 	}
 }
