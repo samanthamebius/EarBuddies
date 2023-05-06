@@ -227,15 +227,29 @@
 	background-color: white;
 }
 
+.result {
+	display: flex;
+}
+
+.result:hover {
+	background-color: #f1f1f1;
+	cursor: pointer;
+}
+
+.resultImgBox {
+	width: 12%;
+	height: 12%
+}
+
 .resultImg {
-	width: 10%;
+	width: 100%;
 	border-radius: 4px;
-	margin-right: 15px;
 }
 
 .resultTitle {
 	font-size: 14px;
 	color: #757575;
+	padding-left: 15px;
 }
 
 .resultIcon {
@@ -244,4 +258,14 @@
 
 .resultTitleDetail {
 	margin: 0px;
+}
+
+.resultImgDark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 4px;
+	width: 100%;
+	height: 90%;
+	background-color: rgba(0, 0, 0, 0.6);
 }

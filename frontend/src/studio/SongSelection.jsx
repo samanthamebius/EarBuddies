@@ -2,23 +2,19 @@ import React from "react";
 import { useState } from "react";
 import styles from "./StudioPage.module.css";
 import useGet from "../hooks/useGet";
-import list_styles from "../shared/SearchBar.module.css";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SearchBar from "../shared/SearchBar";
 import axios from "axios";
 import QueueMusicRoundedIcon from '@mui/icons-material/QueueMusicRounded';
 import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
 import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
 import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { Box, Icon } from '@mui/material';
 import {
 	List,
 	ListItem,
 	ListItemText,
-	ListItemAvatar,
-	Button,
-	Avatar,
 	Menu,
-	MenuItem,
 	styled,
 } from "@mui/material";
 
@@ -40,17 +36,7 @@ export default function SongSelection({ studio }) {
 				studio={studio} />
 			{songSearchResults.length > 0 ? <List className={styles.searchResults}>
 				{songSearchResults.map((result, i) => (
-					<ListItem
-						key={i}
-						secondaryAction={
-							<QueueMusicRoundedIcon
-								edge="end"
-								style={{ color: "#757575" }} />
-						}>
-						<img className={styles.resultImg} src={result.image} />
-						{/* {displayIcon(result)} */}
-						<ListItemText className={styles.resultTitle} primary={displayText(result)} />
-					</ListItem>
+					<SongListItem key={i} result={result} />
 				))}
 			</List> : null}
 			<Queue studio={studio} />
@@ -58,34 +44,41 @@ export default function SongSelection({ studio }) {
 	);
 }
 
-function displayIcon(result) {
-	if (result.type === "audiobook") {
-		return <AutoStoriesRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
-	} else if (result.type === "track") {
-		return <MusicNoteRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
-	} else {
-		return <PodcastsRoundedIcon className={styles.resultIcon} style={{ color: "#c4c4c4" }} />;
-	}
+function SongListItem({ result }) {
+	const [isHover, setIsHover] = useState(false);
+
+	const handleMouseEnter = () => { setIsHover(true); };
+	const handleMouseLeave = () => { setIsHover(false); };
+
+	return (
+		<ListItem
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			className={styles.result}
+			secondaryAction={
+				<QueueMusicRoundedIcon
+					edge="end"
+					style={{ color: "#757575" }} />
+			}>
+			<Box className={styles.resultImgBox} position="relative">
+				<img className={styles.resultImg} src={result.image} />
+				{isHover ? <Box className={styles.resultImgDark} /> : null}
+				{isHover ? <Icon fontSize={'large'} sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -65%)' }}>
+					<PlayArrowRoundedIcon fontSize={'large'} style={{ color: "white" }} />
+				</Icon> : null}
+			</Box>
+			<ListItemText className={styles.resultTitle} primary={displayText(result)} />
+		</ListItem>
+	)
 }
 
 function displayText(result) {
-	if (result.type === "audiobook") {
-		return (
-			<>
-				<p className={styles.resultTitleDetail}><b>{result.name}</b></p>
-				<p className={styles.resultTitleDetail}>{result.authors}</p>
-			</>
-		)
-	} else if (result.type === "track") {
-		return (
-			<>
-				<p className={styles.resultTitleDetail}><b>{result.name}</b></p>
-				<p className={styles.resultTitleDetail}>{result.artists}</p>
-			</>
-		)
-	} else {
-		return <p className={styles.resultTitleDetail}><b>{result.name}</b></p>;
-	}
+	return (
+		<>
+			<p className={styles.resultTitleDetail}><b>{result.name}</b></p>
+			<p className={styles.resultTitleDetail}>{result.artists}</p>
+		</>
+	)
 }
 
 function Queue({ studio }) {
