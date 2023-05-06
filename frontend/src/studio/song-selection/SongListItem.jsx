@@ -139,13 +139,7 @@ export function SongListItem(props) {
 				</Box>
 				<ListItemText
 					className={styles.resultTitle}
-					primary={
-						<>
-							<p className={styles.resultTitleDetail}>
-								<b>{listItem.name}</b>
-							</p>
-						</>
-					}
+					primary={<b>{listItem.name}</b>}
 					secondary={
 						<>
 							{listItem.artists?.map((artist, index) => (

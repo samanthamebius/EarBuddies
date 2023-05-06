@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "../StudioPage.module.css";
-import list_styles from "../../shared/SearchBar.module.css";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import list_styles from "./Queue.module.css";
 import useGet from "../../hooks/useGet";
 import {
 	Avatar,
@@ -52,7 +51,7 @@ function Queue(props) {
 	} else {
 		const snapshot_id = playlist.snapshot_id;
 		return (
-			<div>
+			<div style={{ overflowY: "hidden" }}>
 				<label className={styles.queueGreyHeading}>Coming Up:</label>
 				{playlistSongs?.length > 0 && (
 					<List className={list_styles.listContainer}>
