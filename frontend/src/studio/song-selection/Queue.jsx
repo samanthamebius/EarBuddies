@@ -28,10 +28,12 @@ function Queue(props) {
 		handleCloseMenu();
 	};
 
-	const handleRemove = (result, snapshot_id) => {
+	const handleRemove = async (result, snapshot_id) => {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = result.track.id;
-		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`),
+		await axios.delete(
+			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
+		),
 			{ snapshot_id: snapshot_id };
 
 		// reload the playlist after deleting

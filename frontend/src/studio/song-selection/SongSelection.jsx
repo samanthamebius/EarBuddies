@@ -91,9 +91,6 @@ function SongListItem(props) {
 			playlist_id: studio.studioPlaylist,
 			track_id: result.id,
 		});
-		axios
-			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-			.then((response) => console.log(response.data.tracks.items));
 		// reload the studio queue
 		socket.emit("reload_studio_queue", { room: studio._id });
 	};

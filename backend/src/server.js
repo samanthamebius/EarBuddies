@@ -80,7 +80,6 @@ io.on("connection", (socket) => {
 	// reload the playlist if a song is added
 	socket.on("reload_studio_queue", (data) => {
 		const { room } = data;
-		console.log(room);
 		io.in(room).emit("receive_reload_studio_queue");
 	});
 
