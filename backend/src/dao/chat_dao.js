@@ -1,7 +1,4 @@
-import mongoose from "mongoose";
 import { Chat } from "../database/schema";
-
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
 
 async function getChat(id) {
 	return await Chat.findOne({ roomId: id.toString() });
@@ -78,6 +75,30 @@ async function updateReaction(id, messageId, reaction) {
 	);
 }
 
+async function updateChatMessageDisplayName(username, studioId, nickname) {
+	await Chat.findOneAndUpdate(
+		{
+			roomId: studioId.toString(),
+			"messages.username": username,
+		},
+		{
+			$set: {
+				"messages.$[message].displayName": nickname,
+			},
+		},
+		{
+			arrayFilters: [{ "message.username": username }],
+		}
+	);
+
+	return await getChat(studioId);
+	}
+
+//delete chat of a room
+async function deleteChat(id) {
+	return await Chat.deleteOne({ roomId: id.toString() });
+}
+
 export {
 	getChat,
 	createChat,
@@ -88,4 +109,6 @@ export {
 	getReactionWithUsername,
 	addANewReaction,
 	updateReaction,
+	updateChatMessageDisplayName,
+	deleteChat,
 };

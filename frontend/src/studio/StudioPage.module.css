@@ -9,7 +9,7 @@
 }
 
 .greyheading {
-	color: #606060;;
+	color: #606060;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -17,7 +17,7 @@
 }
 
 .songGreyHeading {
-	color: #606060;;
+	color: #606060;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -25,7 +25,7 @@
 }
 
 .queueGreyHeading {
-	color: #606060;;
+	color: #606060;
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -69,12 +69,12 @@
 }
 
 .menu_item:hover .menu_title {
-    color: #B03EEE;
+	color: #b03eee;
 }
 
 .menu_title {
 	color: #757575;
-    margin: 5px 0px 5px 10px;
+	margin: 5px 0px 5px 10px;
 	font-size: 16px;
 }
 
@@ -96,6 +96,7 @@
 	padding: 10px;
 	cursor: pointer;
 }
+
 .greyOutImage {
 	-webkit-filter: grayscale(100%);
 	-moz-filter: grayscale(100%);
@@ -129,7 +130,7 @@
 }
 
 .controlPanel {
-	background-image: linear-gradient(180deg,#B03EEE, #E640F8);
+	background-image: linear-gradient(180deg, #b03eee, #e640f8);
 	border-radius: 4px;
 	padding: 5px;
 }
@@ -148,7 +149,7 @@
 
 .song {
 	text-align: left;
-	color: #606060;;
+	color: #606060;
 	font-size: 24px;
 	font-weight: bold;
 	display: flex;
@@ -168,7 +169,7 @@
 .artistName {
 	font-size: 18px;
 	text-align: left;
-	color: #606060;;
+	color: #606060;
 	font-size: 18px;
 	font-weight: bold;
 	padding: 6px 0px 0px 6px;
@@ -213,6 +214,6 @@
 }
 
 .icon {
-    height: 30px;
-    pointer-events: none;
+	height: 30px;
+	pointer-events: none;
 }

@@ -46,6 +46,7 @@ function NavMenu() {
 function UserInfo() {
 	const { setUsername, setDisplayName } = useContext(AppContext);
 	const current_user_id = localStorage.getItem("current_user_id");
+	console.log(current_user_id);
 	const id = JSON.parse(current_user_id);
 
 	if (!current_user_id) {
@@ -136,10 +137,13 @@ export function DropdownMenu() {
 
 	const handleLogout = () => {
 		handleClose;
+		const username = JSON.parse(localStorage.getItem("current_user_id"));
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("expires_in");
 		localStorage.removeItem("current_user_id");
+
+		axios.put(`${BASE_URL}/api/user/${username}/logout`);
 
 		navigate("/login");
 	};

@@ -40,9 +40,9 @@ function StudioPage({ socket }) {
 		return <p>Could not load studio</p>;
 	} else {
 		return (
-			< div className={styles.studio} >
-				<Banner id={id} studio={studio[0]} />
-				<NowPlaying studio={studio[0]} />
+			<div className={styles.studio}>
+				<Banner id={id} studio={studio[0]} socket={socket} />
+				<NowPlaying />
 				<SongSelection studio={studio[0]} />
 				<Chat socket={socket} />
 			</div >

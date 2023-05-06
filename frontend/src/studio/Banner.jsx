@@ -2,6 +2,7 @@ import styles from "./StudioPage.module.css";
 import React, { useState, useEffect } from "react";
 import LeaveStudioDialog from "./LeaveStudioDialog";
 import NicknameDialog from "./NicknameDialog";
+import AssignNewHostDialog from "./AssignNewHostDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
 import ProfilePicImg2 from "../assets/profilepic2.png";
 import ProfilePicImg3 from "../assets/profilepic3.png";
@@ -19,13 +20,12 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import VideogameAssetOffRoundedIcon from "@mui/icons-material/VideogameAssetOffRounded";
 import GroupRemoveRoundedIcon from "@mui/icons-material/GroupRemoveRounded";
-import useGet from "../hooks/useGet.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
 
 // TO DO: get if user is host or not
-const isHost = false;
+// const isHost = false;
 
 const hostImage = ProfilePicImg1;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -47,7 +47,7 @@ const listeners = [
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 
-export default function Banner({ id, studio }) {
+export default function Banner({ id, studio, socket }) {
 	const navigate = useNavigate();
 
 	if (!studio) {
@@ -56,6 +56,8 @@ export default function Banner({ id, studio }) {
 
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
+
+	const isHost = (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
 
 	const [controlEnabled, toggleControl] = useState(
 		studio.studioControlHostOnly
@@ -72,6 +74,7 @@ export default function Banner({ id, studio }) {
 	};
 
 	const users = studio.studioUsers;
+	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
 
 	return (
@@ -93,6 +96,11 @@ export default function Banner({ id, studio }) {
 					controlEnabled={controlEnabled}
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
+					id={id}
+					socket={socket}
+					isHost={isHost}
+					studioUsers={users}
+					isAloneInStudio={isAlone}
 				/>
 			</div>
 		</div>
@@ -103,6 +111,11 @@ export function DropdownKebab({
 	controlEnabled,
 	handleControlToggle,
 	handleDelete,
+	isHost,
+	id,
+	studioUsers,
+	isAloneInStudio,
+	socket
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -110,6 +123,7 @@ export function DropdownKebab({
 	const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 	const [isConfirmLeaveOpen, setConfirmleaveOpen] = useState(false);
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
+	const [isAssignOpen, setIsAssignOpen] = useState(false);
 
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -117,6 +131,7 @@ export function DropdownKebab({
 	const [isInAssign, setInAssign] = useState(false);
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
+	const navigate = useNavigate();
 
 	const enterLeave = () => {
 		setInLeave(true);
@@ -187,13 +202,30 @@ export function DropdownKebab({
 	const handleNicknameOpen = () => {
 		setIsNicknameOpen(true);
 	};
+	const handleAssignOpen = () => {
+		setIsAssignOpen(true);
+	};
+
+	const handleLeaveStudio = () => {
+		const user_id = localStorage.getItem("current_user_id");
+		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
+        navigate('/', { replace: true });
+	};
 
 	return (
 		<div>
 			<LeaveStudioDialog
+				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
 				listeners={listeners}
+				studio_id={id}
+			/>
+			<AssignNewHostDialog 
+				isAssignDialogOpened={isAssignOpen}
+				handleCloseAssignDialog={() => setIsAssignOpen(false)}
+				studioUsers={studioUsers}
+				studio_id={id} 
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -210,6 +242,7 @@ export function DropdownKebab({
 				handleClose={() => setConfirmleaveOpen(false)}
 				handleAction={() => {
 					handleClose;
+					handleLeaveStudio();
 				}} //TO DO: replace with leave functionality
 				message={"Are you sure you want to leave this studio?"}
 				actionText={"Leave"}
@@ -217,6 +250,8 @@ export function DropdownKebab({
 			<NicknameDialog
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
+				studioId={id}
+				socket={socket}
 			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
@@ -228,6 +263,7 @@ export function DropdownKebab({
 				onClose={handleClose}
 			>
 				<MenuItem
+					style={{ display: isAloneInStudio ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave}
@@ -253,7 +289,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={handleClose}
 					onMouseEnter={enterRemove}
@@ -267,9 +303,9 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
-					onClick={handleClose}
+					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
 					onMouseLeave={leaveAssign}
 				>
@@ -281,7 +317,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={() => {
 						handleClose;
