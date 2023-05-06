@@ -93,12 +93,10 @@ function SearchBarSong({ studio, setReloadPlaylist }) {
 	}, [searchTerm]);
 
 	function displayText(result) {
-		if (result.type === "audiobook") {
-			return `${result.name} - ${result.authors} - Audiobook`;
-		} else if (result.type === "track") {
-			return `${result.name} - ${result.artists} - Song`;
-		} else {
-			return `${result.name} - Podcast`;
+		if (result.type === "track") {
+			return `${result.name} - ${result.artists}`;
+		} else if (result.type === "episode") {
+			return `${result.name}`;
 		}
 	}
 

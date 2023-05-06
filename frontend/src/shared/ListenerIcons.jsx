@@ -32,6 +32,7 @@ export default function StudioCard({
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
+
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
 		if (!studioUsers || !Array.isArray(studioUsers)) {
@@ -45,12 +46,19 @@ export default function StudioCard({
 		}
 		fetchUserData();
 	}, [studioUsers]);
-	const profileImages = userList.map(user => user.profilePic);
-	const profileStatus = userList.map(user => user.userIsActive);
+
+
+	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
+
+	const profileImages = activeFirst.map(user => user.profilePic);
+	const profileStatus = activeFirst.map(user => user.userIsActive);
 
 	if (!isHomeCard) {
-		profileImages.push(AddIcon);
-		profileStatus.push(true);
+		profileImages.unshift(AddIcon);
+		profileStatus.unshift(true);
+
+		profileImages.reverse();
+		profileStatus.reverse();
 	}
 	
 	return (

@@ -8,11 +8,6 @@
     padding-right: 10px;
 }
 
-.listContainer {
-    max-height: 400px;
-    overflow: auto;
-}
-
 .image {
     max-width: 100%;
     max-height: 100%;

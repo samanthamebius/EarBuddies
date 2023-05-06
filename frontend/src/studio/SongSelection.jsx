@@ -119,7 +119,6 @@ function Queue(props) {
 	} else if (!playlist) {
 		return <p>Could not load songs</p>;
 	} else {
-		console.log(playlist);
 		const snapshot_id = playlist.snapshot_id;
 		return (
 			<div>

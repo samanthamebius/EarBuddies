@@ -12,7 +12,7 @@ router.get("/search/:query", async (req, res) => {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
         const results = await searchSpotify(query, thisSpotifyApi);
-        res.json(results);
+        return res.status(200).json(results);
     }
     catch (err) {
         console.log(err);
@@ -25,24 +25,25 @@ router.get("/search/:query", async (req, res) => {
 
 router.put("/queue", async (req, res) => {
     try {
-      const { playlist_id, track_id } = req.body;
-      const thisSpotifyApi = getSpotifyApi();
-      if (!thisSpotifyApi) {
-        return res.status(403).json({ msg: "No Spotify API connection" });
-      }
-      // Add tracks to a playlist
-      thisSpotifyApi
-        .addTracksToPlaylist(playlist_id, [
-            "spotify:track:" + track_id,
-        ])
-        .then(
-          function (data) {
-            console.log("Added tracks to playlist!");
-          },
-          function (err) {
-            console.log("Something went wrong!", err);
-          }
-        );
+        const { playlist_id, track_id } = req.body;
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Add tracks to a playlist
+        thisSpotifyApi
+            .addTracksToPlaylist(playlist_id, [
+                "spotify:track:" + track_id,
+            ])
+            .then(
+                function (data) {
+                    console.log("Added tracks to playlist!");
+                },
+                function (err) {
+                    console.log("Something went wrong!", err);
+                }
+            );
+        return res.status(200).json({ msg: "Added track to playlist" });
     }
     catch (err) {
         console.log(err);
@@ -61,9 +62,9 @@ router.get("/queue/:playlist_id", async (req, res) => {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
         thisSpotifyApi.getPlaylist(playlist_id)
-            .then(function(data) {
-                res.status(200).json(data.body);
-            }, function(err) {
+            .then(function (data) {
+                return res.status(200).json(data.body);
+            }, function (err) {
                 console.log('Something went wrong!', err);
             });
     }
@@ -86,15 +87,68 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
         }
         // Remove tracks from a playlist
         thisSpotifyApi
-          .removeTracksFromPlaylist(playlist_id, [{uri: "spotify:track:" + track_id}], {snapshot_id: snapshot_id})
-          .then(
-            function (data) {
-              console.log("Tracks removed from playlist!");
-            },
-            function (err) {
-              console.log("Something went wrong!", err);
-            }
-          );
+            .removeTracksFromPlaylist(playlist_id, [{ uri: "spotify:track:" + track_id }], { snapshot_id: snapshot_id })
+            .then(
+                function (data) {
+                    return res.status(200).json({ msg: "Removed track from playlist" });
+                },
+                function (err) {
+                    console.log("Something went wrong!", err);
+                }
+            );
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
+});
+
+router.put("/play", async (req, res) => {
+    try {
+        const { uri, deviceId } = req.body;
+        console.log(uri);
+        console.log(deviceId);
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Play a track if not playing already
+        //will need an if statement to check where it finished to pick it up at correct point 
+        //ooh or just called with no uri and it will resume
+        thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
+            .then(function () {
+                console.log('Playing track!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
+});
+
+router.put("/pause", async (req, res) => {
+    try {
+        const { deviceId } = req.body;
+        console.log(deviceId);
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Pause a track if not paused already
+        thisSpotifyApi.pause({ device_id: deviceId })
+            .then(function () {
+                console.log('Paused track!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
     }
     catch (err) {
         console.log(err);

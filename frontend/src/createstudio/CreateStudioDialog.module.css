@@ -1,26 +1,26 @@
 .heading {
     font-weight: 800;
-	color: #757575;
-	font-size: 32px;
-	position: relative;
+    color: #757575;
+    font-size: 32px;
+    position: relative;
     margin: 0px;
     padding: 20px 24px 0px 24px
 }
 
 .sectionHeading {
     font-weight: 800;
-	color: #757575;
-	font-size: 16px;
-	position: relative;
+    color: #757575;
+    font-size: 16px;
+    position: relative;
     margin: 0px;
     padding: 20px 0px 10px 0px
 }
 
 .focusText {
     font-weight: 800;
-	color: #CA3FF3;
-	font-size: 16px;
-	position: relative;
+    color: #CA3FF3;
+    font-size: 16px;
+    position: relative;
     margin: 0px;
     padding: 10px 0px 10px 0px
 }
@@ -54,6 +54,27 @@
     display: flex;
     align-items: center;
 }
+
 .spacing {
     width: 10px;
+}
+
+.searchResults {
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 0px 0px 4px 4px;
+    background-color: white;
+}
+
+.clearIcon:hover {
+    cursor: pointer;
+}
+
+.listeners {
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: white;
 }
