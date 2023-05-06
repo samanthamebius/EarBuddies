@@ -43,16 +43,16 @@ async function setUserActive(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
 		{ userIsActive: true },
-		{ new: true}
+		{ new: true }
 	);
 }
 
 async function setUserInactive(username) {
-  return await User.findOneAndUpdate(
-    { username: username },
-    { userIsActive: false },
-    { new: true }
-  );
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userIsActive: false },
+		{ new: true }
+	);
 }
 
 async function getUsers() {
@@ -69,11 +69,11 @@ async function updateUserDisplayName(username, userDisplayName) {
 }
 
 async function updateUserProfilePic(username, profilePic) {
-  return await User.findOneAndUpdate(
-    { username: username },
-    { profilePic: profilePic },
-    { new: true }
-  );
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ profilePic: profilePic },
+		{ new: true }
+	);
 }
 
 async function getUser(username) {
@@ -82,8 +82,8 @@ async function getUser(username) {
 }
 
 async function getStudios(username) {
-  const user = await getUserbyId(username);
-  return user.userStudios;
+	const user = await getUserbyId(username);
+	return user.userStudios;
 }
 
 async function getStudiosId(username) {
@@ -104,11 +104,11 @@ async function searchActiveStudios(username, query) {
 }
 
 async function searchUsers(query, username) {
-  const users = await User.find({
-    userDisplayName: { $regex: query, $options: "i" },
-    username: { $ne: username },
-  });
-  return users;
+	const users = await User.find({
+		userDisplayName: { $regex: query, $options: "i" },
+		username: { $ne: username },
+	});
+	return users;
 }
 
 async function searchStudioUsers(studioId, query, username) {
@@ -117,7 +117,7 @@ async function searchStudioUsers(studioId, query, username) {
 }
 
 async function updateStudios(username, studios) {
-  return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
+	return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
 }
 
 async function deleteUser(username) {
@@ -137,7 +137,7 @@ export {
 	searchActiveStudios,
 	searchUsers,
 	getUsers,
-	searchStudioUsers,		
+	searchStudioUsers,
 	updateUserDisplayName,
-	updateUserProfilePic
+	updateUserProfilePic,
 };

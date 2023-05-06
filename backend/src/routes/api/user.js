@@ -66,7 +66,7 @@ router.delete("/:username", async (req, res) => {
       console.log("deleting user from studio " + studios[i])
       await deleteUserFromStudio(studios[i], username);
     }
-    await deleteUser(username);    
+    await deleteUser(username);
     return res.status(204).json({ msg: "User deleted" });
   } catch (err) {
     console.log(err);

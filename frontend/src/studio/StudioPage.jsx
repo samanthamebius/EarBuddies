@@ -45,7 +45,7 @@ function StudioPage({ socket }) {
 				<NowPlaying />
 				<SongSelection studio={studio[0]} />
 				<Chat socket={socket} />
-			</div>
+			</div >
 		);
 	}
 }
