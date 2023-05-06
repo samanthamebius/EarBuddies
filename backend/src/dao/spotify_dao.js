@@ -13,7 +13,7 @@ function getSpotifyApi() {
 
 async function searchSpotify(query, thisSpotifyApi) {
   return new Promise((resolve, reject) => {
-    thisSpotifyApi.search(query, ['track'])
+    thisSpotifyApi.search(query, ['track', 'episode'])
       .then(function (data) {
         const results = [];
         for (var i = 0; i < data.body.tracks.items.length; i++) {
@@ -28,6 +28,15 @@ async function searchSpotify(query, thisSpotifyApi) {
             track.artists.push(data.body.tracks.items[i].artists[j].name);
           }
           results.push(track);
+        }
+        for (var i = 0; i < data.body.episodes.items.length; i++) {
+          var episode = {
+            name: data.body.episodes.items[i].name,
+            image: data.body.episodes.items[i].images[0].url,
+            id: data.body.episodes.items[i].id,
+            type: "episode"
+          };
+          results.push(episode);
         }
         resolve(results);
       })

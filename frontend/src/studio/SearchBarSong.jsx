@@ -88,7 +88,11 @@ function SearchBarSong({ studio }) {
   }, [searchTerm]);
 
   function displayText(result) {
-    return `${result.name} - ${result.artists}`;
+    if (result.type === "track") {
+      return `${result.name} - ${result.artists}`;
+    } else if (result.type === "episode") {
+      return `${result.name}`;
+    }
   }
 
   return (
