@@ -45,9 +45,7 @@ function SongSearch({ studio }) {
 }
 
 function displayText(result) {
-	if (result.type === "audiobook") {
-		return `${result.name} - ${result.authors[0].name} - Audiobook`;
-	} else if (result.type === "track") {
+	if (result.type === "track") {
 		return `${result.name} - ${result.artists[0].name} - Song`;
 	} else {
 		return `${result.name} - Podcast`;
@@ -76,7 +74,7 @@ function Queue({ studio }) {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = result.track.id;
 		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`), { snapshot_id: snapshot_id };
+		axios.delete(`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`), { snapshot_id: snapshot_id, type: result.type };
 		handleCloseMenu();
 	};
 

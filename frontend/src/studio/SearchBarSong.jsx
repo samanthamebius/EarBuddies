@@ -53,7 +53,7 @@ function SearchBarSong({ studio }) {
   };
 
   const handleAddToQueue = (result) => {
-    axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id })
+    axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id, type: result.type })
     handleCloseMenu();
   };
 

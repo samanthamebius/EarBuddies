@@ -25,7 +25,7 @@ router.get("/search/:query", async (req, res) => {
 
 router.put("/queue", async (req, res) => {
     try {
-        const { playlist_id, track_id } = req.body;
+        const { playlist_id, track_id, type } = req.body;
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
@@ -33,7 +33,7 @@ router.put("/queue", async (req, res) => {
         // Add tracks to a playlist
         thisSpotifyApi
             .addTracksToPlaylist(playlist_id, [
-                "spotify:track:" + track_id,
+                "spotify:" + type + ":" + track_id,
             ])
             .then(
                 function (data) {
@@ -80,22 +80,28 @@ router.get("/queue/:playlist_id", async (req, res) => {
 router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
     try {
         const { playlist_id, track_id } = req.params;
-        const { snapshot_id } = req.body;
+        const { snapshot_id, type } = req.body;
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
         // Remove tracks from a playlist
         thisSpotifyApi
-            .removeTracksFromPlaylist(playlist_id, [{ uri: "spotify:track:" + track_id }], { snapshot_id: snapshot_id })
-            .then(
-                function (data) {
-                    return res.status(200).json({ msg: "Removed track from playlist" });
-                },
-                function (err) {
-                    console.log("Something went wrong!", err);
-                }
-            );
+          .removeTracksFromPlaylist(
+            playlist_id,
+            [{ uri: "spotify:" + type + ":" + track_id }],
+            { snapshot_id: snapshot_id }
+          )
+          .then(
+            function (data) {
+              return res
+                .status(200)
+                .json({ msg: "Removed track from playlist" });
+            },
+            function (err) {
+              console.log("Something went wrong!", err);
+            }
+          );
     }
     catch (err) {
         console.log(err);
