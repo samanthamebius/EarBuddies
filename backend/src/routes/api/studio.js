@@ -2,11 +2,14 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
 import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi } from "../../dao/spotify_dao.js";
-import { deleteChat } from "../../dao/chat_dao.js";
 import { Types as mongooseTypes } from "mongoose";
+import {
+	deleteChat,
+	updateChatMessageDisplayName,
+} from "../../dao/chat_dao.js";
 
 const router = express.Router();
 
@@ -160,6 +163,49 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 		.send();
 });
 
+// update nickname for user in studio
+router.put("/:studioId/:userId/nickname", async (req, res) => {
+	try {
+		const { studioId, userId } = req.params;
+		const nickname = req.body.nickname;
+		const studio = await getStudio(studioId);
+		const users = studio[0].studioUsers;
+		const userPos = users.indexOf(userId);
+
+		const nicknames = studio[0].studioNames;
+		nicknames[userPos] = nickname;
+		await updateStudioNames(studioId, nicknames);
+
+		// update the nickname for chat messages
+		const updatedMessages = await updateChatMessageDisplayName(
+			userId,
+			studioId,
+			nickname
+		);
+
+		const data = { updatedMessages: updatedMessages, nickname: nickname };
+
+		res.status(200).json(data);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+// get nickname for user in studio
+router.get("/:studioId/:userId/nickname", async (req, res) => {
+	try {
+		const { studioId, userId } = req.params;
+		const studio = await getStudio(studioId);
+		const users = studio[0].studioUsers;
+		const userPos = users.indexOf(userId);
+		const nickname = studio[0].studioNames[userPos];
+
+		res.status(200).json(nickname);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
 //leave studio
 router.put("/:studio_id/leave/:username", async (req, res) => {
   try {
@@ -173,6 +219,18 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
 		return res.status(404).json({ msg: "User not found" });
 	}
     const listeners = studio[0].studioUsers;
+
+	//remove user from nickname list
+	const indexToRemove = listeners.indexOf(user.replace(/"/g, ""));
+	console.log(listeners);
+	console.log(user);
+	console.log(indexToRemove);
+	const nicknames = studio[0].studioNames;
+	const newArray = [
+		...nicknames.slice(0, indexToRemove),
+		...nicknames.slice(indexToRemove + 1),
+	];
+	updateStudioNames(studio_id, newArray);
 
     //remove user from studio
     const newListeners = listeners.filter((listener) => listener !== JSON.parse(username));

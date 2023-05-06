@@ -81,6 +81,11 @@ async function getUser(username) {
 	return user;
 }
 
+async function getStudios(username) {
+  const user = await getUserbyId(username);
+  return user.userStudios;
+}
+
 async function getStudiosId(username) {
 	const user = await getUser(username);
 	return user.userStudios;
@@ -132,7 +137,7 @@ export {
 	searchActiveStudios,
 	searchUsers,
 	getUsers,
-	searchStudioUsers,
-  	updateUserDisplayName,
-	updateUserProfilePic,			
+	searchStudioUsers,		
+	updateUserDisplayName,
+	updateUserProfilePic
 };

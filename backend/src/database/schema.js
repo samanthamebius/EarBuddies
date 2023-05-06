@@ -15,6 +15,7 @@ const studioSchema = new Schema({
     studioName: String,
     studioIsActive: Boolean,
     studioUsers: [{ type: String, required: true }],
+	studioNames: [String],
     studioHost: String,
     studioGenres: [String],
     studioPicture: String,
