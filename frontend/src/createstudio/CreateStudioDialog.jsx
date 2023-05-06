@@ -64,7 +64,7 @@ function useStudioPost() {
       navigate(`/studio/${response.data._id}`);
     } catch (err) {
       const navigate = useNavigate();
-      navigate("/400");
+      navigate("/500");
     }
   };
 
