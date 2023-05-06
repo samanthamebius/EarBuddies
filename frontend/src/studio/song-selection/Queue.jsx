@@ -2,44 +2,23 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "../StudioPage.module.css";
 import list_styles from "../../shared/SearchBar.module.css";
-
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useGet from "../../hooks/useGet";
-import { List, ListItemText } from "@mui/material";
+import {
+	Avatar,
+	Button,
+	List,
+	ListItem,
+	ListItemAvatar,
+	ListItemText,
+} from "@mui/material";
+import SongListItem from "./SongListItem";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Queue(props) {
-	const { studio, setPlaylistSongs, playlistSongs, socket } = props;
-	const [anchorEl, setAnchorEl] = useState(null);
-	const [selectedIndex, setSelectedIndex] = useState(null);
-
-	const handleOpenMenu = (event, index) => {
-		setAnchorEl(event.currentTarget);
-		setSelectedIndex(index);
-	};
-
-	const handleCloseMenu = () => {
-		setAnchorEl(null);
-		setSelectedIndex(null);
-	};
-
-	const handlePlay = (result) => {
-		//TODO: play func
-		handleCloseMenu();
-	};
-
-	const handleRemove = async (result, snapshot_id) => {
-		const playlist_id = studio.studioPlaylist;
-		const track_id = result.track.id;
-		await axios.delete(
-			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
-		),
-			{ snapshot_id: snapshot_id };
-
-		// reload the playlist after deleting
-		socket.emit("reload_studio_queue", { room: studio._id });
-		handleCloseMenu();
-	};
+	const { studio, socket } = props;
+	const [playlistSongs, setPlaylistSongs] = useState([]);
 
 	const {
 		data: playlist,
@@ -63,8 +42,6 @@ function Queue(props) {
 			.then((response) => setPlaylistSongs(response.data.tracks.items));
 	}, []);
 
-	console.log(playlistSongs);
-
 	if (songsError) {
 		return <p>Could not load songs</p>;
 	}
@@ -80,58 +57,19 @@ function Queue(props) {
 				{playlistSongs?.length > 0 && (
 					<List className={list_styles.listContainer}>
 						{playlistSongs.map((result) => (
-							// <ListItem
-							// 	key={result.track.id}
-							// 	secondaryAction={
-							// 		<Button
-							// 			edge="end"
-							// 			aria-label="more options"
-							// 			onClick={(event) => handleOpenMenu(event, result)}
-							// 		>
-							// 			<MoreHorizIcon />
-							// 		</Button>
-							// 	}
-							// >
-							// 	<StyledMenu
-							// 		anchorEl={anchorEl}
-							// 		open={Boolean(anchorEl)}
-							// 		onClose={handleCloseMenu}
-							// 	>
-							// 		<MenuItem onClick={() => handlePlay(selectedIndex)}>
-							// 			Play
-							// 		</MenuItem>
-							// 		<MenuItem
-							// 			onClick={() => handleRemove(selectedIndex, snapshot_id)}
-							// 		>
-							// 			Remove from queue
-							// 		</MenuItem>
-							// 	</StyledMenu>
-							// 	<ListItemAvatar>
-							// 		<Avatar>
-							// 			<img
-							// 				className={list_styles.image}
-							// 				src={result.track.album.images[0].url}
-							// 			/>
-							// 		</Avatar>
-							// 	</ListItemAvatar>
-							// 	<ListItemText primary={displayText(result.track)} />
-							// </ListItem>
-							<ListItemText primary={displayText(result.track)} />
+							<SongListItem
+								key={result.track.id}
+								result={result}
+								socket={socket}
+								studio={studio}
+								type="queue"
+								snapshotId={snapshot_id}
+							/>
 						))}
 					</List>
 				)}
 			</div>
 		);
-	}
-}
-
-function displayText(result) {
-	if (result.type === "audiobook") {
-		return `${result.name} - ${result.authors[0].name} - Audiobook`;
-	} else if (result.type === "track") {
-		return `${result.name} - ${result.artists[0].name} - Song`;
-	} else {
-		return `${result.name} - Podcast`;
 	}
 }
 

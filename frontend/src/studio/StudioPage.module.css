@@ -119,6 +119,7 @@
 	grid-column: 2 / 2;
 	display: flex;
 	flex-direction: column;
+	height: calc(0.7 * 100vh);
 }
 
 .chat {
@@ -238,7 +239,7 @@
 
 .resultImgBox {
 	width: 12%;
-	height: 12%
+	height: 12%;
 }
 
 .resultImg {
