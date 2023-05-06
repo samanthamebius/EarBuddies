@@ -1,6 +1,5 @@
 import express from "express";
-import { getUser, getUserbyId, searchActiveStudios, searchStudioUsers, searchStudios, searchUsers } from "../../dao/user_dao";
-
+import { getUser, getUserbyId, deleteUser, updateUserInfo, searchActiveStudios, searchStudioUsers, searchStudios, searchUsers } from "../../dao/user_dao";
 
 const router = express.Router();
 
@@ -73,7 +72,7 @@ router.put("/:id", async (req, res) => {
     return res.status(400).json({ msg: "No user id provided" });
   }
   try {
-    await updateUserInfo(id, req.body.userDisplayName, req.body.profilePic);
+    await updateUserInfo(id, req.body.userDisplayName, req.body.spotifyPic, req.body.profilePic);
     res.status(204).json({ msg: "User updated" });
   } catch (err) {
     res.status(500).json(err);
