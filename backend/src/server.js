@@ -77,6 +77,13 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_reload_chat_messages", data);
 	});
 
+	// reload the playlist if a song is added
+	socket.on("reload_studio_queue", (data) => {
+		const { room } = data;
+		console.log(room);
+		io.in(room).emit("receive_reload_studio_queue");
+	});
+
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
 		const { nickname: displayName, room } = data;

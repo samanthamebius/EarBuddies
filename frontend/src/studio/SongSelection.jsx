@@ -28,28 +28,27 @@ const StyledMenu = styled(Menu)({
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function SongSelection({ studio }) {
+export default function SongSelection({ studio, socket }) {
 	const [playlistSongs, setPlaylistSongs] = useState([]);
-	const [reloadPlaylist, setReloadPlaylist] = useState(false);
 	return (
 		<div className={styles.songselection}>
-			<SongSearch studio={studio} setReloadPlaylist={setReloadPlaylist} />
+			<SongSearch studio={studio} socket={socket} />
 			<Queue
 				studio={studio}
 				playlistSongs={playlistSongs}
 				setPlaylistSongs={setPlaylistSongs}
-				reloadPlaylist={reloadPlaylist}
-				setReloadPlaylist={setReloadPlaylist}
+				socket={socket}
 			/>
 		</div>
 	);
 }
 
-function SongSearch({ studio, setReloadPlaylist }) {
+function SongSearch(props) {
+	const { studio, socket } = props;
 	return (
 		<div>
 			<label className={styles.songGreyHeading}>What's Next?</label>
-			<SearchBarSong studio={studio} setReloadPlaylist={setReloadPlaylist} />
+			<SearchBarSong studio={studio} socket={socket} />
 		</div>
 	);
 }
@@ -65,13 +64,7 @@ function displayText(result) {
 }
 
 function Queue(props) {
-	const {
-		studio,
-		setPlaylistSongs,
-		playlistSongs,
-		reloadPlaylist,
-		setReloadPlaylist,
-	} = props;
+	const { studio, setPlaylistSongs, playlistSongs, socket } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -104,12 +97,21 @@ function Queue(props) {
 		error: songsError,
 	} = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
 
+	// reload the studio queue when a new song is added
+	useEffect(() => {
+		socket.on("receive_reload_studio_queue", () => {
+			axios
+				.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
+				.then((response) => setPlaylistSongs(response.data.tracks.items));
+		});
+	}, [socket]);
+
+	// set the initial playlist
 	useEffect(() => {
 		axios
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
 			.then((response) => setPlaylistSongs(response.data.tracks.items));
-		setReloadPlaylist(false);
-	}, [reloadPlaylist]);
+	}, []);
 
 	if (songsError) {
 		return <p>Could not load songs</p>;

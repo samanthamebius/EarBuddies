@@ -29,7 +29,8 @@ const StyledMenu = styled(Menu)({
 	},
 });
 
-function SearchBarSong({ studio, setReloadPlaylist }) {
+function SearchBarSong(props) {
+	const { studio, socket } = props;
 	const navigate = useNavigate();
 	const [focused, setFocused] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -54,12 +55,15 @@ function SearchBarSong({ studio, setReloadPlaylist }) {
 	};
 
 	const handleAddToQueue = async (result) => {
-		axios.put(`${BASE_URL}/api/spotify/queue`, {
+		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
 			track_id: result.id,
 		});
-		// add to the frontend queue
-		setReloadPlaylist(true);
+		axios
+			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
+			.then((response) => console.log(response.data.tracks.items));
+		// reload the studio queue
+		socket.emit("reload_studio_queue", { room: studio._id });
 		handleCloseMenu();
 	};
 

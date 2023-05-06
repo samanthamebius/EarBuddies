@@ -43,9 +43,9 @@ function StudioPage({ socket }) {
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
 				<NowPlaying />
-				<SongSelection studio={studio[0]} />
+				<SongSelection studio={studio[0]} socket={socket} />
 				<Chat socket={socket} />
-			</div >
+			</div>
 		);
 	}
 }
