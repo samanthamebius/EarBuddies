@@ -21,7 +21,11 @@ function App() {
 					<Route path="/" element={<PageLayout />}>
 						<Route index element={<HomePage socket={socket} />} />
 						<Route path="studio/:id" element={<StudioPage socket={socket} />} />
-						<Route path="*" element={<PageNotFound />} />
+						{/* Error handeling routes */}
+						<Route path="*" element={<PageNotFound errorType="404" />} />
+						<Route path="/404" element={<PageNotFound errorType="404" />} />
+						<Route path="/400" element={<PageNotFound errorType="400" />} />
+						<Route path="/500" element={<PageNotFound errorType="500" />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>
