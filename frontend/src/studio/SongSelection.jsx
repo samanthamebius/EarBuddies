@@ -23,7 +23,7 @@ export default function SongSelection({ studio }) {
 				studio={studio} />
 			{songSearchResults.length > 0 ? <List className={styles.searchResults}>
 				{songSearchResults.map((result, i) => (
-					<SongListItem key={i} result={result} />
+					<SongListItem key={i} result={result} studio={studio} />
 				))}
 			</List> : null}
 			<Queue studio={studio} />
@@ -31,7 +31,7 @@ export default function SongSelection({ studio }) {
 	);
 }
 
-function SongListItem({ result }) {
+function SongListItem({ result, studio }) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 
@@ -59,8 +59,8 @@ function SongListItem({ result }) {
 	}));
 
 	const handleAddToQueue = (result) => {
-		axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id })
-		handleCloseMenu();
+		console.log("adding to queue " + result);
+		axios.put(`${BASE_URL}/api/spotify/queue`, { playlist_id: studio.studioPlaylist, track_id: result.id, type: result.type })
 	};
 
 	return (
@@ -138,40 +138,12 @@ function Queue({ studio }) {
 		return <p>Could not load songs</p>;
 	} else {
 		const songs = playlist.tracks.items;
+		console.log(songs)
 		const snapshot_id = playlist.snapshot_id;
 		return (
 			<div>
 				<label className={styles.queueGreyHeading}>Coming Up:</label>
-				{songs?.length > 0 && <List className={list_styles.listContainer}>
-					{songs.map((result) => (
-						<ListItem key={result.track.id}
-							secondaryAction={
-								<Button
-									edge="end"
-									aria-label="more options"
-									onClick={(event) => handleOpenMenu(event, result)}
-								>
-									<MoreHorizIcon />
-								</Button>
-							}
-						>
-							<StyledMenu
-								anchorEl={anchorEl}
-								open={Boolean(anchorEl)}
-								onClose={handleCloseMenu}
-							>
-								<MenuItem onClick={() => handlePlay(selectedIndex)}>Play</MenuItem>
-								<MenuItem onClick={() => handleRemove(selectedIndex, snapshot_id)}>Remove from queue</MenuItem>
-							</StyledMenu>
-							<ListItemAvatar>
-								<Avatar>
-									<img className={list_styles.image} src={result.track.album.images[0].url} />
-								</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary={displayText(result.track)} />
-						</ListItem>
-					))}
-				</List>}
+				
 			</div>
 		);
 	}
