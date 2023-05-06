@@ -27,12 +27,8 @@ function StudioPage({ socket }) {
 	}, []);
 
 	if (studioError) {
-		localStorage.removeItem("access_token");
-		localStorage.removeItem("refresh_token");
-		localStorage.removeItem("expires_in");
-		localStorage.removeItem("current_user_id");
-		navigate("/login");
-		return <p>Could not load studio</p>;
+		navigate("/404")
+		return;
 	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
