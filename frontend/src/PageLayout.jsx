@@ -171,9 +171,11 @@ export function DropdownMenu() {
 		<>
 			<ViewProfileDialog
 				isViewProfileOpen={isViewProfileOpen}
+				handleViewProfileSave={() => {
+					window.location.reload();
+				}}
 				handleViewProfileClose={() => {
 					setIsViewProfileOpen(false);
-					window.location.reload(); //kinda janky code but i couldn't get it working any other way
 				}}
 			/>
 			<ConfirmationDialog
