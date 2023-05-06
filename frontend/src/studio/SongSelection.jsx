@@ -39,6 +39,7 @@ export default function SongSelection({ studio }) {
 				playlistSongs={playlistSongs}
 				setPlaylistSongs={setPlaylistSongs}
 				reloadPlaylist={reloadPlaylist}
+				setReloadPlaylist={setReloadPlaylist}
 			/>
 		</div>
 	);
@@ -64,7 +65,13 @@ function displayText(result) {
 }
 
 function Queue(props) {
-	const { studio, setPlaylistSongs, playlistSongs, reloadPlaylist } = props;
+	const {
+		studio,
+		setPlaylistSongs,
+		playlistSongs,
+		reloadPlaylist,
+		setReloadPlaylist,
+	} = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -100,14 +107,9 @@ function Queue(props) {
 	useEffect(() => {
 		axios
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-			.then((response) => console.log(response));
+			.then((response) => setPlaylistSongs(response.data.tracks.items));
+		setReloadPlaylist(false);
 	}, [reloadPlaylist]);
-
-	// useEffect(() => {
-	// 	if (playlist && !songsIsLoading) {
-	// 		setPlaylistSongs(playlist.tracks.items);
-	// 	}
-	// }, [playlist, songsIsLoading]);
 
 	if (songsError) {
 		return <p>Could not load songs</p>;
