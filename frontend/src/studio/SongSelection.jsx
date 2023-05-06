@@ -48,7 +48,7 @@ export default function SongSelection({ studio }) {
 								style={{ color: "#757575" }} />
 						}>
 						<img className={styles.resultImg} src={result.image} />
-						{displayIcon(result)}
+						{/* {displayIcon(result)} */}
 						<ListItemText className={styles.resultTitle} primary={displayText(result)} />
 					</ListItem>
 				))}
@@ -70,11 +70,21 @@ function displayIcon(result) {
 
 function displayText(result) {
 	if (result.type === "audiobook") {
-		return `${result.name} - ${result.authors}`;
+		return (
+			<>
+				<p className={styles.resultTitleDetail}><b>{result.name}</b></p>
+				<p className={styles.resultTitleDetail}>{result.authors}</p>
+			</>
+		)
 	} else if (result.type === "track") {
-		return `${result.name} - ${result.artists}`;
+		return (
+			<>
+				<p className={styles.resultTitleDetail}><b>{result.name}</b></p>
+				<p className={styles.resultTitleDetail}>{result.artists}</p>
+			</>
+		)
 	} else {
-		return `${result.name}`;
+		return <p className={styles.resultTitleDetail}><b>{result.name}</b></p>;
 	}
 }
 
