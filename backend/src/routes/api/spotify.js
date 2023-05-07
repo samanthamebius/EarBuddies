@@ -111,7 +111,7 @@ router.put("/play", async (req, res) => {
 	try {
 		const { uri, deviceId } = req.body;
 		// console.log(uri);
-		// console.log(deviceId);
+		console.log(deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: "No Spotify API connection" });

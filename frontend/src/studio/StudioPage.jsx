@@ -38,7 +38,7 @@ function StudioPage({ socket }) {
 		return (
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
-				<NowPlaying studio={studio[0]} />
+				<NowPlaying studio={studio[0]} socket={socket} />
 				<SongSelection studio={studio[0]} socket={socket} />
 				<Chat socket={socket} />
 			</div>

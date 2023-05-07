@@ -77,6 +77,7 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_reload_chat_messages", data);
 	});
 
+	// TODO: rename these
 	// add a song to the queue
 	socket.on("send_new_song", (data) => {
 		const { room } = data;
@@ -88,6 +89,18 @@ io.on("connection", (socket) => {
 	socket.on("remove_from_studio_queue", (data) => {
 		const { room } = data;
 		io.in(room).emit("receive_remove_from_studio_queue", data);
+	});
+
+	// play a song from the playlist in studio
+	socket.on("send_play_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_play_song", data);
+	});
+
+	// pause a song from the playlist in studio
+	socket.on("send_pause_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_pause_song", data);
 	});
 
 	// remove the user so they don't receive messages while they are gone
