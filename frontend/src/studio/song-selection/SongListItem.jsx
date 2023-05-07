@@ -5,6 +5,7 @@ import axios from "axios";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
 import { Box, Icon, ListItem, ListItemText, Tooltip } from "@mui/material";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
@@ -16,7 +17,11 @@ export function SongListItem(props) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [listItem, setListItem] = useState({});
+	console.log(result.type);
+	console.log(result.type === "episode");
 
+
+	console.log(result.type);
 	const handleItemMouseEnter = () => {
 		setHover(true);
 	};
@@ -143,9 +148,16 @@ export function SongListItem(props) {
 					primary={<b>{listItem.name}</b>}
 					secondary={
 						<>
-							<p className={styles.resultTitleDetail}>
-								{listItem.artists}
-							</p>
+							{(result.type === "episode") ?
+								<PodcastsRoundedIcon
+									fontSize={"small"}
+									style={{ color: "#c4c4c4" }}
+								/>
+								:
+								<p className={styles.resultTitleDetail}>
+									{listItem.artists}
+								</p>
+							}
 						</>
 					}
 					primaryTypographyProps={{
