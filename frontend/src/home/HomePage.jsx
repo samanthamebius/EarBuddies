@@ -65,9 +65,7 @@ function HomePage(props) {
 				</div>
 				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					{mockStudios
-						.filter((studio) => studio.studioIsActive === false)
-						.map((studio) => (
+					{mockStudios.map((studio) => (
 							<StudioCard key={studio.id} socket={socket} studio={studio} />
 						))}
 				</div>
