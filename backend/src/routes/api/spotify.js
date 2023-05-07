@@ -24,14 +24,14 @@ router.get("/search/:query", async (req, res) => {
 
 router.put("/queue", async (req, res) => {
 	try {
-		const { playlist_id, track_id } = req.body;
+		const { playlist_id, track_id, type } = req.body;
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: "No Spotify API connection" });
 		}
 		// Add tracks to a playlist
 		thisSpotifyApi
-			.addTracksToPlaylist(playlist_id, ["spotify:track:" + track_id])
+			.addTracksToPlaylist(playlist_id, ["spotify:" + type + ":" + track_id])
 			.then(
 				function (data) {
 					console.log("Added tracks to playlist!");
@@ -77,7 +77,7 @@ router.get("/queue/:playlist_id", async (req, res) => {
 router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 	try {
 		const { playlist_id, track_id } = req.params;
-		const { snapshot_id } = req.body;
+		const { snapshot_id, type } = req.body;
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: "No Spotify API connection" });
@@ -86,7 +86,7 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 		thisSpotifyApi
 			.removeTracksFromPlaylist(
 				playlist_id,
-				[{ uri: "spotify:track:" + track_id }],
+				[{ uri: "spotify:" + type + ":" + track_id }],
 				{ snapshot_id: snapshot_id }
 			)
 			.then(

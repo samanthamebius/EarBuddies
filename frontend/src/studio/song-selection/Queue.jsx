@@ -48,6 +48,7 @@ function Queue(props) {
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
 			.then((response) => {
 				response.data?.tracks.items.map((item) => {
+					console.log(item);
 					setPlaylistSongs((playlistSongs) => [
 						...playlistSongs,
 						{
@@ -55,6 +56,7 @@ function Queue(props) {
 							name: item.track.name,
 							artists: item.track.artists,
 							image: item.track.album.images[0].url,
+							type: item.track.type,
 						},
 					]);
 				});
