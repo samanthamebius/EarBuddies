@@ -80,7 +80,8 @@ io.on("connection", (socket) => {
 	// reload the playlist if a song is added
 	socket.on("reload_studio_queue", (data) => {
 		const { room } = data;
-		io.in(room).emit("receive_reload_studio_queue");
+		console.log(data);
+		io.in(room).emit("receive_reload_studio_queue", data);
 	});
 
 	// remove the user so they don't receive messages while they are gone

@@ -27,10 +27,9 @@ function Queue(props) {
 
 	// reload the studio queue when a new song is added
 	useEffect(() => {
-		socket.on("receive_reload_studio_queue", () => {
-			axios
-				.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-				.then((response) => setPlaylistSongs(response.data.tracks.items));
+		socket.on("receive_reload_studio_queue", (data) => {
+			console.log(data.newSong);
+			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
 		});
 	}, [socket]);
 
@@ -38,8 +37,22 @@ function Queue(props) {
 	useEffect(() => {
 		axios
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-			.then((response) => setPlaylistSongs(response.data.tracks.items));
+			.then((response) => {
+				response.data?.tracks.items.map((item) => {
+					setPlaylistSongs((playlistSongs) => [
+						...playlistSongs,
+						{
+							id: item.track.id,
+							name: item.track.name,
+							artists: item.track.artists,
+							image: item.track.album.images[0].url,
+						},
+					]);
+				});
+			});
 	}, []);
+
+	console.log(playlistSongs);
 
 	if (songsError) {
 		return <p>Could not load songs</p>;
@@ -57,7 +70,7 @@ function Queue(props) {
 					<List className={list_styles.listContainer}>
 						{playlistSongs.map((result) => (
 							<SongListItem
-								key={result.track.id}
+								key={result.id}
 								result={result}
 								socket={socket}
 								studio={studio}

@@ -52,38 +52,33 @@ export function SongListItem(props) {
 			playlist_id: studio.studioPlaylist,
 			track_id: result.id,
 		});
+
 		// reload the studio queue
-		socket.emit("reload_studio_queue", { room: studio._id });
+		socket.emit("reload_studio_queue", {
+			room: studio._id,
+			newSong: listItem,
+		});
 	};
 
-	const handleRemoveFromQueue = async () => {
-		const playlist_id = studio.studioPlaylist;
-		const track_id = result.track.id;
-		await axios.delete(
-			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
-		),
-			{ snapshot_id: snapshotId };
+	// const handleRemoveFromQueue = async () => {
+	// 	const playlist_id = studio.studioPlaylist;
+	// 	const track_id = result.id;
+	// 	await axios.delete(
+	// 		`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
+	// 	),
+	// 		{ snapshot_id: snapshotId };
 
-		// reload the playlist after deleting
-		socket.emit("reload_studio_queue", { room: studio._id });
-	};
+	// 	// reload the playlist after deleting
+	// 	socket.emit("reload_studio_queue", { room: studio._id, listItem });
+	// };
 
 	useEffect(() => {
-		if (type === "queue") {
-			setListItem({
-				id: result.track.id,
-				name: result.track.name,
-				artists: result.track.artists,
-				image: result.track.album.images[0].url,
-			});
-		} else {
-			setListItem({
-				id: result.id,
-				name: result.name,
-				artists: result.artists,
-				image: result.image,
-			});
-		}
+		setListItem({
+			id: result.id,
+			name: result.name,
+			artists: result.artists,
+			image: result.image,
+		});
 	}, []);
 
 	return (
