@@ -12,10 +12,9 @@ import { styled } from "@mui/material/styles";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function SongListItem(props) {
-	const { result, studio, socket, type, snapshotId = null } = props;
+	const { song, studio, socket, type, snapshotId = null } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
-	const [listItem, setListItem] = useState({});
 
 	const handleItemMouseEnter = () => {
 		setHover(true);
@@ -50,20 +49,20 @@ export function SongListItem(props) {
 	const handleAddToQueue = async () => {
 		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
-			track_id: result.id,
+			track_id: song.id,
 		});
 
 		// reload the studio queue
 		socket.emit("send_new_song", {
 			room: studio._id,
-			newSong: listItem,
+			newSong: song,
 		});
 	};
 
 	// remove the song from the playlist
 	const handleRemoveFromQueue = async () => {
 		const playlist_id = studio.studioPlaylist;
-		const track_id = result.id;
+		const track_id = song.id;
 		await axios.delete(
 			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
 		),
@@ -75,16 +74,6 @@ export function SongListItem(props) {
 			songId: track_id,
 		});
 	};
-
-	// TODO: Delete this
-	useEffect(() => {
-		setListItem({
-			id: result.id,
-			name: result.name,
-			artists: result.artists,
-			image: result.image,
-		});
-	}, []);
 
 	return (
 		<>
@@ -118,7 +107,7 @@ export function SongListItem(props) {
 				}
 			>
 				<Box className={styles.resultImgBox} position="relative">
-					<img className={styles.resultImg} src={listItem.image} />
+					<img className={styles.resultImg} src={song.image} />
 					{isHover ? <Box className={styles.resultImgDark} /> : null}
 					{isHover ? (
 						<Icon
@@ -139,10 +128,10 @@ export function SongListItem(props) {
 				</Box>
 				<ListItemText
 					className={styles.resultTitle}
-					primary={<b>{listItem.name}</b>}
+					primary={<b>{song.name}</b>}
 					secondary={
 						<>
-							{listItem.artists?.map((artist, index) => (
+							{song.artists?.map((artist, index) => (
 								<p key={index} className={styles.resultTitleDetail}>
 									{artist.name}
 								</p>

@@ -78,7 +78,7 @@ function Queue(props) {
 						{playlistSongs.map((result) => (
 							<SongListItem
 								key={result.id}
-								result={result}
+								song={result}
 								socket={socket}
 								studio={studio}
 								type="queue"
