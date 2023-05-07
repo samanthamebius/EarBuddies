@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { getStudiosId } from "../../dao/user_dao.js";
+import { getStudio } from "../../dao/studio_dao.js";
 
 const router = express.Router();
 
@@ -9,17 +10,18 @@ const upload = multer({
 });
 
 router.get("/:id/studios", async (req, res) => {
-    console.log("in home.js");
     try{ 
         const {id} = req.params;
-        console.log("id " + id);
-        const studios = await getStudiosId(id);
-        console.log("studios " + studios);
-        return res.status(200);
+        const studioIds = await getStudiosId(id);
+        const studios = [];
+        for (let i = 0; i < studioIds.length; i++) {
+            const studio = await getStudio(studioIds[i]);
+            studios.push(studio);
+        }
+        return res.status(200).json(studios);
     } catch (err) {
         res.status(500).json(err);
     }
-    
 });
 
 export default router;
