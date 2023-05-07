@@ -20,12 +20,9 @@ const isListening = true;
 
 export default function StudioCard(props) {
 	const { socket, studio } = props;
-	// studio will be gotten from backend when set up
-	const room = studio.id; // will be the id of the studio
 	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
-		console.log("Joining studio " + studio._id);
 		navigate(`studio/${studio._id}`);
 	};
 
