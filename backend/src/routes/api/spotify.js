@@ -1,7 +1,5 @@
 import express from "express";
-import { getSpotifyApi } from "../../dao/spotify_dao";
-import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId } from "../../dao/spotify_dao";
-import { set } from "mongoose";
+import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId, getSpotifyApi, getPlaybackState } from "../../dao/spotify_dao";
 
 const router = express.Router();
 

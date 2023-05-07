@@ -78,4 +78,20 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId };
+async function getPlaybackState(thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getMyCurrentPlaybackState({ additional_types: 'episode' })
+      .then(function (data) {
+        if (data.body) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId, getPlaybackState };
