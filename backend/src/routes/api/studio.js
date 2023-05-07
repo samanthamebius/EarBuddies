@@ -35,6 +35,8 @@ router.post("/new", async (req, res) => {
         .status(400)
         .json({ msg: "Please provide all required fields" });
     }
+	console.log("TODO: Remove THESE ARE LISTENERS")
+	console.log(listeners);
 
     // Create studio playlist on Spotify
     const playlist_name = "Earbuddies - " + name;
@@ -248,7 +250,7 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
   }
 });
 
-// assign new host
+//assign new host
 router.put("/:studio_id/newHost/:host_name", async (req, res) => {
 	console.log("new host");
   	try {
