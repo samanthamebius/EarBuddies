@@ -199,11 +199,12 @@ function ControlPanel({ deviceId, studio }) {
         }
     }
 
-    function spotifyNext(deviceId) {
+    function spotifyNext(deviceId, studio) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/next`, {
                     deviceId: deviceId,
+                    studio: studio,
                 })
                 .then((response) => {
                     console.log(response);
@@ -279,7 +280,7 @@ function ControlPanel({ deviceId, studio }) {
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
-                    onClick={() => spotifyNext(deviceId)}
+                    onClick={() => spotifyNext(deviceId, studio)}
                 />
             </div>
             <TimeSlider />

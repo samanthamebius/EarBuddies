@@ -47,17 +47,28 @@ async function searchSpotify(query, thisSpotifyApi) {
   });
 }
 
-async function playSpotify(uri, thisSpotifyApi) {
+async function getCurrentTrackId(thisSpotifyApi) {
   return new Promise((resolve, reject) => {
-    thisSpotifyApi.play({ uris: [uri] })
+    thisSpotifyApi.getMyCurrentPlayingTrack({ additional_types: 'episode' })
       .then(function (data) {
-        resolve(data);
-      })
-      .catch(function (err) {
-        console.log("Something went wrong!", err);
+        resolve(data.body.item.id);
+      }, function (err) {
+        console.log('Something went wrong!', err);
         reject(err);
       });
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi };
+async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getPlaylistTracks(playlist_id)
+      .then(function (data) {
+        resolve(data.body.items[data.body.items.length - 1].track.id);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId };
