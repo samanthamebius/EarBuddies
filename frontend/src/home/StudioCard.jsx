@@ -25,7 +25,8 @@ export default function StudioCard(props) {
 	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
-		navigate(`studio/${room}`);
+		console.log("Joining studio " + studio._id);
+		navigate(`studio/${studio._id}`);
 	};
 
 	return (

@@ -46,6 +46,7 @@ function HomePage(props) {
 		const fetchStudios = async () => {
 			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
 			setStudios(response.data);
+			console.log("name " + studios[0].studioName);
 		}
 		fetchStudios();
 	},[]);
