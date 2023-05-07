@@ -135,10 +135,12 @@ export function DropdownKebab({
 	const [isInManList, setInManList] = useState(false);
 	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
+	const [isInAssign, setIsInAssign] = useState(false);
 	const navigate = useNavigate();
 		
 	const handleClick = (event) => { 
 		setOpen(event.currentTarget); 
+	};
 
 	const enterLeave = () => {
 		setInLeave(true);
@@ -146,18 +148,17 @@ export function DropdownKebab({
 	const enterEdit = () => {
 		setInEdit(true);
 	};
-	const enterManList = () => { setInManList(true) };
-	const enterRemove = () => {
-		setInRemove(true);
-	};
-	const enterAssign = () => {
-		setInAssign(true);
+	const enterManList = () => { 
+		setInManList(true) 
 	};
 	const enterEnable = () => {
 		setInEnable(true);
 	};
 	const enterDelete = () => {
 		setInDelete(true);
+	};
+	const enterAssign = () => {
+		setInAssign(true);
 	};
 
 	const leaveLeave = () => {
@@ -166,11 +167,8 @@ export function DropdownKebab({
 	const leaveEdit = () => {
 		setInEdit(false);
 	};
-	const leaveRemove = () => {
-		setInRemove(false);
-	};
-	const leaveAssign = () => {
-		setInAssign(false);
+	const leaveManList = () => {
+		setInManList(false);
 	};
 	const leaveEnable = () => {
 		setInEnable(false);
@@ -178,14 +176,8 @@ export function DropdownKebab({
 	const leaveDelete = () => {
 		setInDelete(false);
 	};
-
-	const handleClick = (event) => {
-		setOpen(event.currentTarget);
-		setInLeave(false);
-		setInEdit(false);
-		setInManList(false);
-		setInEnable(false);
-		setInDelete(false);
+	const leaveAssign = () => {
+		setInAssign(false);
 	};
 
 	const handleClose = () => {
@@ -261,11 +253,11 @@ export function DropdownKebab({
 				studioId={id}
 				socket={socket}/>
 			<ManageListenersDialog
-					isManListDialogOpened={isManListOpen}
-					handleCloseManListDialog={() => setIsManListOpen(false)} />
-			<div onClick={handleClick} className={styles.dropdownButton}>
+				isManListDialogOpened={isManListOpen}
+				handleCloseManListDialog={() => setIsManListOpen(false)} />
+				<div onClick={handleClick} className={styles.dropdownButton}>
 				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
-			</div>
+				</div>
 			<Menu
 				autoFocus={false}
 				anchorEl={isOpen}
@@ -290,8 +282,10 @@ export function DropdownKebab({
 					className={styles.menu_item} 
 					onClick={handleManListOpen}
 					onMouseEnter={enterManList} 
-                    onMouseLeave={leaveManList}>
+                    onMouseLeave={leaveManList}
+					>
 					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
+				</MenuItem>
 
 				<MenuItem
 					className={styles.menu_item}
@@ -314,14 +308,6 @@ export function DropdownKebab({
                     onMouseLeave={leaveManList}>
 					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Manage Listeners</p>
-					onMouseEnter={enterRemove}
-					onMouseLeave={leaveRemove}
-				>
-					<PersonRemoveAlt1RoundedIcon
-						className={styles.icon}
-						style={{ color: isInRemove ? "#B03EEE" : "#757575" }}
-					/>
-					<p className={styles.menu_title}>Remove a Member</p>
 				</MenuItem>
 
 				<MenuItem
@@ -381,5 +367,6 @@ export function DropdownKebab({
 				</MenuItem>
 			</Menu>
 		</div>
-	);
-}
+	
+	)};
+
