@@ -6,10 +6,14 @@ import ClearRounded from "@mui/icons-material/ClearRounded";
 import styles from "./SearchBar.module.css";
 import axios from "axios";
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 function SearchBar({ label, searchType, studioId, setResults }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const username = localStorage.getItem("current_user_id");
 
   const theme = createTheme({
     palette: {
@@ -18,12 +22,6 @@ function SearchBar({ label, searchType, studioId, setResults }) {
       },
     },
   });
-
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const username = localStorage.getItem("current_user_id");
 
   const searchUsers = () => {
     try {
@@ -89,6 +87,27 @@ function SearchBar({ label, searchType, studioId, setResults }) {
     }
   };
 
+  const searchSongs = () => {
+    try {
+      axios
+        .get(
+          `${BASE_URL}/api/spotify/search/${searchTerm}`)
+        .then((response) => {
+          setResults(response.data);
+        })
+        .catch((error) => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          localStorage.removeItem("expires_in");
+          localStorage.removeItem("current_user_id");
+          navigate("/login");
+          return <p>Could not load search</p>;
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  }
+
   const handleCancel = () => {
     setSearchTerm("");
     try {
@@ -108,6 +127,8 @@ function SearchBar({ label, searchType, studioId, setResults }) {
         searchActiveStudios();
       } else if (searchType === "studioUsers") {
         searchStudioUsers();
+      } else if (searchType === "songs") {
+        searchSongs();
       }
     } else {
       handleCancel();

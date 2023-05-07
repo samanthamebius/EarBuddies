@@ -63,13 +63,8 @@ function useStudioPost() {
       });
       navigate(`/studio/${response.data._id}`);
     } catch (err) {
-      console.error(err);
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      localStorage.removeItem("expires_in");
-      localStorage.removeItem("current_user_id");
-      navigate("/login");
-      return <p>Could not load studio</p>;
+      const navigate = useNavigate();
+      navigate("/500");
     }
   };
 
@@ -279,7 +274,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             searchType={"users"}
             label={"Search using Spotify username ..."}
             studioId={""}
-            setResults={setListenerSearchResults} />
+            setResults={setListenerSearchResults}
+            studio={""} />
 
           {/* Map search results */}
           {displayedSearchResults.length > 0 ? <List className={styles.searchResults}>
