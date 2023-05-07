@@ -112,7 +112,6 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 });
 
 router.put("/play", async (req, res) => {
-    console.log("play")
     try {
         const { uri, deviceId } = req.body;
         // console.log(uri);
@@ -126,10 +125,9 @@ router.put("/play", async (req, res) => {
         //ooh or just called with no uri and it will resume
         thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
             .then(function () {
-                console.log('Playing track!');
                 thisSpotifyApi.setRepeat("context", { device_id: deviceId })
                     .then(function () {
-                        console.log('Set repeat to context!');
+
                     }, function (err) {
                         console.log('Something went wrong!', err);
                     }
@@ -151,7 +149,6 @@ router.put("/play", async (req, res) => {
 router.put("/pause", async (req, res) => {
     try {
         const { deviceId } = req.body;
-        console.log(deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
@@ -159,7 +156,6 @@ router.put("/pause", async (req, res) => {
         // Pause a track if not paused already
         thisSpotifyApi.pause({ device_id: deviceId })
             .then(function () {
-                console.log('Paused track!');
             }, function (err) {
                 console.log('Something went wrong!', err);
             });
@@ -176,7 +172,6 @@ router.put("/pause", async (req, res) => {
 router.put("/next", async (req, res) => {
     try {
         const { deviceId, studio } = req.body;
-        console.log("device id " + deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
@@ -185,12 +180,9 @@ router.put("/next", async (req, res) => {
         //other wise skip to next
         let currentId = await getCurrentTrackId(thisSpotifyApi);
         let lastId = await getLastPlaylistTrackId(thisSpotifyApi, studio.studioPlaylist);
-        console.log('current ' + currentId);
-        console.log('last ' + lastId);
         if (currentId === lastId) {
             thisSpotifyApi.play({ context_uri: 'spotify:playlist:' + studio.studioPlaylist, device_id: deviceId, offset: { position: 0 } })
                 .then(function () {
-                    console.log('Playing track!');
                 }, function (err) {
                     console.log('Something went wrong!', err);
                 });
@@ -217,7 +209,6 @@ router.put("/next", async (req, res) => {
 router.put("/previous", async (req, res) => {
     try {
         const { deviceId } = req.body;
-        console.log("device id " + deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
@@ -225,7 +216,6 @@ router.put("/previous", async (req, res) => {
         // Skip to previous track
         thisSpotifyApi.skipToPrevious({ device_id: deviceId })
             .then(function () {
-                console.log('Skipped to previous track!');
             }, function (err) {
                 console.log('Something went wrong!', err);
             });
