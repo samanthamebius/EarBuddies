@@ -92,27 +92,42 @@ async function getStudiosId(username) {
 }
 
 async function searchStudios(username, query) {
+	const regex = new RegExp(`^${query}`, 'i');
 	const studiosId = await getStudiosId(username);
-	const studios = await Studio.find({ _id: { $in: studiosId }, studioName: { $regex: query, $options: "i" } });
+	const studios = await Studio.find({
+		_id: { $in: studiosId },
+		studioName: regex
+	});
 	return studios;
 }
 
 async function searchActiveStudios(username, query) {
+	const regex = new RegExp(`^${query}`, 'i');
 	const studiosId = await getStudiosId(username);
-	const studios = await Studio.find({ _id: { $in: studiosId }, studioName: { $regex: query, $options: "i" }, studioIsActive: true });
+	const studios = await Studio.find({
+		_id: { $in: studiosId },
+		studioName: regex,
+		studioIsActive: true
+	});
 	return studios;
 }
 
 async function searchUsers(query, username) {
+	const regex = new RegExp(`^${query}`, 'i');
 	const users = await User.find({
-		userDisplayName: { $regex: query, $options: "i" },
+		userDisplayName: regex,
 		username: { $ne: username },
 	});
 	return users;
 }
 
 async function searchStudioUsers(studioId, query, username) {
-	const users = await User.find({ userStudios: { $in: studioId }, userDisplayName: { $regex: query, $options: "i" }, username: { $ne: username } });
+	const regex = new RegExp(`^${query}`, 'i');
+	const users = await User.find({
+		userStudios: { $in: studioId },
+		userDisplayName: regex,
+		username: { $ne: username }
+	});
 	return users;
 }
 
