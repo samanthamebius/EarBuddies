@@ -297,7 +297,7 @@ export function DropdownKebab({
 					onMouseEnter={enterManList} 
                     onMouseLeave={leaveManList}
 					>
-					<GroupsIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
+					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
 
