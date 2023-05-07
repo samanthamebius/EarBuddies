@@ -54,24 +54,29 @@ export function SongListItem(props) {
 		});
 
 		// reload the studio queue
-		socket.emit("reload_studio_queue", {
+		socket.emit("send_new_song", {
 			room: studio._id,
 			newSong: listItem,
 		});
 	};
 
-	// const handleRemoveFromQueue = async () => {
-	// 	const playlist_id = studio.studioPlaylist;
-	// 	const track_id = result.id;
-	// 	await axios.delete(
-	// 		`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
-	// 	),
-	// 		{ snapshot_id: snapshotId };
+	// remove the song from the playlist
+	const handleRemoveFromQueue = async () => {
+		const playlist_id = studio.studioPlaylist;
+		const track_id = result.id;
+		await axios.delete(
+			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
+		),
+			{ snapshot_id: snapshotId };
 
-	// 	// reload the playlist after deleting
-	// 	socket.emit("reload_studio_queue", { room: studio._id, listItem });
-	// };
+		// reload the playlist after deleting
+		socket.emit("remove_from_studio_queue", {
+			room: studio._id,
+			songId: track_id,
+		});
+	};
 
+	// TODO: Delete this
 	useEffect(() => {
 		setListItem({
 			id: result.id,

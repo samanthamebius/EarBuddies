@@ -25,13 +25,22 @@ function Queue(props) {
 		error: songsError,
 	} = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
 
-	// reload the studio queue when a new song is added
+	// continously set the new songs added to the queue
 	useEffect(() => {
-		socket.on("receive_reload_studio_queue", (data) => {
+		socket.on("receive_send_new_song", (data) => {
 			console.log(data.newSong);
 			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
 		});
 	}, [socket]);
+
+	// remove the song from the queue
+	useEffect(() => {
+		socket.on("receive_remove_from_studio_queue", (data) => {
+			setPlaylistSongs(
+				playlistSongs.filter((songs) => songs.id !== data.songId)
+			);
+		});
+	});
 
 	// set the initial playlist
 	useEffect(() => {
@@ -51,8 +60,6 @@ function Queue(props) {
 				});
 			});
 	}, []);
-
-	console.log(playlistSongs);
 
 	if (songsError) {
 		return <p>Could not load songs</p>;
