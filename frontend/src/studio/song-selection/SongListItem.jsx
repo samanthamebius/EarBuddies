@@ -148,6 +148,22 @@ export function SongListItem(props) {
 							</p>
 						</>
 					}
+					primaryTypographyProps={{
+						style: {
+							maxWidth: '95%',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
+						}
+					}}
+					secondaryTypographyProps={{
+						style: {
+							maxWidth: '95%',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
+						}
+					}}
 				/>
 			</ListItem>
 		</>
