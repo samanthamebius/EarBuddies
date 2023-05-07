@@ -87,21 +87,21 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
         }
         // Remove tracks from a playlist
         thisSpotifyApi
-          .removeTracksFromPlaylist(
-            playlist_id,
-            [{ uri: "spotify:" + type + ":" + track_id }],
-            { snapshot_id: snapshot_id }
-          )
-          .then(
-            function (data) {
-              return res
-                .status(200)
-                .json({ msg: "Removed track from playlist" });
-            },
-            function (err) {
-              console.log("Something went wrong!", err);
-            }
-          );
+            .removeTracksFromPlaylist(
+                playlist_id,
+                [{ uri: "spotify:" + type + ":" + track_id }],
+                { snapshot_id: snapshot_id }
+            )
+            .then(
+                function (data) {
+                    return res
+                        .status(200)
+                        .json({ msg: "Removed track from playlist" });
+                },
+                function (err) {
+                    console.log("Something went wrong!", err);
+                }
+            );
     }
     catch (err) {
         console.log(err);
@@ -153,6 +153,56 @@ router.put("/pause", async (req, res) => {
         thisSpotifyApi.pause({ device_id: deviceId })
             .then(function () {
                 console.log('Paused track!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
+});
+
+router.put("/next", async (req, res) => {
+    try {
+        const { deviceId } = req.body;
+        console.log(deviceId);
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Skip to next track
+        thisSpotifyApi.skipToNext({ device_id: deviceId })
+            .then(function () {
+                console.log('Skipped to next track!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
+});
+
+router.put("/previous", async (req, res) => {
+    try {
+        const { deviceId } = req.body;
+        console.log(deviceId);
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Skip to previous track
+        thisSpotifyApi.skipToPrevious({ device_id: deviceId })
+            .then(function () {
+                console.log('Skipped to previous track!');
             }, function (err) {
                 console.log('Something went wrong!', err);
             });

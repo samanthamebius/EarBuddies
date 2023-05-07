@@ -267,9 +267,7 @@ function ControlPanel({ deviceId, studio }) {
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
-                        onClick={() =>
-                            playButton(studio, deviceId)
-                        }
+                        onClick={() => playButton(studio, deviceId)}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
