@@ -96,7 +96,12 @@ function HomePage(props) {
 				</div>
 				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					
+					{studios
+                        .filter((studio) => studio.studioIsActive === true)
+                        .map((studio) => (
+                            <StudioCard key={studio.studioName} socket={socket} studio={studio} />
+                        ))}
+
 				</div>
 			</div>
 		</div>
