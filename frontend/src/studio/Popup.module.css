@@ -78,6 +78,7 @@
 }
 
 .listenerListItem img {
+  object-fit: cover;
   height: 35px;
   width: 35px;
   margin-right: 10px;

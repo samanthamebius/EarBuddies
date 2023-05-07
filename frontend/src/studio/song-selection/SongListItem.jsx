@@ -51,6 +51,7 @@ export function SongListItem(props) {
 		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
 			track_id: result.id,
+			type: result.type,
 		});
 		// reload the studio queue
 		socket.emit("reload_studio_queue", { room: studio._id });
@@ -59,10 +60,10 @@ export function SongListItem(props) {
 	const handleRemoveFromQueue = async () => {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = result.track.id;
+		const type = result.track.type;
 		await axios.delete(
-			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`
-		),
-			{ snapshot_id: snapshotId };
+			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`,
+			{ data: { snapshot_id: snapshotId, type: type } } );
 
 		// reload the playlist after deleting
 		socket.emit("reload_studio_queue", { room: studio._id });

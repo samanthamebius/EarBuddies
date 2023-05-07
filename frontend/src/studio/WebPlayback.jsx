@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+let navigate;
 
 const StyledSlider = styled(Slider)({
     color: "#ffffff",
@@ -56,13 +57,30 @@ function SongInfo() {
 
 
 
-export function VolumeSlider() {
+export function VolumeSlider({ player }) {
     const [value, setValue] = useState(30);
     const [isMute, setMute] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        if (player) {
+            player.setVolume(newValue / 100);
+        }
     };
+
+    const handleMute = () => {
+        setMute(true);
+        if (player) {
+            player.setVolume(0);
+        }
+    };
+
+    const handleUnmute = () => {
+        setMute(false);
+        if (player) {
+            player.setVolume(value / 100);
+        }
+    }
 
     return (
         <div className={styles.volume}>
@@ -73,14 +91,14 @@ export function VolumeSlider() {
                             sx={{ "&:hover": { cursor: "pointer" } }}
                             style={{ color: "white", fontSize: "25px" }}
                             className={styles.controlBtn}
-                            onClick={() => setMute(!isMute)}
+                            onClick={handleUnmute}
                         />
                     ) : (
                         <VolumeUpRoundedIcon
                             sx={{ "&:hover": { cursor: "pointer" } }}
                             style={{ color: "white", fontSize: "25px" }}
                             className={styles.controlBtn}
-                            onClick={() => setMute(!isMute)}
+                            onClick={handleMute}
                         />
                     )}
                     <StyledSlider
@@ -96,9 +114,9 @@ export function VolumeSlider() {
     );
 }
 
-export function TimeSlider() {
-    const duration = 200; //seconds
-    const [position, setPosition] = useState(32);
+export function TimeSlider({player}) {
+    const duration = 200; //seconds //TODO: get actual song duration
+    const [position, setPosition] = useState(0); //TODO: set actual song position
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -114,6 +132,13 @@ export function TimeSlider() {
         return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
     }
 
+    const handleChange = (event, newValue) => {
+        setPosition(newValue);
+        if (player) {
+            player.seek(newValue * 1000);
+        }
+    };
+
     return (
         <div className={styles.time}>
             <StyledSlider
@@ -124,7 +149,7 @@ export function TimeSlider() {
                 step={1}
                 max={duration}
                 color="secondary"
-                onChange={(_, value) => setPosition(value)}
+                onChange={handleChange}
             />
             <Box
                 sx={{
@@ -149,7 +174,7 @@ export function TimeSlider() {
     );
 }
 
-function ControlPanel({ deviceId, studio }) {
+function ControlPanel({ deviceId, studio, player }) {
     const [isPlaying, setPlaying] = useState(false);
     const navigate = useNavigate();
 
@@ -165,15 +190,11 @@ function ControlPanel({ deviceId, studio }) {
                     console.log(response);
                 })
                 .catch((error) => {
-                    localStorage.removeItem("access_token");
-                    localStorage.removeItem("refresh_token");
-                    localStorage.removeItem("expires_in");
-                    localStorage.removeItem("current_user_id");
-                    navigate("/login");
-                    return <p>Could not play track</p>;
+                    navigate("/400");
                 });
         } catch (error) {
             console.log(error);
+            navigate("/400");
         }
     }
 
@@ -187,12 +208,53 @@ function ControlPanel({ deviceId, studio }) {
                     console.log(response);
                 })
                 .catch((error) => {
+                    navigate("/400");
+                });
+        } catch (error) {
+            console.log(error);
+            navigate("/400");
+        }
+    }
+
+    function spotifyNext(deviceId, studio) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/next`, {
+                    deviceId: deviceId,
+                    studio: studio,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
                     localStorage.removeItem("access_token");
                     localStorage.removeItem("refresh_token");
                     localStorage.removeItem("expires_in");
                     localStorage.removeItem("current_user_id");
                     navigate("/login");
-                    return <p>Could not pause track</p>;
+                    return <p>Could not play next track</p>;
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function spotifyPrevious(deviceId) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/previous`, {
+                    deviceId: deviceId,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    localStorage.removeItem("expires_in");
+                    localStorage.removeItem("current_user_id");
+                    navigate("/login");
+                    return <p>Could not play previous track</p>;
                 });
         } catch (error) {
             console.log(error);
@@ -217,14 +279,13 @@ function ControlPanel({ deviceId, studio }) {
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyPrevious(deviceId)}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
-                        onClick={() =>
-                            playButton(studio, deviceId)
-                        }
+                        onClick={() => playButton(studio, deviceId)}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
@@ -236,10 +297,11 @@ function ControlPanel({ deviceId, studio }) {
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyNext(deviceId, studio)}
                 />
             </div>
-            <TimeSlider />
-            <VolumeSlider />
+            <TimeSlider player={player}/>
+            <VolumeSlider player={player}/>
         </div>
     );
 }
@@ -283,22 +345,21 @@ function WebPlayback(props) {
         }
         catch (error) {
             console.log(error);
-            if (error.response.status === 401) {
-                navigate("/400")
-            }
+            navigate("/400");
         }
 
 
     }, []);
 
     console.log(myDeviceId);
+    navigate = useNavigate();
 
     return (
         <>
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel deviceId={myDeviceId} studio={studio} />
+                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player}/>
                 </div>
             </div>
         </>
