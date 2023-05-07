@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
@@ -7,6 +7,7 @@ import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { AppContext } from "../AppContextProvider";
+import axios from "axios";
 
 const mockStudios = [
 	{
@@ -36,7 +37,18 @@ const mockStudios = [
 ];
 
 function HomePage(props) {
-	const { username } = useContext(AppContext);
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const current_user = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user);
+	const [studios, setStudios] = useState([]);
+
+	useEffect(() => {
+		const fetchStudios = async () => {
+			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
+			setStudios(response.data);
+		}
+		fetchStudios();
+	},[]);
 
 	const { socket } = props;
 	const [isOpen, setIsOpen] = useState(false);
@@ -68,9 +80,7 @@ function HomePage(props) {
 				</div>
 				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					{mockStudios.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
-						))}
+					<StudioCard key={mockStudios[0].id} socket={socket} studio={mockStudios[0]} />
 				</div>
 			</div>
 			<div className={styles.containerChild}>
