@@ -63,7 +63,7 @@ export function SongListItem(props) {
 		const type = result.track.type;
 		await axios.delete(
 			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`,
-			{ data: { snapshot_id: snapshotId, type: type } } );
+			{ data: { snapshot_id: snapshotId, type: type } });
 
 		// reload the playlist after deleting
 		socket.emit("reload_studio_queue", { room: studio._id });
@@ -143,11 +143,9 @@ export function SongListItem(props) {
 					primary={<b>{listItem.name}</b>}
 					secondary={
 						<>
-							{listItem.artists?.map((artist, index) => (
-								<p key={index} className={styles.resultTitleDetail}>
-									{artist.name}
-								</p>
-							))}
+							<p className={styles.resultTitleDetail}>
+								{listItem.artists}
+							</p>
 						</>
 					}
 				/>
