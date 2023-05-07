@@ -10,7 +10,6 @@ import axios from "axios";
 
 function HomePage(props) {
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-	const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 	const current_user = localStorage.getItem("current_user_id");
 	const id = JSON.parse(current_user);
 	const [studios, setStudios] = useState([]);
