@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+let navigate;
 
 const StyledSlider = styled(Slider)({
     color: "#ffffff",
@@ -56,13 +57,30 @@ function SongInfo() {
 
 
 
-export function VolumeSlider() {
+export function VolumeSlider({ player }) {
     const [value, setValue] = useState(30);
     const [isMute, setMute] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        if (player) {
+            player.setVolume(newValue / 100);
+        }
     };
+
+    const handleMute = () => {
+        setMute(true);
+        if (player) {
+            player.setVolume(0);
+        }
+    };
+
+    const handleUnmute = () => {
+        setMute(false);
+        if (player) {
+            player.setVolume(value / 100);
+        }
+    }
 
     return (
         <div className={styles.volume}>
@@ -73,14 +91,14 @@ export function VolumeSlider() {
                             sx={{ "&:hover": { cursor: "pointer" } }}
                             style={{ color: "white", fontSize: "25px" }}
                             className={styles.controlBtn}
-                            onClick={() => setMute(!isMute)}
+                            onClick={handleUnmute}
                         />
                     ) : (
                         <VolumeUpRoundedIcon
                             sx={{ "&:hover": { cursor: "pointer" } }}
                             style={{ color: "white", fontSize: "25px" }}
                             className={styles.controlBtn}
-                            onClick={() => setMute(!isMute)}
+                            onClick={handleMute}
                         />
                     )}
                     <StyledSlider
@@ -149,7 +167,7 @@ export function TimeSlider() {
     );
 }
 
-function ControlPanel({ deviceId, studio }) {
+function ControlPanel({ deviceId, studio, player }) {
     const [isPlaying, setPlaying] = useState(false);
     const navigate = useNavigate();
 
@@ -165,15 +183,11 @@ function ControlPanel({ deviceId, studio }) {
                     console.log(response);
                 })
                 .catch((error) => {
-                    localStorage.removeItem("access_token");
-                    localStorage.removeItem("refresh_token");
-                    localStorage.removeItem("expires_in");
-                    localStorage.removeItem("current_user_id");
-                    navigate("/login");
-                    return <p>Could not play track</p>;
+                    navigate("/400");
                 });
         } catch (error) {
             console.log(error);
+            navigate("/400");
         }
     }
 
@@ -187,15 +201,11 @@ function ControlPanel({ deviceId, studio }) {
                     console.log(response);
                 })
                 .catch((error) => {
-                    localStorage.removeItem("access_token");
-                    localStorage.removeItem("refresh_token");
-                    localStorage.removeItem("expires_in");
-                    localStorage.removeItem("current_user_id");
-                    navigate("/login");
-                    return <p>Could not pause track</p>;
+                    navigate("/400");
                 });
         } catch (error) {
             console.log(error);
+            navigate("/400");
         }
     }
 
@@ -239,7 +249,7 @@ function ControlPanel({ deviceId, studio }) {
                 />
             </div>
             <TimeSlider />
-            <VolumeSlider />
+            <VolumeSlider player={player}/>
         </div>
     );
 }
@@ -292,13 +302,14 @@ function WebPlayback(props) {
     }, []);
 
     console.log(myDeviceId);
+    navigate = useNavigate();
 
     return (
         <>
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel deviceId={myDeviceId} studio={studio} />
+                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player}/>
                 </div>
             </div>
         </>
