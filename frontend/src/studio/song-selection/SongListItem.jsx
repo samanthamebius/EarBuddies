@@ -150,7 +150,7 @@ export function SongListItem(props) {
 					}
 					primaryTypographyProps={{
 						style: {
-							maxWidth: '500px',
+							maxWidth: '320px',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							textOverflow: 'ellipsis'
@@ -158,7 +158,7 @@ export function SongListItem(props) {
 					}}
 					secondaryTypographyProps={{
 						style: {
-							maxWidth: '500px',
+							maxWidth: '320px',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							textOverflow: 'ellipsis'
