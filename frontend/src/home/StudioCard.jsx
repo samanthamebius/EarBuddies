@@ -41,7 +41,7 @@ export default function StudioCard(props) {
 			<div className={styles.darkLayer}>
 				<div className={styles.cardContent}>
 					<div className={styles.studioNameSection}>
-						<h1 className={styles.studioName}>{studioName}</h1>
+						<h1 className={styles.studioName}>{studio.studioName}</h1>
 						<img
 							className={styles.soundWaves}
 							src={SoundWaves}
@@ -49,7 +49,7 @@ export default function StudioCard(props) {
 						/>
 					</div>
 					<div className={styles.genreTags}>
-						{genres.map((genre, i) => (
+						{studio.studioGenres.map((genre, i) => (
 							<GenreTag key={i} genre={genre} />
 						))}
 					</div>

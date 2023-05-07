@@ -80,7 +80,10 @@ function HomePage(props) {
 				</div>
 				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					<StudioCard key={mockStudios[0].id} socket={socket} studio={mockStudios[0]} />
+					{studios
+						.map((studio) => (
+							<StudioCard key={studio.studioName} socket={socket} studio={studio} />
+					))}
 				</div>
 			</div>
 			<div className={styles.containerChild}>
