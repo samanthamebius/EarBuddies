@@ -58,9 +58,8 @@ export default function StudioCard(props) {
 						))}
 					</div>
 					<div className={styles.listeners}>
-						{/* TODO: This is currently broken since not synced with backend - fix following banner structure */}
 						<ListenerIcons
-							// studioUsers={users} --> ADD IN ONCE BACKEND SYNCED
+							studioUsers={studio.studioUsers}
 							isListening={isListening}
 							isHomeCard={true}
 						/>
