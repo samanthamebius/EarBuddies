@@ -114,9 +114,9 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider() {
-    const duration = 200; //seconds
-    const [position, setPosition] = useState(32);
+export function TimeSlider({player}) {
+    const duration = 200; //seconds //TODO: get actual song duration
+    const [position, setPosition] = useState(0); //TODO: set actual song position
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -132,6 +132,13 @@ export function TimeSlider() {
         return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
     }
 
+    const handleChange = (event, newValue) => {
+        setPosition(newValue);
+        if (player) {
+            player.seek(newValue * 1000);
+        }
+    };
+
     return (
         <div className={styles.time}>
             <StyledSlider
@@ -142,7 +149,7 @@ export function TimeSlider() {
                 step={1}
                 max={duration}
                 color="secondary"
-                onChange={(_, value) => setPosition(value)}
+                onChange={handleChange}
             />
             <Box
                 sx={{
@@ -248,7 +255,7 @@ function ControlPanel({ deviceId, studio, player }) {
                     style={{ color: "white", fontSize: "40px" }}
                 />
             </div>
-            <TimeSlider />
+            <TimeSlider player={player}/>
             <VolumeSlider player={player}/>
         </div>
     );
@@ -293,9 +300,7 @@ function WebPlayback(props) {
         }
         catch (error) {
             console.log(error);
-            if (error.response.status === 401) {
-                navigate("/400")
-            }
+            navigate("/400");
         }
 
 
