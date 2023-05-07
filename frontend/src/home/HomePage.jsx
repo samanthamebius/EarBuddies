@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
@@ -6,7 +6,6 @@ import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { AppContext } from "../AppContextProvider";
 import axios from "axios";
 
 const mockStudios = [
@@ -96,11 +95,7 @@ function HomePage(props) {
 				</div>
 				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} studioId={""} />
 				<div className={styles.cardContainer}>
-					{mockStudios
-						.filter((studio) => studio.studioIsActive === true)
-						.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
-						))}
+					
 				</div>
 			</div>
 		</div>

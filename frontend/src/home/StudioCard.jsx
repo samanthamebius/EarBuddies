@@ -11,6 +11,7 @@ import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 const backgroundImage = TaylorSwiftImg;
 
@@ -18,10 +19,22 @@ const backgroundImage = TaylorSwiftImg;
 export default function StudioCard(props) {
 	const { socket, studio } = props;
 	const navigate = useNavigate();
-	const hostImage = ProfilePicImg1;
-	const isListening = studio.isListening;
+	const [hostImage, setHostImage] = useState(ProfilePicImg1);
+	const isListening = studio.studioIsActive;
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const studio_id = studio._id;
+
+	useEffect(() => {
+		const fetchHostImg = async () => {
+			const hostPic = await axios.get(`${BASE_URL}/api/studio/${studio_id}/host`);
+			setHostImage(hostPic.data.profilePic);
+			
+		}
+		fetchHostImg();
+	},[]);
 
 	const handleJoinStudio = () => {
+		console.log("Joining studio " + studio.id);
 		navigate(`studio/${studio._id}`);
 	};
 

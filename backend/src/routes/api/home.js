@@ -17,6 +17,7 @@ router.get("/:id/studios", async (req, res) => {
         for (let i = 0; i < studioIds.length; i++) {
             const studio = await getStudio(studioIds[i]);
             studios.push(studio[0]);
+            console.log(studio[0]);
         }
         return res.status(200).json(studios);
     } catch (err) {
