@@ -8,33 +8,6 @@ import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import axios from "axios";
 
-const mockStudios = [
-	{
-		id: 1,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 2,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 3,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 4,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-];
-
 function HomePage(props) {
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
