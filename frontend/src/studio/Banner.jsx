@@ -71,6 +71,7 @@ export default function Banner({ id, studio, socket }) {
 			console.log(res);
 		});
 		navigate("/");
+		window.location.reload(false);
 	};
 
 	const users = studio.studioUsers;
