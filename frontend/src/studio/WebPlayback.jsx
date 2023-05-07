@@ -261,6 +261,7 @@ function ControlPanel({ deviceId, studio }) {
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyPrevious(deviceId)}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
@@ -280,6 +281,7 @@ function ControlPanel({ deviceId, studio }) {
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyNext(deviceId)}
                 />
             </div>
             <TimeSlider />
