@@ -255,9 +255,9 @@ export function DropdownKebab({
 			<ManageListenersDialog
 				isManListDialogOpened={isManListOpen}
 				handleCloseManListDialog={() => setIsManListOpen(false)} />
-				<div onClick={handleClick} className={styles.dropdownButton}>
-				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
-				</div>
+			<div onClick={handleClick} className={styles.dropdownButton}>
+			<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
+			</div>
 			<Menu
 				autoFocus={false}
 				anchorEl={isOpen}
@@ -278,15 +278,6 @@ export function DropdownKebab({
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
 
-				<MenuItem 
-					className={styles.menu_item} 
-					onClick={handleManListOpen}
-					onMouseEnter={enterManList} 
-                    onMouseLeave={leaveManList}
-					>
-					<DriveFileRenameOutlineRoundedIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
-				</MenuItem>
-
 				<MenuItem
 					className={styles.menu_item}
 					onClick={handleNicknameOpen}
@@ -298,6 +289,16 @@ export function DropdownKebab({
 						style={{ color: isInEdit ? "#B03EEE" : "#757575" }}
 					/>
 					<p className={styles.menu_title}>Edit Nickname</p>
+				</MenuItem>
+
+				<MenuItem 
+					className={styles.menu_item} 
+					onClick={handleManListOpen}
+					onMouseEnter={enterManList} 
+                    onMouseLeave={leaveManList}
+					>
+					<GroupsIcon className={styles.icon} style={{ color: isInEdit ? "#B03EEE" : "#757575" }} />
+					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
 
 				<MenuItem
