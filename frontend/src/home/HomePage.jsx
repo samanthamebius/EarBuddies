@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
@@ -6,7 +6,6 @@ import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { AppContext } from "../AppContextProvider";
 
 const mockStudios = [
 	{
@@ -38,7 +37,6 @@ const mockStudios = [
 function HomePage(props) {
 	const { socket } = props;
 	const [isOpen, setIsOpen] = useState(false);
-	const { username } = useContext(AppContext);
 
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
@@ -65,17 +63,12 @@ function HomePage(props) {
 						</Button>
 					</div>
 				</div>
-				<SearchBar label={"Search My Studios ..."} />
+				<SearchBar searchType={"studios"} label={"Search My Studios ..."} studioId={""} />
 				<div className={styles.cardContainer}>
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === false)
 						.map((studio) => (
-							<StudioCard
-								key={studio.id}
-								socket={socket}
-								studio={studio}
-								username={username}
-							/>
+							<StudioCard key={studio.id} socket={socket} studio={studio} />
 						))}
 				</div>
 			</div>
@@ -86,17 +79,12 @@ function HomePage(props) {
 						<img src={SoundWavesGradient} className={styles.soundWaves}></img>
 					</div>
 				</div>
-				<SearchBar label={"Search Studios Listening Now ..."} />
+				<SearchBar searchType={"activeStudios"} label={"Search Studios Listening Now ..."} studioId={""} />
 				<div className={styles.cardContainer}>
 					{mockStudios
 						.filter((studio) => studio.studioIsActive === true)
 						.map((studio) => (
-							<StudioCard
-								key={studio.id}
-								socket={socket}
-								studio={studio}
-								username={username}
-							/>
+							<StudioCard key={studio.id} socket={socket} studio={studio} />
 						))}
 				</div>
 			</div>

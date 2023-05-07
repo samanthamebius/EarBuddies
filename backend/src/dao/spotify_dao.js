@@ -13,44 +13,36 @@ function getSpotifyApi() {
 
 async function searchSpotify(query, thisSpotifyApi) {
   return new Promise((resolve, reject) => {
-    thisSpotifyApi.search(query, ['track', 'episode', 'audiobook'])
+    thisSpotifyApi.search(query, ['track', 'episode'])
       .then(function (data) {
         const results = [];
+        const regex = new RegExp(`^${query}`, 'i');
         for (var i = 0; i < data.body.tracks.items.length; i++) {
-          const track = {
-            name: data.body.tracks.items[i].name,
-            image: data.body.tracks.items[i].album.images[0].url,
-            artists: [],
-            id: data.body.tracks.items[i].id,
-            type: "track"
+          // check if the track name starts with the query term
+          if (regex.test(data.body.tracks.items[i].name)) {
+            const track = {
+              name: data.body.tracks.items[i].name,
+              image: data.body.tracks.items[i].album.images[0].url,
+              artists: [],
+              id: data.body.tracks.items[i].id,
+              type: "track"
+            }
+            for (var j = 0; j < data.body.tracks.items[i].artists.length; j++) {
+              track.artists.push(data.body.tracks.items[i].artists[j].name);
+            }
+            results.push(track);
           }
-          for (var j = 0; j < data.body.tracks.items[i].artists.length; j++) {
-            track.artists.push(data.body.tracks.items[i].artists[j].name);
-          }
-          results.push(track);
         }
         for (var i = 0; i < data.body.episodes.items.length; i++) {
-          const episode = {
-            name: data.body.episodes.items[i].name,
-            image: data.body.episodes.items[i].images[0].url,
-            id: data.body.episodes.items[i].id,
-            type: "episode"
-          }
-          results.push(episode);
-        }
-        for (var i = 0; i < data.body.audiobooks.items.length; i++) {
-          const audiobook = {
-            name: data.body.audiobooks.items[i].name,
-            image: data.body.audiobooks.items[i].images[0].url,
-            id: data.body.audiobooks.items[i].id,
-            authors: [],
-            type: "audiobook"
-          }
-          for (var j = 0; j < data.body.audiobooks.items[i].authors.length; j++) {
-            audiobook.authors.push(data.body.audiobooks.items[i].authors[j].name);
-          }
-          if (!data.body.audiobooks.items[i].explicit) {
-            results.push(audiobook);
+          // check if the episode name starts with the query term
+          if (regex.test(data.body.episodes.items[i].name)) {
+            var episode = {
+              name: data.body.episodes.items[i].name,
+              image: data.body.episodes.items[i].images[0].url,
+              id: data.body.episodes.items[i].id,
+              type: "episode"
+            };
+            results.push(episode);
           }
         }
         resolve(results);
@@ -62,4 +54,28 @@ async function searchSpotify(query, thisSpotifyApi) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi };
+async function getCurrentTrackId(thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getMyCurrentPlayingTrack({ additional_types: 'episode' })
+      .then(function (data) {
+        resolve(data.body.item.id);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getPlaylistTracks(playlist_id)
+      .then(function (data) {
+        resolve(data.body.items[data.body.items.length - 1].track.id);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId };

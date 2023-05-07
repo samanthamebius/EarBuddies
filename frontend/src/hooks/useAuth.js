@@ -29,6 +29,7 @@ export default function useAuth(accessToken, code, current_user) {
 					setaccess_token(access_token);
 					setrefresh_token(refresh_token);
 					setexpires_in(expires_in);
+					console.log("user_id: " + user_id)
 					setcurrent_user_id(user_id);
 					window.history.pushState({}, null, "/");
 				} catch (error) {

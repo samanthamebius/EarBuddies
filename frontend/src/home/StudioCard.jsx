@@ -10,24 +10,13 @@ import ProfilePicImg6 from "../assets/profilepic6.png";
 import GenreTag from "./GenreTag";
 import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AppContext } from "../AppContextProvider";
+import axios from "axios";
 
 const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
 const genres = ["Pop", "Country"];
 const hostImage = ProfilePicImg1;
 const isListening = true;
-
-const listenersImages = [
-	ProfilePicImg1,
-	ProfilePicImg2,
-	ProfilePicImg3,
-	ProfilePicImg4,
-	ProfilePicImg5,
-	ProfilePicImg6,
-];
-const listenersActive = [true, true, false, false, true, false];
 
 export default function StudioCard(props) {
 	const { socket, studio } = props;
@@ -36,8 +25,6 @@ export default function StudioCard(props) {
 	const navigate = useNavigate();
 
 	const handleJoinStudio = () => {
-		socket.connect("http://localhost:3000");
-		socket.emit("join_room", { room });
 		navigate(`studio/${room}`);
 	};
 
@@ -67,10 +54,10 @@ export default function StudioCard(props) {
 						))}
 					</div>
 					<div className={styles.listeners}>
+						{/* TODO: This is currently broken since not synced with backend - fix following banner structure */}
 						<ListenerIcons
+							// studioUsers={users} --> ADD IN ONCE BACKEND SYNCED
 							isListening={isListening}
-							profileImages={listenersImages}
-							profileStatus={listenersActive}
 							isHomeCard={true}
 						/>
 						<img className={styles.hostImage} src={hostImage} />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import styles from "./Chat.module.css";
 import { useEffect } from "react";
@@ -12,7 +12,9 @@ import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { AppContext } from "../../AppContextProvider";
+import axios from "axios";
 
+// DELETE this when the real data goes in
 const mockStudios = [
 	{
 		id: 1,
@@ -48,31 +50,73 @@ const StyledTextField = styled(TextField)({
 	width: "100%",
 });
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Chat(props) {
 	const { socket } = props;
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
-	const [replyToMessage, setReplyToMessage] = useState("");
+	const [replyMessage, setReplyMessage] = useState("");
+	const [nickname, setNickname] = useState("");
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
-	const { username, spotifyUsername } = useContext(AppContext);
+	const { username } = useContext(AppContext);
 	const { id } = useParams();
-	const room = mockStudios.find((studio) => studio.id == id); // this will eventually correspond with real backend data
+	const room = id;
+	const textInput = useRef(null);
+	const messagesRef = useRef(null);
+
+	// scroll to the bottom of the chat container when it's overflowed
+	useEffect(() => {
+		setTimeout(() => {
+			messagesRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}, 100);
+	}, [messages]);
+
+	// Set the nickname of the user
+	useEffect(() => {
+		if (username) {
+			axios
+				.get(`${BASE_URL}/api/studio/${id}/${username}/nickname`)
+				.then((response) => setNickname(response.data));
+		}
+	}, [username]);
+
+	// reload the chat messages if the nickname of a user changes
+	useEffect(() => {
+		socket.on("receive_reload_chat_messages", (data) => {
+			setMessages(data.updatedMessages.messages);
+			setNickname(data.nickname);
+		});
+	}, [socket]);
+
+	// Set previous messages
+	useEffect(() => {
+		axios.get(`${BASE_URL}/api/chat/all-messages/${id}`).then((response) => {
+			response.data.messages.length > 0 && setMessages(response.data.messages);
+			setPinnedMessages(response.data.pinnedMessages);
+		});
+	}, []);
 
 	// continously set the live messages received
 	useEffect(() => {
 		socket.on("receive_message", (data) => {
+			console.log(data);
 			setMessages((messages) => [
 				...messages,
 				{
-					message: data.message,
-					username: data.username,
-					messageReply: data?.replyToMessage,
-					spotifyUsername: data.spotifyUsername,
 					id: data.id,
+					username: data.username,
+					displayName: data.nickname,
+					message: data.message,
+					isReply: data.isReply,
+					replyMessage: data?.replyMessage,
 				},
 			]);
 		});
@@ -91,10 +135,10 @@ export default function Chat(props) {
 				setPinnedMessages((pinnedMessages) => [
 					...pinnedMessages,
 					{
+						id: newMessage.id,
 						message: newMessage.message,
 						username: newMessage.username,
-						spotifyUsername: newMessage.spotifyUsername,
-						id: newMessage.id,
+						displayName: newMessage.nickname,
 					},
 				]);
 			}
@@ -113,25 +157,37 @@ export default function Chat(props) {
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
-			socket.emit("leave_room", { username, room });
+			socket.emit("leave_room", { nickname, room });
 		};
 	}, []);
 
-	// TODO: Set previous messages that is run once
-
 	// send the message
-	const handleSendMessage = () => {
+	const handleSendMessage = async () => {
+		const isReply = replyMessage !== "";
+		const messageId = uuid();
 		if (message !== "") {
+			// send the message
 			socket.emit("send_message", {
-				username,
 				room,
+				id: messageId,
+				username,
+				nickname,
 				message,
-				replyToMessage,
-				spotifyUsername,
-				id: uuid(),
+				isReply,
+				replyMessage,
+			});
+
+			// save the image to DB
+			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
+				id: messageId,
+				username: username,
+				displayName: nickname,
+				message: message,
+				isReply: isReply,
+				replyMessage: replyMessage,
 			});
 			setMessage("");
-			setReplyToMessage("");
+			setReplyMessage("");
 		}
 	};
 
@@ -139,14 +195,16 @@ export default function Chat(props) {
 		<div className={styles.chat}>
 			<div className={styles.chatContent}>
 				<div className={styles.pinnedMessages}>
-					{displayedPinnedMessages.map((message, index) => (
-						<PinnedMessage
-							key={index}
-							pinnedMessage={message}
-							room={room}
-							socket={socket}
-						/>
-					))}
+					<div className={styles.pinnedMessagesContent}>
+						{displayedPinnedMessages.map((message, index) => (
+							<PinnedMessage
+								key={index}
+								pinnedMessage={message}
+								room={room}
+								socket={socket}
+							/>
+						))}
+					</div>
 					{pinnedMessages.length > 1 && (
 						<div
 							className={styles.expandPinnedMessages}
@@ -169,28 +227,34 @@ export default function Chat(props) {
 						<ChatMessage
 							key={index}
 							newMessage={message}
-							setReplyToMessage={setReplyToMessage}
-							messageReply={message.messageReply}
+							setReplyMessage={setReplyMessage}
+							replyMessage={message.replyMessage}
 							room={room}
 							socket={socket}
 							pinnedMessages={pinnedMessages}
+							inputRef={textInput}
 						/>
 					))}
+					<div ref={messagesRef}></div>
 				</div>
 			</div>
-			<div className={styles.chatInput}>
+			<div
+				className={styles.chatInput}
+				onClick={() => textInput.current.focus()}
+			>
 				<div className={styles.inputContent}>
-					{replyToMessage !== "" && (
-						<div className={styles.messageReply}>
-							<div>{replyToMessage}</div>
+					{replyMessage !== "" && (
+						<div className={styles.replyMessage}>
+							<p className={styles.replyMessageText}>{replyMessage}</p>
 							<CloseRoundedIcon
 								fontSize="small"
 								className={styles.dismissReply}
-								onClick={() => setReplyToMessage("")}
+								onClick={() => setReplyMessage("")}
 							/>
 						</div>
 					)}
 					<StyledTextField
+						inputRef={textInput}
 						variant="standard"
 						multiline
 						placeholder="Message ..."
@@ -209,11 +273,12 @@ export default function Chat(props) {
 					onClick={() => handleSendMessage()}
 					style={{
 						opacity: `${message !== "" ? "0.5" : "0.2"}`,
-						padding: `${replyToMessage !== "" ? "14px" : "12px"} 10px 0 0`,
+						padding: `${replyMessage !== "" ? "14px" : "12px"} 10px 0 0`,
 						margin: "0",
 						cursor: "pointer",
 						position: "sticky",
 						top: "0",
+						justifySelf: "end",
 					}}
 					fontSize="small"
 				/>

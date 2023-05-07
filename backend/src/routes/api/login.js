@@ -5,7 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 import mongoose from 'mongoose';
-import { loginUser } from '../../dao/user_dao';
+import { loginUser, setUserActive } from '../../dao/user_dao';
 import { setSpotifyApi } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -33,20 +33,19 @@ router.post("/", async (req, res) => {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const access_token = data.body.access_token;
     const refresh_token = data.body.refresh_token;
-    const expires_in = 5;
+    const expires_in = data.body.expires_in;
 
-    spotifyApi.setRefreshToken(refresh_token);
-    console.log("refresh token in login: " + refresh_token)
     spotifyApi.setAccessToken(access_token);
     spotifyApi.setRefreshToken(refresh_token);
     setSpotifyApi(spotifyApi);
-    const user_id = await loginUser(spotifyApi, data);
+    const username = await loginUser(spotifyApi, data);
+    await setUserActive(username);
 
     res.json({
       access_token: access_token,
       refresh_token: refresh_token,
       expires_in: expires_in,
-      user_id: user_id,
+      user_id: username,
     });
   } catch (err) {
     console.error(err);

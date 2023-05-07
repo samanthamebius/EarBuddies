@@ -4,6 +4,7 @@ import LogInPage from "./login/LogInPage";
 import HomePage from "./home/HomePage";
 import PageLayout from "./PageLayout";
 import StudioPage from "./studio/StudioPage";
+import PageNotFound from "./PageNotFound";
 import io from "socket.io-client";
 import { AppContextProvider } from "./AppContextProvider";
 
@@ -20,6 +21,11 @@ function App() {
 					<Route path="/" element={<PageLayout />}>
 						<Route index element={<HomePage socket={socket} />} />
 						<Route path="studio/:id" element={<StudioPage socket={socket} />} />
+						{/* Error handeling routes */}
+						<Route path="*" element={<PageNotFound errorType="404" />} />
+						<Route path="/404" element={<PageNotFound errorType="404" />} />
+						<Route path="/400" element={<PageNotFound errorType="400" />} />
+						<Route path="/500" element={<PageNotFound errorType="500" />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

@@ -43,39 +43,51 @@ io.on("connection", (socket) => {
 
 	// add a user to a studio chat
 	socket.on("join_room", (data) => {
-		const { room } = data;
-		socket.join(room); // let the user join the room
+		const { id } = data;
+		socket.join(id); // let the user join the room
 	});
 
 	// send message to users
 	socket.on("send_message", (data) => {
 		const { room } = data;
-		io.in(room.id).emit("receive_message", data);
+		io.in(room).emit("receive_message", data);
 	});
 
 	// send pinned messages to users
 	socket.on("send_pinned_message", (data) => {
 		const { room } = data;
-		io.in(room.id).emit("receive_pinned_message", data);
+		io.in(room).emit("receive_pinned_message", data);
 	});
 
 	// send removed pinned messages to users
 	socket.on("remove_pinned_message", (data) => {
 		const { room } = data;
-		io.in(room.id).emit("receive_remove_pinned_message", data);
+		io.in(room).emit("receive_remove_pinned_message", data);
 	});
 
 	// send the message reaction to users
 	socket.on("send_message_reaction", (data) => {
 		const { room } = data;
-		io.in(room.id).emit("receive_message_reaction", data);
+		io.in(room).emit("receive_message_reaction", data);
+	});
+
+	// reload the chat messages if the nickname of users in the studio changes
+	socket.on("reload_chat_messages", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_reload_chat_messages", data);
+	});
+
+	// reload the playlist if a song is added
+	socket.on("reload_studio_queue", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_reload_studio_queue");
 	});
 
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
-		const { username, room } = data;
-		socket.leave(room.id);
-		console.log(`${username} has left the chat`);
+		const { nickname: displayName, room } = data;
+		socket.leave(room);
+		console.log(`${displayName} has left the chat`);
 	});
 
 	socket.on("disconnect", () => {

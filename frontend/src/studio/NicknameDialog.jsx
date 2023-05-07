@@ -1,53 +1,134 @@
-import React, {useState} from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import styles from './Popup.module.css';
-import TextField from '@mui/material/TextField';
-import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
+import React, { useContext, useEffect, useState } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import styles from "./Popup.module.css";
+import TextField from "@mui/material/TextField";
+import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRenameOutlineRounded";
+import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 
-export default function NicknameDialog({ isNicknameDialogOpened, handleCloseNicknameDialog }) {
-    const handleClose = () => { handleCloseNicknameDialog(false) };
-    const [nicknameInput, setNicknameInput] = useState('');  
-    const [isNicknameErrorMessage, setIsNicknameErrorMessage] = useState(false); 
+export default function NicknameDialog(props) {
+	const {
+		isNicknameDialogOpened,
+		handleCloseNicknameDialog,
+		studioId,
+		socket,
+	} = props;
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const { username } = useContext(AppContext);
 
-    const handleSubmit = () => {
-        if(nicknameInput == '') {
-            setIsNicknameErrorMessage(true);
-          } else {
-            setIsNicknameErrorMessage(false);
-            handleClose()
-          }
-    };
+	const handleClose = () => {
+		handleCloseNicknameDialog(false);
+	};
+	const [nicknameInput, setNicknameInput] = useState("");
+	const [isNicknameErrorMessage, setIsNicknameErrorMessage] = useState(false);
 
-    return (
-        <Dialog  open={isNicknameDialogOpened} onClose={handleCloseNicknameDialog} fullWidth maxWidth="sm"
-        PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
-        <div className={styles.dialogHeader}>
-            <DriveFileRenameOutlineRoundedIcon style={{ color:  "#757575", fontSize:40}} />
-            <h1 className={styles.heading}>Edit Nickname</h1>
-        </div>
-        
-        <DialogContent className={styles.dialogContent}>
-            <div>
-                <TextField 
-                    value={nicknameInput}
-                    error={isNicknameErrorMessage ? true : false}
-                    required
-                    id="nickname"
-                    label="Enter your new nickname in this studio"
-                    type="text"
-                    fullWidth
-                    onChange={event => setNicknameInput(event.target.value)}
-                    helperText={isNicknameErrorMessage ? "Enter a new nickname or cancel" : ""}/>
-            </div>
-            <DialogActions sx={{ display: 'flex', justifyContent: 'center', mt: 1.5 }}>
-                <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
-                <Button sx={{ fontWeight: 600 }} variant="contained" className={styles.createButton} onClick={handleSubmit}>Submit</Button>
-            </DialogActions>
-        </DialogContent>
-    </Dialog>
-    )
+	const handleSubmit = async () => {
+		if (nicknameInput == "") {
+			setIsNicknameErrorMessage(true);
+		} else {
+			setIsNicknameErrorMessage(false);
+			const nickname = nicknameInput;
+			await axios
+				.put(`${BASE_URL}/api/studio/${studioId}/${username}/nickname`, {
+					nickname: nickname,
+				})
+				.then((response) => handleSetChatMessages(response.data));
 
+			handleClose();
+		}
+	};
+
+	const handleSetChatMessages = (data) => {
+		const { updatedMessages, nickname } = data;
+		socket.emit("reload_chat_messages", {
+			room: studioId,
+			updatedMessages,
+			nickname,
+		});
+	};
+
+	const theme = createTheme({
+		palette: {
+			secondary: {
+				main: "#CA3FF3",
+			},
+		},
+	});
+
+	// set the initial nickname
+	useEffect(() => {
+		if (username) {
+			axios
+				.get(`${BASE_URL}/api/studio/${studioId}/${username}/nickname`)
+				.then((response) => setNicknameInput(response.data));
+		}
+	}, [username]);
+
+	return (
+		<Dialog
+			open={isNicknameDialogOpened}
+			onClose={handleCloseNicknameDialog}
+			fullWidth
+			maxWidth="sm"
+			PaperProps={{ style: { backgroundColor: "#F5F5F5" } }}
+		>
+			<div className={styles.dialogHeader}>
+				<DriveFileRenameOutlineRoundedIcon
+					style={{ color: "#757575", fontSize: 40 }}
+				/>
+				<h1 className={styles.heading}>Edit Nickname</h1>
+			</div>
+
+			<DialogContent className={styles.dialogContent}>
+				<div>
+					<ThemeProvider theme={theme}>
+						<TextField
+							color="secondary"
+							value={nicknameInput}
+							error={isNicknameErrorMessage ? true : false}
+							required
+							id="nickname"
+							label="Enter your new nickname in this studio"
+							type="text"
+							fullWidth
+							onChange={(event) => setNicknameInput(event.target.value)}
+							helperText={
+								isNicknameErrorMessage ? "Enter a new nickname or cancel" : ""
+							}
+							onKeyDown={(event) => {
+								if (event.key === "Enter") {
+									event.preventDefault();
+									handleSubmit();
+								}
+							}}
+						/>
+					</ThemeProvider>
+				</div>
+				<DialogActions
+					sx={{ display: "flex", justifyContent: "center", mt: 1.5 }}
+				>
+					<Button
+						sx={{ fontWeight: 600, color: "#757575" }}
+						variant="contained"
+						className={styles.cancelButton}
+						onClick={handleClose}
+					>
+						Cancel
+					</Button>
+					<Button
+						sx={{ fontWeight: 600 }}
+						variant="contained"
+						className={styles.createButton}
+						onClick={handleSubmit}
+					>
+						Submit
+					</Button>
+				</DialogActions>
+			</DialogContent>
+		</Dialog>
+	);
 }
