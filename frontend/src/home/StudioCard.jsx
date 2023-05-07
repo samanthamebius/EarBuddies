@@ -12,15 +12,14 @@ import ListenerIcons from "../shared/ListenerIcons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const studioName = "Software Swifties";
 const backgroundImage = TaylorSwiftImg;
-const genres = ["Pop", "Country"];
-const hostImage = ProfilePicImg1;
-const isListening = true;
+
 
 export default function StudioCard(props) {
 	const { socket, studio } = props;
 	const navigate = useNavigate();
+	const hostImage = ProfilePicImg1;
+	const isListening = studio.isListening;
 
 	const handleJoinStudio = () => {
 		navigate(`studio/${studio._id}`);
