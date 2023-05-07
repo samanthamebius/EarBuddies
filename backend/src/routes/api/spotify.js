@@ -169,7 +169,7 @@ router.put("/pause", async (req, res) => {
 router.put("/next", async (req, res) => {
     try {
         const { deviceId } = req.body;
-        console.log(deviceId);
+        console.log("device id " + deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
@@ -194,7 +194,7 @@ router.put("/next", async (req, res) => {
 router.put("/previous", async (req, res) => {
     try {
         const { deviceId } = req.body;
-        console.log(deviceId);
+        console.log("device id " + deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });

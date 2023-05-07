@@ -199,7 +199,7 @@ function ControlPanel({ deviceId, studio }) {
         }
     }
 
-    function spotifyNext({ deviceId }) {
+    function spotifyNext(deviceId) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/next`, {
@@ -221,7 +221,7 @@ function ControlPanel({ deviceId, studio }) {
         }
     }
 
-    function spotifyPrevious({ deviceId }) {
+    function spotifyPrevious(deviceId) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/previous`, {
