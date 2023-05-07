@@ -1,6 +1,7 @@
 import express from "express";
 import { getSpotifyApi } from "../../dao/spotify_dao";
 import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId } from "../../dao/spotify_dao";
+import { set } from "mongoose";
 
 const router = express.Router();
 
@@ -128,9 +129,17 @@ router.put("/play", async (req, res) => {
         thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
             .then(function () {
                 console.log('Playing track!');
+                thisSpotifyApi.setRepeat("context", { device_id: deviceId })
+                    .then(function () {
+                        console.log('Set repeat to context!');
+                    }, function (err) {
+                        console.log('Something went wrong!', err);
+                    }
+                    );
             }, function (err) {
                 console.log('Something went wrong!', err);
             });
+
     }
     catch (err) {
         console.log(err);
@@ -195,6 +204,7 @@ router.put("/next", async (req, res) => {
                 }, function (err) {
                     console.log('Something went wrong!', err);
                 });
+
         }
     }
     catch (err) {
