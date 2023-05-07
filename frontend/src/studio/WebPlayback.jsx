@@ -216,6 +216,51 @@ function ControlPanel({ deviceId, studio, player }) {
         }
     }
 
+    function spotifyNext(deviceId, studio) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/next`, {
+                    deviceId: deviceId,
+                    studio: studio,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    localStorage.removeItem("expires_in");
+                    localStorage.removeItem("current_user_id");
+                    navigate("/login");
+                    return <p>Could not play next track</p>;
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function spotifyPrevious(deviceId) {
+        try {
+            axios
+                .put(`${BASE_URL}/api/spotify/previous`, {
+                    deviceId: deviceId,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    localStorage.removeItem("expires_in");
+                    localStorage.removeItem("current_user_id");
+                    navigate("/login");
+                    return <p>Could not play previous track</p>;
+                });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function playButton(studio, deviceId) {
         console.log(deviceId);
         setPlaying(!isPlaying);
@@ -234,14 +279,13 @@ function ControlPanel({ deviceId, studio, player }) {
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyPrevious(deviceId)}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
                         style={{ color: "white", fontSize: "40px" }}
-                        onClick={() =>
-                            playButton(studio, deviceId)
-                        }
+                        onClick={() => playButton(studio, deviceId)}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
@@ -253,6 +297,7 @@ function ControlPanel({ deviceId, studio, player }) {
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
                     style={{ color: "white", fontSize: "40px" }}
+                    onClick={() => spotifyNext(deviceId, studio)}
                 />
             </div>
             <TimeSlider player={player}/>
