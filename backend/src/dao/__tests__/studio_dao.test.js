@@ -9,7 +9,9 @@ import {
 	updateStudioIsActive,
 	updateStudioUsers,
 	updateStudioHost,
-	deleteStudio} from "../studio_dao.js";
+	deleteStudio,
+  setStudioStatus} from "../studio_dao.js";
+import { setUserInactive } from "../user_dao.js";
 
 let mongod;
 
@@ -44,8 +46,8 @@ const mockStudio1 = {
 const mockStudio2 = {
   _id: new mongoose.Types.ObjectId(),
   studioName: "testStudio2",
-  studioIsActive: false,
-  studioUsers: [],
+  studioIsActive: true,
+  studioUsers: ["testUser4", "testUser5"],
   studioHost: "testUser2",
   studioGenres: ["testGenre2"],
   studioPicture: "testPicture2",
@@ -63,9 +65,28 @@ const mockChat2 = {
   pinnedMessages: [],
 };
 
-const mockUsers = [mockUser1, mockUser2];
+
 const mockStudios = [mockStudio1, mockStudio2];
 const mockChats = [mockChat1, mockChat2];
+
+const mockUser4 = {
+  username: "testUser4",
+  userDisplayName: "testUser4",
+  spotifyPic: "testUser4",
+  profilePic: "testUser4",
+  userIsActive: true,
+  userStudios: [mockStudio2._id],
+};
+const mockUser5 = {
+  username: "testUser5",
+  userDisplayName: "testUser5",
+  spotifyPic: "testUser5",
+  profilePic: "testUser5",
+  userIsActive: true,
+  userStudios: [mockStudio2._id],
+};
+
+const mockUsers = [mockUser1, mockUser2, mockUser4, mockUser5];
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
@@ -102,7 +123,7 @@ test('create studio is successful', async () => {
     const studio = {
       _id: new mongoose.Types.ObjectId(),
       studioName: "testStudio3",
-      studioIsActive: true,
+      studioIsActive: false,
       studioUsers: [],
       studioHost: "testUser3",
       studioGenres: ["testGenre3"],
@@ -111,6 +132,22 @@ test('create studio is successful', async () => {
       studioPlaylist: "testPlaylist3",
     };
     const createdStudio = await createStudio("testStudio3", [], "testUser3", ["testGenre3"], "testPicture3", false, "testPlaylist3");
+    expectStudio(studio, createdStudio);
+});
+
+test('create studio is successful with two active users in studio', async () => {
+    const studio = {
+      _id: new mongoose.Types.ObjectId(),
+      studioName: "testStudio3",
+      studioIsActive: true,
+      studioUsers: ["testUser4", "testUser5"],
+      studioHost: "testUser3",
+      studioGenres: ["testGenre3"],
+      studioPicture: "testPicture3",
+      studioControlHostOnly: false,
+      studioPlaylist: "testPlaylist3",
+    };
+    const createdStudio = await createStudio("testStudio3", ["testUser4", "testUser5"], "testUser3", ["testGenre3"], "testPicture3", false, "testPlaylist3");
     expectStudio(studio, createdStudio);
 });
 
@@ -195,3 +232,55 @@ test('update studio host is successful', async () => {
     const studio = await updateStudioHost(mockStudio1._id, mockUser2.username);
     expectStudio(studio, updatedStudio);
 });
+
+test('set studio status is successful with two active users', async () => {
+    const updatedStudio = {
+        _id: mockStudio2._id,
+        studioName: mockStudio2.studioName,
+        studioIsActive: true,
+        studioUsers: mockStudio2.studioUsers,
+        studioHost: mockStudio2.studioHost,
+        studioGenres: mockStudio2.studioGenres,
+        studioPicture: mockStudio2.studioPicture,
+        studioControlHostOnly: mockStudio2.studioControlHostOnly,
+        studioPlaylist: mockStudio2.studioPlaylist,
+    };
+    const studio = await setStudioStatus(mockStudio2._id);
+    expectStudio(studio, updatedStudio);
+});
+
+test('set studio status is successful with one active user', async () => {
+  const updatedStudio = {
+        _id: mockStudio2._id,
+        studioName: mockStudio2.studioName,
+        studioIsActive: false,
+        studioUsers: mockStudio2.studioUsers,
+        studioHost: mockStudio2.studioHost,
+        studioGenres: mockStudio2.studioGenres,
+        studioPicture: mockStudio2.studioPicture,
+        studioControlHostOnly: mockStudio2.studioControlHostOnly,
+        studioPlaylist: mockStudio2.studioPlaylist,
+    };
+    await setUserInactive(mockUser4.username);
+    const studio = await setStudioStatus(mockStudio2._id);
+    expectStudio(studio, updatedStudio);
+});
+
+test("set studio status is successful with zero active users", async () => {
+  const updatedStudio = {
+    _id: mockStudio2._id,
+    studioName: mockStudio2.studioName,
+    studioIsActive: false,
+    studioUsers: mockStudio2.studioUsers,
+    studioHost: mockStudio2.studioHost,
+    studioGenres: mockStudio2.studioGenres,
+    studioPicture: mockStudio2.studioPicture,
+    studioControlHostOnly: mockStudio2.studioControlHostOnly,
+    studioPlaylist: mockStudio2.studioPlaylist,
+  };
+  await setUserInactive(mockUser4.username);
+  await setUserInactive(mockUser5.username);
+  const studio = await setStudioStatus(mockStudio2._id);
+  expectStudio(studio, updatedStudio);
+});
+
