@@ -144,6 +144,7 @@ export {
 	setUserActive,
 	setUserInactive,
 	getUser,
+	getStudios,
 	loginUser,
 	getStudiosId,
 	updateStudios,
