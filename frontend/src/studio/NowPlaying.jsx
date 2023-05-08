@@ -6,8 +6,6 @@ export default function NowPlaying({ studio, socket }) {
 	const accessToken = localStorage.getItem("access_token");
 	return (
 		<div className={styles.nowplaying}>
-			{/* <SongInfo/>
-      <ControlPanel/> */}
 			<WebPlayback
 				studio={studio}
 				token={accessToken.replace(/['"]+/g, "")}

@@ -103,6 +103,18 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_pause_song", data);
 	});
 
+	// go to a previous song in the playlist in studio
+	socket.on("send_previous_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_previous_song");
+	});
+
+	// skip to the next song in the playlist in studio
+	socket.on("send_skip_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_skip_song", data);
+	});
+
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
 		const { nickname: displayName, room } = data;

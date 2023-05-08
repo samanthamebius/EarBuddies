@@ -216,21 +216,11 @@ function ControlPanel(props) {
 		}
 	}
 
-	function playButton(studio) {
-		// setPlaying(!isPlaying);
-		// spotifyPlayer(studio, myDeviceId);
-		socket.emit("send_play_song", {
-			room: studio._id,
-			isPlaying: true,
-			studio: studio,
-		});
-	}
-
-	function spotifyNext(deviceId, studio) {
+	function spotifyNext(myDeviceId, studio) {
 		try {
 			axios
 				.put(`${BASE_URL}/api/spotify/next`, {
-					deviceId: deviceId,
+					deviceId: myDeviceId,
 					studio: studio,
 				})
 				.then((response) => {
@@ -249,11 +239,11 @@ function ControlPanel(props) {
 		}
 	}
 
-	function spotifyPrevious(deviceId) {
+	function spotifyPrevious(myDeviceId) {
 		try {
 			axios
 				.put(`${BASE_URL}/api/spotify/previous`, {
-					deviceId: deviceId,
+					deviceId: myDeviceId,
 				})
 				.then((response) => {
 					console.log(response);
@@ -271,13 +261,35 @@ function ControlPanel(props) {
 		}
 	}
 
-	function pauseButton() {
+	function playButton(studio) {
+		socket.emit("send_play_song", {
+			room: studio._id,
+			isPlaying: true,
+			studio: studio,
+		});
+	}
+
+	function pauseButton(studio) {
 		socket.emit("send_pause_song", {
 			room: studio._id,
 			isPlaying: false,
 		});
 	}
 
+	function previousButton(studio) {
+		socket.emit("send_previous_song", {
+			room: studio._id,
+		});
+	}
+
+	function skipButton(studio) {
+		socket.emit("send_skip_song", {
+			room: studio._id,
+			studio: studio,
+		});
+	}
+
+	// socket is listening to when a song should be played
 	useEffect(() => {
 		socket.on("receive_play_song", (data) => {
 			const { isPlaying, studio } = data;
@@ -289,6 +301,7 @@ function ControlPanel(props) {
 		});
 	}, [socket, myDeviceId]);
 
+	// socket is listening to when a song should be paused
 	useEffect(() => {
 		socket.on("receive_pause_song", (data) => {
 			const { isPlaying } = data;
@@ -300,31 +313,52 @@ function ControlPanel(props) {
 		});
 	}, [socket, myDeviceId]);
 
+	// socket is listening to when a song should be skipped
+	useEffect(() => {
+		socket.on("receive_previous_song", () => {
+			if (Object.keys(myDeviceId).length !== 0) {
+				spotifyPrevious(myDeviceId);
+			}
+			console.log("received previous");
+		});
+	}, [socket, myDeviceId]);
+
+	// socket is listening to when a song should go back to the previous song
+	useEffect(() => {
+		socket.on("receive_skip_song", (data) => {
+			const { studio } = data;
+			if (Object.keys(myDeviceId).length !== 0) {
+				spotifyNext(myDeviceId, studio);
+			}
+			console.log("received skip");
+		});
+	}, [socket, myDeviceId]);
+
 	return (
 		<div className={styles.controlPanel}>
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
 					sx={{ "&:hover": { cursor: "pointer" } }}
 					style={{ color: "white", fontSize: "40px" }}
-					onClick={() => spotifyPrevious(myDeviceId)}
+					onClick={() => previousButton(studio)}
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
 						sx={{ "&:hover": { cursor: "pointer" } }}
 						style={{ color: "white", fontSize: "40px" }}
-						onClick={() => playButton(studio, myDeviceId)}
+						onClick={() => playButton(studio)}
 					/>
 				) : (
 					<PauseCircleRoundedIcon
 						sx={{ "&:hover": { cursor: "pointer" } }}
 						style={{ color: "white", fontSize: "40px" }}
-						onClick={() => pauseButton()}
+						onClick={() => pauseButton(studio)}
 					/>
 				)}
 				<SkipNextRoundedIcon
 					sx={{ "&:hover": { cursor: "pointer" } }}
 					style={{ color: "white", fontSize: "40px" }}
-					onClick={() => spotifyNext(myDeviceId, studio)}
+					onClick={() => skipButton(studio)}
 				/>
 			</div>
 			<TimeSlider player={player} />
@@ -336,7 +370,7 @@ function ControlPanel(props) {
 function WebPlayback(props) {
 	const [player, setPlayer] = useState({});
 	const { myDeviceId, setMyDeviceId } = useContext(AppContext);
-	const { studio, socket } = props;
+	const { studio, socket, token } = props;
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -351,7 +385,7 @@ function WebPlayback(props) {
 				const player = new window.Spotify.Player({
 					name: "EarBuddies",
 					getOAuthToken: (cb) => {
-						cb(props.token);
+						cb(token);
 					},
 					volume: 0.5,
 				});
@@ -375,7 +409,6 @@ function WebPlayback(props) {
 		}
 	}, []);
 
-	console.log(myDeviceId);
 	navigate = useNavigate();
 
 	return (
