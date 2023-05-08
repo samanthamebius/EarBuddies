@@ -149,7 +149,7 @@ export default function SongListItem(props) {
 				onMouseEnter={handleItemMouseEnter}
 				onMouseLeave={handleItemMouseLeave}
 				className={styles.result}
-				onClick={type === "search" ? (() => handleAddToQueue()) : undefined} //For search results, listItem onClick adds to queue
+				// onClick={type === "search" ? (() => handleAddToQueue()) : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
 						{type === "queue" && (
