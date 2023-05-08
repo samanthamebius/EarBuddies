@@ -102,4 +102,22 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId };
+
+async function getPlaybackState(thisSpotifyApi, deviceId) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getMyCurrentPlaybackState({ additional_types: 'episode' })
+      .then(function (data) {
+        if (data.statusCode == 200 && data.body.device.id == deviceId) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId, getPlaybackState };
+

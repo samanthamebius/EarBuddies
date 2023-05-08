@@ -111,7 +111,7 @@
 	background-color: #e9dcf1;
 	padding: 15px;
 	grid-row: 2 / 2;
-	grid-column: 1 / 2;
+	grid-column: 1;
 	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
@@ -119,7 +119,7 @@
 
 .songselection {
 	grid-row: 2 / 2;
-	grid-column: 2 / 2;
+	grid-column: 2;
 	display: flex;
 	flex-direction: column;
 	height: calc(0.7 * 100vh);
@@ -240,6 +240,7 @@
 
 .result {
 	display: flex;
+	width: calc(33*vw);
 }
 
 .result:hover {
@@ -248,12 +249,13 @@
 }
 
 .resultImgBox {
-	width: 12%;
-	height: 12%;
+	width: 14%;
+	height: 14%;
 }
 
 .resultImg {
 	width: 100%;
+	height: 100%;
 	border-radius: 4px;
 }
 
@@ -261,10 +263,6 @@
 	font-size: 14px;
 	color: #757575;
 	padding-left: 15px;
-}
-
-.resultIcon {
-	padding-right: 5px;
 }
 
 .resultTitleDetail {
@@ -277,6 +275,8 @@
 	left: 0;
 	border-radius: 4px;
 	width: 100%;
-	height: 90%;
+	height: 94%;
+	padding: 0px;
+	margin: 0px;
 	background-color: rgba(0, 0, 0, 0.6);
 }
