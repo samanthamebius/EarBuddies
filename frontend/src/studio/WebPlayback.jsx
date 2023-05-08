@@ -65,7 +65,7 @@ function SongInfo() {
             <h3 className={styles.song} style={{ display: songTitle ? "flex" : "none" }}>{songTitle}</h3>
             <div className={styles.artist} style={{ display: artistImg ? "flex" : "none" }}>
                 <img className={styles.artistImg} src={artistImg} />
-                <div className={styles.artistName}>{artistName ? songTitle : null}</div>
+                <div className={styles.artistName}>{artistName ? artistName : null}</div>
             </div>
             <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
         </div>
