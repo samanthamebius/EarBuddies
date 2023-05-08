@@ -66,6 +66,18 @@ async function getCurrentTrackId(thisSpotifyApi) {
   });
 }
 
+async function getCurrentTrack(thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getMyCurrentPlayingTrack({ additional_types: 'episode' })
+      .then(function (data) {
+        resolve(data.body.item);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
 async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getPlaylistTracks(playlist_id)
@@ -78,4 +90,4 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId };
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getLastPlaylistTrackId };
