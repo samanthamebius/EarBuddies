@@ -1,5 +1,6 @@
 import express from "express";
 import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId, getSpotifyApi, getPlaybackState } from "../../dao/spotify_dao";
+import { get } from "mongoose";
 
 const router = express.Router();
 
@@ -114,28 +115,36 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 router.put("/play", async (req, res) => {
     try {
         const { uri, deviceId } = req.body;
-        // console.log(uri);
-        // console.log(deviceId);
         const thisSpotifyApi = getSpotifyApi();
         if (!thisSpotifyApi) {
             return res.status(403).json({ msg: "No Spotify API connection" });
         }
         // Play a track if not playing already
-        //will need an if statement to check where it finished to pick it up at correct point 
-        //ooh or just called with no uri and it will resume
-        thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
-            .then(function () {
-                thisSpotifyApi.setRepeat("context", { device_id: deviceId })
-                    .then(function () {
+        // will need an if statement to check where it finished to pick it up at correct point 
+        // ooh or just called with no uri and it will resume
+        console.log(await getPlaybackState(thisSpotifyApi));
+        if (await getPlaybackState(thisSpotifyApi)) {
+            console.log("device id is " + deviceId);
+            thisSpotifyApi.play()
+                .then(function () {
+                }, function (err) {
+                    console.log('Something went wrong!', err);
+                });
+            return res.status(200).json({ msg: "Resuming track" });
+        } else {
+            thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
+                .then(function () {
+                    thisSpotifyApi.setRepeat("context", { device_id: deviceId })
+                        .then(function () {
 
-                    }, function (err) {
-                        console.log('Something went wrong!', err);
-                    }
-                    );
-            }, function (err) {
-                console.log('Something went wrong!', err);
-            });
-
+                        }, function (err) {
+                            console.log('Something went wrong!', err);
+                        }
+                        );
+                }, function (err) {
+                    console.log('Something went wrong!', err);
+                });
+        }
     }
     catch (err) {
         console.log(err);
