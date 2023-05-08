@@ -3,25 +3,20 @@ import { useState } from "react";
 import styles from "../StudioPage.module.css";
 import axios from "axios";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
-import { Box, Icon, ListItem, ListItemText, Tooltip } from "@mui/material";
-import { tooltipClasses } from "@mui/material/Tooltip";
-import { styled } from "@mui/material/styles";
+import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
+import EqualizerRoundedIcon from '@mui/icons-material/EqualizerRounded';
+import { Box, Icon, ListItem, ListItemText } from "@mui/material";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export function SongListItem(props) {
+export default function SongListItem(props) {
 	const { result, studio, socket, type, snapshotId = null } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [listItem, setListItem] = useState({});
-	console.log(result.type);
-	console.log(result.type === "episode");
 
-
-	console.log(result.type);
 	const handleItemMouseEnter = () => {
 		setHover(true);
 	};
@@ -34,22 +29,6 @@ export function SongListItem(props) {
 	const handleIconMouseLeave = () => {
 		setIconHover(false);
 	};
-
-	const ToolTip = styled(({ className, ...props }) => (
-		<Tooltip {...props} classes={{ popper: className }} />
-	))(({ theme }) => ({
-		[`& .${tooltipClasses.arrow}`]: {
-			color: theme.palette.common.white,
-		},
-		[`& .${tooltipClasses.tooltip}`]: {
-			backgroundColor: theme.palette.common.white,
-			color: "rgba(0, 0, 0, 0.87)",
-			boxShadow: theme.shadows[1],
-			fontSize: 12,
-			color: "#666666",
-			maxWidth: "80%",
-		},
-	}));
 
 	// add the song to queue and emit to all sockets in the studio
 	const handleAddToQueue = async () => {
@@ -81,6 +60,7 @@ export function SongListItem(props) {
 				name: result.track.name,
 				artists: result.track.artists,
 				image: result.track.album.images[0].url,
+				type: result.type,
 			});
 		} else {
 			setListItem({
@@ -88,9 +68,81 @@ export function SongListItem(props) {
 				name: result.name,
 				artists: result.artists,
 				image: result.image,
+				type: result.type,
 			});
 		}
 	}, []);
+
+	const displaySongTypeIcon = () => {
+		if (listItem.type === "episode") {
+			return (
+				<PodcastsRoundedIcon fontSize="small" style={{ color: "#c4c4c4", paddingRight: '10px' }} />
+			)
+		} else if (listItem.type === "track") {
+			return (
+				<MusicNoteRoundedIcon fontSize="small" style={{ color: "#c4c4c4", paddingRight: '10px' }} />
+			)
+		} else if (false) { //TO DO: isPlaying (replace false)
+			return (
+				<EqualizerRoundedIcon fontSize="small" style={{ color: "#CA3FF3", paddingRight: '10px' }} />
+			)
+		}
+	};
+
+	const displaySongText = () => {
+		return (
+			<ListItemText
+				className={styles.resultTitle}
+				primary={<b>{listItem.name}</b>}
+				secondary={<p className={styles.resultTitleDetail}>{listItem.artists}</p>}
+				primaryTypographyProps={{
+					style: {
+						maxWidth: '300px',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}
+				}}
+				secondaryTypographyProps={{
+					style: {
+						maxWidth: '300px',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}
+				}}
+			/>
+		)
+	}
+
+	const displaySongImage = () => {
+		return (
+			<Box className={styles.resultImgBox} position="relative">
+				<img className={styles.resultImg} src={listItem.image} />
+				{/* For search results, onHover styles on listItem */}
+				{type === "search" &&
+					<>
+						{isHover && <Box className={styles.resultImgDark} />}
+						{isHover && (
+							<Icon
+								fontSize={"large"}
+								sx={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -75%)",
+								}}
+							>
+								<QueueMusicRoundedIcon
+									// fontSize={"small"}
+									style={{ color: "white" }}
+								/>
+							</Icon>)}
+					</>
+				}
+			</Box>
+		)
+	}
 
 	return (
 		<>
@@ -98,21 +150,11 @@ export function SongListItem(props) {
 				onMouseEnter={handleItemMouseEnter}
 				onMouseLeave={handleItemMouseLeave}
 				className={styles.result}
-				onClick={null} // TO DO: IMPLEMENT PLAY FROM HERE
+				onClick={type === "search" ? (() => handleAddToQueue()) : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === "search" ? (
-							<ToolTip title={"Add to Queue"} placement="left" arrow>
-								<QueueMusicRoundedIcon
-									onMouseEnter={handleIconMouseEnter}
-									onMouseLeave={handleIconMouseLeave}
-									onClick={() => handleAddToQueue()}
-									edge="end"
-									style={{ color: isIconHover ? "#B03EEE" : "#757575" }}
-								/>
-							</ToolTip>
-						) : (
-							<CloseRoundedIcon
+						{type === "queue" && (
+							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
 								style={{ color: isIconHover ? "#B03EEE" : "#757575" }}
@@ -123,63 +165,10 @@ export function SongListItem(props) {
 					</>
 				}
 			>
-				<Box className={styles.resultImgBox} position="relative">
-					<img className={styles.resultImg} src={listItem.image} />
-					{isHover ? <Box className={styles.resultImgDark} /> : null}
-					{isHover ? (
-						<Icon
-							fontSize={"large"}
-							sx={{
-								position: "absolute",
-								top: "50%",
-								left: "50%",
-								transform: "translate(-50%, -65%)",
-							}}
-						>
-							<PlayArrowRoundedIcon
-								fontSize={"large"}
-								style={{ color: "white" }}
-							/>
-						</Icon>
-					) : null}
-				</Box>
-				<ListItemText
-					className={styles.resultTitle}
-					primary={<b>{listItem.name}</b>}
-					secondary={
-						<>
-							{(result.type === "episode") ?
-								<PodcastsRoundedIcon
-									fontSize={"small"}
-									style={{ color: "#c4c4c4" }}
-								/>
-								:
-								<p className={styles.resultTitleDetail}>
-									{listItem.artists}
-								</p>
-							}
-						</>
-					}
-					primaryTypographyProps={{
-						style: {
-							maxWidth: '320px',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis'
-						}
-					}}
-					secondaryTypographyProps={{
-						style: {
-							maxWidth: '320px',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis'
-						}
-					}}
-				/>
+				{displaySongTypeIcon()}
+				{displaySongImage()}
+				{displaySongText()}
 			</ListItem>
 		</>
 	);
-}
-
-export default SongListItem;
+};
