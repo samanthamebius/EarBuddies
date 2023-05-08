@@ -143,12 +143,22 @@ export function TimeSlider({player}) {
 		fetchDuration();
 	},[]);
 
-    useEffect(() => {
-		const fetchPosition = async () => {
-			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => { setPosition(Math.round(response.data.progress_ms / 1000)); });
-		}
-		fetchPosition();
-	},[]);
+      useEffect(() => {
+    const fetchPosition = async () => {
+      axios
+        .get(`${BASE_URL}/api/spotify/songinfo`)
+        .then((response) => {
+          setPosition(Math.round(response.data.progress_ms / 1000));
+        });
+    };
+    fetchPosition();
+
+    // Polling mechanism to continuously update position
+    const interval = setInterval(fetchPosition, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
