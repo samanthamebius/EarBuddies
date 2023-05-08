@@ -17,7 +17,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
-
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
 
@@ -44,13 +43,20 @@ const StyledSlider = styled(Slider)({
 
 function SongInfo() {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
     const [songTitle, setSongTitle] = useState('');
+    const [artistName, setArtistName] = useState('');
+    const [artistImg, setArtistImg] = useState('');
+    const [albumArtwork, setAlbumArtwork] = useState('');
 
     useEffect(() => {
 		const fetchSongInfo = async () => {
 			const response = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
 			setSongTitle(response.data.name);
-			console.log("name " + studios[0].studioName);
+            setArtistName(response.data.artists[0].name);
+            //setArtistImg(response.data.artists[0].images[0].url);
+            setAlbumArtwork(response.data.album.images[0].url);
+			console.log("name " + response.data.artists[0].images[0].url);
 		}
 		fetchSongInfo();
 	},[]);
@@ -59,10 +65,10 @@ function SongInfo() {
         <div className={styles.songSection}>
             <h3 className={styles.song}>{songTitle}</h3>
             <div className={styles.artist}>
-                <img className={styles.artistImg} src={artist_profile} />
-                <div className={styles.artistName}>Taylor Swift</div>
+                <img className={styles.artistImg} src={artistImg} />
+                <div className={styles.artistName}>{artistName}</div>
             </div>
-            <img className={styles.albumArtwork} src={album_artwork} />
+            <img className={styles.albumArtwork} src={albumArtwork} />
         </div>
     );
 }

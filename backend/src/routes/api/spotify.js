@@ -245,7 +245,7 @@ router.get("/songinfo", async (req, res) => {
 	try {
         const thisSpotifyApi = getSpotifyApi();
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
-        console.log("curent track: " +currentTrack);
+        console.log("curent track: " +currentTrack.album.images[0].url);
 		res.status(200).json(currentTrack);
 	} catch (err) {
 		res.status(500).json(err);
