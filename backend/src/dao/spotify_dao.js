@@ -70,7 +70,7 @@ async function getCurrentTrack(thisSpotifyApi) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getMyCurrentPlayingTrack({ additional_types: 'episode' })
       .then(function (data) {
-        resolve(data.body.item);
+        resolve(data.body);
       }, function (err) {
         console.log('Something went wrong!', err);
         reject(err);

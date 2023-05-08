@@ -52,10 +52,10 @@ function SongInfo() {
     useEffect(() => {
 		const fetchSongInfo = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setSongTitle(track.data.name);
-            setArtistName(track.data.artists[0].name);
-            setAlbumArtwork(track.data.album.images[0].url);
-            const artist_id = track.data.artists[0].id;
+			setSongTitle(track.data.item.name);
+            setArtistName(track.data.item.artists[0].name);
+            setAlbumArtwork(track.data.item.album.images[0].url);
+            const artist_id = track.data.item.artists[0].id;
             const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
             setArtistImg(artist.data.images[0].url);
 		}
@@ -140,17 +140,14 @@ export function TimeSlider({player}) {
     useEffect(() => {
 		const fetchDuration = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setDuration(Math.round(track.data.duration_ms / 1000));
-            console.log("DURATION: " + (Math.round(track.data.duration_ms / 1000)));
+			setDuration(Math.round(track.data.item.duration_ms / 1000));
 		}
 		fetchDuration();
 	},[]);
 
     useEffect(() => {
 		const fetchPosition = async () => {
-			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setPosition(Math.round(track.data.progress_ms / 1000));
-            console.log("PROGRESS: " + (Math.round(track.data.progress_ms / 1000)));
+			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => { setPosition(Math.round(response.data.progress_ms / 1000)); });
 		}
 		fetchPosition();
 	},[]);

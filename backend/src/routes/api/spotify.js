@@ -245,7 +245,6 @@ router.get("/songinfo", async (req, res) => {
 	try {
         const thisSpotifyApi = getSpotifyApi();
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
-        console.log("seconds: " + currentTrack.duration_ms);
 		res.status(200).json(currentTrack);
 	} catch (err) {
 		res.status(500).json(err);
