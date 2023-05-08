@@ -134,8 +134,26 @@ export function VolumeSlider({ player }) {
 }
 
 export function TimeSlider({player}) {
-    const duration = 200; //seconds //TODO: get actual song duration
-    const [position, setPosition] = useState(0); //TODO: set actual song position
+    const [duration, setDuration] = useState(0); 
+    const [position, setPosition] = useState(0);
+
+    useEffect(() => {
+		const fetchDuration = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setDuration(Math.round(track.data.duration_ms / 1000));
+            console.log("DURATION: " + (Math.round(track.data.duration_ms / 1000)));
+		}
+		fetchDuration();
+	},[]);
+
+    useEffect(() => {
+		const fetchPosition = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setPosition(Math.round(track.data.progress_ms / 1000));
+            console.log("PROGRESS: " + (Math.round(track.data.progress_ms / 1000)));
+		}
+		fetchPosition();
+	},[]);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",

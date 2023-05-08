@@ -245,6 +245,7 @@ router.get("/songinfo", async (req, res) => {
 	try {
         const thisSpotifyApi = getSpotifyApi();
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
+        console.log("seconds: " + currentTrack.duration_ms);
 		res.status(200).json(currentTrack);
 	} catch (err) {
 		res.status(500).json(err);
@@ -256,8 +257,6 @@ router.get("/artist/:artist_id", async (req, res) => {
         const { artist_id } = req.params;
         const thisSpotifyApi = getSpotifyApi();
 		const artist = await getArtist(artist_id, thisSpotifyApi);
-        console.log("getting artist");
-        console.log("artist " + artist.name);
 		res.status(200).json(artist);
 	} catch (err) {
 		res.status(500).json(err);
