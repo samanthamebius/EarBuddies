@@ -9,13 +9,11 @@ import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
 import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
 import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
 import VolumeOffRoundedIcon from "@mui/icons-material/VolumeOffRounded";
-import album_artwork from "../assets/now_playing/album_artwork_PLACEHOLDER.png";
-import artist_profile from "../assets/now_playing/artist_profile_PLACEHOLDER.png";
+import placeholder_album from "../assets/now_playing/placeholder_ablum.png";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
@@ -64,12 +62,12 @@ function SongInfo() {
 
     return (
         <div className={styles.songSection}>
-            <h3 className={styles.song}>{songTitle}</h3>
-            <div className={styles.artist}>
+            <h3 className={styles.song} style={{ display: songTitle ? "flex" : "none" }}>{songTitle}</h3>
+            <div className={styles.artist} style={{ display: artistImg ? "flex" : "none" }}>
                 <img className={styles.artistImg} src={artistImg} />
-                <div className={styles.artistName}>{artistName}</div>
+                <div className={styles.artistName}>{artistName ? songTitle : null}</div>
             </div>
-            <img className={styles.albumArtwork} src={albumArtwork} />
+            <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
         </div>
     );
 }
@@ -305,7 +303,7 @@ function ControlPanel({ deviceId, studio, player }) {
         console.log(deviceId);
         setPlaying(!isPlaying);
         spotifyPauser({ deviceId });
-    }
+    }    
 
     return (
         <div className={styles.controlPanel}>
