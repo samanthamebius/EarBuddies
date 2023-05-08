@@ -126,6 +126,7 @@ export function VolumeSlider({ player }) {
                         />
                     )}
                     <StyledSlider
+                        size="small"
                         disabled={isMute}
                         className={styles.slider}
                         aria-label="Volume"
