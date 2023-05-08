@@ -210,7 +210,7 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 });
 
 //update studio listeners HERE THIS ONE HERE
-router.get("/:studioId/newListeners", async (req, res) => {
+router.put("/:studioId/updateListeners", async (req, res) => {
 	try {
 		const { studioId } = req.params;
 		const listeners = req.body.listeners;

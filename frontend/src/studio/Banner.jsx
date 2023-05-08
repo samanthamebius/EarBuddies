@@ -73,6 +73,16 @@ export default function Banner({ id, studio, socket }) {
 		navigate("/");
 	};
 
+	const handleTEST = () => {
+		const users = ["ananya2001", "smeb123", "yuewen789", "bre123"];
+
+		axios.put(`${BASE_URL}/api/studio/${id}/updateListeners`, {
+			listeners: users,
+		}).then((res) => {
+			console.log(res);
+		});
+	}
+
 	const users = studio.studioUsers;
 	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
@@ -84,7 +94,7 @@ export default function Banner({ id, studio, socket }) {
 		>
 			<h1 className={styles.bannerStudioName}>{studioName}</h1>
 
-			<div className={styles.bannerlisteners}>
+			<div className={styles.bannerlisteners} onClick={handleTEST}>
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
