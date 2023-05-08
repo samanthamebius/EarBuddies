@@ -130,6 +130,7 @@ export function VolumeSlider({ player }) {
                         className={styles.slider}
                         aria-label="Volume"
                         value={value}
+                        color="secondary"
                         onChange={handleChange}
                     />
                 </Stack>
