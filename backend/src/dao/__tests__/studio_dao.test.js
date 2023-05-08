@@ -195,5 +195,3 @@ test('update studio host is successful', async () => {
     const studio = await updateStudioHost(mockStudio1._id, mockUser2.username);
     expectStudio(studio, updatedStudio);
 });
-
-

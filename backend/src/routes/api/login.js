@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
     const username = await loginUser(spotifyApi, data);
     await setUserActive(username);
     user.userStudios.forEach(async (studio) => {
-      await setStudioStatus(username, studio);
+      await setStudioStatus(studio);
     });
 
     res.json({

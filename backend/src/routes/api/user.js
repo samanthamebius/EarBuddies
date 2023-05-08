@@ -84,7 +84,7 @@ router.put("/:username/logout", async (req, res) => {
     }
     await setUserInactive(username);
     user.userStudios.forEach(async (studio) => {
-      await setStudioStatus(username, studio);
+      await setStudioStatus(studio);
     });
     return res.status(204).json({ msg: "User logged out" });
   } catch (err) {

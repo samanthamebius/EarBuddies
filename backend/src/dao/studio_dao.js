@@ -88,7 +88,7 @@ async function updateStudioNames(id, newNames) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
 }
 
-async function setStudioStatus(username, studio_id) {
+async function setStudioStatus(studio_id) {
 	const studio = await getStudio(studio_id);
 	const users = studio[0].studioUsers;
 	let numActive = 0;
