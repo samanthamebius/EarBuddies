@@ -59,7 +59,7 @@ function SongInfo() {
 		}
 		fetchSongInfo();
 
-        // Polling mechanism to continuously update position
+        // Polling mechanism to update song info
         const interval = setInterval(fetchSongInfo, 1000);
 
         // Cleanup interval on component unmount
