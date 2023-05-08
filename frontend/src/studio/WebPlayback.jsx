@@ -43,9 +43,21 @@ const StyledSlider = styled(Slider)({
 });
 
 function SongInfo() {
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const [songTitle, setSongTitle] = useState('');
+
+    useEffect(() => {
+		const fetchSongInfo = async () => {
+			const response = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setSongTitle(response.data.name);
+			console.log("name " + studios[0].studioName);
+		}
+		fetchSongInfo();
+	},[]);
+
     return (
         <div className={styles.songSection}>
-            <h3 className={styles.song}>champagne problems</h3>
+            <h3 className={styles.song}>{songTitle}</h3>
             <div className={styles.artist}>
                 <img className={styles.artistImg} src={artist_profile} />
                 <div className={styles.artistName}>Taylor Swift</div>

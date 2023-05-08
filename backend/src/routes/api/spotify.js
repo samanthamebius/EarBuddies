@@ -1,6 +1,6 @@
 import express from "express";
 import { getSpotifyApi } from "../../dao/spotify_dao";
-import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId } from "../../dao/spotify_dao";
+import { searchSpotify, getCurrentTrack, getCurrentTrackId, getLastPlaylistTrackId } from "../../dao/spotify_dao";
 import { set } from "mongoose";
 
 const router = express.Router();
@@ -239,6 +239,17 @@ router.put("/previous", async (req, res) => {
         }
         res.status(500).json(err);
     }
+});
+
+router.get("/songinfo", async (req, res) => {
+	try {
+        const thisSpotifyApi = getSpotifyApi();
+		const currentTrack = await getCurrentTrack(thisSpotifyApi);
+        console.log("curent track: " +currentTrack);
+		res.status(200).json(currentTrack);
+	} catch (err) {
+		res.status(500).json(err);
+	}
 });
 
 export default router;
