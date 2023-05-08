@@ -114,7 +114,7 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider({player}) {
+export function TimeSlider({ player }) {
     const duration = 200; //seconds //TODO: get actual song duration
     const [position, setPosition] = useState(0); //TODO: set actual song position
 
@@ -300,8 +300,8 @@ function ControlPanel({ deviceId, studio, player }) {
                     onClick={() => spotifyNext(deviceId, studio)}
                 />
             </div>
-            <TimeSlider player={player}/>
-            <VolumeSlider player={player}/>
+            <TimeSlider player={player} />
+            <VolumeSlider player={player} />
         </div>
     );
 }
@@ -322,7 +322,7 @@ function WebPlayback(props) {
         try {
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const player = new window.Spotify.Player({
-                    name: "EarBuddies",
+                    name: "Ear Buddies",
                     getOAuthToken: (cb) => {
                         cb(props.token);
                     },
@@ -359,7 +359,7 @@ function WebPlayback(props) {
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player}/>
+                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player} />
                 </div>
             </div>
         </>

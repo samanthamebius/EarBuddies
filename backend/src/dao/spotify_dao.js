@@ -82,7 +82,7 @@ async function getPlaybackState(thisSpotifyApi) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getMyCurrentPlaybackState({ additional_types: 'episode' })
       .then(function (data) {
-        if (data.body) {
+        if (data.statusCode == 200) {
           resolve(true);
         } else {
           resolve(false);
