@@ -58,6 +58,13 @@ function SongInfo() {
             setArtistImg(artist.data.images[0].url);
 		}
 		fetchSongInfo();
+
+        // Polling mechanism to continuously update position
+        const interval = setInterval(fetchSongInfo, 1000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+
 	},[songTitle]);
 
     return (
