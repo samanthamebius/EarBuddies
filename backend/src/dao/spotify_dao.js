@@ -78,11 +78,11 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   });
 }
 
-async function getPlaybackState(thisSpotifyApi) {
+async function getPlaybackState(thisSpotifyApi, deviceId) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getMyCurrentPlaybackState({ additional_types: 'episode' })
       .then(function (data) {
-        if (data.statusCode == 200) {
+        if (data.statusCode == 200 && data.body.device.id == deviceId) {
           resolve(true);
         } else {
           resolve(false);
