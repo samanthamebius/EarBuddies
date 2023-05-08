@@ -226,6 +226,51 @@ function ControlPanel(props) {
 		});
 	}
 
+	function spotifyNext(deviceId, studio) {
+		try {
+			axios
+				.put(`${BASE_URL}/api/spotify/next`, {
+					deviceId: deviceId,
+					studio: studio,
+				})
+				.then((response) => {
+					console.log(response);
+				})
+				.catch((error) => {
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					localStorage.removeItem("expires_in");
+					localStorage.removeItem("current_user_id");
+					navigate("/login");
+					return <p>Could not play next track</p>;
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	function spotifyPrevious(deviceId) {
+		try {
+			axios
+				.put(`${BASE_URL}/api/spotify/previous`, {
+					deviceId: deviceId,
+				})
+				.then((response) => {
+					console.log(response);
+				})
+				.catch((error) => {
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					localStorage.removeItem("expires_in");
+					localStorage.removeItem("current_user_id");
+					navigate("/login");
+					return <p>Could not play previous track</p>;
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	function pauseButton() {
 		socket.emit("send_pause_song", {
 			room: studio._id,
@@ -261,12 +306,13 @@ function ControlPanel(props) {
 				<SkipPreviousRoundedIcon
 					sx={{ "&:hover": { cursor: "pointer" } }}
 					style={{ color: "white", fontSize: "40px" }}
+					onClick={() => spotifyPrevious(myDeviceId)}
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
 						sx={{ "&:hover": { cursor: "pointer" } }}
 						style={{ color: "white", fontSize: "40px" }}
-						onClick={() => playButton(studio)}
+						onClick={() => playButton(studio, myDeviceId)}
 					/>
 				) : (
 					<PauseCircleRoundedIcon
@@ -278,6 +324,7 @@ function ControlPanel(props) {
 				<SkipNextRoundedIcon
 					sx={{ "&:hover": { cursor: "pointer" } }}
 					style={{ color: "white", fontSize: "40px" }}
+					onClick={() => spotifyNext(myDeviceId, studio)}
 				/>
 			</div>
 			<TimeSlider player={player} />
