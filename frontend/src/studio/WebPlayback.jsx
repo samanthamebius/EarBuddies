@@ -56,7 +56,6 @@ function SongInfo() {
             setArtistName(track.data.artists[0].name);
             setAlbumArtwork(track.data.album.images[0].url);
             const artist_id = track.data.artists[0].id;
-            console.log("artist-id: " +artist_id);
             const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
             setArtistImg(artist.data.images[0].url);
 		}
