@@ -48,13 +48,14 @@ function Queue(props) {
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
 			.then((response) => {
 				response.data?.tracks.items.map((item) => {
-					console.log(item);
+					const trackArtists = [];
+					item.track.artists?.map((artist) => trackArtists.push(artist.name));
 					setPlaylistSongs((playlistSongs) => [
 						...playlistSongs,
 						{
 							id: item.track.id,
 							name: item.track.name,
-							artists: item.track.artists,
+							artists: trackArtists,
 							image: item.track.album.images[0].url,
 							type: item.track.type,
 						},

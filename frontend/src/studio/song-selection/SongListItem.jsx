@@ -3,15 +3,15 @@ import { useState } from "react";
 import styles from "../StudioPage.module.css";
 import axios from "axios";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Box, Icon, ListItem, ListItemText, Tooltip } from "@mui/material";
-import { tooltipClasses } from "@mui/material/Tooltip";
-import { styled } from "@mui/material/styles";
+import PodcastsRoundedIcon from "@mui/icons-material/PodcastsRounded";
+import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
+import EqualizerRoundedIcon from "@mui/icons-material/EqualizerRounded";
+import { Box, Icon, ListItem, ListItemText } from "@mui/material";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export function SongListItem(props) {
+function SongListItem(props) {
 	const { song, studio, socket, type, snapshotId = null } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
@@ -28,22 +28,6 @@ export function SongListItem(props) {
 	const handleIconMouseLeave = () => {
 		setIconHover(false);
 	};
-
-	const ToolTip = styled(({ className, ...props }) => (
-		<Tooltip {...props} classes={{ popper: className }} />
-	))(({ theme }) => ({
-		[`& .${tooltipClasses.arrow}`]: {
-			color: theme.palette.common.white,
-		},
-		[`& .${tooltipClasses.tooltip}`]: {
-			backgroundColor: theme.palette.common.white,
-			color: "rgba(0, 0, 0, 0.87)",
-			boxShadow: theme.shadows[1],
-			fontSize: 12,
-			color: "#666666",
-			maxWidth: "80%",
-		},
-	}));
 
 	// add the song to queue and emit to all sockets in the studio
 	const handleAddToQueue = async () => {
@@ -64,10 +48,9 @@ export function SongListItem(props) {
 	const handleRemoveFromQueue = async () => {
 		const playlist_id = studio.studioPlaylist;
 		const track_id = song.id;
-		const type = song.type;
 		await axios.delete(
 			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`,
-			{ data: { snapshot_id: snapshotId, type: type } }
+			{ data: { snapshot_id: snapshotId, type: song.type } }
 		);
 
 		// reload the playlist after deleting
@@ -77,27 +60,96 @@ export function SongListItem(props) {
 		});
 	};
 
+	const displaySongTypeIcon = () => {
+		if (song.type === "episode") {
+			return (
+				<PodcastsRoundedIcon
+					fontSize="small"
+					style={{ color: "#c4c4c4", marginRight: "10px" }}
+				/>
+			);
+		} else if (song.type === "track") {
+			return (
+				<MusicNoteRoundedIcon
+					fontSize="small"
+					style={{ color: "#c4c4c4", marginRight: "10px" }}
+				/>
+			);
+		} else if (false) {
+			//TO DO: isPlaying (replace false)
+			return (
+				<EqualizerRoundedIcon
+					fontSize="small"
+					style={{ color: "#CA3FF3", marginRight: "10px" }}
+				/>
+			);
+		}
+	};
+
+	const displaySongImage = () => {
+		return (
+			<Box className={styles.resultImgBox} position="relative">
+				<img className={styles.resultImg} src={song.image} />
+				{/* For search results, onHover styles on listItem */}
+				{type === "search" && (
+					<>
+						{isHover && <Box className={styles.resultImgDark} />}
+						{isHover && (
+							<Icon
+								fontSize={"large"}
+								sx={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -75%)",
+								}}
+							>
+								<QueueMusicRoundedIcon style={{ color: "white" }} />
+							</Icon>
+						)}
+					</>
+				)}
+			</Box>
+		);
+	};
+
+	const displaySongText = () => {
+		return (
+			<ListItemText
+				className={styles.resultTitle}
+				primary={<b>{song.name}</b>}
+				secondary={<p className={styles.resultTitleDetail}>{song.artists}</p>}
+				primaryTypographyProps={{
+					style: {
+						width: "300px",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+					},
+				}}
+				secondaryTypographyProps={{
+					style: {
+						width: "300px",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+					},
+				}}
+			/>
+		);
+	};
+
 	return (
 		<>
 			<ListItem
 				onMouseEnter={handleItemMouseEnter}
 				onMouseLeave={handleItemMouseLeave}
 				className={styles.result}
-				onClick={null} // TO DO: IMPLEMENT PLAY FROM HERE
+				onClick={type === "search" ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === "search" ? (
-							<ToolTip title={"Add to Queue"} placement="left" arrow>
-								<QueueMusicRoundedIcon
-									onMouseEnter={handleIconMouseEnter}
-									onMouseLeave={handleIconMouseLeave}
-									onClick={() => handleAddToQueue()}
-									edge="end"
-									style={{ color: isIconHover ? "#B03EEE" : "#757575" }}
-								/>
-							</ToolTip>
-						) : (
-							<CloseRoundedIcon
+						{type === "queue" && (
+							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
 								style={{ color: isIconHover ? "#B03EEE" : "#757575" }}
@@ -108,39 +160,9 @@ export function SongListItem(props) {
 					</>
 				}
 			>
-				<Box className={styles.resultImgBox} position="relative">
-					<img className={styles.resultImg} src={song.image} />
-					{isHover ? <Box className={styles.resultImgDark} /> : null}
-					{isHover ? (
-						<Icon
-							fontSize={"large"}
-							sx={{
-								position: "absolute",
-								top: "50%",
-								left: "50%",
-								transform: "translate(-50%, -65%)",
-							}}
-						>
-							<PlayArrowRoundedIcon
-								fontSize={"large"}
-								style={{ color: "white" }}
-							/>
-						</Icon>
-					) : null}
-				</Box>
-				<ListItemText
-					className={styles.resultTitle}
-					primary={<b>{song.name}</b>}
-					secondary={
-						<>
-							{song.artists?.map((artist, index) => (
-								<p key={index} className={styles.resultTitleDetail}>
-									{artist.name}
-								</p>
-							))}
-						</>
-					}
-				/>
+				{displaySongTypeIcon()}
+				{displaySongImage()}
+				{displaySongText()}
 			</ListItem>
 		</>
 	);

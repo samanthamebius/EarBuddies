@@ -264,4 +264,20 @@ router.put("/:studio_id/newHost/:host_name", async (req, res) => {
 	}
 });
 
+router.get("/:studio_id/host", async (req, res) => {
+	try {
+		// get host username
+		const { studio_id } = req.params;
+		const studio = await getStudio(studio_id);
+		const hostName = studio[0].studioHost;
+
+		//get host user object
+		const host = await getUser(hostName);
+		res.status(200).json(host);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+
 export default router;
