@@ -327,7 +327,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                     }>
                     <ListItemAvatar>
                       <Avatar>
-                        <img className={styles.image} src={listener.profilePicture} />
+                        <img className={styles.image} src={listener.profilePic} />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={listener.userDisplayName} />
