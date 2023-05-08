@@ -8,10 +8,10 @@ function PageNotFound({ errorType }) {
   const navigate = useNavigate();
 
   const logout = () => {
-	localStorage.removeItem("access_token");
-	localStorage.removeItem("refresh_token");
-	localStorage.removeItem("expires_in");
-	localStorage.removeItem("current_user_id");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+    localStorage.removeItem("current_user_id");
   }
 
   let errorMessage;
@@ -23,7 +23,7 @@ function PageNotFound({ errorType }) {
     redirectPath = "/";
     buttonText = "Back to home"
   } else if (errorType === "400") {
-    errorMessage = "Oops! An error occurred while communicating with spotify";
+    errorMessage = "Oops! An error occurred while communicating with Spotify";
     logout();
     redirectPath = "/login";
     buttonText = "Please login again"
@@ -37,17 +37,17 @@ function PageNotFound({ errorType }) {
 
   return (
     <div className={styles.spacing}>
-        <div className={styles.icon}>
-            <ErrorOutlineRoundedIcon fontSize={'large'} style={{ color: '#B03EEE'}}/>
-        </div>
-        <h1 style={{display: 'flex', justifyContent: 'center', fontSize: '26px'}} className={styles.sectionHeading}>
-            {errorMessage}
-        </h1>
-        <Button 
-            sx={{ fontWeight: 600, fontSize: '16px', marginTop: '15px' }} 
-            variant='contained' 
-            onClick={() => navigate(redirectPath)}>{buttonText}
-        </Button>
+      <div className={styles.icon}>
+        <ErrorOutlineRoundedIcon fontSize={'large'} style={{ color: '#B03EEE' }} />
+      </div>
+      <h1 style={{ display: 'flex', justifyContent: 'center', fontSize: '26px' }} className={styles.sectionHeading}>
+        {errorMessage}
+      </h1>
+      <Button
+        sx={{ fontWeight: 600, fontSize: '16px', marginTop: '15px' }}
+        variant='contained'
+        onClick={() => navigate(redirectPath)}>{buttonText}
+      </Button>
     </div>
   );
 }
