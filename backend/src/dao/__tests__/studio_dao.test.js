@@ -33,7 +33,7 @@ const mockUser2 = {
 const mockStudio1 = {
     _id: new mongoose.Types.ObjectId(),
   studioName: "testStudio1",
-  studioIsActive: true,
+  studioIsActive: false,
   studioUsers: [],
   studioHost: "testUser1",
   studioGenres: ["testGenre1"],
@@ -44,7 +44,7 @@ const mockStudio1 = {
 const mockStudio2 = {
   _id: new mongoose.Types.ObjectId(),
   studioName: "testStudio2",
-  studioIsActive: true,
+  studioIsActive: false,
   studioUsers: [],
   studioHost: "testUser2",
   studioGenres: ["testGenre2"],
@@ -152,7 +152,7 @@ test('update studio is active is successful', async () => {
     const updatedStudio = {
         _id: mockStudio1._id,
         studioName: mockStudio1.studioName,
-        studioIsActive: !mockStudio1.studioIsActive,
+        studioIsActive: true,
         studioUsers: mockStudio1.studioUsers,
         studioHost: mockStudio1.studioHost,
         studioGenres: mockStudio1.studioGenres,
@@ -160,7 +160,7 @@ test('update studio is active is successful', async () => {
         studioControlHostOnly: mockStudio1.studioControlHostOnly,
         studioPlaylist: mockStudio1.studioPlaylist,
     };
-    const studio = await updateStudioIsActive(mockStudio1._id, false);
+    const studio = await updateStudioIsActive(mockStudio1._id, true);
     expectStudio(studio, updatedStudio);
 });
 
@@ -195,4 +195,5 @@ test('update studio host is successful', async () => {
     const studio = await updateStudioHost(mockStudio1._id, mockUser2.username);
     expectStudio(studio, updatedStudio);
 });
+
 

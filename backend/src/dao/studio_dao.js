@@ -16,7 +16,7 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly, pl
 	
   const newStudio = new Studio({
     studioName: name,
-    studioIsActive: true,
+    studioIsActive: false,
     studioUsers: listeners,
 	studioNames: displayNames,
     studioHost: host,
@@ -87,6 +87,24 @@ async function updateStudioHost(id, host) {
 async function updateStudioNames(id, newNames) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
 }
+
+async function setStudioStatus(username, studio_id) {
+	const studio = await getStudio(studio_id);
+	const users = studio[0].studioUsers;
+	let numActive = 0;
+	users.forEach(async (user) => {
+		const dbUser = await getUser(user);
+		if (dbUser.userIsActive) {
+			numActive++;
+		}
+	});
+	if (numActive > 1) {
+		return await updateStudioIsActive(studio_id, true);
+	} else {
+		return await updateStudioIsActive(studio_id, false);
+	}
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -98,4 +116,5 @@ export {
 	deleteStudio,
 	updateStudioNames,
 	deleteUserFromStudio,
+	setStudioStatus,
 };

@@ -7,6 +7,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import mongoose from 'mongoose';
 import { loginUser, setUserActive } from '../../dao/user_dao';
 import { setSpotifyApi } from '../../dao/spotify_dao';
+import { setStudioStatus } from '../../dao/studio_dao';
 
 const router = express.Router();
 router.use(cors())
@@ -40,6 +41,9 @@ router.post("/", async (req, res) => {
     setSpotifyApi(spotifyApi);
     const username = await loginUser(spotifyApi, data);
     await setUserActive(username);
+    user.userStudios.forEach(async (studio) => {
+      await setStudioStatus(username, studio);
+    });
 
     res.json({
       access_token: access_token,

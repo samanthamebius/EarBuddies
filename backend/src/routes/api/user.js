@@ -10,7 +10,7 @@ import {
   updateUserProfilePic,
   setUserInactive,
 } from "../../dao/user_dao";
-import { deleteUserFromStudio } from "../../dao/studio_dao";
+import { deleteUserFromStudio, setStudioStatus } from "../../dao/studio_dao";
 
 const router = express.Router();
 
@@ -83,6 +83,9 @@ router.put("/:username/logout", async (req, res) => {
       return res.status(404).json({ msg: "No user found" });
     }
     await setUserInactive(username);
+    user.userStudios.forEach(async (studio) => {
+      await setStudioStatus(username, studio);
+    });
     return res.status(204).json({ msg: "User logged out" });
   } catch (err) {
     console.log(err);
