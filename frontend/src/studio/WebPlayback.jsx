@@ -43,23 +43,25 @@ const StyledSlider = styled(Slider)({
 
 function SongInfo() {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
     const [songTitle, setSongTitle] = useState('');
     const [artistName, setArtistName] = useState('');
     const [artistImg, setArtistImg] = useState('');
     const [albumArtwork, setAlbumArtwork] = useState('');
 
+
     useEffect(() => {
 		const fetchSongInfo = async () => {
-			const response = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setSongTitle(response.data.name);
-            setArtistName(response.data.artists[0].name);
-            //setArtistImg(response.data.artists[0].images[0].url);
-            setAlbumArtwork(response.data.album.images[0].url);
-			console.log("name " + response.data.artists[0].images[0].url);
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setSongTitle(track.data.name);
+            setArtistName(track.data.artists[0].name);
+            setAlbumArtwork(track.data.album.images[0].url);
+            const artist_id = track.data.artists[0].id;
+            console.log("artist-id: " +artist_id);
+            const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
+            setArtistImg(artist.data.images[0].url);
 		}
 		fetchSongInfo();
-	},[]);
+	},[songTitle]);
 
     return (
         <div className={styles.songSection}>

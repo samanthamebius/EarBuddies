@@ -1,6 +1,6 @@
 import express from "express";
 import { getSpotifyApi } from "../../dao/spotify_dao";
-import { searchSpotify, getCurrentTrack, getCurrentTrackId, getLastPlaylistTrackId } from "../../dao/spotify_dao";
+import { searchSpotify, getCurrentTrack, getCurrentTrackId, getArtist, getLastPlaylistTrackId } from "../../dao/spotify_dao";
 import { set } from "mongoose";
 
 const router = express.Router();
@@ -245,8 +245,20 @@ router.get("/songinfo", async (req, res) => {
 	try {
         const thisSpotifyApi = getSpotifyApi();
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
-        console.log("curent track: " +currentTrack.album.images[0].url);
 		res.status(200).json(currentTrack);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+router.get("/artist/:artist_id", async (req, res) => {
+	try {
+        const { artist_id } = req.params;
+        const thisSpotifyApi = getSpotifyApi();
+		const artist = await getArtist(artist_id, thisSpotifyApi);
+        console.log("getting artist");
+        console.log("artist " + artist.name);
+		res.status(200).json(artist);
 	} catch (err) {
 		res.status(500).json(err);
 	}

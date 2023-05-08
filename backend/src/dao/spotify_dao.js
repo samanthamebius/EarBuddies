@@ -78,6 +78,20 @@ async function getCurrentTrack(thisSpotifyApi) {
   });
 }
 
+async function getArtist(artist_id, thisSpotifyApi) {
+  console.log("in dao " + artist_id);
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getArtist(artist_id) 
+      .then(function (data) {
+        resolve(data.body);
+        console.log(data.body);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
 async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getPlaylistTracks(playlist_id)
@@ -90,4 +104,4 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getLastPlaylistTrackId };
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId };
