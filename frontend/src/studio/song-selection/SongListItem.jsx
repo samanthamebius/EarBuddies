@@ -76,44 +76,18 @@ export default function SongListItem(props) {
 	const displaySongTypeIcon = () => {
 		if (listItem.type === "episode") {
 			return (
-				<PodcastsRoundedIcon fontSize="small" style={{ color: "#c4c4c4", paddingRight: '10px' }} />
+				<PodcastsRoundedIcon fontSize="small" style={{ color: "#c4c4c4", marginRight: '10px' }} />
 			)
 		} else if (listItem.type === "track") {
 			return (
-				<MusicNoteRoundedIcon fontSize="small" style={{ color: "#c4c4c4", paddingRight: '10px' }} />
+				<MusicNoteRoundedIcon fontSize="small" style={{ color: "#c4c4c4", marginRight: '10px' }} />
 			)
 		} else if (false) { //TO DO: isPlaying (replace false)
 			return (
-				<EqualizerRoundedIcon fontSize="small" style={{ color: "#CA3FF3", paddingRight: '10px' }} />
+				<EqualizerRoundedIcon fontSize="small" style={{ color: "#CA3FF3", marginRight: '10px' }} />
 			)
 		}
 	};
-
-	const displaySongText = () => {
-		return (
-			<ListItemText
-				className={styles.resultTitle}
-				primary={<b>{listItem.name}</b>}
-				secondary={<p className={styles.resultTitleDetail}>{listItem.artists}</p>}
-				primaryTypographyProps={{
-					style: {
-						maxWidth: '300px',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis'
-					}
-				}}
-				secondaryTypographyProps={{
-					style: {
-						maxWidth: '300px',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis'
-					}
-				}}
-			/>
-		)
-	}
 
 	const displaySongImage = () => {
 		return (
@@ -134,13 +108,38 @@ export default function SongListItem(props) {
 								}}
 							>
 								<QueueMusicRoundedIcon
-									// fontSize={"small"}
 									style={{ color: "white" }}
 								/>
 							</Icon>)}
 					</>
 				}
 			</Box>
+		)
+	}
+
+	const displaySongText = () => {
+		return (
+			<ListItemText
+				className={styles.resultTitle}
+				primary={<b>{listItem.name}</b>}
+				secondary={<p className={styles.resultTitleDetail}>{listItem.artists}</p>}
+				primaryTypographyProps={{
+					style: {
+						width: '300px',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}
+				}}
+				secondaryTypographyProps={{
+					style: {
+						width: '300px',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}
+				}}
+			/>
 		)
 	}
 
