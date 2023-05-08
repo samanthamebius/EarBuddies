@@ -20,6 +20,9 @@ router.use('/spotify', spotify);
 import studio from './studio';
 router.use('/studio', studio);
 
+import home from './home';
+router.use('/home', home);
+
 //tester api call
 router.get("/hello", (req, res) => {
 	res.send("Hello, World");
