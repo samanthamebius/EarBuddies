@@ -168,6 +168,7 @@ export function VolumeSlider({ player }) {
 export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchDuration = async () => {
@@ -179,9 +180,14 @@ export function TimeSlider({ player }) {
 
 	useEffect(() => {
 		const fetchPosition = async () => {
-			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
+			try {
+				axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
 				setPosition(Math.round(response.data.progress_ms / 1000));
 			});
+			} catch (error) {
+				console.log(error);
+				navigate('/500');
+			}			
 		};
 		fetchPosition();
 
@@ -313,6 +319,7 @@ function ControlPanel(props) {
 				});
 		} catch (error) {
 			console.log(error);
+			navigate("/400");
 		}
 	}
 
@@ -335,6 +342,7 @@ function ControlPanel(props) {
 				});
 		} catch (error) {
 			console.log(error);
+			navigate('/400');
 		}
 	}
 
@@ -438,7 +446,7 @@ function ControlPanel(props) {
 					onClick={() => skipButton(studio)}
 				/>
 			</div>
-			<TimeSlider player={player} />
+			{/* <TimeSlider player={player} /> */}
 			<VolumeSlider player={player} />
 		</div>
 	);
@@ -492,7 +500,7 @@ function WebPlayback(props) {
 		<>
 			<div className="container">
 				<div className="main-wrapper">
-					<SongInfo />
+					{/* <SongInfo /> */}
 					<ControlPanel studio={studio} player={player} socket={socket} />
 				</div>
 			</div>
