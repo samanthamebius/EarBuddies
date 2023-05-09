@@ -6,7 +6,7 @@ import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import PodcastsRoundedIcon from "@mui/icons-material/PodcastsRounded";
 import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
-import EqualizerRoundedIcon from "@mui/icons-material/EqualizerRounded";
+import equalizer_icon from "../../assets/now_playing/equalizer.gif";
 import { Box, Icon, ListItem, ListItemText } from "@mui/material";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -79,10 +79,7 @@ function SongListItem(props) {
 	const displaySongTypeIcon = () => {
 		if (nowPlayingSong === song.name) {
 			return (
-				<EqualizerRoundedIcon
-					fontSize="small"
-					style={{ color: "#CA3FF3", marginRight: "10px" }}
-				/>
+				<img src={equalizer_icon} style={{ width: "20px", height: "20px", marginRight: "10px" }} />
 			);
 		} else if (song.type === "episode") {
 			return (
