@@ -36,6 +36,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
         });
     } catch (error) {
       console.log(error.msg);
+      navigate('/500');
     }
   };
 
@@ -52,6 +53,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
         });
     } catch (error) {
       console.log(error.msg);
+      navigate('/500');
     }
   };
 
@@ -68,6 +70,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
         });
     } catch (error) {
       console.log(error.msg);
+      navigate('/500');
     }
   };
 
@@ -84,6 +87,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
         });
     } catch (error) {
       console.log(error.msg);
+      navigate('/500');
     }
   };
 
@@ -96,15 +100,11 @@ function SearchBar({ label, searchType, studioId, setResults }) {
           setResults(response.data);
         })
         .catch((error) => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          localStorage.removeItem("expires_in");
-          localStorage.removeItem("current_user_id");
-          navigate("/login");
-          return <p>Could not load search</p>;
+          navigate('/400')
         });
     } catch (error) {
       console.log(error.msg);
+      navigate('/500');
     }
   }
 

@@ -171,6 +171,7 @@ export function VolumeSlider({ player }) {
 export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
+	const navigate = useNavigate();
 
 	// useEffect(() => {
 	// 	const fetchDuration = async () => {
@@ -316,6 +317,7 @@ function ControlPanel(props) {
 				});
 		} catch (error) {
 			console.log(error);
+			navigate("/400");
 		}
 	}
 
@@ -338,6 +340,7 @@ function ControlPanel(props) {
 				});
 		} catch (error) {
 			console.log(error);
+			navigate("/400");
 		}
 	}
 
@@ -441,7 +444,7 @@ function ControlPanel(props) {
 					onClick={() => skipButton(studio)}
 				/>
 			</div>
-			<TimeSlider player={player} />
+			{/* <TimeSlider player={player} /> */}
 			<VolumeSlider player={player} />
 		</div>
 	);

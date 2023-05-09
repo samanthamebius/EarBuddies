@@ -5,12 +5,14 @@ import list_styles from "./Queue.module.css";
 import useGet from "../../hooks/useGet";
 import { List } from "@mui/material";
 import SongListItem from "./SongListItem";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Queue(props) {
 	const { studio, socket } = props;
 	const [playlistSongs, setPlaylistSongs] = useState([]);
+	const navigate = useNavigate();
 
 	const {
 		data: playlist,
@@ -54,6 +56,9 @@ function Queue(props) {
 						},
 					]);
 				});
+			}).catch((error) => {
+				console.log(error);
+				navigate('/500');
 			});
 	}, []);
 

@@ -8,6 +8,7 @@ import PodcastsRoundedIcon from "@mui/icons-material/PodcastsRounded";
 import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
 import equalizer_icon from "../../assets/now_playing/equalizer.gif";
 import { Box, Icon, ListItem, ListItemText } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,6 +17,7 @@ function SongListItem(props) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
+	const navigate = useNavigate();
 
 	// useEffect(() => {
 	// 	const fetchSongInfo = async () => {
