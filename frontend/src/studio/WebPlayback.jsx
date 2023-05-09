@@ -14,6 +14,8 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider";
+import { useContext } from "react";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
@@ -369,6 +371,7 @@ function WebPlayback(props) {
     const [myDeviceId, setDeviceId] = useState({});
     const { studio } = props;
 
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -407,6 +410,12 @@ function WebPlayback(props) {
         }
 
 
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            player.disconnect();
+        };
     }, []);
 
     console.log(myDeviceId);
