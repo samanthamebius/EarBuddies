@@ -25,9 +25,8 @@ cd ./frontend/
 npm install
 npm run dev
 ```
-5. open [localhost](http://127.0.0.1:5173/) in your browser
-6. log in with spotify. Feel free to use your own account, or you can use one of ours:  
-(Please note that your spotify account must be premium to use Earbuddies)
+5. open [localhost](http://127.0.0.1:5173/) in your browser. Please use google chrome, as the system has not been fully tested on other browsers and you may encounter unexpected errors. 
+7. log in with spotify. Please use one of the following accounts:  
 
 Testing account 1  (Taylor Swift)  
 
@@ -36,7 +35,7 @@ Testing account 1  (Taylor Swift)
 
 Testing account 2  (Florence Welch)  
 
-> username: bjur781@aucklanduni.ac.nz 
+> username: bjur781@aucklanduni.ac.nz  
 > password: softeng750  
 
 ## Database
