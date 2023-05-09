@@ -47,36 +47,36 @@ function SongInfo() {
     const [albumArtwork, setAlbumArtwork] = useState('');
 
 
-    useEffect(() => {
-        const fetchSongInfo = async () => {
-            const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-            if (track.data.item.type === "episode") {
-                setSongTitle(track.data.item.name);
-                setAlbumArtwork(track.data.item.images[0].url);
-                setArtistName(track.data.item.show.name);
-                setArtistImg(null);
-            } else {
-                setSongTitle(track.data.item.name);
-                setAlbumArtwork(track.data.item.album.images[0].url);
-                setArtistName(track.data.item.artists[0].name);
-                const artist_id = track.data.item.artists[0].id;
-                const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
-                setArtistImg(artist.data.images[0].url);
-            }
-        }
-        fetchSongInfo();
+    // useEffect(() => {
+    //     const fetchSongInfo = async () => {
+    //         const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+    //         if (track.data.item.type === "episode") {
+    //             setSongTitle(track.data.item.name);
+    //             setAlbumArtwork(track.data.item.images[0].url);
+    //             setArtistName(track.data.item.show.name);
+    //             setArtistImg(null);
+    //         } else {
+    //             setSongTitle(track.data.item.name);
+    //             setAlbumArtwork(track.data.item.album.images[0].url);
+    //             setArtistName(track.data.item.artists[0].name);
+    //             const artist_id = track.data.item.artists[0].id;
+    //             const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
+    //             setArtistImg(artist.data.images[0].url);
+    //         }
+    //     }
+    //     fetchSongInfo();
 
-        // Polling mechanism to update song info
-        const interval = setInterval(fetchSongInfo, 1000);
+    //     // Polling mechanism to update song info
+    //     const interval = setInterval(fetchSongInfo, 1000);
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(interval);
+    //     // Cleanup interval on component unmount
+    //     return () => clearInterval(interval);
 
-    }, [songTitle]);
+    // }, [songTitle]);
 
     return (
         <div className={styles.songSection}>
-            <h3 className={styles.song} style={{ visibility: songTitle ? "visible" : "hidden" }}>{songTitle}</h3>
+            <h3 className={styles.song} style={{ visibility: songTitle ? "visible" : "hidden" }}>Test</h3>
             <div className={styles.artist} >
                 <img style={{ visibility: artistImg ? "visible" : "hidden" }} className={styles.artistImg} src={artistImg} />
                 <div style={{ visibility: artistName ? "visible" : "hidden" }} className={styles.artistName}>{artistName ? artistName : null}</div>
@@ -151,30 +151,30 @@ export function TimeSlider({ player }) {
     const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
 
-    useEffect(() => {
-        const fetchDuration = async () => {
-            const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-            setDuration(Math.round(track.data.item.duration_ms / 1000));
-        }
-        fetchDuration();
-    }, []);
+    // useEffect(() => {
+    //     const fetchDuration = async () => {
+    //         const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+    //         setDuration(Math.round(track.data.item.duration_ms / 1000));
+    //     }
+    //     fetchDuration();
+    // }, []);
 
-    useEffect(() => {
-        const fetchPosition = async () => {
-            axios
-                .get(`${BASE_URL}/api/spotify/songinfo`)
-                .then((response) => {
-                    setPosition(Math.round(response.data.progress_ms / 1000));
-                });
-        };
-        fetchPosition();
+    // useEffect(() => {
+    //     const fetchPosition = async () => {
+    //         axios
+    //             .get(`${BASE_URL}/api/spotify/songinfo`)
+    //             .then((response) => {
+    //                 setPosition(Math.round(response.data.progress_ms / 1000));
+    //             });
+    //     };
+    //     fetchPosition();
 
-        // Polling mechanism to continuously update position
-        const interval = setInterval(fetchPosition, 1000);
+    //     // Polling mechanism to continuously update position
+    //     const interval = setInterval(fetchPosition, 1000);
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(interval);
-    }, []);
+    //     // Cleanup interval on component unmount
+    //     return () => clearInterval(interval);
+    // }, []);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -369,45 +369,45 @@ function WebPlayback(props) {
     const [myDeviceId, setDeviceId] = useState({});
     const { studio } = props;
 
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://sdk.scdn.co/spotify-player.js";
-        script.async = true;
+    // useEffect(() => {
+    //     const script = document.createElement("script");
+    //     script.src = "https://sdk.scdn.co/spotify-player.js";
+    //     script.async = true;
 
-        document.body.appendChild(script);
+    //     document.body.appendChild(script);
 
-        //add try catch around here for access token expiry check
-        try {
-            window.onSpotifyWebPlaybackSDKReady = () => {
-                const player = new window.Spotify.Player({
-                    name: "Ear Buddies",
-                    getOAuthToken: (cb) => {
-                        cb(props.token);
-                    },
-                    volume: 0.5,
-                });
+    //     //add try catch around here for access token expiry check
+    //     try {
+    //         window.onSpotifyWebPlaybackSDKReady = () => {
+    //             const player = new window.Spotify.Player({
+    //                 name: "Ear Buddies",
+    //                 getOAuthToken: (cb) => {
+    //                     cb(props.token);
+    //                 },
+    //                 volume: 0.5,
+    //             });
 
-                setPlayer(player);
+    //             setPlayer(player);
 
-                player.addListener("ready", ({ device_id }) => {
-                    console.log("Ready with Device ID", device_id);
-                    setDeviceId(device_id);
-                });
+    //             player.addListener("ready", ({ device_id }) => {
+    //                 console.log("Ready with Device ID", device_id);
+    //                 setDeviceId(device_id);
+    //             });
 
-                player.addListener("not_ready", ({ device_id }) => {
-                    console.log("Device ID has gone offline", device_id);
-                });
+    //             player.addListener("not_ready", ({ device_id }) => {
+    //                 console.log("Device ID has gone offline", device_id);
+    //             });
 
-                player.connect();
-            };
-        }
-        catch (error) {
-            console.log(error);
-            navigate("/400");
-        }
+    //             player.connect();
+    //         };
+    //     }
+    //     catch (error) {
+    //         console.log(error);
+    //         navigate("/400");
+    //     }
 
 
-    }, []);
+    // }, []);
 
     console.log(myDeviceId);
     navigate = useNavigate();

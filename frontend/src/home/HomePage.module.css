@@ -42,7 +42,7 @@
 .cardContainer::-webkit-scrollbar {
 	display: none;
 }
-  
+
 .cardContainer {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
