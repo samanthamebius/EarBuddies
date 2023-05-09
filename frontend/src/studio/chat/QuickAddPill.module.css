@@ -1,0 +1,25 @@
+.pillContainer {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	align-items: center;
+}
+
+.pillContainer:hover {
+	cursor: pointer;
+}
+
+.pillContent {
+	background-color: white;
+	border-radius: 50px;
+	width: fit-content;
+	padding: 2px 4px 2px 2px;
+	display: flex;
+	align-items: center;
+	height: 100%;
+}
+
+.pillText {
+	color: #cc3ae4;
+	font-size: 12px;
+}

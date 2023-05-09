@@ -40,42 +40,45 @@ const StyledSlider = styled(Slider)({
 	},
 });
 
-function SongInfo() {
-	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+function SongInfo({ socket, studio }) {
 	const [songTitle, setSongTitle] = useState("");
 	const [artistName, setArtistName] = useState("");
 	const [artistImg, setArtistImg] = useState("");
 	const [albumArtwork, setAlbumArtwork] = useState("");
 
-	useEffect(() => {
-		const fetchSongInfo = async () => {
-			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			if (track.data?.item?.type === "episode") {
-				setSongTitle(track.data.item.name);
-				setAlbumArtwork(track.data.item.images[0].url);
-				setArtistName(track.data.item.show.name);
-				setArtistImg(null);
-			} else {
-				setSongTitle(track.data?.item?.name);
-				setAlbumArtwork(track.data?.item?.album.images[0].url);
-				setArtistName(track.data?.item?.artists[0].name);
-				const artist_id = track.data?.item?.artists[0].id;
-				if (artist_id) {
-					const artist = await axios.get(
-						`${BASE_URL}/api/spotify/artist/${artist_id}`
-					);
-					setArtistImg(artist.data.images[0].url);
-				}
-			}
-		};
-		fetchSongInfo();
+	// useEffect(() => {
+	// 	const fetchSongInfo = async () => {
+	// 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+	// 		if (track.data?.item?.type === "episode") {
+	// 			setSongTitle(track.data.item.name);
+	// 			setAlbumArtwork(track.data.item.images[0].url);
+	// 			setArtistName(track.data.item.show.name);
+	// 			setArtistImg(null);
+	// 		} else {
+	// 			setSongTitle(track.data?.item?.name);
+	// 			setAlbumArtwork(track.data?.item?.album.images[0].url);
+	// 			setArtistName(track.data?.item?.artists[0].name);
+	// 			const artist_id = track.data?.item?.artists[0].id;
+	// 			if (artist_id) {
+	// 				const artist = await axios.get(
+	// 					`${BASE_URL}/api/spotify/artist/${artist_id}`
+	// 				);
+	// 				setArtistImg(artist.data.images[0].url);
+	// 			}
+	// 		}
+	// 		socket.emit("send_currently_playing", {
+	// 			room: studio._id,
+	// 			track: track.data.item,
+	// 		});
+	// 	};
+	// 	fetchSongInfo();
 
-		// Polling mechanism to update song info
-		const interval = setInterval(fetchSongInfo, 1000);
+	// 	// Polling mechanism to update song info
+	// 	const interval = setInterval(fetchSongInfo, 1000);
 
-		// Cleanup interval on component unmount
-		return () => clearInterval(interval);
-	}, [songTitle]);
+	// 	// Cleanup interval on component unmount
+	// 	return () => clearInterval(interval);
+	// }, [songTitle]);
 
 	return (
 		<div className={styles.songSection}>
@@ -169,28 +172,28 @@ export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
 
-	useEffect(() => {
-		const fetchDuration = async () => {
-			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setDuration(Math.round(track.data.item.duration_ms / 1000));
-		};
-		fetchDuration();
-	}, []);
+	// useEffect(() => {
+	// 	const fetchDuration = async () => {
+	// 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+	// 		setDuration(Math.round(track.data.item.duration_ms / 1000));
+	// 	};
+	// 	fetchDuration();
+	// }, []);
 
-	useEffect(() => {
-		const fetchPosition = async () => {
-			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
-				setPosition(Math.round(response.data.progress_ms / 1000));
-			});
-		};
-		fetchPosition();
+	// useEffect(() => {
+	// 	const fetchPosition = async () => {
+	// 		axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
+	// 			setPosition(Math.round(response.data.progress_ms / 1000));
+	// 		});
+	// 	};
+	// 	fetchPosition();
 
-		// Polling mechanism to continuously update position
-		const interval = setInterval(fetchPosition, 1000);
+	// 	// Polling mechanism to continuously update position
+	// 	const interval = setInterval(fetchPosition, 1000);
 
-		// Cleanup interval on component unmount
-		return () => clearInterval(interval);
-	}, []);
+	// 	// Cleanup interval on component unmount
+	// 	return () => clearInterval(interval);
+	// }, []);
 
 	const TinyText = styled(Typography)({
 		fontSize: "0.75rem",
@@ -492,7 +495,7 @@ function WebPlayback(props) {
 		<>
 			<div className="container">
 				<div className="main-wrapper">
-					<SongInfo />
+					<SongInfo socket={socket} studio={studio} />
 					<ControlPanel studio={studio} player={player} socket={socket} />
 				</div>
 			</div>

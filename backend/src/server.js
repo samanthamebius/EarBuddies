@@ -77,12 +77,17 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_reload_chat_messages", data);
 	});
 
-	// TODO: rename these
+	// send the currently playing song to the chat
+	socket.on("send_currently_playing", (data) => {
+		const { room, track } = data;
+		io.in(room).emit("receive_currently_playing", track);
+	});
+
 	// add a song to the queue
 	socket.on("send_new_song", (data) => {
 		const { room } = data;
 		console.log(data);
-		io.in(room).emit("receive_send_new_song", data);
+		io.in(room).emit("receive_new_song", data);
 	});
 
 	// remove song from the queue

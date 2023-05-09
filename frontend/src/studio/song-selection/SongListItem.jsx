@@ -17,20 +17,20 @@ function SongListItem(props) {
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
 
-	useEffect(() => {
-		const fetchSongInfo = async () => {
-			await axios
-				.get(`${BASE_URL}/api/spotify/songinfo`)
-				.then((response) => setNowPlayingSong(response.data?.item?.name));
-		};
-		fetchSongInfo();
+	// useEffect(() => {
+	// 	const fetchSongInfo = async () => {
+	// 		await axios
+	// 			.get(`${BASE_URL}/api/spotify/songinfo`)
+	// 			.then((response) => setNowPlayingSong(response.data?.item?.name));
+	// 	};
+	// 	fetchSongInfo();
 
-		// Polling mechanism to update song info
-		const interval = setInterval(fetchSongInfo, 1000);
+	// 	// Polling mechanism to update song info
+	// 	const interval = setInterval(fetchSongInfo, 1000);
 
-		// Cleanup interval on component unmount
-		return () => clearInterval(interval);
-	}, []);
+	// 	// Cleanup interval on component unmount
+	// 	return () => clearInterval(interval);
+	// }, []);
 
 	const handleItemMouseEnter = () => {
 		setHover(true);
@@ -79,7 +79,10 @@ function SongListItem(props) {
 	const displaySongTypeIcon = () => {
 		if (nowPlayingSong === song.name) {
 			return (
-				<img src={equalizer_icon} style={{ width: "20px", height: "20px", marginRight: "10px" }} />
+				<img
+					src={equalizer_icon}
+					style={{ width: "20px", height: "20px", marginRight: "10px" }}
+				/>
 			);
 		} else if (song.type === "episode") {
 			return (
