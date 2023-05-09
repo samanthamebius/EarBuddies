@@ -4,12 +4,25 @@ import React, { useEffect, useState } from "react";
 import SearchBar from "../shared/SearchBar";
 import { ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
 import ClearRounded from "@mui/icons-material/ClearRounded";
+import axios from "axios";
 
 export default function AddListenersBlock() {
 
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
+  const id = '6459c055ca78bfdbbe1c736e';
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  
+  useEffect( () => {
+    async function fetchStudioData() {
+      const studio = await axios.get(`${BASE_URL}/api/studio/${id}`);
+      const existingListeners = studio.data[0].studioUsers;
+      console.log("LISTENERS " + existingListeners);
+      setListeners(existingListeners);
+    } fetchStudioData();
+    
+  }, [listeners])
 
   useEffect(() => {
     const difference = listenerSearchResults.filter(x => !listeners.some(y => y._id === x._id));

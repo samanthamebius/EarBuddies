@@ -6,9 +6,10 @@ import DialogActions from '@mui/material/DialogActions';
 import styles from './Popup.module.css';
 import GroupsIcon from '@mui/icons-material/Groups';
 import axios from "axios";
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 
 import AddListenersBlock from '../shared/AddListenersBlock';
-import ListenerListItem from '../shared/ListenerListItem';
 
 export default function ManageListenersDialog({ isManListDialogOpened, handleCloseManListDialog, studio }) {
 
@@ -29,7 +30,7 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
 
     return (
         <Dialog  open={isManListDialogOpened} onClose={handleCloseManListDialog} fullWidth maxWidth="sm"
-        PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
+        PaperProps={{ style: { padding: '20px', backgroundColor: '#F5F5F5' }}}>
         <div className={styles.dialogHeader}>
             <GroupsIcon style={{ color:  "#757575", fontSize:40}} />
             <h1 className={styles.heading}>Manage Listeners</h1>
@@ -47,3 +48,15 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
     </Dialog>
     );
 }
+
+function ListenerListItem ({ listener }) {
+  
+    return (
+      <div className={styles.listenerListItem}>
+        <img src={listener.profilePic}/>
+        <p>{listener.userDisplayName}</p>
+         <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
+    
+      </div>
+    );
+};

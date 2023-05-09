@@ -46,7 +46,7 @@ function SongInfo() {
     const [artistImg, setArtistImg] = useState('');
     const [albumArtwork, setAlbumArtwork] = useState('');
 
-
+    {/*
     useEffect(() => {
 		const fetchSongInfo = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
@@ -73,6 +73,7 @@ function SongInfo() {
         return () => clearInterval(interval);
 
 	},[songTitle]);
+*/}
 
     return (
         <div className={styles.songSection}>
@@ -151,6 +152,8 @@ export function TimeSlider({player}) {
     const [duration, setDuration] = useState(0); 
     const [position, setPosition] = useState(0);
 
+    {/*
+
     useEffect(() => {
 		const fetchDuration = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
@@ -176,6 +179,7 @@ export function TimeSlider({player}) {
     return () => clearInterval(interval);
   }, []);
 
+  */}
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
         opacity: 0.38,
