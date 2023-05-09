@@ -14,16 +14,16 @@ function HomePage(props) {
 	const id = JSON.parse(current_user);
 	const [studios, setStudios] = useState([]);
 	const [studioSearchResults, setStudioSearchResults] = useState([]);
-	const [studioSearchTerm, setStudioSearchTerm] = useState('');
+	const [studioSearchTerm, setStudioSearchTerm] = useState("");
 	// const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
 
-	console.log("studio search term - ", studioSearchTerm)
+	console.log("studio search term - ", studioSearchTerm);
 
 	useEffect(() => {
 		const fetchStudios = async () => {
 			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
 			setStudios(response.data);
-		}
+		};
 		fetchStudios();
 	}, []);
 
@@ -34,9 +34,7 @@ function HomePage(props) {
 		setIsOpen(!isOpen);
 	};
 
-	const handleStudioSearchTermChange = (value) => {
-		setStudioSearchTerm(value);
-	}
+	console.log(studioSearchResults.length === 0);
 
 	return (
 		<div className={styles.container}>
@@ -64,18 +62,24 @@ function HomePage(props) {
 					label={"Search My Studios ..."}
 					studioId={""}
 					setResults={setStudioSearchResults}
-					onInputChange={(value) => handleStudioSearchTermChange(value)}
+					onInputChange={setStudioSearchTerm}
 				/>
 				<div className={styles.cardContainer}>
-					{(studioSearchResults.length === 0) ?
-						studios.map((studio) => (
-							<StudioCard key={studio.studioName} socket={socket} studio={studio} />
-						))
-						:
-						studioSearchResults.map((studio) => (
-							<StudioCard key={studio.studioName} socket={socket} studio={studio} />
-						))
-					}
+					{studioSearchResults.length === 0 && !studioSearchTerm
+						? studios.map((studio) => (
+								<StudioCard
+									key={studio.studioName}
+									socket={socket}
+									studio={studio}
+								/>
+						  ))
+						: studioSearchResults.map((studio) => (
+								<StudioCard
+									key={studio.studioName}
+									socket={socket}
+									studio={studio}
+								/>
+						  ))}
 				</div>
 			</div>
 			<div className={styles.containerChild}>
@@ -88,14 +92,18 @@ function HomePage(props) {
 				<SearchBar
 					searchType={"activeStudios"}
 					label={"Search Studios Listening Now ..."}
-					studioId={""} />
+					studioId={""}
+				/>
 				<div className={styles.cardContainer}>
 					{studios
 						.filter((studio) => studio.studioIsActive === true)
 						.map((studio) => (
-							<StudioCard key={studio.studioName} socket={socket} studio={studio} />
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
 						))}
-
 				</div>
 			</div>
 		</div>
