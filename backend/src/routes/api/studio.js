@@ -236,31 +236,42 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 			await updateStudios(listener, studios);
 
 			const displayName = thisListener.userDisplayName;
-			studioNamesUpdated.push(displayName);
+			studioNamesUpdated.unshift(displayName);
 		});
 		await Promise.all(promises);
-		console.log(studioNamesUpdated)
 
 		// Add user to studio
 		oldListeners.push(...listenersAdded);
 		await updateStudioUsers(studioId, oldListeners);
 		await updateStudioNames(studioId, studioNamesUpdated);
 
+		console.log("all users being deleted " + listenersDeleted)
 
+		let updatedStudio = studio[0];
 		// Delete studio from users
 		for(const username of listenersDeleted) {
+			console.log("this user deleted " + username)
 			const user = await getUser(username);
 			if (!user) {
 				return res.status(404).json({ msg: "User not found" });
 			}	
 			//remove user from nickname list
-			const indexToRemove = listeners.indexOf(username);
-			const nicknames = studio[0].studioNames;
+			console.log("old listeners " + oldListeners)
+			const indexToRemove = oldListeners.indexOf(username);
+			console.log("index to remove " + indexToRemove)
+			const nicknames = updatedStudio.studioNames;
 			const newArray = [
 				...nicknames.slice(0, indexToRemove),
 				...nicknames.slice(indexToRemove + 1),
 			];
-			await updateStudioNames(studioId, newArray);
+
+			console.log("studio names 4 (new array)" + newArray)
+
+			updatedStudio = await updateStudioNames(studioId, newArray);
+
+			console.log("updated studio 4.5 " +updatedStudio)
+
+			console.log("studio names 5 real " + updatedStudio.studioNames)
 
 			//remove user from studio
 			const newListeners = listeners.filter((listener) => listener !== username);
