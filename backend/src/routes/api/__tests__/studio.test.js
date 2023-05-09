@@ -4,6 +4,7 @@ import { User, Studio, Chat } from "../../../database/schema.js";
 import express from "express";
 import request from "supertest";
 import routes from "../studio.js";
+import { getStudio } from "../../../dao/studio_dao.js";
 
 let mongod;
 
@@ -33,6 +34,7 @@ const mockStudio1 = {
   studioName: "testStudio1",
   studioIsActive: true,
   studioUsers: [],
+  studioNames: [],
   studioHost: "testUser1",
   studioGenres: ["testGenre1"],
   studioPicture: "testPicture1",
@@ -43,8 +45,9 @@ const mockStudio2 = {
   _id: new mongoose.Types.ObjectId(),
   studioName: "testStudio2",
   studioIsActive: true,
-  studioUsers: ["testUser2"],
-  studioHost: "testUser2",
+  studioUsers: ["testUser3", "testUser4"],
+  studioNames: ["testUser3", "testUser4"],
+  studioHost: "testUser3",
   studioGenres: ["testGenre2"],
   studioPicture: "testPicture2",
   studioControlHostOnly: false,
@@ -61,9 +64,28 @@ const mockChat2 = {
   pinnedMessages: [],
 };
 
-const mockUsers = [mockUser1, mockUser2];
+
 const mockStudios = [mockStudio1, mockStudio2];
 const mockChats = [mockChat1, mockChat2];
+
+const mockUser3 = {
+  username: "testUser3",
+  userDisplayName: "testUser3",
+  spotifyPic: "testUser3",
+  profilePic: "testUser3",
+  userIsActive: true,
+  userStudios: [mockStudio2._id],
+};
+const mockUser4 = {
+  username: "testUser4",
+  userDisplayName: "testUser4",
+  spotifyPic: "testUser4",
+  profilePic: "testUser4",
+  userIsActive: true,
+  userStudios: [mockStudio2._id],
+};
+
+const mockUsers = [mockUser1, mockUser2, mockUser3, mockUser4];
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
@@ -89,6 +111,7 @@ function expectStudio(actual, expected) {
   expect(actual.studioName).toEqual(expected.studioName);
   expect(actual.studioIsActive).toEqual(expected.studioIsActive);
   expect(actual.studioUsers).toEqual(expected.studioUsers);
+  expect(actual.studioNames).toEqual(expected.studioNames);
   expect(actual.studioHost).toEqual(expected.studioHost);
   expect(actual.studioGenres).toEqual(expected.studioGenres);
   expect(actual.studioPicture).toEqual(expected.studioPicture);
@@ -119,4 +142,58 @@ test('toggle control of studio is successful', (done) => {
             done();
         });
     }
+)
+
+test("adding user to studio is successful", (done) => {
+  const updatedStudio = {
+    ...mockStudio2,
+    studioUsers: ["testUser3", "testUser4", "testUser1"],
+    studioNames: ["testUser3", "testUser4", "testUser1"],
+  };
+  request(app)
+    .put(`/${mockStudio2._id}/updateListeners`)
+    .send({ listeners: ["testUser3", "testUser4", "testUser1"] })
+    .expect(200)
+    .end((err, res) => {
+      if (err) return done(err);
+      console.log("res " + res.body[0]);
+      expectStudio(res.body[0], updatedStudio);
+      done();
+    });
+});
+
+test("removing user from studio is successful", (done) => {
+  const updatedStudio = {
+    ...mockStudio2,
+    studioUsers: ["testUser3"],
+    studioNames: ["testUser3"],
+  };
+  request(app)
+    .put(`/${mockStudio2._id}/updateListeners`)
+    .send({ listeners: ["testUser3"] })
+    .expect(200)
+    .end((err, res) => {
+      if (err) return done(err);
+      expectStudio(res.body[0], updatedStudio);
+      done();
+    });
+});
+
+test('updating list of users in studio is successful', (done) => {
+    const updatedStudio = {
+        ...mockStudio2,
+        studioUsers: ["testUser2", "testUser3"],
+        studioNames: ["testUser2", "testUser3"]
+    }
+    request(app)
+      .put(`/${mockStudio2._id}/updateListeners`)
+      .send({listeners: ["testUser2", "testUser3"]})
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expectStudio(res.body[0], updatedStudio);
+        done();
+      }
+    );
+  }
 )
