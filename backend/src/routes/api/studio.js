@@ -223,21 +223,27 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 		const listenersAdded = listeners.filter(listener => !oldListeners.includes(listener));
 
 		// Add new listeners
-		// Add studios to user
+		// Add studios to user and add nicknames to studio
+		const studioNamesUpdated = studio[0].studioNames;
+
 		const promises = listenersAdded.map(async (listener) => {
 			const thisListener = await getUser(listener);
 			if (!thisListener) {
 				return res.status(404).json({ msg: "Listener not found" });
 			}
-		  const studios = await getStudiosId(listener);
-		  studios.push(studioId);
-		  await updateStudios(listener, studios);
+			const studios = await getStudiosId(listener);
+			studios.push(studioId);
+			await updateStudios(listener, studios);
+
+			const displayName = thisListener.userDisplayName;
+			studioNamesUpdated.push(displayName);
 		});
 		await Promise.all(promises);
 
 		// Add user to studio
 		oldListeners.push(...listenersAdded);
-		updateStudioUsers(studioId, oldListeners);
+		await updateStudioUsers(studioId, oldListeners);
+		await updateStudioNames(studioId, studioNamesUpdated);
 
 
 		// Delete studio from users
@@ -248,15 +254,12 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 			}	
 			//remove user from nickname list
 			const indexToRemove = listeners.indexOf(username.replace(/"/g, ""));
-
 			const nicknames = studio[0].studioNames;
-
 			const newArray = [
 				...nicknames.slice(0, indexToRemove),
 				...nicknames.slice(indexToRemove + 1),
 			];
-
-			updateStudioNames(studioId, newArray);
+			await updateStudioNames(studioId, newArray);
 
 			//remove user from studio
 			const newListeners = listeners.filter((listener) => listener !== username);
@@ -265,7 +268,7 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 			//remove studio from user
 			const studios = await getStudiosId(username);
 			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studioId);
-			updateStudios(username, newStudios);
+			await updateStudios(username, newStudios);
 		}
 		res.status(200).json();
 	} catch (err) {
