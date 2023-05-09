@@ -50,12 +50,19 @@ function SongInfo() {
     useEffect(() => {
 		const fetchSongInfo = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setSongTitle(track.data.item.name);
-            setArtistName(track.data.item.artists[0].name);
-            setAlbumArtwork(track.data.item.album.images[0].url);
-            const artist_id = track.data.item.artists[0].id;
-            const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
-            setArtistImg(artist.data.images[0].url);
+            if (track.data.item.type === "episode") {
+                setSongTitle(track.data.item.name);
+                setAlbumArtwork(track.data.item.images[0].url);
+                setArtistName(track.data.item.show.name);
+                setArtistImg(null);
+            } else {
+                setSongTitle(track.data.item.name);
+                setAlbumArtwork(track.data.item.album.images[0].url);
+                setArtistName(track.data.item.artists[0].name);
+                const artist_id = track.data.item.artists[0].id;
+                const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
+                setArtistImg(artist.data.images[0].url);
+            }
 		}
 		fetchSongInfo();
 
@@ -70,9 +77,9 @@ function SongInfo() {
     return (
         <div className={styles.songSection}>
             <h3 className={styles.song} style={{ display: songTitle ? "flex" : "none" }}>{songTitle}</h3>
-            <div className={styles.artist} style={{ display: artistImg ? "flex" : "none" }}>
-                <img className={styles.artistImg} src={artistImg} />
-                <div className={styles.artistName}>{artistName ? artistName : null}</div>
+            <div className={styles.artist} >
+                <img style={{ display: artistImg ? "flex" : "none" }} className={styles.artistImg} src={artistImg} />
+                <div style={{ display: artistName ? "flex" : "none" }} className={styles.artistName}>{artistName ? artistName : null}</div>
             </div>
             <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
         </div>
