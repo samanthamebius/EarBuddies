@@ -17,22 +17,13 @@ function SongListItem(props) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
-	const navigate = useNavigate();
 
-	// useEffect(() => {
-	// 	const fetchSongInfo = async () => {
-	// 		await axios
-	// 			.get(`${BASE_URL}/api/spotify/songinfo`)
-	// 			.then((response) => setNowPlayingSong(response.data?.item?.name));
-	// 	};
-	// 	fetchSongInfo();
-
-	// 	// Polling mechanism to update song info
-	// 	const interval = setInterval(fetchSongInfo, 1000);
-
-	// 	// Cleanup interval on component unmount
-	// 	return () => clearInterval(interval);
-	// }, []);
+	// continously get the currently playing song
+	useEffect(() => {
+		socket.on("receive_currently_playing", (data) => [
+			setNowPlayingSong(data?.name),
+		]);
+	}, [socket]);
 
 	const handleItemMouseEnter = () => {
 		setHover(true);
@@ -79,7 +70,7 @@ function SongListItem(props) {
 	};
 
 	const displaySongTypeIcon = () => {
-		if (nowPlayingSong === song.name) {
+		if (nowPlayingSong === song.name && type === "queue") {
 			return (
 				<img
 					src={equalizer_icon}
