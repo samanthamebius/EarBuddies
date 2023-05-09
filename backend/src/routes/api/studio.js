@@ -281,8 +281,12 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 			const studios = await getStudiosId(username);
 			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studioId);
 			await updateStudios(username, newStudios);
+
+			
+
 		}
-		res.status(200).json();
+		const finalStudio = await getStudio(studioId);
+		res.status(200).json(finalStudio);
 	} catch (err) {
 		res.status(500).json(err);
 	}
