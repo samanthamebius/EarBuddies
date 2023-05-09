@@ -10,7 +10,7 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly, pl
 	for (let i = 0; i < listeners.length; i++) {
 		const username = listeners[i];
 		const user = await getUser(username);
-		const displayName = user.userDisplayName;
+		const displayName = user.userDisplayName.trim();
 		displayNames.push(displayName);
 		console.log(username)
 		if (user.userIsActive) {
