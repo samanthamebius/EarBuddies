@@ -370,6 +370,7 @@ function WebPlayback(props) {
     const [player, setPlayer] = useState({});
     const [myDeviceId, setDeviceId] = useState({});
     const { studio } = props;
+    navigate = useNavigate();
 
 
     useEffect(() => {
@@ -409,17 +410,16 @@ function WebPlayback(props) {
             navigate("/400");
         }
 
-
     }, []);
 
     useEffect(() => {
         return () => {
-            player.disconnect();
+            window.location.reload(false);
         };
     }, []);
 
     console.log(myDeviceId);
-    navigate = useNavigate();
+
 
     return (
         <>
