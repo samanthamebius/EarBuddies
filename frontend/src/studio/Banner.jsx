@@ -292,20 +292,10 @@ export function DropdownKebab({
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
 
-				<MenuItem 
-					className={styles.menu_item} 
-					onClick={handleManListOpen}
-					onMouseEnter={enterManList} 
-                    onMouseLeave={leaveManList}
-					>
-					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
-					<p className={styles.menu_title}>Manage Listeners</p>
-				</MenuItem>
-
 				<MenuItem
 					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
 					className={styles.menu_item}
-					onClick={handleClose}
+					onClick={handleManListOpen}
 					onMouseEnter={enterManList} 
                     onMouseLeave={leaveManList}>
 					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
