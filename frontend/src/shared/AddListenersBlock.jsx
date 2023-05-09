@@ -39,7 +39,9 @@ export default function AddListenersBlock({studio_id}) {
         return true;
       }
     });
-
+    if (id) {
+      axios.put(`${BASE_URL}/api/studio/${id}/${listener.username}`);
+    }
     if (!isFound) {
       setListeners(oldListeners => [...oldListeners, listener]);
     }

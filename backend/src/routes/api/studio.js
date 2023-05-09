@@ -315,4 +315,37 @@ router.delete("/:studio_id/:username", async (req, res) => {
 	}
 });
 
+// add a user from a studio
+router.put("/:studio_id/:username", async (req, res) => {
+	try {
+		const { studio_id, username } = req.params;
+		const studio = await getStudio(studio_id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+
+		// add the studio to the user
+		const studios = await getStudiosId(username);
+		studios.push(studio_id);
+		updateStudios(username, studios);
+
+		// add user to studio
+		studio[0].studioUsers.push(username);
+		updateStudioUsers(studio_id, studio[0].studioUsers);
+		
+		
+		studio[0].studioNames.push(user.userDisplayName);
+		updateStudioNames(studio_id, studio[0].studioNames);
+		
+		res.status(204).json({ msg: "User removed from studio" });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ msg: "Server error" });
+	}
+});
+
 export default router;
