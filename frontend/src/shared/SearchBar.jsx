@@ -8,12 +8,14 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 
-function SearchBar({ label, searchType, studioId, setResults }) {
+function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
   const [focused, setFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const username = localStorage.getItem("current_user_id");
+
+  console.log("search term = ", searchTerm);
 
   const theme = createTheme({
     palette: {
@@ -145,7 +147,7 @@ function SearchBar({ label, searchType, studioId, setResults }) {
           type="text"
           label={label}
           value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
+          onChange={(event) => { setSearchTerm(event.target.value); onInputChange(searchTerm); }}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           fullWidth
