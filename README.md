@@ -29,15 +29,15 @@ npm run dev
 6. log in with spotify. Feel free to use your own account, or you can use one of ours:  
 (Please note that your spotify account must be premium to use Earbuddies)
 
-Testing account 1  
+Testing account 1  (Taylor Swift)  
 
 > username: smeb890@aucklanduni.ac.nz  
 > password: softeng750  
 
-Testing account 2  
+Testing account 2  (Florence Welch)  
 
-> username: brejury  
-> password: testing750  
+> username: bjur781@aucklanduni.ac.nz 
+> password: softeng750  
 
 ## Database
 If you want to have some initialised data, run
@@ -53,6 +53,11 @@ To run the backend suite:
 ```
 cd ./backend/
 npm test
+```
+To run an individual test (e.g. studio.test.js)
+``` 
+cd ./backend/
+npm test -t studio.test.js
 ```
 To run the frontend suite:
 ADD HERE
