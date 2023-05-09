@@ -41,50 +41,69 @@ const StyledSlider = styled(Slider)({
 });
 
 function SongInfo() {
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const [songTitle, setSongTitle] = useState('');
-    const [artistName, setArtistName] = useState('');
-    const [artistImg, setArtistImg] = useState('');
-    const [albumArtwork, setAlbumArtwork] = useState('');
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const [songTitle, setSongTitle] = useState("");
+	const [artistName, setArtistName] = useState("");
+	const [artistImg, setArtistImg] = useState("");
+	const [albumArtwork, setAlbumArtwork] = useState("");
 
-
-    useEffect(() => {
+	useEffect(() => {
 		const fetchSongInfo = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-            if (track.data.item.type === "episode") {
-                setSongTitle(track.data.item.name);
-                setAlbumArtwork(track.data.item.images[0].url);
-                setArtistName(track.data.item.show.name);
-                setArtistImg(null);
-            } else {
-                setSongTitle(track.data.item.name);
-                setAlbumArtwork(track.data.item.album.images[0].url);
-                setArtistName(track.data.item.artists[0].name);
-                const artist_id = track.data.item.artists[0].id;
-                const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
-                setArtistImg(artist.data.images[0].url);
-            }
-		}
+			if (track.data?.item?.type === "episode") {
+				setSongTitle(track.data.item.name);
+				setAlbumArtwork(track.data.item.images[0].url);
+				setArtistName(track.data.item.show.name);
+				setArtistImg(null);
+			} else {
+				setSongTitle(track.data?.item?.name);
+				setAlbumArtwork(track.data?.item?.album.images[0].url);
+				setArtistName(track.data?.item?.artists[0].name);
+				const artist_id = track.data?.item?.artists[0].id;
+				if (artist_id) {
+					const artist = await axios.get(
+						`${BASE_URL}/api/spotify/artist/${artist_id}`
+					);
+					setArtistImg(artist.data.images[0].url);
+				}
+			}
+		};
 		fetchSongInfo();
 
-        // Polling mechanism to update song info
-        const interval = setInterval(fetchSongInfo, 1000);
+		// Polling mechanism to update song info
+		const interval = setInterval(fetchSongInfo, 1000);
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(interval);
+		// Cleanup interval on component unmount
+		return () => clearInterval(interval);
+	}, [songTitle]);
 
-	},[songTitle]);
-
-    return (
-        <div className={styles.songSection}>
-            <h3 className={styles.song} style={{ display: songTitle ? "flex" : "none" }}>{songTitle}</h3>
-            <div className={styles.artist} >
-                <img style={{ display: artistImg ? "flex" : "none" }} className={styles.artistImg} src={artistImg} />
-                <div style={{ display: artistName ? "flex" : "none" }} className={styles.artistName}>{artistName ? artistName : null}</div>
-            </div>
-            <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
-        </div>
-    );
+	return (
+		<div className={styles.songSection}>
+			<h3
+				className={styles.song}
+				style={{ display: songTitle ? "flex" : "none" }}
+			>
+				{songTitle}
+			</h3>
+			<div className={styles.artist}>
+				<img
+					style={{ display: artistImg ? "flex" : "none" }}
+					className={styles.artistImg}
+					src={artistImg}
+				/>
+				<div
+					style={{ display: artistName ? "flex" : "none" }}
+					className={styles.artistName}
+				>
+					{artistName ? artistName : null}
+				</div>
+			</div>
+			<img
+				className={styles.albumArtwork}
+				src={albumArtwork ? albumArtwork : placeholder_album}
+			/>
+		</div>
+	);
 }
 
 export function VolumeSlider({ player }) {
@@ -112,68 +131,66 @@ export function VolumeSlider({ player }) {
 		}
 	};
 
-    return (
-        <div className={styles.volume}>
-            <Box fullwidth>
-                <Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
-                    {isMute ? (
-                        <VolumeOffRoundedIcon
-                            sx={{ "&:hover": { cursor: "pointer" } }}
-                            style={{ color: "white", fontSize: "25px" }}
-                            className={styles.controlBtn}
-                            onClick={handleUnmute}
-                        />
-                    ) : (
-                        <VolumeUpRoundedIcon
-                            sx={{ "&:hover": { cursor: "pointer" } }}
-                            style={{ color: "white", fontSize: "25px" }}
-                            className={styles.controlBtn}
-                            onClick={handleMute}
-                        />
-                    )}
-                    <StyledSlider
-                        size="small"
-                        disabled={isMute}
-                        className={styles.slider}
-                        aria-label="Volume"
-                        value={value}
-                        color="secondary"
-                        onChange={handleChange}
-                    />
-                </Stack>
-            </Box>
-        </div>
-    );
+	return (
+		<div className={styles.volume}>
+			<Box fullwidth>
+				<Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
+					{isMute ? (
+						<VolumeOffRoundedIcon
+							sx={{ "&:hover": { cursor: "pointer" } }}
+							style={{ color: "white", fontSize: "25px" }}
+							className={styles.controlBtn}
+							onClick={handleUnmute}
+						/>
+					) : (
+						<VolumeUpRoundedIcon
+							sx={{ "&:hover": { cursor: "pointer" } }}
+							style={{ color: "white", fontSize: "25px" }}
+							className={styles.controlBtn}
+							onClick={handleMute}
+						/>
+					)}
+					<StyledSlider
+						size="small"
+						disabled={isMute}
+						className={styles.slider}
+						aria-label="Volume"
+						value={value}
+						color="secondary"
+						onChange={handleChange}
+					/>
+				</Stack>
+			</Box>
+		</div>
+	);
 }
 
-export function TimeSlider({player}) {
-    const [duration, setDuration] = useState(0); 
-    const [position, setPosition] = useState(0);
+export function TimeSlider({ player }) {
+	const [duration, setDuration] = useState(0);
+	const [position, setPosition] = useState(0);
 
-    useEffect(() => {
+	useEffect(() => {
 		const fetchDuration = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
 			setDuration(Math.round(track.data.item.duration_ms / 1000));
-		}
+		};
 		fetchDuration();
-	},[]);
+	}, []);
 
-      useEffect(() => {
-    const fetchPosition = async () => {
-      axios
-        .get(`${BASE_URL}/api/spotify/songinfo`)
-        .then((response) => {
-          setPosition(Math.round(response.data.progress_ms / 1000));
-        });
-    };
-    fetchPosition();
+	useEffect(() => {
+		const fetchPosition = async () => {
+			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
+				setPosition(Math.round(response.data.progress_ms / 1000));
+			});
+		};
+		fetchPosition();
 
-    // Polling mechanism to continuously update position
-    const interval = setInterval(fetchPosition, 1000);
+		// Polling mechanism to continuously update position
+		const interval = setInterval(fetchPosition, 1000);
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+		// Cleanup interval on component unmount
+		return () => clearInterval(interval);
+	}, []);
 
 	const TinyText = styled(Typography)({
 		fontSize: "0.75rem",

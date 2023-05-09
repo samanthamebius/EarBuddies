@@ -118,7 +118,11 @@ function SongListItem(props) {
 			<ListItemText
 				className={styles.resultTitle}
 				primary={<b>{song.name}</b>}
-				secondary={<p className={styles.resultTitleDetail}>{song.artists}</p>}
+				secondary={
+					<p className={styles.resultTitleDetail}>
+						{song.artists?.length > 0 ? song.artists[0] : song.artists}
+					</p>
+				}
 				primaryTypographyProps={{
 					style: {
 						width: "300px",

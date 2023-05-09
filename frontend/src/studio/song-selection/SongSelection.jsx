@@ -31,7 +31,7 @@ export default function SongSelection({ studio, socket }) {
 					))}
 				</List>
 			) : null}
-			{/* <Queue studio={studio} socket={socket} /> */}
+			<Queue studio={studio} socket={socket} />
 		</div>
 	);
 }
