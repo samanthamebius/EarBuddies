@@ -2,7 +2,7 @@ import {Button, List } from "@mui/material";
 import styles from '../createstudio/CreateStudioDialog.module.css';
 import React, { useEffect, useState } from "react";
 import SearchBar from "../shared/SearchBar";
-import { ListItem, ListItemText, ListItemAvatar, Avatar, Menu, MenuItem } from "@mui/material";
+import { ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
 import ClearRounded from "@mui/icons-material/ClearRounded";
 
 export default function AddListenersBlock() {

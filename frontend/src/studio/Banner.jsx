@@ -101,6 +101,7 @@ export default function Banner({ id, studio, socket }) {
 					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
 					id={id}
+					studio={studio}
 					socket={socket}
 					isHost={isHost}
 					studioUsers={users}
@@ -117,6 +118,7 @@ export function DropdownKebab({
 	handleDelete,
 	isHost,
 	id,
+	studio,
 	studioUsers,
 	isAloneInStudio,
 	socket
@@ -159,7 +161,7 @@ export function DropdownKebab({
 		setInDelete(true);
 	};
 	const enterAssign = () => {
-		setInAssign(true);
+		setIsInAssign(true);
 	};
 
 	const leaveLeave = () => {
@@ -178,7 +180,7 @@ export function DropdownKebab({
 		setInDelete(false);
 	};
 	const leaveAssign = () => {
-		setInAssign(false);
+		setIsInAssign(false);
 	};
 
 	const handleClose = () => {
@@ -255,7 +257,8 @@ export function DropdownKebab({
 				socket={socket}/>
 			<ManageListenersDialog
 				isManListDialogOpened={isManListOpen}
-				handleCloseManListDialog={() => setIsManListOpen(false)} />
+				handleCloseManListDialog={() => setIsManListOpen(false)} 
+				studio={studio} />
 			<div onClick={handleClick} className={styles.dropdownButton}>
 			<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
 			</div>
