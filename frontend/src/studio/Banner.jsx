@@ -60,7 +60,10 @@ export default function Banner({ id, studio, socket }) {
 	};
 
 	const handleTEST = () => {
-		const users = ["ananya2001", "smeb123", "bre123", "amy456"];
+		const users = ["smeb123", "bre123", "amy456"];
+		users.push(studio.studioHost)
+
+		console.log(users)
 
 		axios.put(`${BASE_URL}/api/studio/${id}/updateListeners`, {
 			listeners: users,
