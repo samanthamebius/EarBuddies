@@ -1,11 +1,6 @@
 import express from "express";
 import { getSpotifyApi } from "../../dao/spotify_dao";
-import {
-	searchSpotify,
-	getCurrentTrackId,
-	getLastPlaylistTrackId,
-} from "../../dao/spotify_dao";
-import { set } from "mongoose";
+import { searchSpotify, getCurrentTrack, getCurrentTrackId, getArtist, getLastPlaylistTrackId, getPlaybackState } from "../../dao/spotify_dao";
 
 const router = express.Router();
 
@@ -112,42 +107,52 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 });
 
 router.put("/play", async (req, res) => {
-	console.log("play");
-	try {
-		const { uri, deviceId } = req.body;
-		console.log(deviceId);
-		const thisSpotifyApi = getSpotifyApi();
-		if (!thisSpotifyApi) {
-			return res.status(403).json({ msg: "No Spotify API connection" });
-		}
-		// Play a track if not playing already
-		//will need an if statement to check where it finished to pick it up at correct point
-		//ooh or just called with no uri and it will resume
-		thisSpotifyApi
-			.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
-			.then(
-				function () {
-					console.log("Playing track!");
-					thisSpotifyApi.setRepeat("context", { device_id: deviceId }).then(
-						function () {
-							console.log("Set repeat to context!");
-						},
-						function (err) {
-							console.log("Something went wrong!", err);
-						}
-					);
-				},
-				function (err) {
-					console.log("Something went wrong!", err);
-				}
-			);
-	} catch (err) {
-		console.log(err);
-		if (err.statusCode === 401) {
-			return res.status(401).json({ msg: "Unauthorized" });
-		}
-		res.status(500).json(err);
-	}
+    try {
+        const { uri, deviceId } = req.body;
+        const thisSpotifyApi = getSpotifyApi();
+        if (!thisSpotifyApi) {
+            return res.status(403).json({ msg: "No Spotify API connection" });
+        }
+        // Play a track if not playing already
+        // will need an if statement to check where it finished to pick it up at correct point 
+        // ooh or just called with no uri and it will resume
+        console.log(await getPlaybackState(thisSpotifyApi, deviceId));
+        if (await getPlaybackState(thisSpotifyApi, deviceId)) {
+            thisSpotifyApi.play({ device_id: deviceId })
+                .then(function () {
+                    thisSpotifyApi.setRepeat("context", { device_id: deviceId })
+                        .then(function () {
+
+                        }, function (err) {
+                            console.log('Something went wrong!', err);
+                        }
+                        );
+                }, function (err) {
+                    console.log('Something went wrong!', err);
+                });
+            return res.status(200).json({ msg: "Resuming track" });
+        } else {
+            thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
+                .then(function () {
+                    thisSpotifyApi.setRepeat("context", { device_id: deviceId })
+                        .then(function () {
+
+                        }, function (err) {
+                            console.log('Something went wrong!', err);
+                        }
+                        );
+                }, function (err) {
+                    console.log('Something went wrong!', err);
+                });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        if (err.statusCode === 401) {
+            return res.status(401).json({ msg: "Unauthorized" });
+        }
+        res.status(500).json(err);
+    }
 });
 
 router.put("/pause", async (req, res) => {
@@ -250,6 +255,27 @@ router.put("/previous", async (req, res) => {
 		if (err.statusCode === 401) {
 			return res.status(401).json({ msg: "Unauthorized" });
 		}
+		res.status(500).json(err);
+	}
+});
+
+router.get("/songinfo", async (req, res) => {
+	try {
+        const thisSpotifyApi = getSpotifyApi();
+		const currentTrack = await getCurrentTrack(thisSpotifyApi);
+		res.status(200).json(currentTrack);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+router.get("/artist/:artist_id", async (req, res) => {
+	try {
+        const { artist_id } = req.params;
+        const thisSpotifyApi = getSpotifyApi();
+		const artist = await getArtist(artist_id, thisSpotifyApi);
+		res.status(200).json(artist);
+	} catch (err) {
 		res.status(500).json(err);
 	}
 });

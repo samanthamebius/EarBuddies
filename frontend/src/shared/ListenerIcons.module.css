@@ -1,6 +1,7 @@
 .listenersImages {
 	padding-top: 25px;
 	position: relative;
+	transform: translateX(-10px);
 }
 .listenerImage {
 	object-fit: cover;
