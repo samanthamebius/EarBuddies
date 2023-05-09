@@ -6,7 +6,7 @@ import { ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
 import ClearRounded from "@mui/icons-material/ClearRounded";
 import axios from "axios";
 
-export default function AddListenersBlock() {
+export default function AddListenersBlock({studio_id}) {
 
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
@@ -46,6 +46,9 @@ export default function AddListenersBlock() {
   }
 
   function removeListener(listener) {
+    if (id) {
+      axios.delete(`${BASE_URL}/api/studio/${id}/${listener.username}`);
+    }
     setListeners((oldListeners) =>
       oldListeners.filter((oldListener) => oldListener !== listener)
     );
@@ -79,7 +82,7 @@ export default function AddListenersBlock() {
           }>
           <ListItemAvatar>
             <Avatar>
-              <img className={styles.image} src={listener.profilePicture} />
+              <img className={styles.image} src={listener.profilePic} />
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={listener.userDisplayName} />

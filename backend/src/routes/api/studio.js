@@ -279,5 +279,31 @@ router.get("/:studio_id/host", async (req, res) => {
 	}
 });
 
+//remove a user from a studio
+router.delete("/:studio_id/:username", async (req, res) => {
+	try {
+		const { studio_id, username } = req.params;
+		const studio = await getStudio(studio_id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+		
+		// remove the user from the studio
+		const listeners = studio[0].studioUsers;
+		console.log("Listeners " + listeners);
+		const newListeners = listeners.filter((listener) => listener !== username);
+		console.log("new listeners " + newListeners);
+		await updateStudioUsers(studio_id, newListeners);
+		
+		res.status(204).json({ msg: "User removed from studio" });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ msg: "Server error" });
+	}
+});
 
 export default router;
