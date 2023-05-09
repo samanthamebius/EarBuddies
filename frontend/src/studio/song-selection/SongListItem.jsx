@@ -15,6 +15,22 @@ function SongListItem(props) {
 	const { song, studio, socket, type, snapshotId = null } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
+	const [nowPlayingSong, setNowPlayingSong] = useState("");
+
+	useEffect(() => {
+		const fetchSongInfo = async () => {
+			await axios
+				.get(`${BASE_URL}/api/spotify/songinfo`)
+				.then((response) => setNowPlayingSong(response.data?.item?.name));
+		};
+		fetchSongInfo();
+
+		// Polling mechanism to update song info
+		const interval = setInterval(fetchSongInfo, 1000);
+
+		// Cleanup interval on component unmount
+		return () => clearInterval(interval);
+	}, []);
 
 	const handleItemMouseEnter = () => {
 		setHover(true);
@@ -61,7 +77,14 @@ function SongListItem(props) {
 	};
 
 	const displaySongTypeIcon = () => {
-		if (song.type === "episode") {
+		if (nowPlayingSong === song.name) {
+			return (
+				<EqualizerRoundedIcon
+					fontSize="small"
+					style={{ color: "#CA3FF3", marginRight: "10px" }}
+				/>
+			);
+		} else if (song.type === "episode") {
 			return (
 				<PodcastsRoundedIcon
 					fontSize="small"
@@ -73,14 +96,6 @@ function SongListItem(props) {
 				<MusicNoteRoundedIcon
 					fontSize="small"
 					style={{ color: "#c4c4c4", marginRight: "10px" }}
-				/>
-			);
-		} else if (false) {
-			//TO DO: isPlaying (replace false)
-			return (
-				<EqualizerRoundedIcon
-					fontSize="small"
-					style={{ color: "#CA3FF3", marginRight: "10px" }}
 				/>
 			);
 		}
