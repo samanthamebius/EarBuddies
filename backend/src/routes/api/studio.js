@@ -239,6 +239,7 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 			studioNamesUpdated.push(displayName);
 		});
 		await Promise.all(promises);
+		console.log(studioNamesUpdated)
 
 		// Add user to studio
 		oldListeners.push(...listenersAdded);
@@ -253,7 +254,7 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 				return res.status(404).json({ msg: "User not found" });
 			}	
 			//remove user from nickname list
-			const indexToRemove = listeners.indexOf(username.replace(/"/g, ""));
+			const indexToRemove = listeners.indexOf(username);
 			const nicknames = studio[0].studioNames;
 			const newArray = [
 				...nicknames.slice(0, indexToRemove),

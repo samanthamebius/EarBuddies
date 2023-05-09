@@ -85,7 +85,7 @@ async function updateStudioHost(id, host) {
 }
 
 async function updateStudioNames(id, newNames) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
+	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames }, {new: true});
 }
 export {
 	createStudio,
