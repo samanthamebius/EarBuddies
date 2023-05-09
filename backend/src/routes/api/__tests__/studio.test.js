@@ -147,8 +147,8 @@ test('toggle control of studio is successful', (done) => {
 test("adding user to studio is successful", (done) => {
   const updatedStudio = {
     ...mockStudio2,
-    studioUsers: ["testUser3", "testUser4", "testUser1"],
-    studioNames: ["testUser3", "testUser4", "testUser1"],
+    studioUsers: ["testUser1", "testUser3", "testUser4"],
+    studioNames: ["testUser1", "testUser3", "testUser4"],
   };
   request(app)
     .put(`/${mockStudio2._id}/updateListeners`)
@@ -156,7 +156,8 @@ test("adding user to studio is successful", (done) => {
     .expect(200)
     .end((err, res) => {
       if (err) return done(err);
-      console.log("res " + res.body[0]);
+      console.log("res NAMES " + res.body[0].studioNames);
+      console.log("res USERS " + res.body[0].studioUsers);
       expectStudio(res.body[0], updatedStudio);
       done();
     });
@@ -191,9 +192,30 @@ test('updating list of users in studio is successful', (done) => {
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
+      console.log("res NAMES " + res.body[0].studioNames);
+      console.log("res USERS " + res.body[0].studioUsers);
         expectStudio(res.body[0], updatedStudio);
         done();
       }
     );
   }
 )
+
+test("updating large list of users in studio is successful", (done) => {
+  const updatedStudio = {
+    ...mockStudio2,
+    studioUsers: ["testUser2", "testUser3", "testUser1"],
+    studioNames: ["testUser2", "testUser3, testUser1"],
+  };
+  request(app)
+    .put(`/${mockStudio2._id}/updateListeners`)
+    .send({ listeners: ["testUser2", "testUser3", "testUser1"] })
+    .expect(200)
+    .end((err, res) => {
+      if (err) return done(err);
+      console.log("res NAMES " + res.body[0].studioNames);
+      console.log("res USERS " + res.body[0].studioUsers);
+      expectStudio(res.body[0], updatedStudio);
+      done();
+    });
+});
