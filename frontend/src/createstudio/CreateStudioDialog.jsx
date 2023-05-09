@@ -165,7 +165,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     } else {
       setIsStudioNameErrorMessage(false);
       const selecetedGenres = getSelectedGenres();
-      postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
+      const listenerUsernames = getListenerUsernames();
+      postStudio(navigate, studioNameInput, selecetedGenres, file, listenerUsernames, isHostOnly);
     }
   }
 
@@ -173,6 +174,12 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     const selectedGenres = genres.filter(obj => obj.isSelected);
     const selectedGenreNames = selectedGenres.map(obj => obj.name);
     return selectedGenreNames;
+  }
+
+  function getListenerUsernames() {
+    const usernames = listeners.map(listener => listener.username);
+    console.log(usernames);
+    return usernames;
   }
 
   const handleClose = () => { handleCloseDialog(false) };
@@ -294,7 +301,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 }>
                 <ListItemAvatar>
                   <Avatar>
-                    <img className={styles.image} src={listener.profilePicture} />
+                    {/* HERE LOOK HERE */}
+                    <img className={styles.image} src={listener.profilePic} />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={listener.userDisplayName} />
@@ -319,7 +327,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                     }>
                     <ListItemAvatar>
                       <Avatar>
-                        <img className={styles.image} src={listener.profilePicture} />
+                        <img className={styles.image} src={listener.profilePic} />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={listener.userDisplayName} />
