@@ -9,14 +9,11 @@ import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
 import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
 import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
 import VolumeOffRoundedIcon from "@mui/icons-material/VolumeOffRounded";
-import album_artwork from "../assets/now_playing/album_artwork_PLACEHOLDER.png";
-import artist_profile from "../assets/now_playing/artist_profile_PLACEHOLDER.png";
+import placeholder_album from "../assets/now_playing/placeholder_ablum.png";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
@@ -43,14 +40,48 @@ const StyledSlider = styled(Slider)({
 });
 
 function SongInfo() {
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const [songTitle, setSongTitle] = useState('');
+    const [artistName, setArtistName] = useState('');
+    const [artistImg, setArtistImg] = useState('');
+    const [albumArtwork, setAlbumArtwork] = useState('');
+
+
+    useEffect(() => {
+		const fetchSongInfo = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+            if (track.data.item.type === "episode") {
+                setSongTitle(track.data.item.name);
+                setAlbumArtwork(track.data.item.images[0].url);
+                setArtistName(track.data.item.show.name);
+                setArtistImg(null);
+            } else {
+                setSongTitle(track.data.item.name);
+                setAlbumArtwork(track.data.item.album.images[0].url);
+                setArtistName(track.data.item.artists[0].name);
+                const artist_id = track.data.item.artists[0].id;
+                const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
+                setArtistImg(artist.data.images[0].url);
+            }
+		}
+		fetchSongInfo();
+
+        // Polling mechanism to update song info
+        const interval = setInterval(fetchSongInfo, 1000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+
+	},[songTitle]);
+
     return (
         <div className={styles.songSection}>
-            <h3 className={styles.song}>champagne problems</h3>
-            <div className={styles.artist}>
-                <img className={styles.artistImg} src={artist_profile} />
-                <div className={styles.artistName}>Taylor Swift</div>
+            <h3 className={styles.song} style={{ display: songTitle ? "flex" : "none" }}>{songTitle}</h3>
+            <div className={styles.artist} >
+                <img style={{ display: artistImg ? "flex" : "none" }} className={styles.artistImg} src={artistImg} />
+                <div style={{ display: artistName ? "flex" : "none" }} className={styles.artistName}>{artistName ? artistName : null}</div>
             </div>
-            <img className={styles.albumArtwork} src={album_artwork} />
+            <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
         </div>
     );
 }
@@ -102,10 +133,12 @@ export function VolumeSlider({ player }) {
                         />
                     )}
                     <StyledSlider
+                        size="small"
                         disabled={isMute}
                         className={styles.slider}
                         aria-label="Volume"
                         value={value}
+                        color="secondary"
                         onChange={handleChange}
                     />
                 </Stack>
@@ -114,9 +147,34 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider({ player }) {
-    const duration = 200; //seconds //TODO: get actual song duration
-    const [position, setPosition] = useState(0); //TODO: set actual song position
+export function TimeSlider({player}) {
+    const [duration, setDuration] = useState(0); 
+    const [position, setPosition] = useState(0);
+
+    useEffect(() => {
+		const fetchDuration = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setDuration(Math.round(track.data.item.duration_ms / 1000));
+		}
+		fetchDuration();
+	},[]);
+
+      useEffect(() => {
+    const fetchPosition = async () => {
+      axios
+        .get(`${BASE_URL}/api/spotify/songinfo`)
+        .then((response) => {
+          setPosition(Math.round(response.data.progress_ms / 1000));
+        });
+    };
+    fetchPosition();
+
+    // Polling mechanism to continuously update position
+    const interval = setInterval(fetchPosition, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -271,7 +329,7 @@ function ControlPanel({ deviceId, studio, player }) {
         console.log(deviceId);
         setPlaying(!isPlaying);
         spotifyPauser({ deviceId });
-    }
+    }    
 
     return (
         <div className={styles.controlPanel}>

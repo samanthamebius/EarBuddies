@@ -1,6 +1,6 @@
 import express from "express";
-import { searchSpotify, getCurrentTrackId, getLastPlaylistTrackId, getSpotifyApi, getPlaybackState } from "../../dao/spotify_dao";
-import { get } from "mongoose";
+import { getSpotifyApi } from "../../dao/spotify_dao";
+import { searchSpotify, getCurrentTrack, getCurrentTrackId, getArtist, getLastPlaylistTrackId, getPlaybackState } from "../../dao/spotify_dao";
 
 const router = express.Router();
 
@@ -242,6 +242,27 @@ router.put("/previous", async (req, res) => {
         }
         res.status(500).json(err);
     }
+});
+
+router.get("/songinfo", async (req, res) => {
+	try {
+        const thisSpotifyApi = getSpotifyApi();
+		const currentTrack = await getCurrentTrack(thisSpotifyApi);
+		res.status(200).json(currentTrack);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+router.get("/artist/:artist_id", async (req, res) => {
+	try {
+        const { artist_id } = req.params;
+        const thisSpotifyApi = getSpotifyApi();
+		const artist = await getArtist(artist_id, thisSpotifyApi);
+		res.status(200).json(artist);
+	} catch (err) {
+		res.status(500).json(err);
+	}
 });
 
 export default router;

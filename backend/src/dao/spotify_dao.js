@@ -66,6 +66,30 @@ async function getCurrentTrackId(thisSpotifyApi) {
   });
 }
 
+async function getCurrentTrack(thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getMyCurrentPlayingTrack({ additional_types: 'episode' })
+      .then(function (data) {
+        resolve(data.body);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
+async function getArtist(artist_id, thisSpotifyApi) {
+  return new Promise((resolve, reject) => {
+    thisSpotifyApi.getArtist(artist_id) 
+      .then(function (data) {
+        resolve(data.body);
+      }, function (err) {
+        console.log('Something went wrong!', err);
+        reject(err);
+      });
+  });
+}
+
 async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
   return new Promise((resolve, reject) => {
     thisSpotifyApi.getPlaylistTracks(playlist_id)
@@ -77,6 +101,7 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
       });
   });
 }
+
 
 async function getPlaybackState(thisSpotifyApi, deviceId) {
   return new Promise((resolve, reject) => {
@@ -94,4 +119,5 @@ async function getPlaybackState(thisSpotifyApi, deviceId) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getLastPlaylistTrackId, getPlaybackState };
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId, getPlaybackState };
+

@@ -164,7 +164,11 @@
 }
 
 .artistImg {
-	height: 40px;
+	object-fit: cover;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .artist {

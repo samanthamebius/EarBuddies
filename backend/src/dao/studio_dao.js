@@ -6,17 +6,25 @@ import { getUser } from "./user_dao.js";
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
 	const displayNames = [];
-
+	let numActive = 0;
 	for (let i = 0; i < listeners.length; i++) {
 		const username = listeners[i];
 		const user = await getUser(username);
-		const displayName = user.userDisplayName;
+		const displayName = user.userDisplayName.trim();
 		displayNames.push(displayName);
+		console.log(username)
+		if (user.userIsActive) {
+			numActive++;
+		}
+	}
+	let isActive = false;
+	if (numActive > 1) {
+		isActive = true;
 	}
 	
   const newStudio = new Studio({
     studioName: name,
-    studioIsActive: true,
+    studioIsActive: isActive,
     studioUsers: listeners,
 	studioNames: displayNames,
     studioHost: host,
@@ -87,6 +95,27 @@ async function updateStudioHost(id, host) {
 async function updateStudioNames(id, newNames) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames })
 }
+
+async function setStudioStatus(studio_id) {
+	const studio = await getStudio(studio_id);
+	const users = studio[0].studioUsers;
+	let numActive = 0;
+	const promises = users.map(async (user) => {
+		const dbUser = await getUser(user);
+		if (dbUser.userIsActive) {
+			numActive++;
+		}
+  	});
+
+  	await Promise.all(promises);
+
+	if (numActive > 1) {
+		return await updateStudioIsActive(studio_id, true);
+	} else {
+		return await updateStudioIsActive(studio_id, false);
+	}
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -98,4 +127,5 @@ export {
 	deleteStudio,
 	updateStudioNames,
 	deleteUserFromStudio,
+	setStudioStatus,
 };
