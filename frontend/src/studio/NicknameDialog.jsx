@@ -30,12 +30,13 @@ export default function NicknameDialog(props) {
 	const handleSubmit = async () => {
 		const response = await axios.get(`${BASE_URL}/api/studio/${studioId}`);
 		const takenNicknames = response.data[0].studioNames;
-		//console.log("NICKNAMES " + takenNicknames.includes(nicknameInput));
-		console.log("nicknameInput " + nicknameInput);
+		const userPos = response.data[0].studioUsers.indexOf(username);
+		const currentNickname = response.data[0].studioNames[userPos];
+
 		if (nicknameInput == "") {
 			setErrorText("Enter a new nickname or cancel");
 			setIsNicknameErrorMessage(true);
-		} else if (takenNicknames.includes(nicknameInput)) {
+		} else if (takenNicknames.includes(nicknameInput) && nicknameInput != currentNickname) {
 			setErrorText("This nickname is already taken");
 			setIsNicknameErrorMessage(true);
 		} else {
