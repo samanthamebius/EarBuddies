@@ -15,7 +15,8 @@ function HomePage(props) {
 	const [studios, setStudios] = useState([]);
 	const [studioSearchResults, setStudioSearchResults] = useState([]);
 	const [studioSearchTerm, setStudioSearchTerm] = useState("");
-	// const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
+	const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
+	const [activeStudioSearchTerm, setActiveStudioSearchTerm] = useState("");
 
 	console.log("studio search term - ", studioSearchTerm);
 
@@ -67,19 +68,19 @@ function HomePage(props) {
 				<div className={styles.cardContainer}>
 					{studioSearchResults.length === 0 && !studioSearchTerm
 						? studios.map((studio) => (
-								<StudioCard
-									key={studio.studioName}
-									socket={socket}
-									studio={studio}
-								/>
-						  ))
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
+						))
 						: studioSearchResults.map((studio) => (
-								<StudioCard
-									key={studio.studioName}
-									socket={socket}
-									studio={studio}
-								/>
-						  ))}
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
+						))}
 				</div>
 			</div>
 			<div className={styles.containerChild}>
@@ -93,11 +94,19 @@ function HomePage(props) {
 					searchType={"activeStudios"}
 					label={"Search Studios Listening Now ..."}
 					studioId={""}
+					setResults={setActiveStudioSearchResults}
+					onInputChange={setActiveStudioSearchTerm}
 				/>
 				<div className={styles.cardContainer}>
-					{studios
-						.filter((studio) => studio.studioIsActive === true)
-						.map((studio) => (
+					{activeStudioSearchResults.length === 0 && !activeStudioSearchTerm
+						? studios.map((studio) => (
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
+						))
+						: activeStudioSearchResults.map((studio) => (
 							<StudioCard
 								key={studio.studioName}
 								socket={socket}
