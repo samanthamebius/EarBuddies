@@ -22,7 +22,6 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
 		async function fetchStudioData() {
             const hostId = studio.studioHost; 
             const host = await axios.get(`${BASE_URL}/api/user/${hostId}`);
-            console.log("HOST " + host.data.userDisplayName);
             setHost(host.data);
         }
 		fetchStudioData();

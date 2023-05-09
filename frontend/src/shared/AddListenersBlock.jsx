@@ -17,12 +17,16 @@ export default function AddListenersBlock() {
   useEffect( () => {
     async function fetchStudioData() {
       const studio = await axios.get(`${BASE_URL}/api/studio/${id}`);
-      const existingListeners = studio.data[0].studioUsers;
-      console.log("LISTENERS " + existingListeners);
+      const existingListenerId = studio.data[0].studioUsers;
+      const existingListeners = [];
+      for (let i = 0; i < existingListenerId.length; i++) {
+        const listener = await axios.get(`${BASE_URL}/api/user/${existingListenerId[i]}`);
+        existingListeners.push(listener.data);
+      }
       setListeners(existingListeners);
     } fetchStudioData();
     
-  }, [listeners])
+  }, [])
 
   useEffect(() => {
     const difference = listenerSearchResults.filter(x => !listeners.some(y => y._id === x._id));
@@ -100,7 +104,7 @@ export default function AddListenersBlock() {
               }>
               <ListItemAvatar>
                 <Avatar>
-                  <img className={styles.image} src={listener.profilePicture} />
+                  <img className={styles.image} src={listener.profilePic} />
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={listener.userDisplayName} />
