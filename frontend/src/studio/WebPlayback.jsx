@@ -14,6 +14,8 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider";
+import { useContext } from "react";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
@@ -48,8 +50,8 @@ function SongInfo() {
 
 
     useEffect(() => {
-		const fetchSongInfo = async () => {
-			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+        const fetchSongInfo = async () => {
+            const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
             if (track.data.item.type === "episode") {
                 setSongTitle(track.data.item.name);
                 setAlbumArtwork(track.data.item.images[0].url);
@@ -63,8 +65,8 @@ function SongInfo() {
                 const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
                 setArtistImg(artist.data.images[0].url);
             }
-		}
-		fetchSongInfo();
+        }
+        fetchSongInfo();
 
         // Polling mechanism to update song info
         const interval = setInterval(fetchSongInfo, 1000);
@@ -72,7 +74,7 @@ function SongInfo() {
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
 
-	},[songTitle]);
+    }, [songTitle]);
 
     return (
         <div className={styles.songSection}>
@@ -147,34 +149,34 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider({player}) {
-    const [duration, setDuration] = useState(0); 
+export function TimeSlider({ player }) {
+    const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
 
     useEffect(() => {
-		const fetchDuration = async () => {
-			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			setDuration(Math.round(track.data.item.duration_ms / 1000));
-		}
-		fetchDuration();
-	},[]);
+        const fetchDuration = async () => {
+            const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+            setDuration(Math.round(track.data.item.duration_ms / 1000));
+        }
+        fetchDuration();
+    }, []);
 
-      useEffect(() => {
-    const fetchPosition = async () => {
-      axios
-        .get(`${BASE_URL}/api/spotify/songinfo`)
-        .then((response) => {
-          setPosition(Math.round(response.data.progress_ms / 1000));
-        });
-    };
-    fetchPosition();
+    useEffect(() => {
+        const fetchPosition = async () => {
+            axios
+                .get(`${BASE_URL}/api/spotify/songinfo`)
+                .then((response) => {
+                    setPosition(Math.round(response.data.progress_ms / 1000));
+                });
+        };
+        fetchPosition();
 
-    // Polling mechanism to continuously update position
-    const interval = setInterval(fetchPosition, 1000);
+        // Polling mechanism to continuously update position
+        const interval = setInterval(fetchPosition, 1000);
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -329,7 +331,7 @@ function ControlPanel({ deviceId, studio, player }) {
         console.log(deviceId);
         setPlaying(!isPlaying);
         spotifyPauser({ deviceId });
-    }    
+    }
 
     return (
         <div className={styles.controlPanel}>
@@ -368,6 +370,8 @@ function WebPlayback(props) {
     const [player, setPlayer] = useState({});
     const [myDeviceId, setDeviceId] = useState({});
     const { studio } = props;
+    navigate = useNavigate();
+
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -406,11 +410,16 @@ function WebPlayback(props) {
             navigate("/400");
         }
 
+    }, []);
 
+    useEffect(() => {
+        return () => {
+            window.location.reload(false);
+        };
     }, []);
 
     console.log(myDeviceId);
-    navigate = useNavigate();
+
 
     return (
         <>
