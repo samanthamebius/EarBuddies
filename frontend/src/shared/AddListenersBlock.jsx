@@ -7,27 +7,27 @@ import ClearRounded from "@mui/icons-material/ClearRounded";
 import axios from "axios";
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 
-export default function AddListenersBlock({studio_id}) {
+export default function AddListenersBlock({studio}) {
 
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
   const [host,  setHost] = useState(null);
-  const id = '6459c055ca78bfdbbe1c736e';
+  const [isHost,  setIsHost] = useState(null);
+  const studioId = studio._id;
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
   useEffect( () => {
     async function fetchStudioData() {
-      const studio = await axios.get(`${BASE_URL}/api/studio/${id}`);
-      const existingListenerId = studio.data[0].studioUsers;
+      const existingListenerId = studio.studioUsers;
       const existingListeners = [];
       for (let i = 0; i < existingListenerId.length; i++) {
         const listener = await axios.get(`${BASE_URL}/api/user/${existingListenerId[i]}`);
         existingListeners.push(listener.data);
       }
       setListeners(existingListeners);
-      console.log("HOST " + studio.data[0].studioHost);
-      setHost(studio.data[0].studioHost);
+      setHost(studio.studioHost);
+      setIsHost(studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
     } fetchStudioData();
     
   }, [])
@@ -43,8 +43,8 @@ export default function AddListenersBlock({studio_id}) {
         return true;
       }
     });
-    if (id) {
-      axios.put(`${BASE_URL}/api/studio/${id}/${listener.username}`);
+    if (studioId) {
+      axios.put(`${BASE_URL}/api/studio/${studioId}/${listener.username}`);
     }
     if (!isFound) {
       setListeners(oldListeners => [...oldListeners, listener]);
@@ -52,8 +52,8 @@ export default function AddListenersBlock({studio_id}) {
   }
 
   function removeListener(listener) {
-    if (id) {
-      axios.delete(`${BASE_URL}/api/studio/${id}/${listener.username}`);
+    if (studioId) {
+      axios.delete(`${BASE_URL}/api/studio/${studioId}/${listener.username}`);
     }
     setListeners((oldListeners) =>
       oldListeners.filter((oldListener) => oldListener !== listener)
@@ -108,7 +108,7 @@ export default function AddListenersBlock({studio_id}) {
                 <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
                 : <ClearRounded
                   edge="end"
-                  style={{ color: "#757575" }}
+                  style={{ display: isHost ? "flex" : "none", color: "#757575" }}
                   className={styles.clearIcon}
                   onClick={() => removeListener(listener)} />
               }>

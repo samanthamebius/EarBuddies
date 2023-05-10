@@ -5,26 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import styles from './Popup.module.css';
 import GroupsIcon from '@mui/icons-material/Groups';
-import axios from "axios";
 
 
 import AddListenersBlock from '../shared/AddListenersBlock';
 
 export default function ManageListenersDialog({ isManListDialogOpened, handleCloseManListDialog, studio }) {
 
-    const [host, setHost] = useState(null);
-
     const handleClose = () => { handleCloseManListDialog(false) };
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-    useEffect(() => {
-		async function fetchStudioData() {
-            const hostId = studio.studioHost; 
-            const host = await axios.get(`${BASE_URL}/api/user/${hostId}`);
-            setHost(host.data);
-        }
-		fetchStudioData();
-	}, []);
 
     return (
         <Dialog  open={isManListDialogOpened} onClose={handleCloseManListDialog} fullWidth maxWidth="sm"
@@ -34,7 +22,7 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
             <h1 className={styles.heading}>Manage Listeners</h1>
         </div>
 
-        <AddListenersBlock/>
+        <AddListenersBlock studio={studio}/>
         
         <DialogContent className={styles.dialogContent}>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center', mt: 1.5 }}>
