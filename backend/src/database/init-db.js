@@ -9,7 +9,7 @@ const users = [
     { username: 'bre123', userDisplayName: "Breanna Jury", profilePic: "/src/assets/profile/bunny.png", userIsActive: false, userStudios: [] },
     { username: 'ananya456', userDisplayName: "Ananya Ahluwalia", profilePic: "/src/assets/profile/cat.png", userIsActive: true, userStudios: [] },
     { username: 'amy456', userDisplayName: "Amy Rimmer", profilePic: "/src/assets/profile/clown-fish.png", userIsActive: false, userStudios: [] },
-    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "/src/assets/profile/jaguar.png", userIsActive: true, userStudios: [] },
+    { username: 'ange789', userDisplayName: "Angela Lorusso", profilePic: "/src/assets/profile/panda.png", userIsActive: true, userStudios: [] },
     { username: 'yuewen789', userDisplayName: "Yuewen Zheng", profilePic: "/src/assets/profile/giraffe.png", userIsActive: false, userStudios: [] }
 ];
 
