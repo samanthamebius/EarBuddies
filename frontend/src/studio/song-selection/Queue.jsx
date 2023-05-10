@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import styles from "../StudioPage.module.css";
-import list_styles from "./Queue.module.css";
+import styles from "./Queue.module.css";
 import useGet from "../../hooks/useGet";
 import { List } from "@mui/material";
 import SongListItem from "./SongListItem";
@@ -56,9 +55,10 @@ function Queue(props) {
 						},
 					]);
 				});
-			}).catch((error) => {
+			})
+			.catch((error) => {
 				console.log(error);
-				navigate('/500');
+				navigate("/500");
 			});
 	}, []);
 
@@ -72,10 +72,10 @@ function Queue(props) {
 	} else {
 		const snapshot_id = playlist.snapshot_id;
 		return (
-			<div style={{ overflowY: "hidden" }}>
+			<div style={{ maxHeight: "100%", overflowY: "auto" }}>
 				<label className={styles.queueGreyHeading}>Playlist:</label>
 				{playlistSongs?.length > 0 && (
-					<List className={list_styles.listContainer}>
+					<List className={styles.listContainer}>
 						{playlistSongs.map((result) => (
 							<SongListItem
 								key={result.id}

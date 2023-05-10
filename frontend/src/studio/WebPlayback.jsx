@@ -188,6 +188,7 @@ export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
 
+	// COMMENT BACK IN AT A LATER DATE
 	// useEffect(() => {
 	// 	const fetchDuration = async () => {
 	// 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
