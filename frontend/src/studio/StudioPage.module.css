@@ -106,7 +106,7 @@
 	filter: grayscale(100%);
 }
 
-.nowplaying {
+.webPlayback {
 	background-color: #e9dcf1;
 	padding: 15px;
 	grid-row: 2 / 2;
