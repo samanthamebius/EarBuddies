@@ -24,7 +24,6 @@ function Queue(props) {
 		socket.on("receive_new_song", (data) => {
 			console.log(data.newSong);
 			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
-			console.log("PLAYLIST LENGTH " + playlistSongs.length);
 		});
 		updateQueueStatus(playlistSongs.length);
 	}, [socket]);
@@ -41,11 +40,9 @@ function Queue(props) {
 
 	function updateQueueStatus(queueLength) {
 		if (queueLength > 0) {
-			console.log("queue is not empty ");
 			setQueueIsEmpty(false);
 		} else {
 			setQueueIsEmpty(true);
-			console.log("queue is empty ");
 		}
 	}
 
