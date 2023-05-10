@@ -46,6 +46,9 @@ router.put("/:username", async (req, res) => {
     if (profilePic) {
       await updateUserProfilePic(username, profilePic);
     }
+    if (spotifyPic) {
+      await updateUserSpotifyPic(username, spotifyPic);
+    }
     return res.status(204).json({ msg: "User updated" });
   } catch (err) {
     console.log(err)
