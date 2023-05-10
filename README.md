@@ -61,4 +61,45 @@ To run the frontend suite:
 ADD HERE
 
 # Features
+## Login
+Log in using your spotify account (no account creation required!)  
+![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/8f21a616-534e-401a-b583-5d2e8c1e350b)
 
+## Home
+View your studios - with active studios seperated to easily find your friends 🧑‍🤝‍🧑  
+Search your studios  
+Create a studio. Customisable with:  
+- name
+- banner photo
+- genres (choose from our pre-set list, or add your own)
+- control settings
+- listeners  
+![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/50c10bf8-523f-4f76-9772-f140fc0ca122)
+
+## Profile
+Switch to dark mode! 🌑🌃🌠 perfect for late night listening sessions  
+Change your display name and photo  
+Quick access to your spotify dashboard  
+Log out or delete your account ☹️👋  
+![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/aa95ad2b-e5df-4398-bc24-f9f0b20cc5c3)
+
+## Studio
+### now playing 🎵
+View the song playing  
+Control the volume in studio  
+Play, pause, skip and seek songs  
+![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/233772aa-478a-4d50-94d8-f9fac5d5776c)
+
+### search and queue songs 🎼
+
+### chat 💬
+
+### manage studio 🖊️
+Leave studio  
+Edit nickname (specific to this studio)  
+Add listeners  
+And if you're the host:
+- delete listeners
+- assign a new host
+- enable/disable control
+- delete studio
