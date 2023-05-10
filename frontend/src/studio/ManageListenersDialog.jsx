@@ -11,7 +11,8 @@ import AddListenersBlock from '../shared/AddListenersBlock';
 
 export default function ManageListenersDialog({ isManListDialogOpened, handleCloseManListDialog, studio }) {
 
-    const handleClose = () => { handleCloseManListDialog(false) };
+    const handleClose = () => { handleCloseManListDialog(false);
+    window.location.reload(); };
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     return (
