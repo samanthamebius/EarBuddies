@@ -20,6 +20,9 @@ beforeAll(() => {
     global.localStorage = localStorageMock;
 });
 
+/**
+ * Tests that appropriate elements render on page not found page when error code is 404
+ */
 it('page not found renders correctly for 404 code', () => {
     localStorage.setItem('current_user_id', mockUser1._id);
   
@@ -34,6 +37,9 @@ it('page not found renders correctly for 404 code', () => {
     expect(getByRole('button', {name: "Back to home"})).toBeInTheDocument();
 });
 
+/**
+ * Tests that appropriate elements render on page not found page when error code is 400
+ */
 it('page not found renders correctly for 400 code', () => {
     localStorage.setItem('current_user_id', mockUser1._id);
 
@@ -48,7 +54,9 @@ it('page not found renders correctly for 400 code', () => {
     expect(getByRole('button', { name: "Please login again" })).toBeInTheDocument();
 });
 
-
+/**
+ * Tests that appropriate elements render on page not found page when error code is 500
+ */
 it('page not found renders correctly for 500 code', () => {
     localStorage.setItem('current_user_id', mockUser1._id);
 
@@ -63,7 +71,10 @@ it('page not found renders correctly for 500 code', () => {
     expect(getByRole('button', { name: "Please login again" })).toBeInTheDocument();
 });
 
-it('page not found renders correctly for * code', () => {
+/**
+ * Tests that appropriate elements render on page not found page when path is random
+ */
+it('page not found renders correctly for random path', () => {
     localStorage.setItem('current_user_id', mockUser1._id);
 
     const { getByTestId, getByText, getByRole } = render(
