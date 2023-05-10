@@ -12,7 +12,7 @@ export default function AddListenersBlock({studio}) {
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
-  const [isHost,  setIsHost] = useState(null);
+  const isHost = studio ? (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, '')) : null;
   const studioId = studio ? studio._id : null;
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
@@ -25,7 +25,6 @@ export default function AddListenersBlock({studio}) {
         existingListeners.push(listener.data);
       }
       setListeners(existingListeners);
-      setIsHost(studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
     } fetchStudioData();
     
   }, [])
