@@ -48,17 +48,6 @@ export default function Banner({ id, studio, socket }) {
 		window.location.reload(false);
 	};
 
-	const handleTEST = () => {
-		const users = ["smeb123", "bre123", "amy456"];
-		users.push(studio.studioHost)
-
-		axios.put(`${BASE_URL}/api/studio/${id}/updateListeners`, {
-			listeners: users,
-		}).then((res) => {
-			console.log(res);
-		});
-	}
-
 	const users = studio.studioUsers;
 	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
@@ -70,7 +59,7 @@ export default function Banner({ id, studio, socket }) {
 		>
 			<h1 className={styles.bannerStudioName}>{studioName}</h1>
 
-			<div className={styles.bannerlisteners} onClick={handleTEST}>
+			<div className={styles.bannerlisteners}>
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
@@ -114,7 +103,6 @@ export function DropdownKebab({
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
 	const [isInManList, setInManList] = useState(false);
-	const [isInEnable, setInEnable] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 	const [isInAssign, setIsInAssign] = useState(false);
 	const navigate = useNavigate();
@@ -132,9 +120,6 @@ export function DropdownKebab({
 	const enterManList = () => { 
 		setInManList(true) 
 	};
-	const enterEnable = () => {
-		setInEnable(true);
-	};
 	const enterDelete = () => {
 		setInDelete(true);
 	};
@@ -151,9 +136,6 @@ export function DropdownKebab({
 	const leaveManList = () => {
 		setInManList(false);
 	};
-	const leaveEnable = () => {
-		setInEnable(false);
-	};
 	const leaveDelete = () => {
 		setInDelete(false);
 	};
@@ -166,7 +148,6 @@ export function DropdownKebab({
 		setInLeave(false);
 		setInEdit(false);
 		setInManList(false);
-		setInEnable(false);
 		setInDelete(false);
 	};
 
