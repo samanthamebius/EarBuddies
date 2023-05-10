@@ -5,24 +5,17 @@ import NicknameDialog from "./NicknameDialog";
 import ManageListenersDialog from "./ManageListenersDialog";
 import AssignNewHostDialog from "./AssignNewHostDialog";
 import ProfilePicImg1 from "../assets/profilepic1.png";
-import ProfilePicImg2 from "../assets/profilepic2.png";
-import ProfilePicImg3 from "../assets/profilepic3.png";
-import ProfilePicImg4 from "../assets/profilepic4.png";
-import ProfilePicImg5 from "../assets/profilepic5.png";
-import ProfilePicImg6 from "../assets/profilepic6.png";
 import ListenerIcons from "../shared/ListenerIcons";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import GroupsIcon from '@mui/icons-material/Groups';
 import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
 import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
 import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
-import useGet from "../hooks/useGet.js"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
@@ -47,13 +40,6 @@ export default function Banner({ id, studio, socket }) {
 
 	const isHost = (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
 
-	const [controlEnabled, toggleControl] = useState(
-		studio.studioControlHostOnly
-	);
-	const handleControlToggle = () => {
-		toggleControl((current) => !current);
-		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
-	};
 	const handleDelete = () => {
 		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
 			console.log(res);
@@ -93,8 +79,6 @@ export default function Banner({ id, studio, socket }) {
 			</div>
 			<div className={styles.bannerDropdownKebab}>
 				<DropdownKebab
-					controlEnabled={controlEnabled}
-					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
 					id={id}
 					studio={studio}
@@ -109,8 +93,6 @@ export default function Banner({ id, studio, socket }) {
 }
 
 export function DropdownKebab({
-	controlEnabled,
-	handleControlToggle,
 	handleDelete,
 	isHost,
 	id,
@@ -265,20 +247,6 @@ export function DropdownKebab({
 				onClose={handleClose}
 			>
 				<MenuItem
-					style={{ display: isAloneInStudio ? "none" : "flex" }}
-					className={styles.menu_item}
-					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
-					onMouseEnter={enterLeave}
-					onMouseLeave={leaveLeave}
-				>
-					<ExitToAppRoundedIcon
-						className={styles.icon}
-						style={{ color: isInLeave ? "#B03EEE" : "#757575" }}
-					/>
-					<p className={styles.menu_title}>Leave Studio</p>
-				</MenuItem>
-
-				<MenuItem
 					className={styles.menu_item}
 					onClick={handleNicknameOpen}
 					onMouseEnter={enterEdit}
@@ -316,33 +284,19 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
+					style={{ display: isAloneInStudio ? "none" : "flex" }}
 					className={styles.menu_item}
-					onClick={() => {
-						handleClose;
-						handleControlToggle();
-					}}
-					onMouseEnter={enterEnable}
-					onMouseLeave={leaveEnable}
+					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
+					onMouseEnter={enterLeave}
+					onMouseLeave={leaveLeave}
 				>
-					{controlEnabled ? (
-						<>
-							<VideogameAssetOffRoundedIcon
-								className={styles.icon}
-								style={{ color: isInEnable ? "#B03EEE" : "#757575" }}
-							/>
-							<p className={styles.menu_title}>Disable Control</p>
-						</>
-					) : (
-						<>
-							<VideogameAssetRoundedIcon
-								className={styles.icon}
-								style={{ color: isInEnable ? "#B03EEE" : "#757575" }}
-							/>
-							<p className={styles.menu_title}>Enable Control</p>
-						</>
-					)}
+					<ExitToAppRoundedIcon
+						className={styles.icon}
+						style={{ color: isInLeave ? "#B03EEE" : "#757575" }}
+					/>
+					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
+				
 				<MenuItem
 					style={{ display: isHost ? "flex" : "none" }}
 					className={styles.menu_item}
@@ -356,6 +310,7 @@ export function DropdownKebab({
 					/>
 					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
+
 			</Menu>
 		</div>
 	
