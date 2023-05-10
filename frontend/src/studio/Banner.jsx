@@ -296,7 +296,7 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
+					style={{ display: (!isHost) ? "none" : "flex" }}
 					className={styles.menu_item}
 					onClick={handleManListOpen}
 					onMouseEnter={enterManList} 

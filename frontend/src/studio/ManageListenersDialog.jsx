@@ -6,8 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import styles from './Popup.module.css';
 import GroupsIcon from '@mui/icons-material/Groups';
 import axios from "axios";
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
+
 
 import AddListenersBlock from '../shared/AddListenersBlock';
 
@@ -35,7 +34,6 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
             <h1 className={styles.heading}>Manage Listeners</h1>
         </div>
 
-        <ListenerListItem listener={host}/>
         <AddListenersBlock/>
         
         <DialogContent className={styles.dialogContent}>
@@ -47,15 +45,3 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
     </Dialog>
     );
 }
-
-function ListenerListItem ({ listener }) {
-  
-    return (
-      <div className={styles.listenerListItem}>
-        <img src={listener.profilePic}/>
-        <p>{listener.userDisplayName}</p>
-         <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
-    
-      </div>
-    );
-};

@@ -5,12 +5,14 @@ import SearchBar from "../shared/SearchBar";
 import { ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
 import ClearRounded from "@mui/icons-material/ClearRounded";
 import axios from "axios";
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
 
 export default function AddListenersBlock({studio_id}) {
 
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
+  const [host,  setHost] = useState(null);
   const id = '6459c055ca78bfdbbe1c736e';
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
@@ -24,6 +26,8 @@ export default function AddListenersBlock({studio_id}) {
         existingListeners.push(listener.data);
       }
       setListeners(existingListeners);
+      console.log("HOST " + studio.data[0].studioHost);
+      setHost(studio.data[0].studioHost);
     } fetchStudioData();
     
   }, [])
@@ -100,8 +104,9 @@ export default function AddListenersBlock({studio_id}) {
           {listeners.map((listener, i) => (
             <ListItem
               key={i}
-              secondaryAction={
-                <ClearRounded
+              secondaryAction={ host === listener.username ?
+                <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
+                : <ClearRounded
                   edge="end"
                   style={{ color: "#757575" }}
                   className={styles.clearIcon}
