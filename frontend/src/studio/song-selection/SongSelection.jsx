@@ -6,7 +6,7 @@ import { List } from "@mui/material";
 import Queue from "./Queue";
 import SongListItem from "./SongListItem";
 
-export default function SongSelection({ studio, socket }) {
+export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 	const [songSearchResults, setSongSearchResults] = useState([]);
 
 	return (
@@ -31,7 +31,7 @@ export default function SongSelection({ studio, socket }) {
 					))}
 				</List>
 			) : null}
-			{/* <Queue studio={studio} socket={socket} /> */}
+			{/* <Queue studio={studio} socket={socket} setQueueIsEmpty={setQueueIsEmpty}/> */}
 		</div>
 	);
 }

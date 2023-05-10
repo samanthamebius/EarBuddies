@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
@@ -14,6 +14,8 @@ function StudioPage({ socket }) {
 	const accessToken = localStorage.getItem("access_token");
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
+
 	const {
 		data: studio,
 		isLoading: studioIsLoading,
@@ -40,9 +42,9 @@ function StudioPage({ socket }) {
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
 				<div className={styles.webPlayback}>
-				<WebPlayback studio={studio} token={accessToken.replace(/['"]+/g, '')} />
+				<WebPlayback studio={studio} token={accessToken.replace(/['"]+/g, '')} queueIsEmpty={queueIsEmpty}/>
 				</div>
-				<SongSelection studio={studio[0]} socket={socket} />
+				<SongSelection studio={studio[0]} socket={socket} setQueueIsEmpty={setQueueIsEmpty}/>
 				<Chat socket={socket} />
 			</div>
 		);

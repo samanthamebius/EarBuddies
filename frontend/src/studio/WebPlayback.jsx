@@ -48,7 +48,7 @@ function SongInfo() {
     const [artistImg, setArtistImg] = useState('');
     const [albumArtwork, setAlbumArtwork] = useState('');
 
-    {/*
+
     useEffect(() => {
         const fetchSongInfo = async () => {
             const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
@@ -75,7 +75,6 @@ function SongInfo() {
         return () => clearInterval(interval);
 
 	},[songTitle]);
-*/}
 
     return (
         <div className={styles.songSection}>
@@ -150,13 +149,9 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider({ player }) {
+export function TimeSlider({ player, queueIsEmpty }) {
     const [duration, setDuration] = useState(0);
-    const [position, setPosition] = useState(0);
-    const [isDisabled, setIsDisabled] = useState(true);
-    //TODO: do real check for if buttons should be disabled
-
-    {/*
+    const [position, setPosition] = useState(0); 
 
     useEffect(() => {
         const fetchDuration = async () => {
@@ -183,7 +178,7 @@ export function TimeSlider({ player }) {
         return () => clearInterval(interval);
     }, []);
 
-  */}
+
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
         opacity: 0.38,
@@ -216,7 +211,7 @@ export function TimeSlider({ player }) {
                 max={duration}
                 color="secondary"
                 onChange={handleChange}
-                style={{ pointerEvents: isDisabled ? "none" : "auto" }}
+                style={{ pointerEvents: queueIsEmpty ? "none" : "auto" }}
             />
             <Box
                 sx={{
@@ -241,15 +236,13 @@ export function TimeSlider({ player }) {
     );
 }
 
-function ControlPanel({ deviceId, studio, player }) {
+function ControlPanel({ deviceId, studio, player, queueIsEmpty}) {
     const [isPlaying, setPlaying] = useState(false);
     const navigate = useNavigate();
     const [isInPrevious, setInPrevious] = useState(false);
     const [isInPause, setInPause] = useState(false);
     const [isInPlay, setInPlay] = useState(false);
     const [isInNext, setInNext] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(true);
-    //TODO: do real check for if buttons should be disabled
 
     function spotifyPlayer({ studio, deviceId }) {
         console.log("playing in " + studio);
@@ -383,41 +376,41 @@ function ControlPanel({ deviceId, studio, player }) {
             <div className={styles.playbackCntrls}>
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ fontSize: "40px", color: isDisabled || isInPrevious ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
+                    style={{ fontSize: "40px", color: queueIsEmpty || isInPrevious ? "#e7bcf7" : "white", pointerEvents: queueIsEmpty ? "none" : "auto" }}
                     onClick={() => spotifyPrevious(deviceId)}
                     onMouseEnter={enterPrevious}
 					onMouseLeave={leavePrevious}
-                    disabled={isDisabled}
+                    disabled={queueIsEmpty}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ fontSize: "40px", color: isDisabled || isInPlay ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
+                        style={{ fontSize: "40px", color: queueIsEmpty || isInPlay ? "#e7bcf7" : "white", pointerEvents: queueIsEmpty ? "none" : "auto" }}
                         onClick={() => playButton(studio, deviceId)}
                         onMouseEnter={enterPlay}
 					    onMouseLeave={leavePlay}
-                        disabled={isDisabled}
+                        disabled={queueIsEmpty}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ fontSize: "40px", color: isDisabled || isInPause ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
+                        style={{ fontSize: "40px", color: queueIsEmpty || isInPause ? "#e7bcf7" : "white", pointerEvents: queueIsEmpty ? "none" : "auto" }}
                         onClick={() => pauseButton(deviceId)}
                         onMouseEnter={enterPause}
 					    onMouseLeave={leavePause}
-                        disabled={isDisabled}
+                        disabled={queueIsEmpty}
                     />
                 )}
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ fontSize: "40px", color: isDisabled || isInNext ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
+                    style={{ fontSize: "40px", color: queueIsEmpty || isInNext ? "#e7bcf7" : "white", pointerEvents: queueIsEmpty ? "none" : "auto" }}
                     onClick={() => spotifyNext(deviceId, studio)}
                     onMouseEnter={enterNext}
 					onMouseLeave={leaveNext}
-                    disabled={isDisabled}
+                    disabled={queueIsEmpty}
                 />
             </div>
-            <TimeSlider player={player} />
+            <TimeSlider player={player} queueIsEmpty={queueIsEmpty}/>
             <VolumeSlider player={player} />
         </div>
     );
@@ -426,7 +419,7 @@ function ControlPanel({ deviceId, studio, player }) {
 function WebPlayback(props) {
     const [player, setPlayer] = useState({});
     const [myDeviceId, setDeviceId] = useState({});
-    const { studio } = props;
+    const { studio, queueIsEmpty } = props;
     navigate = useNavigate();
 
 
@@ -483,7 +476,7 @@ function WebPlayback(props) {
             <div className="container">
                 <div className="main-wrapper">
                     <SongInfo />
-                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player} />
+                    <ControlPanel deviceId={myDeviceId} studio={studio} player={player} queueIsEmpty={queueIsEmpty}/>
                 </div>
             </div>
         </>

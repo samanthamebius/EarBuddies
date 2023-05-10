@@ -16,7 +16,7 @@ import SongListItem from "./SongListItem";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Queue(props) {
-	const { studio, socket } = props;
+	const { studio, socket, setQueueIsEmpty } = props;
 	const [playlistSongs, setPlaylistSongs] = useState([]);
 
 	const {
@@ -32,6 +32,11 @@ function Queue(props) {
 				.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
 				.then((response) => setPlaylistSongs(response.data.tracks.items));
 		});
+		if (response.data.tracks) {
+			setQueueIsEmpty(false);
+		} else {
+			setQueueIsEmpty(true);
+		}
 	}, [socket]);
 
 	// set the initial playlist
