@@ -10,6 +10,6 @@ it('renders login page correctly', () => {
     const { getByRole, getByText, getByAltText } = render(<LogInPage />);
 
     expect(getByRole('button', { name: 'Log In Using Spotify' })).toBeInTheDocument();
-    // expect(getByRole('img', { name: 'Log In Using Spotify' })).toBeInTheDocument();
+    expect(getByAltText('Spotify and Ear Buddies Logo')).toBeInTheDocument();
     expect(getByText('EAR BUDDIES')).toBeInTheDocument();
 });
