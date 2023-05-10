@@ -17,13 +17,14 @@ export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 				studioId={""}
 				setResults={setSongSearchResults}
 				studio={studio}
+				onInputChange={() => {}}
 			/>
 			{songSearchResults.length > 0 ? (
 				<List className={styles.searchResults}>
 					{songSearchResults.map((result) => (
 						<SongListItem
 							key={result.id}
-							result={result}
+							song={result}
 							socket={socket}
 							studio={studio}
 							type="search"
@@ -31,7 +32,7 @@ export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 					))}
 				</List>
 			) : null}
-			{/* <Queue studio={studio} socket={socket} setQueueIsEmpty={setQueueIsEmpty}/> */}
+			<Queue studio={studio} socket={socket} setQueueIsEmpty={setQueueIsEmpty} />
 		</div>
 	);
 }

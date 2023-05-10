@@ -4,18 +4,26 @@ import styles from "../StudioPage.module.css";
 import axios from "axios";
 import QueueMusicRoundedIcon from "@mui/icons-material/QueueMusicRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
-import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
-import EqualizerRoundedIcon from '@mui/icons-material/EqualizerRounded';
+import PodcastsRoundedIcon from "@mui/icons-material/PodcastsRounded";
+import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
+import equalizer_icon from "../../assets/now_playing/equalizer.gif";
 import { Box, Icon, ListItem, ListItemText } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function SongListItem(props) {
-	const { result, studio, socket, type, snapshotId = null } = props;
+function SongListItem(props) {
+	const { song, studio, socket, type, snapshotId = null } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
-	const [listItem, setListItem] = useState({});
+	const [nowPlayingSong, setNowPlayingSong] = useState("");
+
+	// continously get the currently playing song
+	useEffect(() => {
+		socket.on("receive_currently_playing", (data) => {
+			setNowPlayingSong(data?.name);
+		});
+	}, [socket]);
 
 	const handleItemMouseEnter = () => {
 		setHover(true);
@@ -34,67 +42,64 @@ export default function SongListItem(props) {
 	const handleAddToQueue = async () => {
 		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
-			track_id: result.id,
-			type: result.type,
+			track_id: song.id,
+			type: song.type,
 		});
+
 		// reload the studio queue
-		socket.emit("reload_studio_queue", { room: studio._id });
+		socket.emit("send_new_song", {
+			room: studio._id,
+			newSong: song,
+		});
 	};
 
+	// remove the song from the playlist
 	const handleRemoveFromQueue = async () => {
 		const playlist_id = studio.studioPlaylist;
-		const track_id = result.track.id;
-		const type = result.track.type;
+		const track_id = song.id;
 		await axios.delete(
 			`${BASE_URL}/api/spotify/queue/${playlist_id}/${track_id}`,
-			{ data: { snapshot_id: snapshotId, type: type } });
+			{ data: { snapshot_id: snapshotId, type: song.type } }
+		);
 
 		// reload the playlist after deleting
-		socket.emit("reload_studio_queue", { room: studio._id });
+		socket.emit("remove_from_studio_queue", {
+			room: studio._id,
+			songId: track_id,
+		});
 	};
 
-	useEffect(() => {
-		if (type === "queue") {
-			setListItem({
-				id: result.track.id,
-				name: result.track.name,
-				artists: result.track.artists,
-				image: result.track.album.images[0].url,
-				type: result.type,
-			});
-		} else {
-			setListItem({
-				id: result.id,
-				name: result.name,
-				artists: result.artists,
-				image: result.image,
-				type: result.type,
-			});
-		}
-	}, []);
-
 	const displaySongTypeIcon = () => {
-		if (listItem.type === "episode") {
+		if (nowPlayingSong === song.name && type === "queue") {
 			return (
-				<PodcastsRoundedIcon fontSize="small" style={{ color: "#c4c4c4", marginRight: '10px' }} />
-			)
-		} else if (listItem.type === "track") {
+				<img
+					src={equalizer_icon}
+					style={{ width: "20px", height: "20px", marginRight: "10px" }}
+				/>
+			);
+		} else if (song.type === "episode") {
 			return (
-				<MusicNoteRoundedIcon fontSize="small" style={{ color: "#c4c4c4", marginRight: '10px' }} />
-			)
-		} else if (false) { //TO DO: isPlaying (replace false)
+				<PodcastsRoundedIcon
+					fontSize="small"
+					style={{ color: "#c4c4c4", marginRight: "10px" }}
+				/>
+			);
+		} else if (song.type === "track") {
 			return (
-				<EqualizerRoundedIcon fontSize="small" style={{ color: "#CA3FF3", marginRight: '10px' }} />
-			)
+				<MusicNoteRoundedIcon
+					fontSize="small"
+					style={{ color: "#c4c4c4", marginRight: "10px" }}
+				/>
+			);
 		}
 	};
 
 	const displaySongImage = () => {
 		return (
 			<Box className={styles.resultImgBox} position="relative">
-				<img className={styles.resultImg} src={listItem.image} />
+				<img className={styles.resultImg} src={song.image} />
 				{/* For search results, onHover styles on listItem */}
-				{type === "search" &&
+				{type === "search" && (
 					<>
 						{isHover && <Box className={styles.resultImgDark} />}
 						{isHover && (
@@ -107,41 +112,44 @@ export default function SongListItem(props) {
 									transform: "translate(-50%, -75%)",
 								}}
 							>
-								<QueueMusicRoundedIcon
-									style={{ color: "white" }}
-								/>
-							</Icon>)}
+								<QueueMusicRoundedIcon style={{ color: "white" }} />
+							</Icon>
+						)}
 					</>
-				}
+				)}
 			</Box>
-		)
-	}
+		);
+	};
 
 	const displaySongText = () => {
 		return (
 			<ListItemText
 				className={styles.resultTitle}
-				primary={<b>{listItem.name}</b>}
-				secondary={<p className={styles.resultTitleDetail}>{listItem.artists}</p>}
+				primary={<b>{song.name}</b>}
+				secondary={
+					<p className={styles.resultTitleDetail}>
+						{song.artists?.length > 0 ? song.artists[0] : song.artists}
+					</p>
+				}
 				primaryTypographyProps={{
 					style: {
-						width: '300px',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis'
-					}
+						width: "300px",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+					},
 				}}
 				secondaryTypographyProps={{
 					style: {
-						width: '300px',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis'
-					}
+						width: "300px",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+					},
 				}}
 			/>
-		)
-	}
+		);
+	};
 
 	return (
 		<>
@@ -149,7 +157,7 @@ export default function SongListItem(props) {
 				onMouseEnter={handleItemMouseEnter}
 				onMouseLeave={handleItemMouseLeave}
 				className={styles.result}
-				// onClick={type === "search" ? (() => handleAddToQueue()) : undefined} //For search results, listItem onClick adds to queue
+				onClick={type === "search" ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
 						{type === "queue" && (
@@ -170,4 +178,6 @@ export default function SongListItem(props) {
 			</ListItem>
 		</>
 	);
-};
+}
+
+export default SongListItem;

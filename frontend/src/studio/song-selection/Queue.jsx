@@ -1,23 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import styles from "../StudioPage.module.css";
-import list_styles from "./Queue.module.css";
+import styles from "./Queue.module.css";
 import useGet from "../../hooks/useGet";
-import {
-	Avatar,
-	Button,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
-} from "@mui/material";
+import { List } from "@mui/material";
 import SongListItem from "./SongListItem";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Queue(props) {
 	const { studio, socket, setQueueIsEmpty } = props;
 	const [playlistSongs, setPlaylistSongs] = useState([]);
+	const navigate = useNavigate();
 
 	const {
 		data: playlist,
@@ -25,12 +19,11 @@ function Queue(props) {
 		error: songsError,
 	} = useGet(`/api/spotify/queue/${studio.studioPlaylist}`);
 
-	// reload the studio queue when a new song is added
+	// continously set the new songs added to the queue
 	useEffect(() => {
-		socket.on("receive_reload_studio_queue", () => {
-			axios
-				.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-				.then((response) => setPlaylistSongs(response.data.tracks.items));
+		socket.on("receive_new_song", (data) => {
+			console.log(data.newSong);
+			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
 		});
 		if (response.data.tracks) {
 			setQueueIsEmpty(false);
@@ -39,11 +32,39 @@ function Queue(props) {
 		}
 	}, [socket]);
 
+	// remove the song from the queue
+	useEffect(() => {
+		socket.on("receive_remove_from_studio_queue", (data) => {
+			setPlaylistSongs(
+				playlistSongs.filter((songs) => songs.id !== data.songId)
+			);
+		});
+	});
+
 	// set the initial playlist
 	useEffect(() => {
 		axios
 			.get(`${BASE_URL}/api/spotify/queue/${studio.studioPlaylist}`)
-			.then((response) => setPlaylistSongs(response.data.tracks.items));
+			.then((response) => {
+				response.data?.tracks.items.map((item) => {
+					const trackArtists = [];
+					item.track.artists?.map((artist) => trackArtists.push(artist.name));
+					setPlaylistSongs((playlistSongs) => [
+						...playlistSongs,
+						{
+							id: item.track.id,
+							name: item.track.name,
+							artists: trackArtists,
+							image: item.track.album.images[0].url,
+							type: item.track.type,
+						},
+					]);
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+				navigate("/500");
+			});
 	}, []);
 
 	if (songsError) {
@@ -56,14 +77,14 @@ function Queue(props) {
 	} else {
 		const snapshot_id = playlist.snapshot_id;
 		return (
-			<div style={{ overflowY: "hidden" }}>
-				<label className={styles.queueGreyHeading}>Coming Up:</label>
+			<div style={{ maxHeight: "100%", overflowY: "auto" }}>
+				<label className={styles.queueGreyHeading}>Playlist:</label>
 				{playlistSongs?.length > 0 && (
-					<List className={list_styles.listContainer}>
+					<List className={styles.listContainer}>
 						{playlistSongs.map((result) => (
 							<SongListItem
-								key={result.track.id}
-								result={result}
+								key={result.id}
+								song={result}
 								socket={socket}
 								studio={studio}
 								type="queue"
