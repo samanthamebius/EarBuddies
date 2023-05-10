@@ -6,14 +6,26 @@ import React from "react";
 import HomePage from '../home/HomePage';
 import localStorageMock from './local-storage-mock.js';
 
-const mockUser1 = {
+const mockStudio1 = {
     _id: 1,
+    studioName: "testStudio1",
+    studioIsActive: true,
+    studioUsers: [],
+    studioHost: "testUser1",
+    studioGenres: ["testGenre1"],
+    studioPicture: "testPicture1",
+    studioControlHostOnly: false,
+    studioPlaylist: "testPlaylist1",
+};
+
+const mockUser1 = {
+    _id: 2,
     username: "testUser1",
     userDisplayName: "testUser1",
     spotifyPic: "testUser1",
     profilePic: "testUser1",
-    userIsActive: false,
-    userStudios: [],
+    userIsActive: true,
+    userStudios: [mockStudio1._id],
 };
 
 beforeAll(() => {
@@ -41,7 +53,6 @@ it('renders home page correctly', () => {
  * Tests that search bars with appropriate labels render on home page
  */
 it('renders search bars in home page correctly', () => {
-
     const { getByLabelText } = render(
         <MemoryRouter initialEntries={['/']}>
             <HomePage />
@@ -50,5 +61,12 @@ it('renders search bars in home page correctly', () => {
 
     expect(getByLabelText('Search My Studios ...')).toBeInTheDocument();
     expect(getByLabelText('Search Studios Listening Now ...')).toBeInTheDocument();
+});
+
+/**
+ * Tests that studio card with appropriate labels renders on home page
+ */
+it('renders studio card in home page correctly', () => {
+    console.log(mockUser1.userStudios[0])
 
 });
