@@ -107,6 +107,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const [isHostOnly, setIsHostOnly] = useState(false);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
+  const [listeners, setNewStudioListeners] = useState([]);
   const [genres, setGenres] = useState([
     { name: "Rap", isSelected: false },
     { name: "Rock", isSelected: false },
@@ -247,7 +248,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <SwitchWithTooltip checked={isHostOnly} onChange={handleSwitchToggle} />
           </div>
           
-          <AddListenersBlock studio={null}/>
+          <AddListenersBlock studio={null} setNewStudioListeners={setNewStudioListeners}/>
           
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>

@@ -7,12 +7,13 @@ import ClearRounded from "@mui/icons-material/ClearRounded";
 import axios from "axios";
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 
-export default function AddListenersBlock({studio}) {
+export default function AddListenersBlock({studio, setNewStudioListeners}) {
 
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
   const isHost = studio ? (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, '')) : null;
+  const host = studio ? studio.studioHost : null;
   const studioId = studio ? studio._id : null;
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
@@ -42,6 +43,8 @@ export default function AddListenersBlock({studio}) {
     });
     if (studioId) {
       axios.put(`${BASE_URL}/api/studio/${studioId}/${listener.username}`);
+    } else {
+      setNewStudioListeners(oldListeners => [...oldListeners, listener]);
     }
     if (!isFound) {
       setListeners(oldListeners => [...oldListeners, listener]);
@@ -51,10 +54,15 @@ export default function AddListenersBlock({studio}) {
   function removeListener(listener) {
     if (studioId) {
       axios.delete(`${BASE_URL}/api/studio/${studioId}/${listener.username}`);
+    } else {
+      setNewStudioListeners((oldListeners) =>
+      oldListeners.filter((oldListener) => oldListener !== listener)
+    );
     }
     setListeners((oldListeners) =>
       oldListeners.filter((oldListener) => oldListener !== listener)
     );
+    
   }
 
   return (
@@ -101,7 +109,7 @@ export default function AddListenersBlock({studio}) {
           {listeners.map((listener, i) => (
             <ListItem
               key={i}
-              secondaryAction={ studio.studioHost === listener.username ?
+              secondaryAction={ host === listener.username ?
                 <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
                 : <ClearRounded
                   edge="end"
