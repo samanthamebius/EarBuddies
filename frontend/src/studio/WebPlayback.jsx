@@ -153,6 +153,8 @@ export function VolumeSlider({ player }) {
 export function TimeSlider({ player }) {
     const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
+    const [isDisabled, setIsDisabled] = useState(true);
+    //TODO: do real check for if buttons should be disabled
 
     {/*
 
@@ -214,6 +216,7 @@ export function TimeSlider({ player }) {
                 max={duration}
                 color="secondary"
                 onChange={handleChange}
+                style={{ pointerEvents: isDisabled ? "none" : "auto" }}
             />
             <Box
                 sx={{
@@ -241,6 +244,12 @@ export function TimeSlider({ player }) {
 function ControlPanel({ deviceId, studio, player }) {
     const [isPlaying, setPlaying] = useState(false);
     const navigate = useNavigate();
+    const [isInPrevious, setInPrevious] = useState(false);
+    const [isInPause, setInPause] = useState(false);
+    const [isInPlay, setInPlay] = useState(false);
+    const [isInNext, setInNext] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
+    //TODO: do real check for if buttons should be disabled
 
     function spotifyPlayer({ studio, deviceId }) {
         console.log("playing in " + studio);
@@ -337,31 +346,75 @@ function ControlPanel({ deviceId, studio, player }) {
         spotifyPauser({ deviceId });
     }
 
+    const enterPrevious = () => {
+        setInPrevious(true);
+	};
+
+    const enterPause = () => {
+		    setInPause(true);
+	};
+
+    const enterPlay = () => {
+		    setInPlay(true);
+	};
+
+    const enterNext = () => {
+		    setInNext(true);
+	};
+
+    const leavePrevious = () => {
+		setInPrevious(false);
+	};
+
+    const leavePause = () => {
+		setInPause(false);
+	};
+
+    const leavePlay = () => {
+		setInPlay(false);
+	};
+
+    const leaveNext = () => {
+		setInNext(false);
+	};
+
     return (
         <div className={styles.controlPanel}>
             <div className={styles.playbackCntrls}>
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }}
+                    style={{ fontSize: "40px", color: isDisabled || isInPrevious ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
                     onClick={() => spotifyPrevious(deviceId)}
+                    onMouseEnter={enterPrevious}
+					onMouseLeave={leavePrevious}
+                    disabled={isDisabled}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
+                        style={{ fontSize: "40px", color: isDisabled || isInPlay ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
                         onClick={() => playButton(studio, deviceId)}
+                        onMouseEnter={enterPlay}
+					    onMouseLeave={leavePlay}
+                        disabled={isDisabled}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
+                        style={{ fontSize: "40px", color: isDisabled || isInPause ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
                         onClick={() => pauseButton(deviceId)}
+                        onMouseEnter={enterPause}
+					    onMouseLeave={leavePause}
+                        disabled={isDisabled}
                     />
                 )}
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }}
+                    style={{ fontSize: "40px", color: isDisabled || isInNext ? "#e7bcf7" : "white", pointerEvents: isDisabled ? "none" : "auto" }}
                     onClick={() => spotifyNext(deviceId, studio)}
+                    onMouseEnter={enterNext}
+					onMouseLeave={leaveNext}
+                    disabled={isDisabled}
                 />
             </div>
             <TimeSlider player={player} />
