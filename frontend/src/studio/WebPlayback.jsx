@@ -545,6 +545,11 @@ function WebPlayback(props) {
 
     console.log(myDeviceId);
 
+	useEffect(() => {
+		return () => {
+			window.location.reload(false);
+		};
+	}, []);
 
     return (
         <>

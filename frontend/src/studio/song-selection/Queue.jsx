@@ -24,12 +24,9 @@ function Queue(props) {
 		socket.on("receive_new_song", (data) => {
 			console.log(data.newSong);
 			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
+			console.log("PLAYLIST LENGTH " + playlistSongs.length);
 		});
-		if (playlistSongs.length > 0) {
-			setQueueIsEmpty(false);
-		} else {
-			setQueueIsEmpty(true);
-		}
+		updateQueueStatus(playlistSongs.length);
 	}, [socket]);
 
 	// remove the song from the queue
@@ -39,7 +36,18 @@ function Queue(props) {
 				playlistSongs.filter((songs) => songs.id !== data.songId)
 			);
 		});
+		updateQueueStatus(playlistSongs.length);
 	});
+
+	function updateQueueStatus(queueLength) {
+		if (queueLength > 0) {
+			console.log("queue is not empty ");
+			setQueueIsEmpty(false);
+		} else {
+			setQueueIsEmpty(true);
+			console.log("queue is empty ");
+		}
+	}
 
 	// set the initial playlist
 	useEffect(() => {
