@@ -20,9 +20,9 @@ function SongListItem(props) {
 
 	// continously get the currently playing song
 	useEffect(() => {
-		socket.on("receive_currently_playing", (data) => [
-			setNowPlayingSong(data?.name),
-		]);
+		socket.on("receive_currently_playing", (data) => {
+			setNowPlayingSong(data?.name);
+		});
 	}, [socket]);
 
 	const handleItemMouseEnter = () => {

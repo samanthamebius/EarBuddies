@@ -3,6 +3,7 @@
 	flex-direction: row;
 	height: 100%;
 	align-items: center;
+	gap: 12px;
 }
 
 .pillContainer:hover {

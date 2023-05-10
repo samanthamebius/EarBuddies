@@ -1,6 +1,13 @@
 import express from "express";
 import { getSpotifyApi } from "../../dao/spotify_dao";
-import { searchSpotify, getCurrentTrack, getCurrentTrackId, getArtist, getLastPlaylistTrackId, getPlaybackState } from "../../dao/spotify_dao";
+import {
+	searchSpotify,
+	getCurrentTrack,
+	getCurrentTrackId,
+	getArtist,
+	getLastPlaylistTrackId,
+	getPlaybackState,
+} from "../../dao/spotify_dao";
 
 const router = express.Router();
 
@@ -107,53 +114,60 @@ router.delete("/queue/:playlist_id/:track_id", async (req, res) => {
 });
 
 router.put("/play", async (req, res) => {
-    try {
-        const { uri, deviceId } = req.body;
-        const thisSpotifyApi = getSpotifyApi();
-        if (!thisSpotifyApi) {
-            return res.status(403).json({ msg: "No Spotify API connection" });
-        }
+	try {
+		const { uri, deviceId } = req.body;
+		const thisSpotifyApi = getSpotifyApi();
+		if (!thisSpotifyApi) {
+			return res.status(403).json({ msg: "No Spotify API connection" });
+		}
 		console.log("PLAYING ON " + deviceId);
-        // Play a track if not playing already
-        // will need an if statement to check where it finished to pick it up at correct point 
-        // ooh or just called with no uri and it will resume
-        console.log(await getPlaybackState(thisSpotifyApi, deviceId));
-        if (await getPlaybackState(thisSpotifyApi, deviceId)) {
-            thisSpotifyApi.play({ device_id: deviceId })
-                .then(function () {
-                    thisSpotifyApi.setRepeat("context", { device_id: deviceId })
-                        .then(function () {
-
-                        }, function (err) {
-                            console.log('Something went wrong!', err);
-                        }
-                        );
-                }, function (err) {
-                    console.log('Something went wrong!', err);
-                });
-            return res.status(200).json({ msg: "Resuming track" });
-        } else {
-            thisSpotifyApi.play({ context_uri: uri, device_id: deviceId, offset: { position: 0 } })
-                .then(function () {
-                    thisSpotifyApi.setRepeat("context", { device_id: deviceId })
-                        .then(function () {
-
-                        }, function (err) {
-                            console.log('Something went wrong!', err);
-                        }
-                        );
-                }, function (err) {
-                    console.log('Something went wrong!', err);
-                });
-        }
-    }
-    catch (err) {
-        console.log(err);
-        if (err.statusCode === 401) {
-            return res.status(401).json({ msg: "Unauthorized" });
-        }
-        res.status(500).json(err);
-    }
+		// Play a track if not playing already
+		// will need an if statement to check where it finished to pick it up at correct point
+		// ooh or just called with no uri and it will resume
+		console.log(await getPlaybackState(thisSpotifyApi, deviceId));
+		if (await getPlaybackState(thisSpotifyApi, deviceId)) {
+			thisSpotifyApi.play({ device_id: deviceId }).then(
+				function () {
+					thisSpotifyApi.setRepeat("context", { device_id: deviceId }).then(
+						function () {},
+						function (err) {
+							console.log("Something went wrong!", err);
+						}
+					);
+				},
+				function (err) {
+					console.log("Something went wrong!", err);
+				}
+			);
+			return res.status(200).json({ msg: "Resuming track" });
+		} else {
+			thisSpotifyApi
+				.play({
+					context_uri: uri,
+					device_id: deviceId,
+					offset: { position: 0 },
+				})
+				.then(
+					function () {
+						thisSpotifyApi.setRepeat("context", { device_id: deviceId }).then(
+							function () {},
+							function (err) {
+								console.log("Something went wrong!", err);
+							}
+						);
+					},
+					function (err) {
+						console.log("Something went wrong!", err);
+					}
+				);
+		}
+	} catch (err) {
+		console.log(err);
+		if (err.statusCode === 401) {
+			return res.status(401).json({ msg: "Unauthorized" });
+		}
+		res.status(500).json(err);
+	}
 });
 
 router.put("/pause", async (req, res) => {
@@ -262,7 +276,7 @@ router.put("/previous", async (req, res) => {
 
 router.get("/songinfo", async (req, res) => {
 	try {
-        const thisSpotifyApi = getSpotifyApi();
+		const thisSpotifyApi = getSpotifyApi();
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
 		res.status(200).json(currentTrack);
 	} catch (err) {
@@ -272,8 +286,8 @@ router.get("/songinfo", async (req, res) => {
 
 router.get("/artist/:artist_id", async (req, res) => {
 	try {
-        const { artist_id } = req.params;
-        const thisSpotifyApi = getSpotifyApi();
+		const { artist_id } = req.params;
+		const thisSpotifyApi = getSpotifyApi();
 		const artist = await getArtist(artist_id, thisSpotifyApi);
 		res.status(200).json(artist);
 	} catch (err) {

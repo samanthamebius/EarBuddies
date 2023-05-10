@@ -6,18 +6,26 @@ import AlbumRoundedIcon from "@mui/icons-material/AlbumRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 function QuickAddPill({ nowPlaying, message, setMessage }) {
-	console.log(message);
-	console.log(nowPlaying);
-
 	const handleAddToTextField = (type) => {
 		// add a space if the message is not blank
-		// TODO: fill in with actual data
 		if (type === "name") {
-			setMessage(message ? `${message + " name"}` : `${message + "name"}`);
+			setMessage(
+				message
+					? `${message} ${nowPlaying.name}`
+					: `${message}${nowPlaying.name}`
+			);
 		} else if (type === "album") {
-			setMessage(message ? `${message + " album"}` : `${message + "album"}`);
+			setMessage(
+				message
+					? `${message} ${nowPlaying.album}`
+					: `${message}${nowPlaying.album}`
+			);
 		} else if (type === "artist") {
-			setMessage(message ? `${message + " artist"}` : `${message + "artist"}`);
+			setMessage(
+				message
+					? `${message} ${nowPlaying.artist}`
+					: `${message}${nowPlaying.artist}`
+			);
 		}
 	};
 

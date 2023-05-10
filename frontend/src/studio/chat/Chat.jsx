@@ -96,6 +96,36 @@ export default function Chat(props) {
 		});
 	}, [socket]);
 
+	// continously set the live messages received from currently playing
+	useEffect(() => {
+		socket.on("receive_user_currently_playing_song", (trackTitle) => {
+			console.log(trackTitle);
+			if (trackTitle) {
+				const messageId = uuid();
+				setMessages((messages) => [
+					...messages,
+					{
+						id: messageId,
+						username: "chat_bot",
+						displayName: "chat_bot",
+						message: `Now playing: ${trackTitle}`,
+						isReply: false,
+						replyMessage: "",
+					},
+				]);
+				// save the message to DB
+				axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
+					id: messageId,
+					username: "chat_bot",
+					displayName: "chat_bot",
+					message: `Now playing: ${trackTitle}`,
+					isReply: false,
+					replyMessage: "",
+				});
+			}
+		});
+	}, [socket]);
+
 	// continously set the pinned messages received
 	useEffect(() => {
 		socket.on("receive_pinned_message", (data) => {
@@ -135,12 +165,12 @@ export default function Chat(props) {
 				setNowPlaying({
 					type: data?.type,
 					name: data?.name,
-					artist: data?.artists[0].name,
-					album: data?.album.name,
+					artist: `${data?.type === "track" ? data?.artists[0]?.name : ""}`,
+					album: `${data?.type === "track" ? data?.album?.name : ""}`,
 				});
 			}
 		});
-	});
+	}, [socket]);
 
 	// user leaves the room when they navigate away
 	useEffect(() => {
@@ -165,7 +195,7 @@ export default function Chat(props) {
 				replyMessage,
 			});
 
-			// save the image to DB
+			// save the message to DB
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
@@ -277,13 +307,13 @@ export default function Chat(props) {
 				</div>
 				<div className={styles.pillContainer}>
 					<b className={styles.quickAddText}>Quick Add:</b>
-					{/* {Object.keys(nowPlaying).length > 0 && ( */}
-					<QuickAddPill
-						nowPlaying={nowPlaying}
-						message={message}
-						setMessage={setMessage}
-					/>
-					{/* )} */}
+					{Object.keys(nowPlaying).length > 0 && (
+						<QuickAddPill
+							nowPlaying={nowPlaying}
+							message={message}
+							setMessage={setMessage}
+						/>
+					)}
 				</div>
 			</div>
 		</div>

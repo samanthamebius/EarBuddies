@@ -17,8 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../AppContextProvider";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-let songNumber = 0;
 let navigate;
+let songNumber = 0;
 
 const StyledSlider = styled(Slider)({
 	color: "#ffffff",
@@ -59,21 +59,39 @@ function SongInfo({ socket, studio }) {
 				setSongTitle(track.data?.item?.name);
 				setAlbumArtwork(track.data?.item?.album.images[0].url);
 				setArtistName(track.data?.item?.artists[0].name);
-				const artist_id = track.data?.item?.artists[0].id;
-				if (artist_id) {
-					const artist = await axios.get(
-						`${BASE_URL}/api/spotify/artist/${artist_id}`
-					);
-					setArtistImg(artist.data.images[0].url);
-				}
+				// const artist_id = track.data?.item?.artists[0].id;
+				// if (artist_id) {
+				// 	const artist = await axios.get(
+				// 		`${BASE_URL}/api/spotify/artist/${artist_id}`
+				// 	);
+				// 	setArtistImg(artist.data.images[0].url);
+				// }
 			}
+
+			console.log(track);
 			socket.emit("send_currently_playing", {
 				room: studio._id,
 				track: track.data.item,
 			});
 		};
 		fetchSongInfo();
+
+		// Polling mechanism to update song info
+		const interval = setInterval(fetchSongInfo, 5000);
+
+		// // Cleanup interval on component unmount
+		return () => clearInterval(interval);
 	}, [songTitle, songNumber]);
+
+	console.log(songTitle);
+	// send the now playing song to chat only when it changes
+	useEffect(() => {
+		console.log("send one");
+		socket.emit("send_to_chat_currently_playing", {
+			room: studio._id,
+			trackTitle: songTitle,
+		});
+	}, [songTitle]);
 
 	return (
 		<div className={styles.songSection}>
@@ -254,8 +272,6 @@ function ControlPanel(props) {
 	const { myDeviceId } = useContext(AppContext);
 
 	function spotifyPlayer(studio, myDeviceId) {
-		console.log("playing in " + studio._id);
-		console.log(myDeviceId);
 		try {
 			axios
 				.put(`${BASE_URL}/api/spotify/play`, {
@@ -264,7 +280,7 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
-					songNumber++;
+					console.log(songNumber);
 				})
 				.catch((error) => {
 					navigate("/400");
@@ -283,7 +299,6 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
-					songNumber++;
 				})
 				.catch((error) => {
 					navigate("/400");
@@ -303,10 +318,9 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
-					songNumber++;
 				})
 				.catch((error) => {
-					navigate('/400')
+					navigate("/400");
 				});
 		} catch (error) {
 			console.log(error);
@@ -322,7 +336,6 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
-					songNumber++;
 				})
 				.catch((error) => {
 					navigate("/400");
@@ -334,6 +347,8 @@ function ControlPanel(props) {
 	}
 
 	function playButton(studio) {
+		songNumber++;
+
 		socket.emit("send_play_song", {
 			room: studio._id,
 			isPlaying: true,
@@ -342,6 +357,8 @@ function ControlPanel(props) {
 	}
 
 	function pauseButton(studio) {
+		songNumber++;
+
 		socket.emit("send_pause_song", {
 			room: studio._id,
 			isPlaying: false,
@@ -349,12 +366,16 @@ function ControlPanel(props) {
 	}
 
 	function previousButton(studio) {
+		songNumber++;
+
 		socket.emit("send_previous_song", {
 			room: studio._id,
 		});
 	}
 
 	function skipButton(studio) {
+		songNumber++;
+
 		socket.emit("send_skip_song", {
 			room: studio._id,
 			studio: studio,

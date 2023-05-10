@@ -86,7 +86,6 @@ io.on("connection", (socket) => {
 	// add a song to the queue
 	socket.on("send_new_song", (data) => {
 		const { room } = data;
-		console.log(data);
 		io.in(room).emit("receive_new_song", data);
 	});
 
@@ -118,6 +117,14 @@ io.on("connection", (socket) => {
 	socket.on("send_skip_song", (data) => {
 		const { room } = data;
 		io.in(room).emit("receive_skip_song", data);
+	});
+
+	// send the user's currently playing song to chat
+	socket.on("send_to_chat_currently_playing", (data) => {
+		const { room } = data;
+		console.log("One time send");
+		console.log(data);
+		io.in(room).emit("receive_user_currently_playing_song", data.trackTitle);
 	});
 
 	// remove the user so they don't receive messages while they are gone
