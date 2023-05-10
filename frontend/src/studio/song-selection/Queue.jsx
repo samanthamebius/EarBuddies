@@ -25,7 +25,7 @@ function Queue(props) {
 			console.log(data.newSong);
 			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
 		});
-		if (response.data.tracks) {
+		if (playlistSongs.length > 0) {
 			setQueueIsEmpty(false);
 		} else {
 			setQueueIsEmpty(true);
