@@ -33,21 +33,6 @@ import ConfirmationDialog from "../shared/ConfirmationDialog";
 const hostImage = ProfilePicImg1;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const listeners = [
-	{ id: 1, username: "breannajury", icon: ProfilePicImg1 },
-	{ id: 2, username: "ananyaahluwalia", icon: ProfilePicImg2 },
-	{ id: 3, username: "yuewenzheng", icon: ProfilePicImg3 },
-	{ id: 4, username: "samanthamebius", icon: ProfilePicImg4 },
-	{ id: 5, username: "amyrimmer", icon: ProfilePicImg5 },
-	{ id: 6, username: "angelalorusso", icon: ProfilePicImg6 },
-	{ id: 7, username: "breannajury1", icon: ProfilePicImg1 },
-	{ id: 8, username: "ananyaahluwalia1", icon: ProfilePicImg2 },
-	{ id: 9, username: "yuewenzheng1", icon: ProfilePicImg3 },
-	{ id: 10, username: "samanthamebius1", icon: ProfilePicImg4 },
-	{ id: 11, username: "amyrimmer1", icon: ProfilePicImg5 },
-	{ id: 12, username: "angelalorusso1", icon: ProfilePicImg6 },
-];
-
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
 
 export default function Banner({ id, studio, socket }) {
@@ -77,6 +62,17 @@ export default function Banner({ id, studio, socket }) {
 		window.location.reload(false);
 	};
 
+	const handleTEST = () => {
+		const users = ["smeb123", "bre123", "amy456"];
+		users.push(studio.studioHost)
+
+		axios.put(`${BASE_URL}/api/studio/${id}/updateListeners`, {
+			listeners: users,
+		}).then((res) => {
+			console.log(res);
+		});
+	}
+
 	const users = studio.studioUsers;
 	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
@@ -88,7 +84,7 @@ export default function Banner({ id, studio, socket }) {
 		>
 			<h1 className={styles.bannerStudioName}>{studioName}</h1>
 
-			<div className={styles.bannerlisteners}>
+			<div className={styles.bannerlisteners} onClick={handleTEST}>
 				<ListenerIcons
 					studioUsers={users}
 					isListening={isListening}
@@ -221,7 +217,7 @@ export function DropdownKebab({
 				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}
 				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
-				listeners={listeners}
+				studioUsers={studioUsers}
 				studio_id={id}
 			/>
 			<AssignNewHostDialog 
