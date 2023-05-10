@@ -44,7 +44,6 @@ If you want to have some initialised data, run
 cd ./backend/
 npm init_db
 ```
-and log in with Testing account 1
 
 ## Testing
 We have two testing suites set up.
