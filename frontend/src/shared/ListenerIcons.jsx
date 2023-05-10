@@ -54,10 +54,7 @@ export default function StudioCard({
 	const profileStatus = activeFirst.map(user => user.userIsActive);
 
 	if (!isHomeCard) {
-		profileImages.unshift(AddIcon);
 		profileStatus.unshift(true);
-
-		profileImages.reverse();
 		profileStatus.reverse();
 	}
 	

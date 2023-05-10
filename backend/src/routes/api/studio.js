@@ -128,6 +128,7 @@ router.delete("/:id", async (req, res) => {
 	}
 });
 
+//toggle control
 router.post("/:id/toggle", async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -206,6 +207,80 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 	}
 });
 
+//update studio listeners HERE THIS ONE HERE
+router.put("/:studioId/updateListeners", async (req, res) => {
+	try {
+		const { studioId } = req.params;
+		const listeners = req.body.listeners;
+
+		const studio = await getStudio(studioId);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
+		const oldListeners = studio[0].studioUsers; // TODO: check that this is IDs not objects
+
+		const listenersDeleted = oldListeners.filter(listener => !listeners.includes(listener));
+		const listenersAdded = listeners.filter(listener => !oldListeners.includes(listener));
+
+		// Add new listeners
+		// Add studios to user and add nicknames to studio
+		const studioNamesUpdated = studio[0].studioNames;
+
+		const promises = listenersAdded.map(async (listener) => {
+			const thisListener = await getUser(listener);
+			if (!thisListener) {
+				return res.status(404).json({ msg: "Listener not found" });
+			}
+			const studios = await getStudiosId(listener);
+			studios.push(studioId);
+			await updateStudios(listener, studios);
+
+			// Add user to nickname list
+			const displayName = thisListener.userDisplayName;
+			studioNamesUpdated.unshift(displayName);
+		});
+		await Promise.all(promises);
+
+		// Add user to studio
+		oldListeners.unshift(...listenersAdded);
+		await updateStudioUsers(studioId, oldListeners);
+		await updateStudioNames(studioId, studioNamesUpdated);
+
+		let updatedStudio = studio[0];
+
+		// Delete studio from users
+		for(const username of listenersDeleted) {
+			const user = await getUser(username);
+			if (!user) {
+				return res.status(404).json({ msg: "User not found" });
+			}	
+			//remove user from nickname list
+			const indexToRemove = updatedStudio.studioUsers.indexOf(username);
+			const nicknames = updatedStudio.studioNames;
+			const newArray = [
+				...nicknames.slice(0, indexToRemove),
+				...nicknames.slice(indexToRemove + 1),
+			];
+
+			updatedStudio = await updateStudioNames(studioId, newArray);
+
+			//remove user from studio
+			const newListeners = updatedStudio.studioUsers.filter((listener) => listener !== username);
+			updatedStudio = await updateStudioUsers(studioId, newListeners);
+
+			//remove studio from user
+			const studios = await getStudiosId(username);
+			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studioId);
+			await updateStudios(username, newStudios);
+
+		}
+		const finalStudio = await getStudio(studioId);
+		res.status(200).json(finalStudio);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
 //leave studio
 router.put("/:studio_id/leave/:username", async (req, res) => {
   try {
@@ -221,10 +296,7 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
     const listeners = studio[0].studioUsers;
 
 	//remove user from nickname list
-	const indexToRemove = listeners.indexOf(user.replace(/"/g, ""));
-	console.log(listeners);
-	console.log(user);
-	console.log(indexToRemove);
+	const indexToRemove = listeners.indexOf(username.replace(/"/g, ""));
 	const nicknames = studio[0].studioNames;
 	const newArray = [
 		...nicknames.slice(0, indexToRemove),
@@ -248,7 +320,7 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
   }
 });
 
-// assign new host
+//assign new host
 router.put("/:studio_id/newHost/:host_name", async (req, res) => {
 	console.log("new host");
   	try {
@@ -279,5 +351,76 @@ router.get("/:studio_id/host", async (req, res) => {
 	}
 });
 
+//remove a user from a studio
+router.delete("/:studio_id/:username", async (req, res) => {
+	try {
+		const { studio_id, username } = req.params;
+		const studio = await getStudio(studio_id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+
+		// remove the studio from the user
+		const studios = await getStudiosId(username);
+		const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
+		updateStudios(username, newStudios);
+		
+		// remove the user from the studio
+		const listeners = studio[0].studioUsers;
+		const newListeners = listeners.filter((listener) => listener !== username);
+		await updateStudioUsers(studio_id, newListeners);
+
+		//remove user from nickname list
+		const indexToRemove = listeners.indexOf(username);
+		const nicknames = studio[0].studioNames;
+		const newStudioNames = [
+			...nicknames.slice(0, indexToRemove),
+			...nicknames.slice(indexToRemove + 1),
+		];
+		updateStudioNames(studio_id, newStudioNames);
+		
+		res.status(204).json({ msg: "User removed from studio" });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ msg: "Server error" });
+	}
+});
+
+// add a user from a studio
+router.put("/:studio_id/:username", async (req, res) => {
+	try {
+		const { studio_id, username } = req.params;
+		const studio = await getStudio(studio_id);
+		if (!studio) {
+			return res.status(404).json({ msg: "Studio not found" });
+		}
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+
+		// add the studio to the user
+		const studios = await getStudiosId(username);
+		studios.push(studio_id);
+		updateStudios(username, studios);
+
+		// add user to studio
+		studio[0].studioUsers.push(username);
+		updateStudioUsers(studio_id, studio[0].studioUsers);
+		
+		
+		studio[0].studioNames.push(user.userDisplayName);
+		updateStudioNames(studio_id, studio[0].studioNames);
+		
+		res.status(204).json({ msg: "User removed from studio" });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ msg: "Server error" });
+	}
+});
 
 export default router;

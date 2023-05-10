@@ -15,7 +15,8 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseAssignDialog, studioUsers, studio_id }) {
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const handleClose = () => { handleCloseAssignDialog(false) };
+    const handleClose = () => { handleCloseAssignDialog(false); 
+        window.location.reload(); };
     const [ newHost, setNewHost] = useState(null);
 
     const handleSubmit = () => {

@@ -17,6 +17,7 @@ export default function SongSelection({ studio, socket }) {
 				studioId={""}
 				setResults={setSongSearchResults}
 				studio={studio}
+				onInputChange={() => {}}
 			/>
 			{songSearchResults.length > 0 ? (
 				<List className={styles.searchResults}>

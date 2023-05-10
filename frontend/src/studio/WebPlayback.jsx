@@ -59,6 +59,7 @@ function SongInfo({ socket, studio }) {
 				setSongTitle(track.data?.item?.name);
 				setAlbumArtwork(track.data?.item?.album.images[0].url);
 				setArtistName(track.data?.item?.artists[0].name);
+				// THIS CURRENTLY BREAKS 429 ERROR
 				// const artist_id = track.data?.item?.artists[0].id;
 				// if (artist_id) {
 				// 	const artist = await axios.get(
@@ -76,17 +77,17 @@ function SongInfo({ socket, studio }) {
 		};
 		fetchSongInfo();
 
+		// POLLING IS THE ONLY THING THAT CURRENTLY WORKS
 		// Polling mechanism to update song info
-		// const interval = setInterval(fetchSongInfo, 5000);
+		const interval = setInterval(fetchSongInfo, 5000);
 
 		// // Cleanup interval on component unmount
-		// return () => clearInterval(interval);
+		return () => clearInterval(interval);
 	}, [songTitle, songNumber]);
 
 	console.log(songTitle);
 	// send the now playing song to chat only when it changes
 	useEffect(() => {
-		console.log("send one");
 		if (songTitle !== "") {
 			socket.emit("send_to_chat_currently_playing", {
 				room: studio._id,
@@ -186,7 +187,6 @@ export function VolumeSlider({ player }) {
 export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
-	const navigate = useNavigate();
 
 	// useEffect(() => {
 	// 	const fetchDuration = async () => {
@@ -467,6 +467,8 @@ function WebPlayback(props) {
 	const { myDeviceId, setMyDeviceId } = useContext(AppContext);
 	const { studio, socket, token } = props;
 
+	navigate = useNavigate();
+
 	useEffect(() => {
 		const script = document.createElement("script");
 		script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -504,14 +506,25 @@ function WebPlayback(props) {
 		}
 	}, []);
 
-	navigate = useNavigate();
+	useEffect(() => {
+		return () => {
+			window.location.reload(false);
+		};
+	}, []);
+
+	console.log(myDeviceId);
 
 	return (
 		<>
 			<div className="container">
 				<div className="main-wrapper">
 					<SongInfo socket={socket} studio={studio} />
-					<ControlPanel studio={studio} player={player} socket={socket} />
+					<ControlPanel
+						deviceId={myDeviceId}
+						studio={studio}
+						player={player}
+						socket={socket}
+					/>
 				</div>
 			</div>
 		</>
