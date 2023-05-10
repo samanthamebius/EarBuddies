@@ -18,31 +18,29 @@ const mockUser1 = {
 
 beforeAll(() => {
     global.localStorage = localStorageMock;
+    localStorage.setItem('current_user_id', mockUser1._id);
+
 });
 
 /**
  * Tests that appropriate elements render on page not found page when error code is 404
  */
 it('page not found renders correctly for 404 code', () => {
-    localStorage.setItem('current_user_id', mockUser1._id);
-  
     const { getByTestId, getByText, getByRole } = render(
-      <MemoryRouter initialEntries={['/404']}>
-        <PageNotFound errorType={"404"}/>
-      </MemoryRouter>
+        <MemoryRouter initialEntries={['/404']}>
+            <PageNotFound errorType={"404"} />
+        </MemoryRouter>
     )
-  
+
     expect(getByTestId('ErrorOutlineRoundedIcon')).toBeInTheDocument();
     expect(getByText('Oops! The page you\'re looking for doesn\'t exist')).toBeInTheDocument();
-    expect(getByRole('button', {name: "Back to home"})).toBeInTheDocument();
+    expect(getByRole('button', { name: "Back to home" })).toBeInTheDocument();
 });
 
 /**
  * Tests that appropriate elements render on page not found page when error code is 400
  */
 it('page not found renders correctly for 400 code', () => {
-    localStorage.setItem('current_user_id', mockUser1._id);
-
     const { getByTestId, getByText, getByRole } = render(
         <MemoryRouter initialEntries={['/400']}>
             <PageNotFound errorType={"400"} />
@@ -58,8 +56,6 @@ it('page not found renders correctly for 400 code', () => {
  * Tests that appropriate elements render on page not found page when error code is 500
  */
 it('page not found renders correctly for 500 code', () => {
-    localStorage.setItem('current_user_id', mockUser1._id);
-
     const { getByTestId, getByText, getByRole } = render(
         <MemoryRouter initialEntries={['/500']}>
             <PageNotFound errorType={"500"} />
@@ -75,8 +71,6 @@ it('page not found renders correctly for 500 code', () => {
  * Tests that appropriate elements render on page not found page when path is random
  */
 it('page not found renders correctly for random path', () => {
-    localStorage.setItem('current_user_id', mockUser1._id);
-
     const { getByTestId, getByText, getByRole } = render(
         <MemoryRouter initialEntries={['/random']}>
             <PageNotFound errorType={"404"} />
