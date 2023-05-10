@@ -77,20 +77,22 @@ function SongInfo({ socket, studio }) {
 		fetchSongInfo();
 
 		// Polling mechanism to update song info
-		const interval = setInterval(fetchSongInfo, 5000);
+		// const interval = setInterval(fetchSongInfo, 5000);
 
 		// // Cleanup interval on component unmount
-		return () => clearInterval(interval);
+		// return () => clearInterval(interval);
 	}, [songTitle, songNumber]);
 
 	console.log(songTitle);
 	// send the now playing song to chat only when it changes
 	useEffect(() => {
 		console.log("send one");
-		socket.emit("send_to_chat_currently_playing", {
-			room: studio._id,
-			trackTitle: songTitle,
-		});
+		if (songTitle !== "") {
+			socket.emit("send_to_chat_currently_playing", {
+				room: studio._id,
+				trackTitle: songTitle,
+			});
+		}
 	}, [songTitle]);
 
 	return (
