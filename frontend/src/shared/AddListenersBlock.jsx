@@ -12,9 +12,8 @@ export default function AddListenersBlock({studio}) {
   const [listenerSearchResults, setListenerSearchResults] = useState([]);
   const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
   const [listeners, setListeners] = useState([]);
-  const [host,  setHost] = useState(null);
   const [isHost,  setIsHost] = useState(null);
-  const studioId = studio._id;
+  const studioId = studio ? studio._id : null;
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
   useEffect( () => {
@@ -26,7 +25,6 @@ export default function AddListenersBlock({studio}) {
         existingListeners.push(listener.data);
       }
       setListeners(existingListeners);
-      setHost(studio.studioHost);
       setIsHost(studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
     } fetchStudioData();
     
@@ -104,11 +102,11 @@ export default function AddListenersBlock({studio}) {
           {listeners.map((listener, i) => (
             <ListItem
               key={i}
-              secondaryAction={ host === listener.username ?
+              secondaryAction={ studio.studioHost === listener.username ?
                 <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
                 : <ClearRounded
                   edge="end"
-                  style={{ display: isHost ? "flex" : "none", color: "#757575" }}
+                  style={{ display: isHost || studio === null ? "flex" : "none", color: "#757575" }}
                   className={styles.clearIcon}
                   onClick={() => removeListener(listener)} />
               }>

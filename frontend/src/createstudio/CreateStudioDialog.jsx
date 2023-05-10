@@ -247,7 +247,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <SwitchWithTooltip checked={isHostOnly} onChange={handleSwitchToggle} />
           </div>
           
-          <AddListenersBlock />
+          <AddListenersBlock studio={null}/>
           
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
