@@ -26,8 +26,7 @@ async function main() {
     console.log('Deleted all users and studios!');
 
     await User.insertMany(users);
-    await Studio.insertMany(studios);
-    console.log('Inserted new users and studios!');
+    console.log('Inserted new users!');
 
     await mongoose.disconnect();
     console.log('Disconnected from database!');
