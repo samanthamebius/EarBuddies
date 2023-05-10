@@ -35,7 +35,7 @@
 }
 
 .cardContainer {
-	height: calc(0.8 * 100vh);
+	height: calc(80vh - 60px);
 	overflow-y: scroll;
 }
 
