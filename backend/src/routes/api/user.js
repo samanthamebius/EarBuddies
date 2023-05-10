@@ -34,7 +34,7 @@ router.get("/:username", async (req, res) => {
 //update a user
 router.put("/:username", async (req, res) => {
   const { username } = req.params;
-  const { userDisplayName, profilePic } = req.body;
+  const { userDisplayName, profilePic, spotifyPic } = req.body;
   try {
     const user = await getUser(username);
     if (!user) {
