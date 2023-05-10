@@ -1,10 +1,10 @@
-import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip } from "@mui/material";
+import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip, List } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
-import SearchBar from "../shared/SearchBar";
+import AddListenersBlock from "../shared/AddListenersBlock";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
@@ -13,64 +13,60 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function useStudioPost() {
-	const postStudio = async (
-		navigate,
-		name,
-		genres,
-		coverPhoto,
-		listeners,
-		isHostOnly
-	) => {
-		const host = JSON.parse(localStorage.getItem("current_user_id"));
-		listeners.push(host);
-		//add dummy listener pending search bar completion
-		// listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
+  const postStudio = async (
+    navigate,
+    name,
+    genres,
+    coverPhoto,
+    listeners,
+    isHostOnly
+  ) => {
+    const host = JSON.parse(localStorage.getItem("current_user_id"));
+    listeners.push(host);
+    console.log(listeners)
+    //add dummy listener pending search bar completion
+    // listeners.push("31dmqvyr4rgviwxt7ovzqfctkzzy")
 
-		const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-		const url = `${BASE_URL}/api/studio`;
-		let studioBannerImageUrl = "/images/defaultBanner.png";
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const url = `${BASE_URL}/api/studio`;
+    let studioBannerImageUrl = "/images/defaultBanner.png";
 
-		if (coverPhoto) {
-			// upload the image
-			const imgUploadConfig = {
-				headers: {
-					"content-type": "multipart/form-data",
-				},
-			};
-			const imgFormData = new FormData();
-			imgFormData.append("image", coverPhoto[0]);
+    if (coverPhoto) {
+      // upload the image
+      const imgUploadConfig = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      const imgFormData = new FormData();
+      imgFormData.append("image", coverPhoto[0]);
 
-			const imgUploadResponse = await axios.post(
-				`${url}/upload-image`,
-				imgFormData,
-				imgUploadConfig
-			);
+      const imgUploadResponse = await axios.post(
+        `${url}/upload-image`,
+        imgFormData,
+        imgUploadConfig
+      );
 
-			studioBannerImageUrl = imgUploadResponse.headers["location"];
-		}
+      studioBannerImageUrl = imgUploadResponse.headers["location"];
+    }
 
-		try {
-			const response = await axios.post(`${url}/new`, {
-				name,
-				listeners,
-				host,
-				genres,
-				studioBannerImageUrl,
-				isHostOnly,
-			});
-			navigate(`/studio/${response.data._id}`);
-		} catch (err) {
-			console.error(err);
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      localStorage.removeItem("expires_in");
-      localStorage.removeItem("current_user_id");
-      navigate("/login");
-      return <p>Could not load studio</p>;
-		}
-	};
+    try {
+      const response = await axios.post(`${url}/new`, {
+        name,
+        listeners,
+        host,
+        genres,
+        studioBannerImageUrl,
+        isHostOnly,
+      });
+      navigate(`/studio/${response.data._id}`);
+    } catch (err) {
+      const navigate = useNavigate();
+      navigate("/500");
+    }
+  };
 
-	return { postStudio };
+  return { postStudio };
 }
 
 function SwitchWithTooltip({ checked, onChange }) {
@@ -108,24 +104,25 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const { postStudio } = useStudioPost();
   const [isStudioNameErrorMessage, setIsStudioNameErrorMessage] = useState(false);
   const [isGenreInputErrorMessage, setIsGenreInputErrorMessage] = useState(false);
+  const [isHostOnly, setIsHostOnly] = useState(false);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
-  const [genres, setGenres] = useState([{ name: "Rap", isSelected: false },
-  { name: "Rock", isSelected: false },
-  { name: "K-Pop", isSelected: false },
-  { name: "Country", isSelected: false },
-  { name: "Classical", isSelected: false },
-  { name: "R&B", isSelected: false },
-  { name: "Jazz", isSelected: false },
-  { name: "Pop", isSelected: false }]);
+  const [listeners, setNewStudioListeners] = useState([]);
+  const [genres, setGenres] = useState([
+    { name: "Rap", isSelected: false },
+    { name: "Rock", isSelected: false },
+    { name: "K-Pop", isSelected: false },
+    { name: "Country", isSelected: false },
+    { name: "Classical", isSelected: false },
+    { name: "R&B", isSelected: false },
+    { name: "Jazz", isSelected: false },
+    { name: "Pop", isSelected: false }
+  ]);
   const [file, setFile] = useState(null);
-  const handleFileChange = (selectedFile) => {
-    setFile(selectedFile);
-  };
-  const [isHostOnly, setIsHostOnly] = useState(false);
-  const handleSwitchToggle = (isChecked) => {
-    setIsHostOnly(isChecked);
-  };
+
+  const handleFileChange = (selectedFile) => { setFile(selectedFile); };
+
+  const handleSwitchToggle = (isChecked) => { setIsHostOnly(isChecked); };
 
   function toggleGenre(genre) {
     const newGenres = genres.map((obj, i) => {
@@ -159,7 +156,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     } else {
       setIsStudioNameErrorMessage(false);
       const selecetedGenres = getSelectedGenres();
-      postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
+      const listenerUsernames = getListenerUsernames();
+      postStudio(navigate, studioNameInput, selecetedGenres, file, listenerUsernames, isHostOnly);
     }
   }
 
@@ -167,6 +165,12 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     const selectedGenres = genres.filter(obj => obj.isSelected);
     const selectedGenreNames = selectedGenres.map(obj => obj.name);
     return selectedGenreNames;
+  }
+
+  function getListenerUsernames() {
+    const usernames = listeners.map(listener => listener.username);
+    console.log(usernames);
+    return usernames;
   }
 
   const handleClose = () => { handleCloseDialog(false) };
@@ -190,6 +194,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
+          {/* Studio name */}
           <h2 className={styles.sectionHeading}>Studio Name<span className={styles.focusText}>*</span></h2>
           <ThemeProvider theme={theme}>
             <TextField
@@ -209,9 +214,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               autoComplete="off" />
           </ThemeProvider>
 
+          {/* Cover photo */}
           <h2 className={styles.sectionHeading}>Cover Photo</h2>
           <FileDropZone onFileChange={handleFileChange} />
-
           <h2 className={styles.sectionHeading}>Genres</h2>
           {genres.map((genre, i) => genre.isSelected == false ? <UnselectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />
             : <SelectedGenreTag key={i} genre={genre.name} handleClick={() => toggleGenre(genre.name)} />)}
@@ -237,13 +242,14 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>
           </div>
 
+          {/* Control Setting */}
           <div className={styles.controlSection}>
             <h2 className={styles.sectionHeading}>Only I Have Control</h2>
             <SwitchWithTooltip checked={isHostOnly} onChange={handleSwitchToggle} />
           </div>
-
-          <h2 className={styles.sectionHeading}>Add Listeners</h2>
-          <SearchBar label={"Search using Spotify username ..."} />
+          
+          <AddListenersBlock studio={null} setNewStudioListeners={setNewStudioListeners}/>
+          
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>

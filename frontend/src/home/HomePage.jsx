@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StudioCard from "./StudioCard";
 import styles from "./HomePage.module.css";
 import Button from "@mui/material/Button";
@@ -6,41 +6,36 @@ import SoundWavesGradient from "../assets/home/soundwavesgradient.png";
 import SearchBar from "../shared/SearchBar";
 import CreateStudioDialog from "../createstudio/CreateStudioDialog";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-const mockStudios = [
-	{
-		id: 1,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 2,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 3,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 4,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-];
+import axios from "axios";
 
 function HomePage(props) {
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+	const current_user = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user);
+	const [studios, setStudios] = useState([]);
+	const [studioSearchResults, setStudioSearchResults] = useState([]);
+	const [studioSearchTerm, setStudioSearchTerm] = useState("");
+	const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
+	const [activeStudioSearchTerm, setActiveStudioSearchTerm] = useState("");
+
+	console.log("studio search term - ", studioSearchTerm);
+
+	useEffect(() => {
+		const fetchStudios = async () => {
+			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
+			setStudios(response.data);
+		};
+		fetchStudios();
+	}, []);
+
 	const { socket } = props;
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
 	};
+
+	console.log(studioSearchResults.length === 0);
 
 	return (
 		<div className={styles.container}>
@@ -63,12 +58,28 @@ function HomePage(props) {
 						</Button>
 					</div>
 				</div>
-				<SearchBar label={"Search My Studios ..."} />
+				<SearchBar
+					searchType={"studios"}
+					label={"Search My Studios ..."}
+					studioId={""}
+					setResults={setStudioSearchResults}
+					onInputChange={setStudioSearchTerm}
+				/>
 				<div className={styles.cardContainer}>
-					{mockStudios
-						.filter((studio) => studio.studioIsActive === false)
-						.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
+					{studioSearchResults.length === 0 && !studioSearchTerm
+						? studios.map((studio) => (
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
+						))
+						: studioSearchResults.map((studio) => (
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
 						))}
 				</div>
 			</div>
@@ -79,12 +90,28 @@ function HomePage(props) {
 						<img src={SoundWavesGradient} className={styles.soundWaves}></img>
 					</div>
 				</div>
-				<SearchBar label={"Search Studios Listening Now ..."} />
+				<SearchBar
+					searchType={"activeStudios"}
+					label={"Search Studios Listening Now ..."}
+					studioId={""}
+					setResults={setActiveStudioSearchResults}
+					onInputChange={setActiveStudioSearchTerm}
+				/>
 				<div className={styles.cardContainer}>
-					{mockStudios
-						.filter((studio) => studio.studioIsActive === true)
-						.map((studio) => (
-							<StudioCard key={studio.id} socket={socket} studio={studio} />
+					{activeStudioSearchResults.length === 0 && !activeStudioSearchTerm
+						? studios.map((studio) => (
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
+						))
+						: activeStudioSearchResults.map((studio) => (
+							<StudioCard
+								key={studio.studioName}
+								socket={socket}
+								studio={studio}
+							/>
 						))}
 				</div>
 			</div>

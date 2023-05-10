@@ -6,7 +6,7 @@ import styles from "./StudioPage.module.css";
 import Banner from "./Banner";
 import Chat from "./chat/Chat";
 import NowPlaying from "./NowPlaying";
-import SongSelection from "./SongSelection";
+import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";
 
@@ -27,12 +27,8 @@ function StudioPage({ socket }) {
 	}, []);
 
 	if (studioError) {
-		localStorage.removeItem("access_token");
-		localStorage.removeItem("refresh_token");
-		localStorage.removeItem("expires_in");
-		localStorage.removeItem("current_user_id");
-		navigate("/login");
-		return <p>Could not load studio</p>;
+		navigate("/404");
+		return;
 	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
@@ -41,9 +37,9 @@ function StudioPage({ socket }) {
 	} else {
 		return (
 			<div className={styles.studio}>
-				<Banner id={id} studio={studio[0]} />
-				<NowPlaying />
-				<SongSelection studio={studio[0]}/>
+				<Banner id={id} studio={studio[0]} socket={socket} />
+				<NowPlaying studio={studio[0]} />
+				<SongSelection studio={studio[0]} socket={socket} />
 				<Chat socket={socket} />
 			</div>
 		);
