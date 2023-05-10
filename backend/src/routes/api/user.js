@@ -9,6 +9,7 @@ import {
   updateUserDisplayName,
   updateUserProfilePic,
   setUserInactive,
+  updateUserSpotifyPic
 } from "../../dao/user_dao";
 import { deleteUserFromStudio, setStudioStatus } from "../../dao/studio_dao";
 

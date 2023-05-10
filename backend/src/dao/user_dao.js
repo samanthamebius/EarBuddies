@@ -164,4 +164,5 @@ export {
 	searchStudioUsers,
 	updateUserDisplayName,
 	updateUserProfilePic,
+	updateUserSpotifyPic
 };
