@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../AppContextProvider";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+let songNumber = 0;
 let navigate;
 
 const StyledSlider = styled(Slider)({
@@ -46,39 +47,33 @@ function SongInfo({ socket, studio }) {
 	const [artistImg, setArtistImg] = useState("");
 	const [albumArtwork, setAlbumArtwork] = useState("");
 
-	// useEffect(() => {
-	// 	const fetchSongInfo = async () => {
-	// 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-	// 		if (track.data?.item?.type === "episode") {
-	// 			setSongTitle(track.data.item.name);
-	// 			setAlbumArtwork(track.data.item.images[0].url);
-	// 			setArtistName(track.data.item.show.name);
-	// 			setArtistImg(null);
-	// 		} else {
-	// 			setSongTitle(track.data?.item?.name);
-	// 			setAlbumArtwork(track.data?.item?.album.images[0].url);
-	// 			setArtistName(track.data?.item?.artists[0].name);
-	// 			const artist_id = track.data?.item?.artists[0].id;
-	// 			if (artist_id) {
-	// 				const artist = await axios.get(
-	// 					`${BASE_URL}/api/spotify/artist/${artist_id}`
-	// 				);
-	// 				setArtistImg(artist.data.images[0].url);
-	// 			}
-	// 		}
-	// 		socket.emit("send_currently_playing", {
-	// 			room: studio._id,
-	// 			track: track.data.item,
-	// 		});
-	// 	};
-	// 	fetchSongInfo();
-
-	// 	// Polling mechanism to update song info
-	// 	const interval = setInterval(fetchSongInfo, 1000);
-
-	// 	// Cleanup interval on component unmount
-	// 	return () => clearInterval(interval);
-	// }, [songTitle]);
+	useEffect(() => {
+		const fetchSongInfo = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			if (track.data?.item?.type === "episode") {
+				setSongTitle(track.data.item.name);
+				setAlbumArtwork(track.data.item.images[0].url);
+				setArtistName(track.data.item.show.name);
+				setArtistImg(null);
+			} else {
+				setSongTitle(track.data?.item?.name);
+				setAlbumArtwork(track.data?.item?.album.images[0].url);
+				setArtistName(track.data?.item?.artists[0].name);
+				const artist_id = track.data?.item?.artists[0].id;
+				if (artist_id) {
+					const artist = await axios.get(
+						`${BASE_URL}/api/spotify/artist/${artist_id}`
+					);
+					setArtistImg(artist.data.images[0].url);
+				}
+			}
+			socket.emit("send_currently_playing", {
+				room: studio._id,
+				track: track.data.item,
+			});
+		};
+		fetchSongInfo();
+	}, [songTitle, songNumber]);
 
 	return (
 		<div className={styles.songSection}>
@@ -269,6 +264,7 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
+					songNumber++;
 				})
 				.catch((error) => {
 					navigate("/400");
@@ -287,6 +283,7 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
+					songNumber++;
 				})
 				.catch((error) => {
 					navigate("/400");
@@ -306,14 +303,10 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
+					songNumber++;
 				})
 				.catch((error) => {
-					localStorage.removeItem("access_token");
-					localStorage.removeItem("refresh_token");
-					localStorage.removeItem("expires_in");
-					localStorage.removeItem("current_user_id");
-					navigate("/login");
-					return <p>Could not play next track</p>;
+					navigate('/400')
 				});
 		} catch (error) {
 			console.log(error);
@@ -329,14 +322,10 @@ function ControlPanel(props) {
 				})
 				.then((response) => {
 					console.log(response);
+					songNumber++;
 				})
 				.catch((error) => {
-					localStorage.removeItem("access_token");
-					localStorage.removeItem("refresh_token");
-					localStorage.removeItem("expires_in");
-					localStorage.removeItem("current_user_id");
-					navigate("/login");
-					return <p>Could not play previous track</p>;
+					navigate("/400");
 				});
 		} catch (error) {
 			console.log(error);
@@ -444,7 +433,7 @@ function ControlPanel(props) {
 					onClick={() => skipButton(studio)}
 				/>
 			</div>
-			{/* <TimeSlider player={player} /> */}
+			<TimeSlider player={player} />
 			<VolumeSlider player={player} />
 		</div>
 	);
