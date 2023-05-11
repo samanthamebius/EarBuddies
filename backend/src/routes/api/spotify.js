@@ -11,14 +11,14 @@ import {
 
 const router = express.Router();
 
-router.get("/search/:query", async (req, res) => {
+router.get("/search/:playlist_id/:query", async (req, res) => {
 	try {
-		const { query } = req.params;
+		const { playlist_id, query } = req.params;
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: "No Spotify API connection" });
 		}
-		const results = await searchSpotify(query, thisSpotifyApi);
+		const results = await searchSpotify(query, thisSpotifyApi, playlist_id);
 		return res.status(200).json(results);
 	} catch (err) {
 		console.log(err);

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SongListItem(props) {
-	const { song, studio, socket, type, snapshotId = null } = props;
+	const { song, studio, socket, type, snapshotId = null, setResults } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
@@ -42,6 +42,7 @@ function SongListItem(props) {
 
 	// add the song to queue and emit to all sockets in the studio
 	const handleAddToQueue = async () => {
+		setResults([]);
 		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
 			track_id: song.id,
