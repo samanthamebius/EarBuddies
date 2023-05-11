@@ -32,10 +32,21 @@ export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseA
 
     const handleSubmitConfirm = () => {
         // axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
-        socket.emit("send_new_host", { studio_id: studio_id, newHost: newHost });
+        socket.emit("send_new_host", { room: studio_id, newHost: newHost });
         setIsConfirmOpen(false)
         handleClose()
     };
+
+    useEffect(() => {
+        socket.on("recieve_new_host", (data) => {
+            console.log("recieve_new_host", data);
+            const { newHost } = data;
+            const current_user_id = localStorage.getItem("current_user_id").replace(/"/g, '');
+            if (newHost === current_user_id) {
+                axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
+            }
+        });
+    }, [newHost]);
 
     return (
         <Dialog open={isAssignDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' } }}>
