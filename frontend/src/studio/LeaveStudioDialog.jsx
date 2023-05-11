@@ -34,7 +34,8 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
         axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
         setIsConfirmOpen(false)
         handleClose()
-        axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user_id}`);
+        const user = JSON.parse(user_id);
+        axios.put(`${BASE_URL}/api/studio/${studio_id}/leave/${user}`);
         navigate('/', { replace: true });
     };
 
