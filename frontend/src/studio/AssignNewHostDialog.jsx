@@ -21,6 +21,7 @@ export default function AssignNewHostDialog({
 }) {
 	const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+	const [isHelperTextMessage, setIsHelperTextMessage] = useState(false);
 	const handleClose = () => {
 		handleCloseAssignDialog(false);
 		// window.location.reload();
@@ -42,7 +43,7 @@ export default function AssignNewHostDialog({
 		const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
 		const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
 		if (current_user_id === studio.data[0].studioHost) {
-			// return <p className={styles.helperText}>You must select a host</p>;
+			setIsHelperTextMessage(true);
 		} else {
 			setIsConfirmOpen(false);
 			handleClose();
@@ -110,6 +111,8 @@ export default function AssignNewHostDialog({
 					handleAction={handleSubmitConfirm}
 					message={'Are you sure you want to give up your role as host?'}
 					actionText={'Yes'}
+					isHelperTextMessage={isHelperTextMessage}
+					helperMessage={'Please select a valid host'}
 				/>
 			</DialogContent>
 		</Dialog>
