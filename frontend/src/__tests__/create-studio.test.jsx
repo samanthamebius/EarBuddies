@@ -21,17 +21,20 @@ beforeAll(() => {
     localStorage.setItem('current_user_id', mockUser1._id);
 });
 
+/**
+ * Tests that elements of create studio dialog render
+ */
 it('create studio pop up renders correctly', () => {
-    
+
     const { getByRole } = render(
-      <MemoryRouter initialEntries={['/']}>
-        <CreateStudioDialog 
-          isDialogOpened={true} 
-          handleCloseDialog={() => {}} 
-        />
-      </MemoryRouter>
+        <MemoryRouter initialEntries={['/']}>
+            <CreateStudioDialog
+                isDialogOpened={true}
+                handleCloseDialog={() => { }}
+            />
+        </MemoryRouter>
     )
-  
+
     expect(getByRole('dialog')).toBeInTheDocument();
     expect(getByRole('heading', { name: 'Create Studio' })).toBeInTheDocument();
     expect(getByRole('heading', { name: 'Studio Name *' })).toBeInTheDocument();
@@ -57,23 +60,42 @@ it('create studio pop up renders correctly', () => {
     expect(getByRole('button', { name: 'Create Studio' })).toBeInTheDocument();
 });
 
-
+/**
+ * Tests that genre tag is added to create studio dialog
+ */
 it('adds a new genre when the "Add" button is clicked', () => {
-  const { getByRole } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <CreateStudioDialog 
-        isDialogOpened={true} 
-        handleCloseDialog={() => {}} 
-      />
-    </MemoryRouter>
-  );
-  
-  const genreInputBox = getByRole('textbox', { name: 'Add your own genres ...' });
-  const addButton = getByRole('button', { name: 'Add' })
-  
-  fireEvent.change(genreInputBox, { target: { value: 'Indie' } });
-  
-  fireEvent.click(addButton);
-  
-  expect(getByRole('button', { name: 'Indie' })).toBeInTheDocument();
+    const { getByRole } = render(
+        <MemoryRouter initialEntries={['/']}>
+            <CreateStudioDialog
+                isDialogOpened={true}
+                handleCloseDialog={() => { }}
+            />
+        </MemoryRouter>
+    );
+
+    const genreInputBox = getByRole('textbox', { name: 'Add your own genres ...' });
+    const addButton = getByRole('button', { name: 'Add' })
+
+    fireEvent.change(genreInputBox, { target: { value: 'Indie' } });
+
+    fireEvent.click(addButton);
+
+    expect(getByRole('button', { name: 'Indie' })).toBeInTheDocument();
+});
+
+/**
+ * Tests that helper text error message is displayed when no studio name is entered in create studio dialog
+ */
+it('create studio error text renders correctly', () => {
+    const { getByText, getByRole } = render(
+        <MemoryRouter initialEntries={['/']}>
+            <CreateStudioDialog isDialogOpened={true} handleCloseDialog={() => { }} />
+        </MemoryRouter>
+    )
+
+    const createStudioButton = getByRole('button', { name: 'Create Studio' });
+    const studioNameField = getByRole('textbox', { name: 'Enter a Studio Name ...' });
+    fireEvent.click(createStudioButton);
+
+    expect(getByText('No Studio Name Entry')).toBeInTheDocument();
 });
