@@ -126,6 +126,12 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_user_currently_playing_song", data.trackTitle);
 	});
 
+	// send new host to users
+	socket.on("send_new_host", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_new_host", data.newHost);
+	});
+
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
 		const { nickname: displayName, room } = data;
