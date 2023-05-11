@@ -42,7 +42,7 @@ Testing account 2  (Florence Welch)
 If you want to have some initialised data, run
 ```
 cd ./backend/
-npm init_db
+npm run init_db
 ```
 
 ## Testing
