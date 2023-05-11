@@ -195,6 +195,17 @@ export function DropdownMenu() {
 		}
 	}
 
+	useEffect(() => {
+		const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		if (prefersDarkMode) {
+			setDarkMode();
+			setIsDarkMode(true);
+		} else {
+			setLightMode();
+			setIsDarkMode(false);
+		} 
+	  }, []);
+
 	return (
 		<>
 			<ViewProfileDialog

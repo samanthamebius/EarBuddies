@@ -37,13 +37,13 @@
   --backgroundColor: #2f2f2f; 
   --menuColor: #181818;
   --headingColor: #FFFFFF;
-  --fieldColor: #212121;
+  --fieldColor: #292929;
   --fieldHoverColor: #202020;
   --fieldBorderColor: #1e1e1e;
   --focusText: #CA3FF3;
   --iconColor: #FFFFFF;
   --dialogColor: #202020;
-  --shadowColor: rgb(58, 58, 58);
+  --shadowColor: rgb(26, 26, 26);
 
   /* Studio */
   --nowPlayingBackgroundColor: #cb9ce8;
