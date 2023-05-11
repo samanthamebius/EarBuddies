@@ -17,9 +17,9 @@ export default function ManageListenersDialog({ isManListDialogOpened, handleClo
 
     return (
         <Dialog  open={isManListDialogOpened} onClose={handleCloseManListDialog} fullWidth maxWidth="sm"
-        PaperProps={{ style: { padding: '20px', backgroundColor: '#F5F5F5' }}}>
+        PaperProps={{ style: { padding: '20px', backgroundColor: 'var(--dialogColor)' }}}>
         <div className={styles.dialogHeader}>
-            <GroupsIcon style={{ color:  "#757575", fontSize:40}} />
+            <GroupsIcon style={{ color:  "var(--iconColor)", fontSize:40}} />
             <h1 className={styles.heading}>Manage Listeners</h1>
         </div>
 

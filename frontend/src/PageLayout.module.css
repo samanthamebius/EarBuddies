@@ -68,11 +68,11 @@
 }
 
 .menu_item {
-    color: #606060;
+    color: var(--headingColor);
 }
 
 .menu_title {
-    color: #757575;
+    color: var(--headingColor);
     margin: 5px 0px 5px 10px;
     font-size: 16px;
 }

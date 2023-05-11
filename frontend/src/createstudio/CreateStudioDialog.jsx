@@ -191,7 +191,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
   return (
     <div>
-      <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
+      <Dialog fullWidth maxWidth="md" open={isDialogOpened} onClose={handleClose} PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}>
         <h1 className={styles.heading}>Create Studio</h1>
         <DialogContent>
           {/* Studio name */}
@@ -211,7 +211,13 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               variant="outlined"
               onChange={event => setStudioNameInput(event.target.value)}
               className={styles.textfield}
-              autoComplete="off" />
+              autoComplete="off" 
+              InputLabelProps={{
+                style: { color: 'var(--headingColor)' },
+              }}
+              InputProps={{
+                style: { color: 'var(--headingColor)' },
+              }}/>
           </ThemeProvider>
 
           {/* Cover photo */}
@@ -236,7 +242,13 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
                 autoComplete="off"
                 onKeyDown={event => handleKeyPress(event, genreInput)}
                 error={isGenreInputErrorMessage ? true : false}
-                helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""} />
+                helperText={isGenreInputErrorMessage ? "Input is already a genre option" : ""} 
+                InputLabelProps={{
+                  style: { color: 'var(--headingColor)' },
+                }}
+                InputProps={{
+                  style: { color: 'var(--headingColor)' },
+                }}/>
             </ThemeProvider>
             <span className={styles.spacing}></span>
             <Button sx={{ fontWeight: 600 }} variant="contained" onClick={() => addGenre(genreInput)}>Add</Button>

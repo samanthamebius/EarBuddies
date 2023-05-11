@@ -1,6 +1,6 @@
 .heading {
     font-weight: 800;
-    color: #757575;
+    color: var(--headingColor);
     font-size: 32px;
     position: relative;
     margin: 0px;
@@ -9,7 +9,7 @@
 
 .sectionHeading {
     font-weight: 800;
-    color: #757575;
+    color: var(--headingColor);
     font-size: 16px;
     position: relative;
     margin: 0px;
@@ -51,7 +51,7 @@
 }
 
 .clearIcon {
-    color: #757575;
+    color: var(--iconColor);
 }
 
 .clearIcon:hover {
@@ -60,8 +60,8 @@
 
 .displayPhotoContainer {
     display: flex;
-    border: solid 1px #C4C4C4;
-    background-color: white;
+    border: solid 1px var(--fieldBorderColor);
+    background-color: var(--fieldColor);
     border-radius: 4px;
     flex-direction: column;
     padding: 16px 0px 16px 0px;
@@ -87,14 +87,14 @@
     border-radius: 4px;
     padding: 5px 5px 0px 5px;
     width: fit-content;
-    background-color: white;
+    background-color: var(--fieldColor);
 }
 
 .avatarOption {
     width: 11%;
     margin: 4px;
     border-radius: 4px;
-    border: solid 2px white;
+    border: solid 2px var(--fieldBorderColor);
     object-fit: cover;
 }
 

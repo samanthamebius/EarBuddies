@@ -106,7 +106,7 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
 									<img className={styles.image} src={listener.profilePic} />
 								</Avatar>
 							</ListItemAvatar>
-							<ListItemText primary={listener.userDisplayName} />
+							<ListItemText primary={listener.userDisplayName} style={{color: "var(--headingColor)",}}/>
 						</ListItem>
 					))}
 				</List>
@@ -124,14 +124,14 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
 									host === listener.username ? (
 										<StarRoundedIcon
 											className={styles.hostIcon}
-											style={{ color: "#757575", fontSize: "30px" }}
+											style={{ color: "var(--iconColor)", fontSize: "30px" }}
 										/>
 									) : (
 										<ClearRounded
 											edge="end"
 											style={{
 												display: isHost || studio === null ? "flex" : "none",
-												color: "#757575",
+												color: "var(--iconColor)",
 											}}
 											className={styles.clearIcon}
 											onClick={() => removeListener(listener)}
@@ -144,7 +144,8 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
 										<img className={styles.image} src={listener.profilePic} />
 									</Avatar>
 								</ListItemAvatar>
-								<ListItemText primary={listener.userDisplayName} />
+								<ListItemText primary={listener.userDisplayName} style={{color: "var(--headingColor)",
+											}}/>
 							</ListItem>
 						))}
 					</List>

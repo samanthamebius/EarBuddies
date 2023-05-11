@@ -123,7 +123,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                 actionText={"Delete"}
             />
             <div>
-                <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: '#F5F5F5', }, }}>
+                <Dialog fullWidth maxWidth='sm' open={isViewProfileOpen} onClose={onClose} PaperProps={{ style: { backgroundColor: 'var(--dialogColor', }, }}>
                     <h1 className={styles.heading}>My Profile</h1>
                     <DialogContent>
                         <h2 className={styles.sectionHeading}>Display Name</h2>
@@ -143,8 +143,9 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                                 className={styles.textfield}
                                 autoComplete='off'
                                 InputProps={{
+                                    style: { color: 'var(--headingColor)' },
                                     endAdornment: <InputAdornment position='end'>
-                                        <EditRoundedIcon style={{ pointerEvents: "none", color: isInDisplayName ? '#B03EEE' : '#757575' }} />
+                                        <EditRoundedIcon style={{ pointerEvents: "none", color: isInDisplayName ? '#B03EEE' : 'var(--iconColor)' }} />
                                     </InputAdornment>,
                                 }} />
                         </ThemeProvider>
@@ -158,7 +159,7 @@ export default function ViewProfileDialog({ isViewProfileOpen, handleViewProfile
                             <div onClick={isAvatarOptionsOpen ? closeAvatarOptions : openAvatarOptions} className={styles.currentDisplayPhotoContainter} >
                                 <img src={displayPhoto} className={styles.displayPhoto} />
                                 <div className={styles.editIconContainer}>
-                                    <EditRoundedIcon style={{ color: isInDisplayPhoto ? '#B03EEE' : '#757575' }} />
+                                    <EditRoundedIcon style={{ color: isInDisplayPhoto ? '#B03EEE' : 'var(--iconColor)' }} />
                                 </div>
                             </div>
                             <div className={styles.hiddenPhotoSection} style={{ display: isAvatarOptionsOpen ? '' : 'none' }}>

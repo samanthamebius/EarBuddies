@@ -85,11 +85,11 @@ export default function NicknameDialog(props) {
 			onClose={handleCloseNicknameDialog}
 			fullWidth
 			maxWidth="sm"
-			PaperProps={{ style: { backgroundColor: "#F5F5F5" } }}
+			PaperProps={{ style: { backgroundColor: "var(--dialogColor" } }}
 		>
 			<div className={styles.dialogHeader}>
 				<DriveFileRenameOutlineRoundedIcon
-					style={{ color: "#757575", fontSize: 40 }}
+					style={{ color: "var(--iconColor)", fontSize: 40 }}
 				/>
 				<h1 className={styles.heading}>Edit Nickname</h1>
 			</div>
@@ -116,6 +116,9 @@ export default function NicknameDialog(props) {
 									handleSubmit();
 								}
 							}}
+							InputProps={{
+								style: { color: 'var(--headingColor)' },
+							  }}
 						/>
 					</ThemeProvider>
 				</div>

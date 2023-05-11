@@ -170,9 +170,10 @@ function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
 					onBlur={() => setFocused(false)}
 					fullWidth
 					InputProps={{
+						style: { color: 'var(--headingColor)' },
 						startAdornment: (
 							<SearchRoundedIcon
-								style={{ color: "#757575" }}
+								style={{ color: "var(--iconColor)" }}
 								position="start"
 								className={styles.searchIcon}
 							/>
@@ -191,7 +192,8 @@ function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
 					}}
 					InputLabelProps={{
 						shrink: focused || searchTerm.length > 0,
-						style: { marginLeft: searchTerm || focused ? 0 : 30 },
+						style: { marginLeft: searchTerm || focused ? 0 : 30,
+						color: 'var(--headingColor)' },
 					}}
 				/>
 			</ThemeProvider>

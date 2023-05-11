@@ -9,7 +9,7 @@ export default function ListenerListItem ({ listener }) {
       <div className={styles.listenerListItem}>
         <img src={listener.profilePic}/>
         <p>{listener.userDisplayName}</p>
-         <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
+         <StarRoundedIcon className={styles.hostIcon} styles={{ color: "var(--iconColor)", fontSize: "30px" }} />
     
       </div>
     );

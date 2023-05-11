@@ -294,16 +294,19 @@ function ChatMessage(props) {
 										className={styles.reply}
 										onClick={() => handleMessageReply()}
 										fontSize="small"
+										style={{ color: 'var(--iconColor)' }}
 									/>
 									<PushPinIcon
 										className={styles.pin}
 										onClick={() => handlePinMessage()}
 										fontSize="small"
+										style={{ color: 'var(--iconColor)' }}
 									/>
 									<SentimentSatisfiedRoundedIcon
 										onClick={() => setIsReacting(!isReacting)}
 										className={styles.reaction}
 										fontSize="small"
+										style={{ color: 'var(--iconColor)' }}
 									/>
 								</div>
 								{/* Reaction Bar */}

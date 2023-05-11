@@ -195,7 +195,7 @@ export function DropdownMenu() {
 					<UserInfo />
 				</Button>
 
-				<Menu anchorEl={isOpen} open={open} onClose={handleClose}>
+				<Menu anchorEl={isOpen} open={open} onClose={handleClose} PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}>
 					<MenuItem
 						className={styles.menu_item}
 						onClick={() => handleViewProfileOpen()}
@@ -204,7 +204,7 @@ export function DropdownMenu() {
 					>
 						<PersonRoundedIcon
 							className={styles.icon}
-							style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
+							style={{ color: isInProfle ? "#B03EEE" : "var(--iconColor)" }}
 						/>
 						<p className={styles.menu_title}>My Profile</p>
 					</MenuItem>
@@ -217,7 +217,7 @@ export function DropdownMenu() {
 					>
 						<DarkModeRoundedIcon
 							className={styles.icon}
-							style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }}
+							style={{ color: isInDarkMode ? "#B03EEE" : "var(--iconColor)" }}
 						/>
 						<p className={styles.menu_title}>Dark Mode</p>
 					</MenuItem>
@@ -229,7 +229,7 @@ export function DropdownMenu() {
 					>
 						<LogoutRoundedIcon
 							className={styles.icon}
-							style={{ color: isInLogOut ? "#B03EEE" : "#757575" }}
+							style={{ color: isInLogOut ? "#B03EEE" : "var(--iconColor)" }}
 						/>
 						<p className={styles.menu_title}>Log Out</p>
 					</MenuItem>

@@ -7,7 +7,11 @@
   --headingColor: #FFFFFF;
   --fieldColor: #2c2c2c;
   --fieldHoverColor: #202020;
+  --fieldBorderColor: #1e1e1e;
   --focusText: #CA3FF3;
+  --iconColor: #FFFFFF;
+  --dialogColor: #202020;
+  --shadowColor: rgb(58, 58, 58);
 
   /* Studio */
   --nowPlayingBackgroundColor: #cb9ce8;
@@ -29,7 +33,11 @@
   --headingColor: #757575;
   --fieldColor: #FFFFFF;
   --fieldHoverColor: #f1f1f1;
+  --fieldBorderColor: #C4C4C4;
   --focusText: #CA3FF3;
+  --iconColor: #757575;
+  --dialogColor: #FFFFFF;
+  --shadowColor: grey;
 
   /* Studio */
   --nowPlayingBackgroundColor: #e9dcf1;

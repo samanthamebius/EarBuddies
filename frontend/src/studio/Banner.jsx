@@ -20,6 +20,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
 
+
 // TO DO: get if user is host or not
 // const isHost = false;
 
@@ -249,7 +250,9 @@ export function DropdownKebab({
 				anchorEl={isOpen}
 				open={open}
 				onClose={handleClose}
-			>
+				PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}
+				>
+		
 				<MenuItem
 					className={styles.menu_item}
 					onClick={handleNicknameOpen}
@@ -258,7 +261,7 @@ export function DropdownKebab({
 				>
 					<DriveFileRenameOutlineRoundedIcon
 						className={styles.icon}
-						style={{ color: isInEdit ? '#B03EEE' : '#757575' }}
+						style={{ color: isInEdit ? '#B03EEE' : 'var(--iconColor)' }}
 					/>
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
@@ -280,7 +283,7 @@ export function DropdownKebab({
 							<VideogameAssetOffRoundedIcon
 								className={styles.icon}
 								style={{
-									color: isInEnable ? '#B03EEE' : '#757575',
+									color: isInEnable ? '#B03EEE' : 'var(--iconColor)',
 								}}
 							/>
 							<p className={styles.menu_title}>Disable Control</p>
@@ -290,7 +293,7 @@ export function DropdownKebab({
 							<VideogameAssetRoundedIcon
 								className={styles.icon}
 								style={{
-									color: isInEnable ? '#B03EEE' : '#757575',
+									color: isInEnable ? '#B03EEE' : 'var(--iconColor)',
 								}}
 							/>
 							<p className={styles.menu_title}>Enable Control</p>
@@ -307,7 +310,7 @@ export function DropdownKebab({
 				>
 					<GroupsIcon
 						className={styles.icon}
-						style={{ color: isInManList ? '#B03EEE' : '#757575' }}
+						style={{ color: isInManList ? '#B03EEE' : 'var(--iconColor)' }}
 					/>
 					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
@@ -323,7 +326,7 @@ export function DropdownKebab({
 				>
 					<StarRoundedIcon
 						className={styles.icon}
-						style={{ color: isInAssign ? '#B03EEE' : '#757575' }}
+						style={{ color: isInAssign ? '#B03EEE' : 'var(--iconColor)' }}
 					/>
 					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
@@ -337,7 +340,7 @@ export function DropdownKebab({
 				>
 					<ExitToAppRoundedIcon
 						className={styles.icon}
-						style={{ color: isInLeave ? '#B03EEE' : '#757575' }}
+						style={{ color: isInLeave ? '#B03EEE' : 'var(--iconColor)' }}
 					/>
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
@@ -351,7 +354,7 @@ export function DropdownKebab({
 				>
 					<GroupRemoveRoundedIcon
 						className={styles.icon}
-						style={{ color: isInDelete ? '#B03EEE' : '#757575' }}
+						style={{ color: isInDelete ? '#B03EEE' : 'var(--iconColor)' }}
 					/>
 					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>

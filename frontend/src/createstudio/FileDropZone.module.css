@@ -1,8 +1,8 @@
 .dropBox {
-    background-color: white;
+    background-color: var(--fieldColor);
     border-radius: 4px;
     border-style: dashed;
-    border-color: #C4C4C4;
+    border-color: var(--fieldBorderColor);
     padding: 20px;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .uploadedfileText {
-	color: black;
+	color: var(--headingColor);
 	font-size: 16px;
 	position: relative;
     margin: 0px;
@@ -28,7 +28,7 @@
 
 .dropBox:hover {
     cursor: pointer;
-    border-color: #212121;
+    border-color: var(--fieldBorderColor);
 }
 
 .focusText {

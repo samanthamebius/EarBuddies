@@ -81,14 +81,14 @@ function SongListItem(props) {
 			return (
 				<PodcastsRoundedIcon
 					fontSize="small"
-					style={{ color: "#c4c4c4", marginRight: "10px" }}
+					style={{ color: 'var(--iconColor)', marginRight: "10px" }}
 				/>
 			);
 		} else if (song.type === "track") {
 			return (
 				<MusicNoteRoundedIcon
 					fontSize="small"
-					style={{ color: "#c4c4c4", marginRight: "10px" }}
+					style={{ color: 'var(--iconColor)', marginRight: "10px" }}
 				/>
 			);
 		}
@@ -164,7 +164,7 @@ function SongListItem(props) {
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
-								style={{ color: isIconHover ? "#B03EEE" : "#757575" }}
+								style={{ color: isIconHover ? "#B03EEE" : "var(--iconColor)" }}
 								fontSize="small"
 								onClick={() => handleRemoveFromQueue()}
 							/>
