@@ -13,10 +13,12 @@ import { useNavigate } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SongListItem(props) {
-	const { song, studio, socket, type, snapshotId = null } = props;
+	const { song, studio, socket, type, snapshotId = null, setResults } = props;
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
+
+	const isHost = studio.studioHost === JSON.parse(localStorage.getItem("current_user_id"));
 
 	// continously get the currently playing song
 	useEffect(() => {
@@ -40,6 +42,7 @@ function SongListItem(props) {
 
 	// add the song to queue and emit to all sockets in the studio
 	const handleAddToQueue = async () => {
+		setResults([]);
 		await axios.put(`${BASE_URL}/api/spotify/queue`, {
 			playlist_id: studio.studioPlaylist,
 			track_id: song.id,
@@ -160,7 +163,7 @@ function SongListItem(props) {
 				onClick={type === "search" ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === "queue" && (
+						{type === "queue" && isHost && (
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}

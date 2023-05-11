@@ -8,12 +8,13 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
+function SearchBar({ label, searchType, studioId, setResults, onInputChange, playlist_id = null }) {
 	const [focused, setFocused] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 	const navigate = useNavigate();
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const username = localStorage.getItem("current_user_id");
+
 
 	const theme = createTheme({
 		palette: {
@@ -106,7 +107,7 @@ function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
 	const searchSongs = () => {
 		try {
 			axios
-				.get(`${BASE_URL}/api/spotify/search/${searchTerm}`)
+				.get(`${BASE_URL}/api/spotify/search/${playlist_id}/${searchTerm}`)
 				.then((response) => {
 					setResults(response.data);
 				})
@@ -164,7 +165,7 @@ function SearchBar({ label, searchType, studioId, setResults, onInputChange }) {
 						setSearchTerm(event.target.value);
 						onInputChange(event.target.value);
 					}}
-					onFocus={() => setFocused(true)}
+					onFocus={() => {setFocused(true); setSearchTerm("");}}
 					onBlur={() => setFocused(false)}
 					fullWidth
 					InputProps={{
