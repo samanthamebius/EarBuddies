@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { expect, it } from 'vitest';
-import { getAllByTestId, getByRole, render } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import React from "react";
 import localStorageMock from './local-storage-mock.js';
@@ -23,9 +23,12 @@ beforeAll(() => {
 
 it('create studio pop up renders correctly', () => {
     
-    const { getByTestId, getByText, getByRole } = render(
+    const { getByRole } = render(
       <MemoryRouter initialEntries={['/']}>
-        <CreateStudioDialog isDialogOpened={true} handleCloseDialog={() => {}} />
+        <CreateStudioDialog 
+          isDialogOpened={true} 
+          handleCloseDialog={() => {}} 
+        />
       </MemoryRouter>
     )
   
@@ -54,3 +57,23 @@ it('create studio pop up renders correctly', () => {
     expect(getByRole('button', { name: 'Create Studio' })).toBeInTheDocument();
 });
 
+
+it('adds a new genre when the "Add" button is clicked', () => {
+  const { getByRole } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <CreateStudioDialog 
+        isDialogOpened={true} 
+        handleCloseDialog={() => {}} 
+      />
+    </MemoryRouter>
+  );
+  
+  const genreInputBox = getByRole('textbox', { name: 'Add your own genres ...' });
+  const addButton = getByRole('button', { name: 'Add' })
+  
+  fireEvent.change(genreInputBox, { target: { value: 'Indie' } });
+  
+  fireEvent.click(addButton);
+  
+  expect(getByRole('button', { name: 'Indie' })).toBeInTheDocument();
+});
