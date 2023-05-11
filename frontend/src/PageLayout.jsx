@@ -167,44 +167,34 @@ export function DropdownMenu() {
 		setInLogOut(!isInLogOut);
 	};
 
-	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem("selectedTheme") == "dark");
+	const colorModePref = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const colorModeSetting = localStorage.getItem("selectedTheme");
+	const [isDarkMode, setIsDarkMode] = useState(colorModeSetting ? colorModeSetting == "dark" : colorModePref);
 
-	const setDarkMode = () => {
+	const updateToDarkMode = () => {
 		document.querySelector("body").setAttribute("data-theme", "dark");
 		localStorage.setItem("selectedTheme", "dark");
 	}
 
-	const setLightMode = () => {
+	const updateToLightMode = () => {
 		document.querySelector("body").setAttribute("data-theme", "light");
 		localStorage.setItem("selectedTheme", "light");
 	}
 
-	const selectedTheme = localStorage.getItem("selectedTheme");
-
-	if (selectedTheme == "dark") {
-		setDarkMode();
+	if (isDarkMode) {
+		updateToDarkMode();
 	}
 
 	const toggleTheme = (e) => {
-		if (selectedTheme == "light") {
-			setDarkMode();
-			setIsDarkMode(true);
-		} else {
-			setLightMode();
+		if (isDarkMode) {
+			updateToLightMode();
 			setIsDarkMode(false);
+		} else {
+			updateToDarkMode();
+			setIsDarkMode(true);
 		}
 	}
 
-	useEffect(() => {
-		const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		if (prefersDarkMode) {
-			setDarkMode();
-			setIsDarkMode(true);
-		} else {
-			setLightMode();
-			setIsDarkMode(false);
-		} 
-	  }, []);
 
 	return (
 		<>

@@ -40,9 +40,9 @@ export default function LeaveStudioDialog({ isHost, isLeaveDialogOpened, handleC
     };
 
     return(
-        <Dialog  open={isLeaveDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
+        <Dialog  open={isLeaveDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: "var(--dialogColor)" }}}>
             <div className={styles.dialogHeader}>
-                <ExitToAppRoundedIcon style={{ color: "#757575", fontSize: "30px" }} />
+                <ExitToAppRoundedIcon style={{ color: "var(--iconColor)", fontSize: "30px" }} />
                 <h1 className={styles.heading}>Leave Studio</h1>
             </div>
             

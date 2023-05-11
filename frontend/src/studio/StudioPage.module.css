@@ -246,14 +246,16 @@
 }
 
 .resultTitle {
-	font-size: 14px;
 	color: var(--headingColor);
-	padding-left: 15px;
+	padding: 0px 0px 0px 15px;
+	margin: 0px;
+	font-weight: bold;
 }
 
 .resultTitleDetail {
-	margin: 0px;
 	color: var(--headingColor);
+	padding: 0px 0px 0px 15px;
+	margin: 0px;
 }
 
 .resultImgDark {

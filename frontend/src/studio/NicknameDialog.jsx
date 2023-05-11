@@ -110,6 +110,7 @@ export default function NicknameDialog(props) {
 							helperText={
 								isNicknameErrorMessage ? errorText : ""
 							}
+							FormHelperTextProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}
 							onKeyDown={(event) => {
 								if (event.key === "Enter") {
 									event.preventDefault();

@@ -202,6 +202,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               value={studioNameInput}
               error={isStudioNameErrorMessage ? true : false}
               helperText={isStudioNameErrorMessage ? "No Studio Name Entry" : ""}
+              FormHelperTextProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}
               required
               margin="dense"
               id="name"

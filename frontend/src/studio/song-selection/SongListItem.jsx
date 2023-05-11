@@ -124,8 +124,7 @@ function SongListItem(props) {
 	const displaySongText = () => {
 		return (
 			<ListItemText
-				className={styles.resultTitle}
-				primary={<b>{song.name}</b>}
+				primary={<p className={styles.resultTitle}>{song.name}</p>}
 				secondary={
 					<p className={styles.resultTitleDetail}>
 						{song.artists?.length > 0 ? song.artists[0] : song.artists}
