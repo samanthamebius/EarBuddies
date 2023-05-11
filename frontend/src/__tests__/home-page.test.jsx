@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { expect, it } from 'vitest';
-import { getByLabelText, render } from "@testing-library/react"
+import { render } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import React from "react";
 import HomePage from '../home/HomePage';
