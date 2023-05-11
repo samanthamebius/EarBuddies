@@ -47,6 +47,10 @@ it('create studio pop up renders correctly', () => {
     expect(getByRole('button', { name: 'Jazz' })).toBeInTheDocument();
     expect(getByRole('button', { name: 'Pop' })).toBeInTheDocument();
 
+    expect(getByRole('textbox', { name: 'Enter a Studio Name ...' })).toBeInTheDocument();
+    expect(getByRole('textbox', { name: 'Add your own genres ...' })).toBeInTheDocument();
+
     expect(getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     expect(getByRole('button', { name: 'Create Studio' })).toBeInTheDocument();
 });
+

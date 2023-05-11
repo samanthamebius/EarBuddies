@@ -245,7 +245,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               <TextField
                 color="secondary"
                 margin="dense"
-                id="name"
+                id="genres"
                 label="Add your own genres ..."
                 type="text"
                 fullWidth
