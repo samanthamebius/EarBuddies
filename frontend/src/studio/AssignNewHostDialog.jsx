@@ -23,7 +23,7 @@ export default function AssignNewHostDialog({
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 	const handleClose = () => {
 		handleCloseAssignDialog(false);
-		// window.location.reload();
+		window.location.reload();
 	};
 	const [newHost, setNewHost] = useState(null);
 
