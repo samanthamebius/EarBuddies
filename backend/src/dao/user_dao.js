@@ -76,6 +76,14 @@ async function updateUserProfilePic(username, profilePic) {
 	);
 }
 
+async function updateUserSpotifyPic(username, spotifyPic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ spotifyPic: spotifyPic },
+		{ new: true }
+	);
+}
+
 async function getUser(username) {
 	const user = await User.findOne({ username: username });
 	return user;
@@ -156,4 +164,5 @@ export {
 	searchStudioUsers,
 	updateUserDisplayName,
 	updateUserProfilePic,
+	updateUserSpotifyPic
 };

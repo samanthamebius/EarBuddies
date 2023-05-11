@@ -25,13 +25,24 @@ export default function NicknameDialog(props) {
 	};
 	const [nicknameInput, setNicknameInput] = useState("");
 	const [isNicknameErrorMessage, setIsNicknameErrorMessage] = useState(false);
+	const [errorText, setErrorText] = useState("");
 
 	const handleSubmit = async () => {
+		const response = await axios.get(`${BASE_URL}/api/studio/${studioId}`);
+		const takenNicknames = response.data[0].studioNames;
+		const userPos = response.data[0].studioUsers.indexOf(username);
+		const currentNickname = response.data[0].studioNames[userPos];
+		const trimmedNicknameInput = nicknameInput.trim();
+
 		if (nicknameInput == "") {
+			setErrorText("Enter a new nickname or cancel");
+			setIsNicknameErrorMessage(true);
+		} else if (takenNicknames.includes(trimmedNicknameInput) && trimmedNicknameInput != currentNickname) {
+			setErrorText("This nickname is already taken");
 			setIsNicknameErrorMessage(true);
 		} else {
 			setIsNicknameErrorMessage(false);
-			const nickname = nicknameInput;
+			const nickname = trimmedNicknameInput;
 			await axios
 				.put(`${BASE_URL}/api/studio/${studioId}/${username}/nickname`, {
 					nickname: nickname,
@@ -97,7 +108,7 @@ export default function NicknameDialog(props) {
 							fullWidth
 							onChange={(event) => setNicknameInput(event.target.value)}
 							helperText={
-								isNicknameErrorMessage ? "Enter a new nickname or cancel" : ""
+								isNicknameErrorMessage ? errorText : ""
 							}
 							onKeyDown={(event) => {
 								if (event.key === "Enter") {

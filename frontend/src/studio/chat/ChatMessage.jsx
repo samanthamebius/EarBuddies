@@ -223,104 +223,111 @@ function ChatMessage(props) {
 	}, []);
 
 	return (
-		<div
-			style={setChatMessageStyle()}
-			onMouseOver={() => setHover(true)}
-			onMouseOut={() => setHover(false)}
-		>
-			<h4 className={styles.username}>{messageDisplayName}</h4>
-			{/* Message Reply */}
-			{(replyMessage || isPastReply) && (
-				<div className={styles.messageReply}>
-					<p className={styles.messageReplyContent}>{replyMessage}</p>
-				</div>
-			)}
-			<div
-				style={{
-					display: "flex",
-					flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
-				}}
-			>
-				{/* Message */}
+		<>
+			{messageUsername === "chat_bot" ? (
+				// message styles for a chat bot
+				<div className={styles.chatBotMessage}>{message}</div>
+			) : (
 				<div
-					style={{
-						display: "flex",
-						maxWidth: "70%",
-					}}
+					style={setChatMessageStyle()}
+					onMouseOver={() => setHover(true)}
+					onMouseOut={() => setHover(false)}
 				>
-					{/* Message Content */}
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							position: "relative",
-							width: "100%",
-							alignItems: `${isCurrentUser ? "flex-end" : "flex-start"}`,
-						}}
-					>
-						<div style={setMessageBodyStyle()}>
-							<p className={styles.body}>{message}</p>
+					<h4 className={styles.username}>{messageDisplayName}</h4>
+					{/* Message Reply */}
+					{(replyMessage || isPastReply) && (
+						<div className={styles.messageReply}>
+							<p className={styles.messageReplyContent}>{replyMessage}</p>
 						</div>
-						<img
-							src={isCurrentUser ? messageDecoration1 : messageDecoration2}
-							className={styles.messageDecoration}
-						/>
-					</div>
-				</div>
-				{/* Reaction Counter */}
-				{reactions.length > 0 && (
-					<div className={styles.reactionCounter}>
-						{reactions.map((reaction) => (
-							<div key={reaction.id}>{reaction.node}</div>
-						))}
-						{reactions.length > 1 && <div>&nbsp; {reactions.length}</div>}
-					</div>
-				)}
-				{hover ? (
-					// Actions Container
+					)}
 					<div
 						style={{
 							display: "flex",
 							flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
 						}}
 					>
-						<div style={setActionsContainerStyle()}>
-							<ReplyRoundedIcon
-								className={styles.reply}
-								onClick={() => handleMessageReply()}
-								fontSize="small"
-							/>
-							<PushPinIcon
-								className={styles.pin}
-								onClick={() => handlePinMessage()}
-								fontSize="small"
-							/>
-							<SentimentSatisfiedRoundedIcon
-								onClick={() => setIsReacting(!isReacting)}
-								className={styles.reaction}
-								fontSize="small"
-							/>
-						</div>
-						{/* Reaction Bar */}
-						{isReacting && hover && (
-							<ReactionBarSelector
-								iconSize={12}
+						{/* Message */}
+						<div
+							style={{
+								display: "flex",
+								maxWidth: "70%",
+							}}
+						>
+							{/* Message Content */}
+							<div
 								style={{
-									alignSelf: "center",
-									marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
-									marginRight: `${isCurrentUser ? "4px" : "0"}`,
-									marginBottom: "6px",
+									display: "flex",
+									flexDirection: "column",
+									position: "relative",
+									width: "100%",
+									alignItems: `${isCurrentUser ? "flex-end" : "flex-start"}`,
 								}}
-								onSelect={(reaction) => handleReactions(reaction)}
-							/>
+							>
+								<div style={setMessageBodyStyle()}>
+									<p className={styles.body}>{message}</p>
+								</div>
+								<img
+									src={isCurrentUser ? messageDecoration1 : messageDecoration2}
+									className={styles.messageDecoration}
+								/>
+							</div>
+						</div>
+						{/* Reaction Counter */}
+						{reactions.length > 0 && (
+							<div className={styles.reactionCounter}>
+								{reactions.map((reaction) => (
+									<div key={reaction.id}>{reaction.node}</div>
+								))}
+								{reactions.length > 1 && <div>&nbsp; {reactions.length}</div>}
+							</div>
+						)}
+						{hover ? (
+							// Actions Container
+							<div
+								style={{
+									display: "flex",
+									flexDirection: `${isCurrentUser ? "row-reverse" : "row"}`,
+								}}
+							>
+								<div style={setActionsContainerStyle()}>
+									<ReplyRoundedIcon
+										className={styles.reply}
+										onClick={() => handleMessageReply()}
+										fontSize="small"
+									/>
+									<PushPinIcon
+										className={styles.pin}
+										onClick={() => handlePinMessage()}
+										fontSize="small"
+									/>
+									<SentimentSatisfiedRoundedIcon
+										onClick={() => setIsReacting(!isReacting)}
+										className={styles.reaction}
+										fontSize="small"
+									/>
+								</div>
+								{/* Reaction Bar */}
+								{isReacting && hover && (
+									<ReactionBarSelector
+										iconSize={12}
+										style={{
+											alignSelf: "center",
+											marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
+											marginRight: `${isCurrentUser ? "4px" : "0"}`,
+											marginBottom: "6px",
+										}}
+										onSelect={(reaction) => handleReactions(reaction)}
+									/>
+								)}
+							</div>
+						) : (
+							// placeholder
+							<div style={{ width: "72px" }}></div>
 						)}
 					</div>
-				) : (
-					// placeholder
-					<div style={{ width: "72px" }}></div>
-				)}
-			</div>
-		</div>
+				</div>
+			)}
+		</>
 	);
 }
 

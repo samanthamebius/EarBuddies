@@ -44,10 +44,9 @@ function NavMenu() {
 }
 
 function UserInfo() {
-    const { setUsername, setDisplayName } = useContext(AppContext);
-    const current_user_id = localStorage.getItem("current_user_id");
-    console.log(current_user_id);
-    const id = JSON.parse(current_user_id);
+	const { setUsername, setDisplayName } = useContext(AppContext);
+	const current_user_id = localStorage.getItem("current_user_id");
+	const id = JSON.parse(current_user_id);
 
     if (!current_user_id) {
         return <p>Could not load user</p>;
