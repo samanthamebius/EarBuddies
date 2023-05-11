@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { v4 as uuid } from "uuid";
 import Slider from "@mui/material/Slider";
 import styles from "./StudioPage.module.css";
 import Box from "@mui/material/Box";
@@ -41,8 +42,8 @@ const StyledSlider = styled(Slider)({
 	},
 });
 
-function SongInfo({ socket, studio, queueIsEmpty }) {
-	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+function SongInfo(props) {
+	const { socket, studio, queueIsEmpty, messages, isHost } = props;
 	const [songTitle, setSongTitle] = useState("");
 	const [artistName, setArtistName] = useState("");
 	const [artistImg, setArtistImg] = useState("");
@@ -78,7 +79,7 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 
 		// CHANGE THIS POLLING BACK
 		// Polling mechanism to update song info
-		const interval = setInterval(fetchSongInfo, 5000);
+		const interval = setInterval(fetchSongInfo, 1000);
 
 		// Cleanup interval on component unmount
 		return () => clearInterval(interval);
@@ -90,6 +91,9 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 			socket.emit("send_to_chat_currently_playing", {
 				room: studio._id,
 				trackTitle: songTitle,
+				messageId: uuid(),
+				messages: messages,
+				isHost: isHost,
 			});
 		}
 	}, [songTitle]);
@@ -367,7 +371,6 @@ function ControlPanel(props) {
 		socket.emit("send_play_song", {
 			room: studio._id,
 			isPlaying: true,
-			studio: studio,
 		});
 	}
 
@@ -400,7 +403,7 @@ function ControlPanel(props) {
 	// socket is listening to when a song should be played
 	useEffect(() => {
 		socket.on("receive_play_song", (data) => {
-			const { isPlaying, studio } = data;
+			const { isPlaying } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 			}
@@ -514,7 +517,7 @@ function ControlPanel(props) {
 }
 
 function WebPlayback(props) {
-	const { studio, socket, token, queueIsEmpty } = props;
+	const { studio, socket, token, queueIsEmpty, messages } = props;
 	const [player, setPlayer] = useState({});
 	const { myDeviceId, setMyDeviceId, username } = useContext(AppContext);
 	navigate = useNavigate();
@@ -574,6 +577,8 @@ function WebPlayback(props) {
 						socket={socket}
 						studio={studio}
 						queueIsEmpty={queueIsEmpty}
+						messages={messages}
+						isHost={isHost}
 					/>
 					<ControlPanel
 						deviceId={myDeviceId}

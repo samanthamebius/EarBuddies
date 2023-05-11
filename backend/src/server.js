@@ -111,7 +111,8 @@ io.on("connection", (socket) => {
 	// send the user's currently playing song to chat
 	socket.on("send_to_chat_currently_playing", (data) => {
 		const { room } = data;
-		io.in(room).emit("receive_user_currently_playing_song", data.trackTitle);
+		console.log("sent to chat");
+		io.in(room).emit("receive_user_currently_playing_song", data);
 	});
 
 	// remove the user so they don't receive messages while they are gone

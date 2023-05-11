@@ -14,6 +14,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppContext } from "../../AppContextProvider";
 import axios from "axios";
 import QuickAddPill from "./QuickAddPill";
+import { Studio } from "../../../../backend/src/database/schema";
 
 const StyledTextField = styled(TextField)({
 	"& .MuiInputBase-root": {
@@ -26,8 +27,7 @@ const StyledTextField = styled(TextField)({
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Chat(props) {
-	const { socket } = props;
-	const [messages, setMessages] = useState([]);
+	const { socket, studio, messages, setMessages } = props;
 	const [message, setMessage] = useState("");
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
@@ -42,6 +42,7 @@ export default function Chat(props) {
 	const room = id;
 	const textInput = useRef(null);
 	const messagesRef = useRef(null);
+	const isHost = username === studio.studioHost;
 
 	// scroll to the bottom of the chat container when it's overflowed
 	useEffect(() => {
@@ -98,10 +99,20 @@ export default function Chat(props) {
 
 	// continously set the live messages received from currently playing
 	useEffect(() => {
-		socket.on("receive_user_currently_playing_song", (trackTitle) => {
-			console.log(trackTitle);
-			if (trackTitle) {
-				const messageId = uuid();
+		socket.on("receive_user_currently_playing_song", (data) => {
+			const {
+				trackTitle,
+				messageId,
+				messages: messageHistory,
+				isHost: isStudioHost,
+			} = data;
+			const lastChatBotMessage = messageHistory
+				.filter((message) => message.username === "chat_bot")
+				.pop();
+			console.log("last message");
+			console.log(lastChatBotMessage);
+
+			if (trackTitle && lastChatBotMessage?.id !== messageId && isStudioHost) {
 				setMessages((messages) => [
 					...messages,
 					{
@@ -157,6 +168,8 @@ export default function Chat(props) {
 			);
 		});
 	});
+
+	console.log("isHost: " + isHost);
 
 	// continously get the currently playing song to display quick add options
 	useEffect(() => {

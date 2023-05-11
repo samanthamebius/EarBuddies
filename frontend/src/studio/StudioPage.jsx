@@ -16,6 +16,7 @@ function StudioPage({ socket }) {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
+	const [messages, setMessages] = useState([]);
 	const { username } = useContext(AppContext);
 
 	const {
@@ -49,6 +50,7 @@ function StudioPage({ socket }) {
 						socket={socket}
 						token={accessToken.replace(/['"]+/g, "")}
 						queueIsEmpty={queueIsEmpty}
+						messages={messages}
 					/>
 				</div>
 				<SongSelection
@@ -56,7 +58,12 @@ function StudioPage({ socket }) {
 					socket={socket}
 					setQueueIsEmpty={setQueueIsEmpty}
 				/>
-				<Chat socket={socket} />
+				<Chat
+					socket={socket}
+					studio={studio[0]}
+					messages={messages}
+					setMessages={setMessages}
+				/>
 			</div>
 		);
 	}
