@@ -434,6 +434,7 @@ router.put('/:studio_id/new_host/:host', async (req, res) => {
 		console.log(new_playlist)
 		await copyPlaylist(old_playlist, new_playlist);
 		await updateStudioPlaylist(studio_id, new_playlist);
+		await updateStudioHost(studio_id, host);
 
 		res.status(200).json({ msg: "New playlist created" });
 	} catch (err) {
