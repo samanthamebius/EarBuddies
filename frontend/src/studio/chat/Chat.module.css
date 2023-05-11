@@ -1,5 +1,5 @@
 .chat {
-	background-color: #c68eef;
+	background-color: var(--chatBackgroundColor);
 	grid-row-start: 1;
 	grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
 	grid-column: 3 / 3;
@@ -12,7 +12,7 @@
 }
 
 .chatContent {
-	background-color: white;
+	background-color: var(--fieldColor);
 	padding: 24px;
 	border-radius: 10px;
 	height: 75%;
@@ -21,7 +21,7 @@
 }
 
 .chatInputContainer {
-	background-color: white;
+	background-color: var(--fieldColor);
 	height: 16%;
 	border-radius: 10px;
 	width: calc(0.4 * 100vw);
@@ -30,7 +30,7 @@
 }
 
 .chatInput {
-	background-color: white;
+	background-color: var(--fieldColor);
 	border-radius: 10px;
 	height: 80%;
 	width: calc(0.4 * 100vw);
@@ -120,7 +120,7 @@
 .pillContainer {
 	position: relative;
 	height: 20%;
-	background-color: #ededed;
+	background-color: var(--pillBackgroundColor);
 	border-radius: 0 0 10px 10px;
 	padding: 6px;
 	display: flex;
@@ -133,4 +133,5 @@
 	text-align: left;
 	margin: 0;
 	font-size: 12px;
+	color: var(--pillTextColor);
 }

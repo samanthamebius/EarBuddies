@@ -1,6 +1,6 @@
 .heading {
   font-weight: 800;
-  color: #757575;
+  color: var(--headingColor);
   font-size: 32px;
   position: relative;
   margin: 0px;
@@ -9,7 +9,7 @@
 
 .subHeading {
   font-weight: 800;
-  color: #757575;
+  color: var(--headingColor);
   font-size: 16px;
   margin: 0px 0px 0px 24px;
   padding: 0px 0px 20px 0px;
@@ -34,7 +34,7 @@
 .dialogContent {
   text-align: center;
   font-weight: 800;
-  color: #757575;
+  color: var(--headingColor);
   font-size: 32px;
   position: relative;
   margin: 0px;
@@ -65,12 +65,12 @@
   border-top: #ABABAB solid 1px;
   width: 100%;
   padding: 10px;
-  background-color: #FFF;
+  background-color: var(--fieldColor);
   cursor: pointer;
 }
 
 .listenerListItem:hover {
-  background-color: #f1f1f1;
+  background-color: var(--fieldHoverColor);
 }
 
 .listenerListItem:hover p {

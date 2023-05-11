@@ -8,7 +8,7 @@
 }
 
 .MuiTextField-root {
-	background: white;
+	background: var(--fieldColor);
 	border-radius: 10px;
 }
 

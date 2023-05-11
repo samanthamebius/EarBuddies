@@ -3,12 +3,11 @@
 }
 
 .queueGreyHeading {
-	color: #606060;
+	color: var(--headingColor);
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
 	position: sticky;
 	top: 0;
-	background-color: #f5f5f5;
 	z-index: 3;
 }

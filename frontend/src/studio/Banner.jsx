@@ -194,7 +194,7 @@ export function DropdownKebab({
 	};
 
 	return (
-		<div>
+		<div className={styles.bannerDropdownKebab}>
 			<LeaveStudioDialog
 				isHost={isHost}
 				isLeaveDialogOpened={isLeaveOpen}

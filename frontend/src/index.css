@@ -2,9 +2,47 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 :root {
+  --backgroundColor: #515151; 
+  --menuColor: #2c2c2c;
+  --headingColor: #FFFFFF;
+  --fieldColor: #2c2c2c;
+  --fieldHoverColor: #202020;
+  --focusText: #CA3FF3;
+
+  /* Studio */
+  --nowPlayingBackgroundColor: #cb9ce8;
+
+  /* Chat */
+  --chatBackgroundColor: #aa4ced;
+  --replyBackgroundColor: #171717;
+  --replyTextColor: #b6b6b6;
+  --pillBackgroundColor: #171717;
+  --pillTextColor: #b6b6b6;
+
+  background-color: var(--backgroundColor);
   font-family: 'Open Sans';
-  background-color: #F5F5F5;
 }
+
+[data-theme="dark"] {
+  --backgroundColor: #F5F5F5;
+  --menuColor: #E6E6E6;
+  --headingColor: #757575;
+  --fieldColor: #FFFFFF;
+  --fieldHoverColor: #f1f1f1;
+  --focusText: #CA3FF3;
+
+  /* Studio */
+  --nowPlayingBackgroundColor: #e9dcf1;
+
+  /* Chat */
+  --chatBackgroundColor: #c68eef;
+  --replyBackgroundColor: #f6f9fa;
+  --replyTextColor: grey;
+  --pillBackgroundColor: #ededed;
+  --pillTextColor: #grey;
+
+}
+
 
 body {
   margin: 0px;

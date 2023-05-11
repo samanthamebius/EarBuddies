@@ -1,6 +1,6 @@
 .navmenu {
     font-size: 10;
-    background-color: #E6E6E6;
+    background-color: var(--menuColor);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
