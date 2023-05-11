@@ -5,7 +5,7 @@ import styles from "./StudioPage.module.css";
 
 import Banner from "./Banner";
 import Chat from "./chat/Chat";
-import WebPlayback from "./WebPlayback";
+import WebPlayback from "./player/WebPlayback";
 import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";

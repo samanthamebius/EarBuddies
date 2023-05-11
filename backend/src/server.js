@@ -111,7 +111,6 @@ io.on("connection", (socket) => {
 	// send the user's currently playing song to chat
 	socket.on("send_to_chat_currently_playing", (data) => {
 		const { room } = data;
-		console.log("sent to chat");
 		io.in(room).emit("receive_user_currently_playing_song", data);
 	});
 

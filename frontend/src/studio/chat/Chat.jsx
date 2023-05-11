@@ -1,20 +1,18 @@
 import React, { useContext, useRef, useState } from "react";
-import { v4 as uuid } from "uuid";
-import styles from "./Chat.module.css";
-import { useEffect } from "react";
-import { TextField, styled } from "@mui/material";
-import ChatMessage from "./ChatMessage";
-import { useParams } from "react-router-dom";
-import PinnedMessage from "./PinnedMessage";
+import axios from "axios";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-
-import { AppContext } from "../../AppContextProvider";
-import axios from "axios";
+import { TextField, styled } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
+import ChatMessage from "./ChatMessage";
+import PinnedMessage from "./PinnedMessage";
 import QuickAddPill from "./QuickAddPill";
-import { Studio } from "../../../../backend/src/database/schema";
+import styles from "./Chat.module.css";
+import { AppContext } from "../../AppContextProvider";
+import { useEffect } from "react";
 
 const StyledTextField = styled(TextField)({
 	"& .MuiInputBase-root": {
@@ -42,7 +40,6 @@ export default function Chat(props) {
 	const room = id;
 	const textInput = useRef(null);
 	const messagesRef = useRef(null);
-	const isHost = username === studio.studioHost;
 
 	// scroll to the bottom of the chat container when it's overflowed
 	useEffect(() => {
@@ -109,8 +106,6 @@ export default function Chat(props) {
 			const lastChatBotMessage = messageHistory
 				.filter((message) => message.username === "chat_bot")
 				.pop();
-			console.log("last message");
-			console.log(lastChatBotMessage);
 
 			if (trackTitle && lastChatBotMessage?.id !== messageId && isStudioHost) {
 				setMessages((messages) => [
@@ -168,8 +163,6 @@ export default function Chat(props) {
 			);
 		});
 	});
-
-	console.log("isHost: " + isHost);
 
 	// continously get the currently playing song to display quick add options
 	useEffect(() => {
