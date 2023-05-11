@@ -17,10 +17,10 @@ function LogInPage() {
 
     return (
         <div className={styles.page}>
-            <img src={logos} className={styles.logo}/>
-            <h1 className={styles.brandName}>EAR BUDDIES</h1>            
+            <img src={logos} className={styles.logo} alt='Spotify and Ear Buddies Logo' />
+            <h1 className={styles.brandName}>EAR BUDDIES</h1>
             <Button variant="contained" size="large" className={styles.button}>
-                 <a className={styles.link} href={AUTH_URL}>Log In Using Spotify</a>
+                <a className={styles.link} href={AUTH_URL}>Log In Using Spotify</a>
             </Button>
         </div>
     )

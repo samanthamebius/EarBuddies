@@ -15,7 +15,6 @@ function SearchBar({ label, searchType, studioId, setResults, onInputChange, pla
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const username = localStorage.getItem("current_user_id");
 
-	console.log(searchTerm);
 
 	const theme = createTheme({
 		palette: {
