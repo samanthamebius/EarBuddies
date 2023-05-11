@@ -40,7 +40,7 @@ function VolumeSlider({ player, isHost }) {
 							sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 							style={{ color: isHost ? "white" : "#e7bcf7", fontSize: "25px" }}
 							className={styles.controlBtn}
-							onClick={handleUnmute}
+							onClick={isHost ? () => handleUnmute() : undefined}
 							disabled={!isHost}
 						/>
 					) : (
@@ -48,7 +48,7 @@ function VolumeSlider({ player, isHost }) {
 							sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 							style={{ color: isHost ? "white" : "#e7bcf7", fontSize: "25px" }}
 							className={styles.controlBtn}
-							onClick={handleMute}
+							onClick={isHost ? () => handleMute() : undefined}
 							disabled={!isHost}
 						/>
 					)}
@@ -59,7 +59,7 @@ function VolumeSlider({ player, isHost }) {
 						aria-label="Volume"
 						value={value}
 						color="secondary"
-						onChange={handleChange}
+						onChange={isHost ? () => handleChange() : undefined}
 					/>
 				</Stack>
 			</Box>
