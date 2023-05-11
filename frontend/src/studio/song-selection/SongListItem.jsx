@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import styles from "../StudioPage.module.css";
 import axios from "axios";
@@ -9,6 +9,7 @@ import MusicNoteRoundedIcon from "@mui/icons-material/MusicNoteRounded";
 import equalizer_icon from "../../assets/now_playing/equalizer.gif";
 import { Box, Icon, ListItem, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../AppContextProvider";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,6 +18,8 @@ function SongListItem(props) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
+	const { username } = useContext(AppContext);
+	const isHost = username === studio.studioHost;
 
 	// continously get the currently playing song
 	useEffect(() => {
@@ -160,7 +163,7 @@ function SongListItem(props) {
 				onClick={type === "search" ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === "queue" && (
+						{isHost && type === "queue" && (
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}

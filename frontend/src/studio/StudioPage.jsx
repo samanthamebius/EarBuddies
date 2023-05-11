@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
@@ -9,12 +9,14 @@ import WebPlayback from "./WebPlayback";
 import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 
 function StudioPage({ socket }) {
 	const accessToken = localStorage.getItem("access_token");
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
+	const { username } = useContext(AppContext);
 
 	const {
 		data: studio,

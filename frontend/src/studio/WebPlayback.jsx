@@ -123,7 +123,7 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 	);
 }
 
-export function VolumeSlider({ player }) {
+export function VolumeSlider({ player, isHost }) {
 	const [value, setValue] = useState(30);
 	const [isMute, setMute] = useState(false);
 
@@ -154,22 +154,24 @@ export function VolumeSlider({ player }) {
 				<Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
 					{isMute ? (
 						<VolumeOffRoundedIcon
-							sx={{ "&:hover": { cursor: "pointer" } }}
-							style={{ color: "white", fontSize: "25px" }}
+							sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+							style={{ color: isHost ? "white" : "#e7bcf7", fontSize: "25px" }}
 							className={styles.controlBtn}
 							onClick={handleUnmute}
+							disabled={!isHost}
 						/>
 					) : (
 						<VolumeUpRoundedIcon
-							sx={{ "&:hover": { cursor: "pointer" } }}
-							style={{ color: "white", fontSize: "25px" }}
+							sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+							style={{ color: isHost ? "white" : "#e7bcf7", fontSize: "25px" }}
 							className={styles.controlBtn}
 							onClick={handleMute}
+							disabled={!isHost}
 						/>
 					)}
 					<StyledSlider
 						size="small"
-						disabled={isMute}
+						disabled={isMute || !isHost}
 						className={styles.slider}
 						aria-label="Volume"
 						value={value}
@@ -182,7 +184,8 @@ export function VolumeSlider({ player }) {
 	);
 }
 
-export function TimeSlider({ player, queueIsEmpty }) {
+export function TimeSlider(props) {
+	const { player, queueIsEmpty, isHost } = props;
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
 
@@ -241,8 +244,9 @@ export function TimeSlider({ player, queueIsEmpty }) {
 				step={1}
 				max={duration}
 				color="secondary"
-				onChange={handleChange}
+				onChange={isHost ? () => handleChange() : undefined}
 				style={{ pointerEvents: queueIsEmpty ? "none" : "auto" }}
+				disabled={!isHost}
 			/>
 			<Box
 				sx={{
@@ -268,7 +272,7 @@ export function TimeSlider({ player, queueIsEmpty }) {
 }
 
 function ControlPanel(props) {
-	const { studio, player, socket, queueIsEmpty } = props;
+	const { studio, player, socket, queueIsEmpty, isHost } = props;
 	const [isPlaying, setPlaying] = useState(false);
 	const navigate = useNavigate();
 	const { myDeviceId, username } = useContext(AppContext);
@@ -276,9 +280,6 @@ function ControlPanel(props) {
 	const [isInPause, setInPause] = useState(false);
 	const [isInPlay, setInPlay] = useState(false);
 	const [isInNext, setInNext] = useState(false);
-	const isHost = username === studio.studioHost;
-
-	console.log("IsHost: " + isHost);
 
 	function spotifyPlayer(studio, myDeviceId) {
 		try {
@@ -454,68 +455,70 @@ function ControlPanel(props) {
 		<div className={styles.controlPanel}>
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
-					sx={{ "&:hover": { cursor: "pointer" } }}
+					sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 					style={{
 						fontSize: "40px",
-						color: queueIsEmpty || isInPrevious ? "#e7bcf7" : "white",
+						color:
+							queueIsEmpty || isInPrevious || !isHost ? "#e7bcf7" : "white",
 						pointerEvents: queueIsEmpty ? "none" : "auto",
 					}}
-					onClick={() => previousButton()}
+					onClick={isHost ? () => previousButton() : undefined}
 					onMouseEnter={enterPrevious}
 					onMouseLeave={leavePrevious}
-					disabled={queueIsEmpty}
+					disabled={queueIsEmpty || !isHost}
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
-						sx={{ "&:hover": { cursor: "pointer" } }}
+						sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 						style={{
 							fontSize: "40px",
-							color: queueIsEmpty || isInPlay ? "#e7bcf7" : "white",
+							color: queueIsEmpty || isInPlay || !isHost ? "#e7bcf7" : "white",
 							pointerEvents: queueIsEmpty ? "none" : "auto",
 						}}
-						onClick={() => playButton(studio)}
+						onClick={isHost ? () => playButton(studio) : undefined}
 						onMouseEnter={enterPlay}
 						onMouseLeave={leavePlay}
-						disabled={queueIsEmpty}
+						disabled={queueIsEmpty || !isHost}
 					/>
 				) : (
 					<PauseCircleRoundedIcon
-						sx={{ "&:hover": { cursor: "pointer" } }}
+						sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 						style={{
 							fontSize: "40px",
-							color: queueIsEmpty || isInPause ? "#e7bcf7" : "white",
+							color: queueIsEmpty || isInPause || !isHost ? "#e7bcf7" : "white",
 							pointerEvents: queueIsEmpty ? "none" : "auto",
 						}}
-						onClick={() => pauseButton(studio)}
+						onClick={isHost ? () => pauseButton(studio) : undefined}
 						onMouseEnter={enterPause}
 						onMouseLeave={leavePause}
-						disabled={queueIsEmpty}
+						disabled={queueIsEmpty || !isHost}
 					/>
 				)}
 				<SkipNextRoundedIcon
-					sx={{ "&:hover": { cursor: "pointer" } }}
+					sx={{ "&:hover": { cursor: isHost && "pointer" } }}
 					style={{
 						fontSize: "40px",
-						color: queueIsEmpty || isInNext ? "#e7bcf7" : "white",
+						color: queueIsEmpty || isInNext || !isHost ? "#e7bcf7" : "white",
 						pointerEvents: queueIsEmpty ? "none" : "auto",
 					}}
-					onClick={() => skipButton(studio)}
+					onClick={isHost ? () => skipButton(studio) : undefined}
 					onMouseEnter={enterNext}
 					onMouseLeave={leaveNext}
-					disabled={queueIsEmpty}
+					disabled={queueIsEmpty || !isHost}
 				/>
 			</div>
-			<TimeSlider player={player} queueIsEmpty={queueIsEmpty} />
-			<VolumeSlider player={player} />
+			<TimeSlider player={player} queueIsEmpty={queueIsEmpty} isHost={isHost} />
+			<VolumeSlider player={player} isHost={isHost} />
 		</div>
 	);
 }
 
 function WebPlayback(props) {
-	const [player, setPlayer] = useState({});
-	const { myDeviceId, setMyDeviceId } = useContext(AppContext);
 	const { studio, socket, token, queueIsEmpty } = props;
+	const [player, setPlayer] = useState({});
+	const { myDeviceId, setMyDeviceId, username } = useContext(AppContext);
 	navigate = useNavigate();
+	const isHost = username === studio.studioHost;
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -556,11 +559,12 @@ function WebPlayback(props) {
 
 	console.log(myDeviceId);
 
-	// useEffect(() => {
-	// 	return () => {
-	// 		window.location.reload(false);
-	// 	};
-	// }, []);
+	// disconnect the player when the component dismounts
+	useEffect(() => {
+		return () => {
+			window.location.reload(false);
+		};
+	}, []);
 
 	return (
 		<>
@@ -577,6 +581,7 @@ function WebPlayback(props) {
 						player={player}
 						socket={socket}
 						queueIsEmpty={queueIsEmpty}
+						isHost={isHost}
 					/>
 				</div>
 			</div>
