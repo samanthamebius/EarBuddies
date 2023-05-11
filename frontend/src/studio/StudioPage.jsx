@@ -42,9 +42,18 @@ function StudioPage({ socket }) {
 			<div className={styles.studio}>
 				<Banner id={id} studio={studio[0]} socket={socket} />
 				<div className={styles.webPlayback}>
-				<WebPlayback studio={studio} socket={socket} token={accessToken.replace(/['"]+/g, '')} queueIsEmpty={queueIsEmpty}/>
+					<WebPlayback
+						studio={studio[0]}
+						socket={socket}
+						token={accessToken.replace(/['"]+/g, "")}
+						queueIsEmpty={queueIsEmpty}
+					/>
 				</div>
-				<SongSelection studio={studio[0]} socket={socket} setQueueIsEmpty={setQueueIsEmpty}/>
+				<SongSelection
+					studio={studio[0]}
+					socket={socket}
+					setQueueIsEmpty={setQueueIsEmpty}
+				/>
 				<Chat socket={socket} />
 			</div>
 		);

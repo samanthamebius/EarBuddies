@@ -98,6 +98,7 @@ io.on("connection", (socket) => {
 	// play a song from the playlist in studio
 	socket.on("send_play_song", (data) => {
 		const { room } = data;
+		console.log(room);
 		io.in(room).emit("receive_play_song", data);
 	});
 
@@ -122,8 +123,6 @@ io.on("connection", (socket) => {
 	// send the user's currently playing song to chat
 	socket.on("send_to_chat_currently_playing", (data) => {
 		const { room } = data;
-		console.log("One time send");
-		console.log(data);
 		io.in(room).emit("receive_user_currently_playing_song", data.trackTitle);
 	});
 
