@@ -1,3 +1,6 @@
+/**
+ *  Mock implementation of localStorage in browser for testing purposes.
+ */
 const localStorageMock = {
     getItem: (key) => {
       return localStorageMock[key];
