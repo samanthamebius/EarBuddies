@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
+import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost, updateStudioPlaylist } from "../../dao/studio_dao.js";
 import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
 import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist } from "../../dao/spotify_dao.js";
 import { Types as mongooseTypes } from "mongoose";
@@ -431,8 +431,9 @@ router.put('/:studio_id/new_host/:host', async (req, res) => {
 		const studio = await getStudio(studio_id);
 		const old_playlist = studio[0].studioPlaylist;
 		const new_playlist = await createNewStudioPlaylist(studio);
+		console.log(new_playlist)
 		await copyPlaylist(old_playlist, new_playlist);
-		await updateStudioHost(studio_id, host);
+		await updateStudioPlaylist(studio_id, new_playlist);
 
 		res.status(200).json({ msg: "New playlist created" });
 	} catch (err) {

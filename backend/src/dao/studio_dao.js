@@ -116,6 +116,10 @@ async function setStudioStatus(studio_id) {
 	}
 }
 
+async function updateStudioPlaylist(id, playlist) {
+	return await Studio.findOneAndUpdate({ _id: id }, { studioPlaylist: playlist }, { new: true });
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -128,4 +132,5 @@ export {
 	updateStudioNames,
 	deleteUserFromStudio,
 	setStudioStatus,
+	updateStudioPlaylist,
 };

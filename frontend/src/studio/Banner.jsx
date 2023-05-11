@@ -179,6 +179,7 @@ export function DropdownKebab({
 		console.log("test");
 		const newHost = studioUsers[1].user_id;
 		axios.put(`${BASE_URL}/api/studio/${id}/new_host/${newHost}`);
+		window.location.reload(false);
 	};
 
 	return (
