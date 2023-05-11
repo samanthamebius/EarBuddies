@@ -94,7 +94,6 @@ it('create studio error text renders correctly', () => {
     )
 
     const createStudioButton = getByRole('button', { name: 'Create Studio' });
-    const studioNameField = getByRole('textbox', { name: 'Enter a Studio Name ...' });
     fireEvent.click(createStudioButton);
 
     expect(getByText('No Studio Name Entry')).toBeInTheDocument();
