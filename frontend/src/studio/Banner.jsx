@@ -1,24 +1,24 @@
-import styles from "./StudioPage.module.css";
-import React, { useState, useEffect } from "react";
-import LeaveStudioDialog from "./LeaveStudioDialog";
-import NicknameDialog from "./NicknameDialog";
-import ManageListenersDialog from "./ManageListenersDialog";
-import AssignNewHostDialog from "./AssignNewHostDialog";
-import ProfilePicImg1 from "../assets/profilepic1.png";
-import ListenerIcons from "../shared/ListenerIcons";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import styles from './StudioPage.module.css';
+import React, { useState, useEffect } from 'react';
+import LeaveStudioDialog from './LeaveStudioDialog';
+import NicknameDialog from './NicknameDialog';
+import ManageListenersDialog from './ManageListenersDialog';
+import AssignNewHostDialog from './AssignNewHostDialog';
+import ProfilePicImg1 from '../assets/profilepic1.png';
+import ListenerIcons from '../shared/ListenerIcons';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import GroupsIcon from '@mui/icons-material/Groups';
 import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
 import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
 import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ConfirmationDialog from "../shared/ConfirmationDialog";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import ConfirmationDialog from '../shared/ConfirmationDialog';
 
 // TO DO: get if user is host or not
 // const isHost = false;
@@ -26,7 +26,7 @@ import ConfirmationDialog from "../shared/ConfirmationDialog";
 const hostImage = ProfilePicImg1;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? "";
+const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? '';
 
 export default function Banner({ id, studio, socket }) {
 	const navigate = useNavigate();
@@ -38,25 +38,25 @@ export default function Banner({ id, studio, socket }) {
 	const studioName = studio.studioName;
 	const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
-	const isHost = (studio.studioHost === localStorage.getItem("current_user_id").replace(/"/g, ''));
+	const isHost =
+		studio.studioHost === localStorage.getItem('current_user_id').replace(/"/g, '');
 
 	const handleDelete = () => {
 		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
 			console.log(res);
 		});
-		navigate("/");
+		navigate('/');
 		window.location.reload(false);
 	};
 
 	const users = studio.studioUsers;
-	const isAlone = (users.length <= 1) ? true : false;
+	const isAlone = users.length <= 1 ? true : false;
 	const isListening = studio.studioIsActive;
 
 	return (
 		<div
 			className={styles.banner}
-			style={{ backgroundImage: `url(${backgroundImage})` }}
-		>
+			style={{ backgroundImage: `url(${backgroundImage})` }}>
 			<h1 className={styles.bannerStudioName}>{studioName}</h1>
 
 			<div className={styles.bannerlisteners}>
@@ -88,7 +88,7 @@ export function DropdownKebab({
 	studio,
 	studioUsers,
 	isAloneInStudio,
-	socket
+	socket,
 }) {
 	const [isOpen, setOpen] = useState(null);
 	const open = Boolean(isOpen);
@@ -98,7 +98,6 @@ export function DropdownKebab({
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
 	const [isManListOpen, setIsManListOpen] = useState(false);
 	const [isAssignOpen, setIsAssignOpen] = useState(false);
-
 
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
@@ -118,7 +117,7 @@ export function DropdownKebab({
 		setInEdit(true);
 	};
 	const enterManList = () => {
-		setInManList(true)
+		setInManList(true);
 	};
 	const enterDelete = () => {
 		setInDelete(true);
@@ -166,17 +165,19 @@ export function DropdownKebab({
 	const handleAssignOpen = () => {
 		setIsAssignOpen(true);
 	};
-	const handleManListOpen = () => { setIsManListOpen(true); };
+	const handleManListOpen = () => {
+		setIsManListOpen(true);
+	};
 
 	const handleLeaveStudio = () => {
-		const user_id = localStorage.getItem("current_user_id");
+		const user_id = localStorage.getItem('current_user_id');
 		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
 		navigate('/', { replace: true });
 	};
 
 	//TODO: DELETE THIS
 	const handleTestClick = () => {
-		console.log("test");
+		console.log('test');
 		const newHost = studioUsers[1].user_id;
 		axios.put(`${BASE_URL}/api/studio/${id}/new_host/${newHost}`);
 		window.location.reload(false);
@@ -205,8 +206,8 @@ export function DropdownKebab({
 					handleClose;
 					handleDelete();
 				}} //TO DO: replace with delete functionality
-				message={"Are you sure you want to delete this studio?"}
-				actionText={"Delete"}
+				message={'Are you sure you want to delete this studio?'}
+				actionText={'Delete'}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmLeaveOpen}
@@ -215,100 +216,92 @@ export function DropdownKebab({
 					handleClose;
 					handleLeaveStudio();
 				}} //TO DO: replace with leave functionality
-				message={"Are you sure you want to leave this studio?"}
-				actionText={"Leave"}
+				message={'Are you sure you want to leave this studio?'}
+				actionText={'Leave'}
 			/>
 			<NicknameDialog
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
 				studioId={id}
-				socket={socket} />
+				socket={socket}
+			/>
 			<ManageListenersDialog
 				isManListDialogOpened={isManListOpen}
 				handleCloseManListDialog={() => setIsManListOpen(false)}
-				studio={studio} />
+				studio={studio}
+			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
-				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
+				<MoreVertRoundedIcon style={{ color: 'white', fontSize: '30px' }} />
 			</div>
-			<Menu
-				autoFocus={false}
-				anchorEl={isOpen}
-				open={open}
-				onClose={handleClose}
-			>
+			<Menu autoFocus={false} anchorEl={isOpen} open={open} onClose={handleClose}>
 				{/* TODO: DELETE THIS */}
-				<MenuItem
-					onClick={handleTestClick}>
+				<MenuItem onClick={handleTestClick}>
 					<p className={styles.menu_title}>Test button</p>
 				</MenuItem>
 				<MenuItem
 					className={styles.menu_item}
 					onClick={handleNicknameOpen}
 					onMouseEnter={enterEdit}
-					onMouseLeave={leaveEdit}
-				>
+					onMouseLeave={leaveEdit}>
 					<DriveFileRenameOutlineRoundedIcon
 						className={styles.icon}
-						style={{ color: isInEdit ? "#B03EEE" : "#757575" }}
+						style={{ color: isInEdit ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: "flex" }}
+					style={{ display: 'flex' }}
 					className={styles.menu_item}
 					onClick={handleManListOpen}
 					onMouseEnter={enterManList}
 					onMouseLeave={leaveManList}>
-					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
+					<GroupsIcon
+						className={styles.icon}
+						style={{ color: isInManList ? '#B03EEE' : '#757575' }}
+					/>
 					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
+					style={{ display: !isHost || isAloneInStudio ? 'none' : 'flex' }}
 					className={styles.menu_item}
 					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
-					onMouseLeave={leaveAssign}
-				>
+					onMouseLeave={leaveAssign}>
 					<StarRoundedIcon
 						className={styles.icon}
-						style={{ color: isInAssign ? "#B03EEE" : "#757575" }}
+						style={{ color: isInAssign ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isAloneInStudio ? "none" : "flex" }}
+					style={{ display: isAloneInStudio ? 'none' : 'flex' }}
 					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave}
-					onMouseLeave={leaveLeave}
-				>
+					onMouseLeave={leaveLeave}>
 					<ExitToAppRoundedIcon
 						className={styles.icon}
-						style={{ color: isInLeave ? "#B03EEE" : "#757575" }}
+						style={{ color: isInLeave ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: isHost ? 'flex' : 'none' }}
 					className={styles.menu_item}
 					onClick={handleConfirmDeleteOpen}
 					onMouseEnter={enterDelete}
-					onMouseLeave={leaveDelete}
-				>
+					onMouseLeave={leaveDelete}>
 					<GroupRemoveRoundedIcon
 						className={styles.icon}
-						style={{ color: isInDelete ? "#B03EEE" : "#757575" }}
+						style={{ color: isInDelete ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
-
 			</Menu>
 		</div>
-
-	)
-};
-
+	);
+}
