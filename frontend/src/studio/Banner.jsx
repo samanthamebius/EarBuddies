@@ -106,9 +106,9 @@ export function DropdownKebab({
 	const [isInDelete, setInDelete] = useState(false);
 	const [isInAssign, setIsInAssign] = useState(false);
 	const navigate = useNavigate();
-		
-	const handleClick = (event) => { 
-		setOpen(event.currentTarget); 
+
+	const handleClick = (event) => {
+		setOpen(event.currentTarget);
 	};
 
 	const enterLeave = () => {
@@ -117,8 +117,8 @@ export function DropdownKebab({
 	const enterEdit = () => {
 		setInEdit(true);
 	};
-	const enterManList = () => { 
-		setInManList(true) 
+	const enterManList = () => {
+		setInManList(true)
 	};
 	const enterDelete = () => {
 		setInDelete(true);
@@ -171,7 +171,7 @@ export function DropdownKebab({
 	const handleLeaveStudio = () => {
 		const user_id = localStorage.getItem("current_user_id");
 		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
-        navigate('/', { replace: true });
+		navigate('/', { replace: true });
 	};
 
 	//TODO: DELETE THIS
@@ -191,11 +191,12 @@ export function DropdownKebab({
 				studioUsers={studioUsers}
 				studio_id={id}
 			/>
-			<AssignNewHostDialog 
+			<AssignNewHostDialog
 				isAssignDialogOpened={isAssignOpen}
 				handleCloseAssignDialog={() => setIsAssignOpen(false)}
 				studioUsers={studioUsers}
-				studio_id={id} 
+				studio_id={id}
+				socket={socket}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -221,13 +222,13 @@ export function DropdownKebab({
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
 				studioId={id}
-				socket={socket}/>
+				socket={socket} />
 			<ManageListenersDialog
 				isManListDialogOpened={isManListOpen}
-				handleCloseManListDialog={() => setIsManListOpen(false)} 
+				handleCloseManListDialog={() => setIsManListOpen(false)}
 				studio={studio} />
 			<div onClick={handleClick} className={styles.dropdownButton}>
-			<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
+				<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
 			</div>
 			<Menu
 				autoFocus={false}
@@ -257,8 +258,8 @@ export function DropdownKebab({
 					style={{ display: "flex" }}
 					className={styles.menu_item}
 					onClick={handleManListOpen}
-					onMouseEnter={enterManList} 
-                    onMouseLeave={leaveManList}>
+					onMouseEnter={enterManList}
+					onMouseLeave={leaveManList}>
 					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
 					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
@@ -290,7 +291,7 @@ export function DropdownKebab({
 					/>
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
-				
+
 				<MenuItem
 					style={{ display: isHost ? "flex" : "none" }}
 					className={styles.menu_item}
@@ -307,6 +308,7 @@ export function DropdownKebab({
 
 			</Menu>
 		</div>
-	
-	)};
+
+	)
+};
 

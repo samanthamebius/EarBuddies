@@ -12,12 +12,14 @@ import NewHostSelection from "./NewHostSelection";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseAssignDialog, studioUsers, studio_id }) {
+export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseAssignDialog, studioUsers, studio_id, socket }) {
     const [isHostErrorMessage, setIsHostErrorMessage] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const handleClose = () => { handleCloseAssignDialog(false); 
-        window.location.reload(); };
-    const [ newHost, setNewHost] = useState(null);
+    const handleClose = () => {
+        handleCloseAssignDialog(false);
+        window.location.reload();
+    };
+    const [newHost, setNewHost] = useState(null);
 
     const handleSubmit = () => {
         if (newHost === null) {
@@ -28,19 +30,20 @@ export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseA
         }
     };
 
-    const handleSubmitConfirm = () => { 
-        axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
+    const handleSubmitConfirm = () => {
+        // axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
+        socket.emit("newHost", { studio_id: studio_id, newHost: newHost });
         setIsConfirmOpen(false)
         handleClose()
     };
 
-    return(
-        <Dialog  open={isAssignDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' }}}>
+    return (
+        <Dialog open={isAssignDialogOpened} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{ style: { backgroundColor: '#F5F5F5' } }}>
             <div className={styles.dialogHeader}>
                 <ExitToAppRoundedIcon style={{ color: "#757575", fontSize: "30px" }} />
                 <h1 className={styles.heading}>Assign a New Host</h1>
             </div>
-            
+
             <DialogContent className={styles.dialogContent}>
                 <h2 className={styles.subHeading}>Choose another listener to be a host</h2>
                 <NewHostSelection newHost={newHost}
@@ -50,15 +53,15 @@ export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseA
                     studio_id={studio_id} />
 
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
-                    <Button variant="contained" sx={{ fontWeight: 600, color: '#757575'  }} className={styles.secondaryButton} onClick={() => { setNewHost(null); handleClose(); }}>Cancel</Button>
+                    <Button variant="contained" sx={{ fontWeight: 600, color: '#757575' }} className={styles.secondaryButton} onClick={() => { setNewHost(null); handleClose(); }}>Cancel</Button>
                     <Button variant="contained" sx={{ fontWeight: 600 }} className={styles.purpleButton} onClick={handleSubmit}>Assign New Host</Button>
                 </DialogActions>
-                <ConfirmationDialog 
+                <ConfirmationDialog
                     isOpen={isConfirmOpen}
                     handleClose={() => setIsConfirmOpen(false)}
-                    handleAction={handleSubmitConfirm} 
+                    handleAction={handleSubmitConfirm}
                     message={"Are you sure you want to give up your role as host?"}
-                    actionText={"Yes"}/>
+                    actionText={"Yes"} />
             </DialogContent>
         </Dialog>
     )
