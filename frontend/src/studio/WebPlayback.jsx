@@ -104,12 +104,12 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 			</h3>
 			<div className={styles.artist}>
 				<img
-					style={{ display: artistImg  && !queueIsEmpty ? "flex" : "none" }}
+					style={{ display: artistImg && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistImg}
 					src={artistImg}
 				/>
 				<div
-					style={{ display: artistName  && !queueIsEmpty ? "flex" : "none" }}
+					style={{ display: artistName && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistName}
 				>
 					{artistName ? artistName : null}
@@ -117,7 +117,7 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 			</div>
 			<img
 				className={styles.albumArtwork}
-				src={albumArtwork  && !queueIsEmpty ? albumArtwork  : placeholder_album}
+				src={albumArtwork && !queueIsEmpty ? albumArtwork : placeholder_album}
 			/>
 		</div>
 	);
@@ -271,11 +271,14 @@ function ControlPanel(props) {
 	const { studio, player, socket, queueIsEmpty } = props;
 	const [isPlaying, setPlaying] = useState(false);
 	const navigate = useNavigate();
-	const { myDeviceId } = useContext(AppContext);
+	const { myDeviceId, username } = useContext(AppContext);
 	const [isInPrevious, setInPrevious] = useState(false);
 	const [isInPause, setInPause] = useState(false);
 	const [isInPlay, setInPlay] = useState(false);
 	const [isInNext, setInNext] = useState(false);
+	const isHost = username === studio.studioHost;
+
+	console.log("IsHost: " + isHost);
 
 	function spotifyPlayer(studio, myDeviceId) {
 		try {
@@ -355,7 +358,11 @@ function ControlPanel(props) {
 
 	function playButton(studio) {
 		songNumber++;
-
+		// only play if host
+		if (isHost) {
+			console.log("playing");
+			spotifyPlayer(studio, myDeviceId);
+		}
 		socket.emit("send_play_song", {
 			room: studio._id,
 			isPlaying: true,
@@ -365,28 +372,28 @@ function ControlPanel(props) {
 
 	function pauseButton(studio) {
 		songNumber++;
-
+		// only pause if host
+		if (isHost) {
+			spotifyPauser(myDeviceId);
+		}
 		socket.emit("send_pause_song", {
 			room: studio._id,
 			isPlaying: false,
 		});
 	}
 
-	function previousButton(studio) {
+	function previousButton() {
 		songNumber++;
-
-		socket.emit("send_previous_song", {
-			room: studio._id,
-		});
+		if (isHost) {
+			spotifyPrevious(myDeviceId);
+		}
 	}
 
 	function skipButton(studio) {
 		songNumber++;
-
-		socket.emit("send_skip_song", {
-			room: studio._id,
-			studio: studio,
-		});
+		if (isHost) {
+			spotifyNext(myDeviceId, studio);
+		}
 	}
 
 	// socket is listening to when a song should be played
@@ -395,7 +402,6 @@ function ControlPanel(props) {
 			const { isPlaying, studio } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
-				spotifyPlayer(studio, myDeviceId);
 			}
 			console.log("received play");
 		});
@@ -407,30 +413,8 @@ function ControlPanel(props) {
 			const { isPlaying } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
-				spotifyPauser(myDeviceId);
 			}
 			console.log("received pause");
-		});
-	}, [socket, myDeviceId]);
-
-	// socket is listening to when a song should be skipped
-	useEffect(() => {
-		socket.on("receive_previous_song", () => {
-			if (Object.keys(myDeviceId).length !== 0) {
-				spotifyPrevious(myDeviceId);
-			}
-			console.log("received previous");
-		});
-	}, [socket, myDeviceId]);
-
-	// socket is listening to when a song should go back to the previous song
-	useEffect(() => {
-		socket.on("receive_skip_song", (data) => {
-			const { studio } = data;
-			if (Object.keys(myDeviceId).length !== 0) {
-				spotifyNext(myDeviceId, studio);
-			}
-			console.log("received skip");
 		});
 	}, [socket, myDeviceId]);
 
@@ -476,7 +460,7 @@ function ControlPanel(props) {
 						color: queueIsEmpty || isInPrevious ? "#e7bcf7" : "white",
 						pointerEvents: queueIsEmpty ? "none" : "auto",
 					}}
-					onClick={() => previousButton(studio)}
+					onClick={() => previousButton()}
 					onMouseEnter={enterPrevious}
 					onMouseLeave={leavePrevious}
 					disabled={queueIsEmpty}
@@ -582,7 +566,11 @@ function WebPlayback(props) {
 		<>
 			<div className="container">
 				<div className="main-wrapper">
-					<SongInfo socket={socket} studio={studio} queueIsEmpty={queueIsEmpty} />
+					<SongInfo
+						socket={socket}
+						studio={studio}
+						queueIsEmpty={queueIsEmpty}
+					/>
 					<ControlPanel
 						deviceId={myDeviceId}
 						studio={studio}

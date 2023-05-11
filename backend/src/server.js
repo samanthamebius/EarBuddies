@@ -108,18 +108,6 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_pause_song", data);
 	});
 
-	// go to a previous song in the playlist in studio
-	socket.on("send_previous_song", (data) => {
-		const { room } = data;
-		io.in(room).emit("receive_previous_song");
-	});
-
-	// skip to the next song in the playlist in studio
-	socket.on("send_skip_song", (data) => {
-		const { room } = data;
-		io.in(room).emit("receive_skip_song", data);
-	});
-
 	// send the user's currently playing song to chat
 	socket.on("send_to_chat_currently_playing", (data) => {
 		const { room } = data;
