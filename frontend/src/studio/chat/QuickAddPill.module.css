@@ -11,7 +11,7 @@
 }
 
 .pillContent {
-	background-color: var(--pinnedBackgroundColor);
+	background-color: var(--pillBackgroundColor);
 	border-radius: 50px;
 	width: fit-content;
 	padding: 2px 6px 2px 4px;
@@ -23,4 +23,5 @@
 .pillText {
 	color: var(--pillTextColor);
 	font-size: 12px;
+	padding-right: 8px;
 }

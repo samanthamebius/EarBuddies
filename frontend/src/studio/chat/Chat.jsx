@@ -306,16 +306,18 @@ export default function Chat(props) {
 						fontSize="small"
 					/>
 				</div>
+				{Object.keys(nowPlaying).length > 0 && (
 				<div className={styles.pillContainer}>
 					<b className={styles.quickAddText}>Quick Add:</b>
-					{Object.keys(nowPlaying).length > 0 && (
+					
 						<QuickAddPill
 							nowPlaying={nowPlaying}
 							message={message}
 							setMessage={setMessage}
 						/>
-					)}
+					
 				</div>
+				)}
 			</div>
 		</div>
 	);
