@@ -62,11 +62,3 @@ it('renders search bars in home page correctly', () => {
     expect(getByLabelText('Search My Studios ...')).toBeInTheDocument();
     expect(getByLabelText('Search Studios Listening Now ...')).toBeInTheDocument();
 });
-
-/**
- * Tests that studio card with appropriate labels renders on home page
- */
-it('renders studio card in home page correctly', () => {
-    console.log(mockUser1.userStudios[0])
-
-});
