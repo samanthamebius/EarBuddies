@@ -33,8 +33,6 @@ function HomePage(props) {
         setIsOpen(!isOpen);
     };
 
-	console.log(studioSearchResults.length === 0);
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.containerChild} style={{ marginRight: "45px" }}>
