@@ -49,6 +49,13 @@ export default function Banner({ id, studio, socket }) {
 		window.location.reload(false);
 	};
 
+	const [controlEnabled, toggleControl] = useState(
+		studio.studioControlHostOnly
+	);
+	const handleControlToggle = () => {
+		toggleControl((current) => !current);
+		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
+	};
 	const users = studio.studioUsers;
 	const isAlone = users.length <= 1 ? true : false;
 	const isListening = studio.studioIsActive;
@@ -68,6 +75,8 @@ export default function Banner({ id, studio, socket }) {
 			</div>
 			<div className={styles.bannerDropdownKebab}>
 				<DropdownKebab
+					controlEnabled={controlEnabled}
+					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
 					id={id}
 					studio={studio}
@@ -82,6 +91,8 @@ export default function Banner({ id, studio, socket }) {
 }
 
 export function DropdownKebab({
+	controlEnabled,
+	handleControlToggle,
 	handleDelete,
 	isHost,
 	id,
@@ -98,12 +109,14 @@ export function DropdownKebab({
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
 	const [isManListOpen, setIsManListOpen] = useState(false);
 	const [isAssignOpen, setIsAssignOpen] = useState(false);
+	
 
 	const [isInLeave, setInLeave] = useState(false);
 	const [isInEdit, setInEdit] = useState(false);
 	const [isInManList, setInManList] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 	const [isInAssign, setIsInAssign] = useState(false);
+	const [isInEnable, setIsInEnable] = useState(false);
 	const navigate = useNavigate();
 
 	const handleClick = (event) => {
@@ -125,6 +138,9 @@ export function DropdownKebab({
 	const enterAssign = () => {
 		setIsInAssign(true);
 	};
+	const enterEnable = () => {
+		setIsInEnable(true);
+	};
 
 	const leaveLeave = () => {
 		setInLeave(false);
@@ -140,6 +156,9 @@ export function DropdownKebab({
 	};
 	const leaveAssign = () => {
 		setIsInAssign(false);
+	};
+	const leaveEnable = () => {
+		setIsInEnable(false);
 	};
 
 	const handleClose = () => {
@@ -223,7 +242,9 @@ export function DropdownKebab({
 				studio={studio}
 			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
-				<MoreVertRoundedIcon style={{ color: 'white', fontSize: '30px' }} />
+				<MoreVertRoundedIcon
+					style={{ color: 'white', fontSize: '30px' }}
+				/>
 			</div>
 			<Menu autoFocus={false} anchorEl={isOpen} open={open} onClose={handleClose}>
 				<MenuItem
@@ -239,11 +260,47 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: 'flex' }}
+					style={{
+						display: !isHost ? 'none' : 'flex',
+					}}
+					className={styles.menu_item}
+					onClick={() => {
+						handleClose;
+						handleControlToggle();
+					}}
+					onMouseEnter={enterEnable}
+					onMouseLeave={leaveEnable}
+				>
+					{!controlEnabled ? (
+						<>
+							<VideogameAssetOffRoundedIcon
+								className={styles.icon}
+								style={{
+									color: isInEnable ? '#B03EEE' : '#757575',
+								}}
+							/>
+							<p className={styles.menu_title}>Disable Control</p>
+						</>
+					) : (
+						<>
+							<VideogameAssetRoundedIcon
+								className={styles.icon}
+								style={{
+									color: isInEnable ? '#B03EEE' : '#757575',
+								}}
+							/>
+							<p className={styles.menu_title}>Enable Control</p>
+						</>
+					)}
+				</MenuItem>
+
+				<MenuItem
+					style={{ display: isHost || !controlEnabled ? 'flex' : 'none' }}
 					className={styles.menu_item}
 					onClick={handleManListOpen}
 					onMouseEnter={enterManList}
-					onMouseLeave={leaveManList}>
+					onMouseLeave={leaveManList}
+				>
 					<GroupsIcon
 						className={styles.icon}
 						style={{ color: isInManList ? '#B03EEE' : '#757575' }}
@@ -252,7 +309,9 @@ export function DropdownKebab({
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: !isHost || isAloneInStudio ? 'none' : 'flex' }}
+					style={{
+						display: !isHost || isAloneInStudio ? 'none' : 'flex',
+					}}
 					className={styles.menu_item}
 					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
@@ -291,5 +350,4 @@ export function DropdownKebab({
 				</MenuItem>
 			</Menu>
 		</div>
-	);
-}
+	);};

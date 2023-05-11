@@ -18,8 +18,6 @@ function HomePage(props) {
 	const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
 	const [activeStudioSearchTerm, setActiveStudioSearchTerm] = useState("");
 
-	console.log("studio search term - ", studioSearchTerm);
-
 	useEffect(() => {
 		const fetchStudios = async () => {
 			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
@@ -28,14 +26,12 @@ function HomePage(props) {
 		fetchStudios();
 	}, []);
 
-	const { socket } = props;
-	const [isOpen, setIsOpen] = useState(false);
+    const { socket } = props;
+    const [isOpen, setIsOpen] = useState(false);
 
-	const handleOpen = () => {
-		setIsOpen(!isOpen);
-	};
-
-	console.log(studioSearchResults.length === 0);
+    const handleOpen = () => {
+        setIsOpen(!isOpen);
+    };
 
 	return (
 		<div className={styles.container}>
@@ -87,7 +83,7 @@ function HomePage(props) {
 				<div className={styles.header}>
 					<h1 className={styles.headings}>Listening Now</h1>
 					<div className={styles.headerChild}>
-						<img src={SoundWavesGradient} className={styles.soundWaves}></img>
+                        <img src={SoundWavesGradient} className={styles.soundWaves} alt="Pink Sound Waves"></img>
 					</div>
 				</div>
 				<SearchBar
