@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { getStudio } from './studio_dao';
 dotenv.config();
 
 var spotifyApi = null;
@@ -119,5 +120,40 @@ async function getPlaybackState(thisSpotifyApi, deviceId) {
   });
 }
 
-export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId, getPlaybackState };
+async function createNewStudioPlaylist(studio) {
+  const playlist_name = 'Earbuddies - ' + studio.studioName;
+	const api = getSpotifyApi();
+	if (!api) {
+		console.log('No Spotify API connection');
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	const createPlaylistRes = await api.createPlaylist(playlist_name, {
+		public: true,
+	});
+	return createPlaylistRes.body.id;
+}
+
+async function copyPlaylist(old_playlist, new_playlist) {
+  const api = getSpotifyApi();
+  if (!api) {
+		console.log('No Spotify API connection');
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+  }
+  api.getPlaylistTracks(old_playlist)
+    .then(function (data) {
+      const tracks = [];
+      for (var i = 0; i < data.body.items.length; i++) {
+        tracks.push('spotify:' + data.body.items[i].track.type + ':' + data.body.items[i].track.uri);
+      }
+      api.addTracksToPlaylist(new_playlist, tracks)
+        .then(function (data) {
+          console.log('Added tracks to playlist!');
+        }, function (err) {
+          console.log('Something went wrong!', err);
+        });
+    }
+  );
+}
+
+export { searchSpotify, setSpotifyApi, getSpotifyApi, getCurrentTrackId, getCurrentTrack, getArtist, getLastPlaylistTrackId, getPlaybackState, createNewStudioPlaylist, copyPlaylist };
 

@@ -4,7 +4,7 @@ import multer from "multer";
 import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost } from "../../dao/studio_dao.js";
 import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
-import { getSpotifyApi } from "../../dao/spotify_dao.js";
+import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist } from "../../dao/spotify_dao.js";
 import { Types as mongooseTypes } from "mongoose";
 import {
 	deleteChat,
@@ -330,6 +330,7 @@ router.put("/:studio_id/newHost/:host_name", async (req, res) => {
 			return res.status(404).json({ msg: "Invalid host provided" });
 		}
 		await updateStudioHost(studio_id, host_name);
+
 		res.status(204).json({ msg: "Host Updated" })
 	} catch (err) {
 		res.status(500).json(err);
@@ -422,5 +423,21 @@ router.put("/:studio_id/:username", async (req, res) => {
 		res.status(500).json({ msg: "Server error" });
 	}
 });
+
+router.post('/:studio_id/new_host/:host', async (req, res) => {
+	try {
+		const { studio_id, host } = req.params;
+		const studio = await getStudio(studio_id);
+		const old_playlist = studio[0].studioPlaylist;
+		const new_playlist = await createNewStudioPlaylist(studio);
+		await copyPlaylist(old_playlist, new_playlist);
+		await updateStudioHost(studio_id, host);
+
+		res.status(200).json({ msg: "New playlist created" });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ msg: "Server error" });
+	}
+})
 
 export default router;
