@@ -175,14 +175,6 @@ export function DropdownKebab({
 		navigate('/', { replace: true });
 	};
 
-	//TODO: DELETE THIS
-	const handleTestClick = () => {
-		console.log('test');
-		const newHost = studioUsers[1].user_id;
-		axios.put(`${BASE_URL}/api/studio/${id}/new_host/${newHost}`);
-		window.location.reload(false);
-	};
-
 	return (
 		<div>
 			<LeaveStudioDialog
@@ -234,10 +226,6 @@ export function DropdownKebab({
 				<MoreVertRoundedIcon style={{ color: 'white', fontSize: '30px' }} />
 			</div>
 			<Menu autoFocus={false} anchorEl={isOpen} open={open} onClose={handleClose}>
-				{/* TODO: DELETE THIS */}
-				<MenuItem onClick={handleTestClick}>
-					<p className={styles.menu_title}>Test button</p>
-				</MenuItem>
 				<MenuItem
 					className={styles.menu_item}
 					onClick={handleNicknameOpen}
