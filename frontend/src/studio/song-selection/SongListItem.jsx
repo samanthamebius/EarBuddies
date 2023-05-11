@@ -19,8 +19,6 @@ function SongListItem(props) {
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
 
 	const isHost = studio.studioHost === JSON.parse(localStorage.getItem("current_user_id"));
-	console.log(studio.studioHost);
-	console.log(isHost);
 
 	// continously get the currently playing song
 	useEffect(() => {
