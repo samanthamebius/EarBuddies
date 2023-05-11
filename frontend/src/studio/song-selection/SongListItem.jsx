@@ -18,6 +18,10 @@ function SongListItem(props) {
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState("");
 
+	const isHost = studio.studioHost === JSON.parse(localStorage.getItem("current_user_id"));
+	console.log(studio.studioHost);
+	console.log(isHost);
+
 	// continously get the currently playing song
 	useEffect(() => {
 		socket.on("receive_currently_playing", (data) => {
@@ -160,7 +164,7 @@ function SongListItem(props) {
 				onClick={type === "search" ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === "queue" && (
+						{type === "queue" && isHost && (
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
