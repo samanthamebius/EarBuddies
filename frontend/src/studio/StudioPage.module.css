@@ -1,271 +1,271 @@
 .studio {
-	height: calc(100vh - 56px);
-	display: grid;
-	grid-template-rows: 1fr 5fr;
-	grid-template-columns: 2fr 3fr 4fr;
-	grid-gap: 20px;
-	padding: 20px;
-	box-sizing: border-box;
-	background-color: var(--backgroundColor);
+    height: calc(100vh - 56px);
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    grid-template-columns: 2fr 3fr 4fr;
+    grid-gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: var(--backgroundColor);
 }
 
 .greyheading {
-	color: var(--headingColor);
-	font-size: 36px;
-	font-weight: bolder;
-	display: flex;
-	padding: 20px;
+    color: var(--headingColor);
+    font-size: 36px;
+    font-weight: bolder;
+    display: flex;
+    padding: 20px;
 }
 
 .songGreyHeading {
-	color: #606060;
-	font-size: 36px;
-	font-weight: bolder;
-	display: flex;
-	margin-bottom: 20px;
+    color: #606060;
+    font-size: 36px;
+    font-weight: bolder;
+    display: flex;
+    margin-bottom: 20px;
 }
 
 .banner {
-	grid-row: 1 / 1;
-	grid-column: 1 / 3;
-	border-radius: 10px;
-	min-height: 50px;
-	overflow: hidden;
-	height: auto;
-	position: relative;
-	background-size: cover;
-	background-repeat: no-repeat;
+    grid-row: 1 / 1;
+    grid-column: 1 / 3;
+    border-radius: 10px;
+    min-height: 50px;
+    overflow: hidden;
+    height: auto;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .bannerDropdownKebab {
-	padding: 0;
-	position: absolute;
-	top: 0;
-	right: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .dropdownButton {
-	margin: 0;
-	padding: 10px 10px 5px 10px;
-	cursor: pointer;
+    margin: 0;
+    padding: 10px 10px 5px 10px;
+    cursor: pointer;
 }
 
 .icon {
-	height: 20px;
-	width: 20px;
-	padding-right: 15px;
-	pointer-events: none;
+    height: 20px;
+    width: 20px;
+    padding-right: 15px;
+    pointer-events: none;
 }
 
 .menu_item:hover .menu_title {
-	color: #b03eee;
+    color: #b03eee;
 }
 
 .menu_title {
-	color: var(--headingColor);
-	margin: 5px 0px 5px 10px;
-	font-size: 16px;
+    color: var(--headingColor);
+    margin: 5px 0px 5px 10px;
+    font-size: 16px;
 }
 
 .bannerStudioName {
-	color: white;
-	text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 2px 2px 7px rgba(0, 0, 0, 0.5),
-		0 0 8px rgba(255, 255, 255, 0.7);
-	font-weight: bold;
-	margin: 0px;
-	font-size: 28px;
-	padding: 10px;
-	position: absolute;
-	bottom: 0;
-	left: 0;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 2px 2px 7px rgba(0, 0, 0, 0.5),
+        0 0 8px rgba(255, 255, 255, 0.7);
+    font-weight: bold;
+    margin: 0px;
+    font-size: 28px;
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .bannerlisteners {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	padding: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
 }
 
 .greyOutImage {
-	-webkit-filter: grayscale(100%);
-	-moz-filter: grayscale(100%);
-	-o-filter: grayscale(100%);
-	filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
 }
 
 .webPlayback {
-	background-color: var(--nowPlayingBackgroundColor);
-	padding: 15px;
-	grid-row: 2 / 2;
-	grid-column: 1;
-	border-radius: 4px;
-	display: flex;
-	flex-direction: column;
+    background-color: var(--nowPlayingBackgroundColor);
+    padding: 15px;
+    grid-row: 2 / 2;
+    grid-column: 1;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
 }
 
 .songselection {
-	grid-row: 2 / 2;
-	grid-column: 2;
-	display: flex;
-	flex-direction: column;
-	height: calc(0.7 * 100vh);
-	padding-top: 6px;
-	gap: 8px;
+    grid-row: 2 / 2;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    height: calc(0.7 * 100vh);
+    padding-top: 6px;
+    gap: 8px;
 }
 
 .chat {
-	grid-row-start: 1;
-	grid-row-end: 3;
-	/* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
-	grid-column: 3 / 3;
-	border-radius: 4px;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
+    grid-column: 3 / 3;
+    border-radius: 4px;
 }
 
 .controlPanel {
-	background-image: linear-gradient(180deg, #b03eee, #e640f8);
-	border-radius: 4px;
-	padding: 5px;
+    background-image: linear-gradient(180deg, #b03eee, #e640f8);
+    border-radius: 4px;
+    padding: 5px;
 }
 
 .playbackCntrls {
-	padding: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 0px;
 }
 
 .albumArtwork {
-	border-radius: 4px;
-	width: 100%;
-	height: auto;
-	object-fit: cover;
-	padding: 15px 0px 15px 0px;
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    padding: 15px 0px 15px 0px;
 }
 
 .song {
-	text-align: left;
-	color: #606060;
-	font-size: 24px;
-	font-weight: bold;
-	display: flex;
-	margin: 10px 0px 10px 0px;
+    text-align: left;
+    color: #606060;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    margin: 10px 0px 10px 0px;
 }
 
 .artistImg {
-	object-fit: cover;
-	height: 40px;
-	width: 40px;
-	border-radius: 50%;
-	pointer-events: none;
+    object-fit: cover;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .artist {
-	text-align: left;
-	display: flex;
-	margin: 10px 0px 10px 0px;
+    text-align: left;
+    display: flex;
+    margin: 10px 0px 10px 0px;
 }
 
 .artistName {
-	font-size: 18px;
-	text-align: left;
-	color: #606060;
-	font-size: 18px;
-	font-weight: bold;
-	padding: 6px 0px 0px 6px;
+    font-size: 18px;
+    text-align: left;
+    color: #606060;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 6px 0px 0px 6px;
 }
 
 .time {
-	padding: 0px 15px 0px 15px;
+    padding: 0px 15px 0px 15px;
 }
 
 .volume {
-	padding: 0px 5px 0px 5px;
+    padding: 0px 5px 0px 5px;
 }
 
 .volIcon {
-	height: 16px;
+    height: 16px;
 }
 
 .songSection {
-	flex-grow: 1;
+    flex-grow: 1;
 }
 
 .slider:disabled {
-	background: red;
+    background: red;
 }
 
 .MuiSlider-root.Mui-disabled {
-	opacity: 50%;
+    opacity: 50%;
 }
 
 @media only screen and (max-aspect-ratio: 6/5) {
-	.bannerStudioName {
-		font-size: 20px;
-		transform: translateX(10px);
-	}
+    .bannerStudioName {
+        font-size: 20px;
+        transform: translateX(10px);
+    }
 
-	.kebabIcon {
-		height: 20px;
-	}
+    .kebabIcon {
+        height: 20px;
+    }
 
-	.bannerlisteners {
-		transform: translateX(-25px);
-	}
+    .bannerlisteners {
+        transform: translateX(-25px);
+    }
 }
 
 .icon {
-	height: 30px;
-	pointer-events: none;
+    height: 30px;
+    pointer-events: none;
 }
 
 .searchResults {
-	overflow: auto;
-	border: 1px solid #c4c4c4;
-	border-radius: 0px 0px 4px 4px;
-	background-color: var(--fieldColor);
-	max-height: 40%;
+    overflow: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 0px 0px 4px 4px;
+    background-color: var(--fieldColor);
+    max-height: 40%;
 }
 
 .result {
-	display: flex;
-	width: calc(33 * vw);
+    display: flex;
+    width: calc(33 * vw);
 }
 
 .result:hover {
-	background-color: var(--fieldHoverColor);
-	cursor: pointer;
+    background-color: var(--fieldHoverColor);
+    cursor: pointer;
 }
 
 .resultImgBox {
-	width: 14%;
-	height: 14%;
+    width: 14%;
+    height: 14%;
 }
 
 .resultImg {
-	width: 100%;
-	height: 100%;
-	border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
 }
 
 .resultTitle {
-	color: var(--headingColor);
-	padding: 0px 0px 0px 15px;
-	margin: 0px;
-	font-weight: bold;
+    color: var(--headingColor);
+    padding: 0px 0px 0px 15px;
+    margin: 0px;
+    font-weight: bold;
 }
 
 .resultTitleDetail {
-	color: var(--headingColor);
-	padding: 0px 0px 0px 15px;
-	margin: 0px;
+    color: var(--headingColor);
+    padding: 0px 0px 0px 15px;
+    margin: 0px;
 }
 
 .resultImgDark {
-	position: absolute;
-	top: 0;
-	left: 0;
-	border-radius: 4px;
-	width: 100%;
-	height: 94%;
-	padding: 0px;
-	margin: 0px;
-	background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    width: 100%;
+    height: 94%;
+    padding: 0px;
+    margin: 0px;
+    background-color: rgba(0, 0, 0, 0.6);
 }

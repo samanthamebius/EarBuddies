@@ -4,7 +4,7 @@
     font-size: 32px;
     position: relative;
     margin: 0px;
-    padding: 20px 24px 0px 24px
+    padding: 20px 24px 0px 24px;
 }
 
 .sectionHeading {
@@ -13,7 +13,7 @@
     font-size: 16px;
     position: relative;
     margin: 0px;
-    padding: 20px 0px 10px 0px
+    padding: 20px 0px 10px 0px;
 }
 
 .createButton {
@@ -21,12 +21,12 @@
 }
 
 .cancelButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#bebebe, #ededed);
     font-weight: 700;
 }
 
 .linkButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#bebebe, #ededed);
     font-weight: 700;
     width: 100%;
 }
@@ -55,7 +55,7 @@
 }
 
 .clearIcon:hover {
-    color: #B03EEE;
+    color: #b03eee;
 }
 
 .displayPhotoContainer {
@@ -100,7 +100,7 @@
 
 .avatarOption:hover {
     cursor: pointer;
-    border: solid 2px #C4C4C4;
+    border: solid 2px #c4c4c4;
 }
 
 .buttonIcon {

@@ -23,7 +23,7 @@
     margin-left: 15px;
     font-family: 'Secular One';
     font-size: 26px;
-    background: -webkit-linear-gradient(#B03EEE, #E640F8);
+    background: -webkit-linear-gradient(#b03eee, #e640f8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -47,7 +47,7 @@
     height: 28px;
     width: 28px;
     border-radius: 50%;
-	border: 1px solid #FFFFFF;
+    border: 1px solid #ffffff;
     pointer-events: none;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .username {
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 600;
     padding-left: 15px;
 }
@@ -78,5 +78,5 @@
 }
 
 .menu_item:hover .menu_title {
-    color: #B03EEE;
+    color: #b03eee;
 }

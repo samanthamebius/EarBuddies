@@ -19,11 +19,11 @@
 }
 
 .uploadedfileText {
-	color: var(--headingColor);
-	font-size: 16px;
-	position: relative;
+    color: var(--headingColor);
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 20px
+    padding: 10px 0px 10px 20px;
 }
 
 .dropBox:hover {
@@ -33,15 +33,15 @@
 
 .focusText {
     font-weight: bold;
-	color: #CA3FF3;
-	font-size: 16px;
-	position: relative;
+    color: #ca3ff3;
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 0px
+    padding: 10px 0px 10px 0px;
 }
 
 p {
-  margin: 10px 0px 10px 0px;  
+    margin: 10px 0px 10px 0px;
 }
 
 .closeIcon {

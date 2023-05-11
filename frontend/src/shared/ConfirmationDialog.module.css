@@ -1,5 +1,5 @@
 .icon {
-    background-color: #E2BFF6;
+    background-color: #e2bff6;
     width: 40px;
     height: 40px;
     padding: 4px;
@@ -12,11 +12,11 @@
 
 .sectionHeading {
     font-weight: 800;
-	color: var(--headingColor);
-	font-size: 16px;
-	position: relative;
+    color: var(--headingColor);
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 20px 0px 10px 0px
+    padding: 20px 0px 10px 0px;
 }
 
 .buttons {
@@ -26,7 +26,7 @@
 }
 
 .secondaryButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#bebebe, #ededed);
 }
 
 .spacing {

@@ -21,14 +21,14 @@
     margin: 0.5em;
     font-family: 'Secular One';
     font-size: 4em;
-    background: -webkit-linear-gradient(#B03EEE, #E640F8);
+    background: -webkit-linear-gradient(#b03eee, #e640f8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: block;
 }
 
 .button {
-    background: linear-gradient(#B03EEE, #E640F8);
+    background: linear-gradient(#b03eee, #e640f8);
 }
 
 .link {

@@ -1,54 +1,54 @@
 .containerChild {
-	flex: 1;
+    flex: 1;
 }
 
 .container {
-	display: flex;
-	padding: 0px 25px 0px 25px;
-	height: calc(100vh - 16px);
-	overflow: hidden;
-	background-color: var(--backgroundColor);
+    display: flex;
+    padding: 0px 25px 0px 25px;
+    height: calc(100vh - 16px);
+    overflow: hidden;
+    background-color: var(--backgroundColor);
 }
 
 .headings {
-	font-weight: 800;
-	color: var(--headingColor);
-	font-size: 32px;
-	position: relative;
+    font-weight: 800;
+    color: var(--headingColor);
+    font-size: 32px;
+    position: relative;
 }
 
 .button {
-	height: fit-content;
-	margin-left: auto;
-	display: flex;
-	align-items: center;
+    height: fit-content;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .header {
-	display: flex;
+    display: flex;
 }
 
 .headerChild {
-	display: flex;
-	align-items: center;
-	float: right;
-	margin-left: auto;
+    display: flex;
+    align-items: center;
+    float: right;
+    margin-left: auto;
 }
 
 .cardContainer {
-	height: calc(0.8 * 100vh);
-	overflow-y: scroll;
+    height: calc(0.8 * 100vh);
+    overflow-y: scroll;
 }
 
 .cardContainer::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
-  
+
 .cardContainer {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .soundWaves {
-	height: 45px;
+    height: 45px;
 }

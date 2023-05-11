@@ -4,7 +4,7 @@
     font-size: 32px;
     position: relative;
     margin: 0px;
-    padding: 20px 24px 0px 24px
+    padding: 20px 24px 0px 24px;
 }
 
 .sectionHeading {
@@ -13,7 +13,7 @@
     font-size: 16px;
     position: relative;
     margin: 0px;
-    padding: 20px 0px 10px 0px
+    padding: 20px 0px 10px 0px;
 }
 
 .focusText {
@@ -22,7 +22,7 @@
     font-size: 16px;
     position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 0px
+    padding: 10px 0px 10px 0px;
 }
 
 .controlSection {
@@ -40,7 +40,7 @@
 }
 
 .cancelButton {
-    background: linear-gradient(#EDEDED, #BEBEBE);
+    background: linear-gradient(#ededed, #bebebe);
     font-weight: 700;
 }
 

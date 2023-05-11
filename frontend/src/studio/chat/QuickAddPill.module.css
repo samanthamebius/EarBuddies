@@ -1,27 +1,27 @@
 .pillContainer {
-	display: flex;
-	flex-direction: row;
-	height: 100%;
-	align-items: center;
-	gap: 12px;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+    gap: 12px;
 }
 
 .pillContainer:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .pillContent {
-	background-color: var(--pillBackgroundColor);
-	border-radius: 50px;
-	width: fit-content;
-	padding: 2px 6px 2px 4px;
-	display: flex;
-	align-items: center;
-	height: 100%;
+    background-color: var(--pillBackgroundColor);
+    border-radius: 50px;
+    width: fit-content;
+    padding: 2px 6px 2px 4px;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 .pillText {
-	color: var(--pillTextColor);
-	font-size: 12px;
-	padding-right: 8px;
+    color: var(--pillTextColor);
+    font-size: 12px;
+    padding-right: 8px;
 }
