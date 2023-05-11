@@ -6,6 +6,7 @@
 	grid-gap: 20px;
 	padding: 20px;
 	box-sizing: border-box;
+	background-color: var(--backgroundColor);
 }
 
 .greyheading {

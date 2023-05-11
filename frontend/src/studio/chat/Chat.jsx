@@ -287,7 +287,7 @@ export default function Chat(props) {
 							}}
 							InputProps={{
 								disableUnderline: true,
-								style: { color: "#797979" },
+								style: { color: "var(--replyTextColor)" },
 							}}
 						/>
 					</div>
@@ -301,6 +301,7 @@ export default function Chat(props) {
 							position: "sticky",
 							top: "0",
 							justifySelf: "end",
+							color: "var(--iconColor)"
 						}}
 						fontSize="small"
 					/>

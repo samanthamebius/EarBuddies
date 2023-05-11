@@ -119,6 +119,9 @@ export default function NicknameDialog(props) {
 							InputProps={{
 								style: { color: 'var(--headingColor)' },
 							  }}
+							  InputLabelProps={{
+								style: { color: 'var(--headingColor)' },
+							}}
 						/>
 					</ThemeProvider>
 				</div>

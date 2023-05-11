@@ -9,7 +9,7 @@ import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 export default function ConfirmationDialog({ isOpen, handleClose, handleAction, message, actionText }) {
     return(
         <div>
-            <Dialog fullWidth maxWidth='sm' open={isOpen} onClose={handleClose} PaperProps={{ style: { backgroundColor: '#F5F5F5',},}}>
+            <Dialog fullWidth maxWidth='sm' open={isOpen} onClose={handleClose} PaperProps={{ style: { backgroundColor: 'var(--dialogColor)',},}}>
                 <DialogContent>
                     <div className={styles.icon}>
                         <ErrorOutlineRoundedIcon fontSize={'large'} style={{ color: '#B03EEE'}}/>

@@ -38,7 +38,7 @@ function QuickAddPill({ nowPlaying, message, setMessage }) {
 						onClick={() => handleAddToTextField("name")}
 					>
 						<MusicNoteRoundedIcon
-							style={{ color: "#757575", marginRight: "8px" }}
+							style={{ color: "var(--iconColor)", marginRight: "8px" }}
 							sx={{ fontSize: "14px" }}
 						/>
 						<b className={styles.pillText}>Song</b>
@@ -48,7 +48,7 @@ function QuickAddPill({ nowPlaying, message, setMessage }) {
 						onClick={() => handleAddToTextField("album")}
 					>
 						<AlbumRoundedIcon
-							style={{ color: "#757575", marginRight: "8px" }}
+							style={{ color: "var(--iconColor)", marginRight: "8px" }}
 							sx={{ fontSize: "14px" }}
 						/>
 						<b className={styles.pillText}>Album</b>
@@ -58,7 +58,7 @@ function QuickAddPill({ nowPlaying, message, setMessage }) {
 						onClick={() => handleAddToTextField("artist")}
 					>
 						<PersonRoundedIcon
-							style={{ color: "#757575", marginRight: "8px" }}
+							style={{ color: "var(--iconColor)", marginRight: "8px" }}
 							sx={{ fontSize: "14px" }}
 						/>
 						<b className={styles.pillText}>Artist</b>
@@ -70,7 +70,7 @@ function QuickAddPill({ nowPlaying, message, setMessage }) {
 					onClick={() => handleAddToTextField("name")}
 				>
 					<PodcastsRoundedIcon
-						style={{ color: "#757575", marginRight: "8px" }}
+						style={{ color: "var(--iconColor)", marginRight: "8px" }}
 						sx={{ fontSize: "16px" }}
 					/>
 					<b className={styles.pillText}>Podcast</b>

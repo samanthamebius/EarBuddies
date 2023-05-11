@@ -318,6 +318,7 @@ function ChatMessage(props) {
 											marginLeft: `${isCurrentUser ? "0px" : "4px"}`,
 											marginRight: `${isCurrentUser ? "4px" : "0"}`,
 											marginBottom: "6px",
+											background: "var(--replyBackgroundColor)",
 										}}
 										onSelect={(reaction) => handleReactions(reaction)}
 									/>

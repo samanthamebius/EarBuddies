@@ -12,7 +12,7 @@
 
 .sectionHeading {
     font-weight: 800;
-	color: #757575;
+	color: var(--headingColor);
 	font-size: 16px;
 	position: relative;
     margin: 0px;

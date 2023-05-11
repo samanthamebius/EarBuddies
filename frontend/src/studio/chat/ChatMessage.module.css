@@ -1,8 +1,8 @@
 .chatBotMessage {
-	background-color: #f8e9fc;
+	background-color: var(--chatBackgroundColor);
 	border-radius: 50px;
 	margin-bottom: 16px;
-	color: grey;
+	color: var(--headingColor);
 	font-size: 14px;
 	padding: 4px;
 }
@@ -51,16 +51,16 @@
 }
 
 .reactionCounter {
-	background-color: white;
+	background-color: var(--replyBackgroundColor);
 	align-self: end;
 	border-radius: 80px;
 	font-size: 12px;
 	padding: 2px 3px 2px 2px;
 	margin: 0 -10px 0 -10px;
-	border: 1px solid lightgrey;
+	border: 1px solid var(--fieldBorderColor);
 	display: flex;
 	align-items: center;
-	color: grey;
+	color: var(--replyTextColor);
 	z-index: 1;
 }
 

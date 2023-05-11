@@ -89,7 +89,7 @@
 .replyMessage {
 	margin: 0;
 	font-size: 13px;
-	background-color: #f8e9fc;
+	background-color: var(--replyBackgroundColor);
 	padding: 4px;
 	border-radius: 10px;
 	width: calc(100%);
@@ -105,7 +105,7 @@
 	text-overflow: ellipsis;
 	text-align: left;
 	margin: 0;
-	color: grey;
+	color: var(--replyTextColor);
 }
 
 .dismissReply {

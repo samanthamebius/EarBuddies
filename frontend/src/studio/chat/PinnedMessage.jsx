@@ -38,7 +38,7 @@ function PinnedMessage({ pinnedMessage, room, socket }) {
 			onMouseLeave={() => setHover(false)}
 		>
 			<div className={styles.content}>
-				<PushPinIcon className={styles.pin} />
+				<PushPinIcon className={styles.pin} style = {{color: "var(--iconColor)"}} />
 				<p className={styles.message}>{pinnedMessage.message}</p>
 			</div>
 			<img src={profileImage} alt="profile" className={styles.profileImage} />
@@ -47,6 +47,7 @@ function PinnedMessage({ pinnedMessage, room, socket }) {
 					fontSize="small"
 					className={styles.delete}
 					onClick={() => handleRemovePin()}
+					style = {{color: "var(--iconColor)"}}
 				/>
 			)}
 		</div>

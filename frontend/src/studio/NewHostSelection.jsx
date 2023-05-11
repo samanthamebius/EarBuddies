@@ -52,11 +52,11 @@ function ListenerListItem ({ listener, isNewHost, setNewHost }) {
     return (
       <div className={styles.listenerListItem} onClick={handleClick}>
         <img src={listener.profilePic}/>
-        <p>{listener.userDisplayName}</p>
+        <p style={{ color: "var(--headingColor)"}}>{listener.userDisplayName}</p>
         {isNewHost ?
-            <StarRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
+            <StarRoundedIcon className={styles.hostIcon} style={{ color: "var(--iconColor)", fontSize: "30px" }} />
         :
-            <StarBorderRoundedIcon className={styles.hostIcon} style={{ color: "#757575", fontSize: "30px" }} />
+            <StarBorderRoundedIcon className={styles.hostIcon} style={{ color: "var(--iconColor)", fontSize: "30px" }} />
         }
       </div>
     );

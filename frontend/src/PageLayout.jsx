@@ -8,6 +8,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeIcon from '@mui/icons-material/LightMode';
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import logo from "./assets/shared/earBuddiesLogo.png";
 import defaultProfilePic from "./assets/home/defaultprofilepic.png";
@@ -166,6 +167,34 @@ export function DropdownMenu() {
 		setInLogOut(!isInLogOut);
 	};
 
+	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem("selectedTheme") == "dark");
+
+	const setDarkMode = () => {
+		document.querySelector("body").setAttribute("data-theme", "dark");
+		localStorage.setItem("selectedTheme", "dark");
+	}
+
+	const setLightMode = () => {
+		document.querySelector("body").setAttribute("data-theme", "light");
+		localStorage.setItem("selectedTheme", "light");
+	}
+
+	const selectedTheme = localStorage.getItem("selectedTheme");
+
+	if (selectedTheme == "dark") {
+		setDarkMode();
+	}
+
+	const toggleTheme = (e) => {
+		if (selectedTheme == "light") {
+			setDarkMode();
+			setIsDarkMode(true);
+		} else {
+			setLightMode();
+			setIsDarkMode(false);
+		}
+	}
+
 	return (
 		<>
 			<ViewProfileDialog
@@ -211,15 +240,22 @@ export function DropdownMenu() {
 
 					<MenuItem
 						className={styles.menu_item}
-						onClick={handleClose}
+						onClick={toggleTheme}
 						onMouseEnter={toggleDarkMode}
 						onMouseLeave={toggleDarkMode}
 					>
+						{isDarkMode ? 
+						<LightModeIcon
+						className={styles.icon}
+						style={{ color: isInDarkMode ? "#B03EEE" : "var(--iconColor)" }}
+						/> :
 						<DarkModeRoundedIcon
 							className={styles.icon}
 							style={{ color: isInDarkMode ? "#B03EEE" : "var(--iconColor)" }}
-						/>
-						<p className={styles.menu_title}>Dark Mode</p>
+						/> 
+						}
+
+						<p className={styles.menu_title}>{isDarkMode ? 'Light Mode' : 'Dark Mode'} </p>
 					</MenuItem>
 					<MenuItem
 						className={styles.menu_item}
@@ -238,3 +274,4 @@ export function DropdownMenu() {
 		</>
 	);
 }
+

@@ -62,7 +62,7 @@
 .listenerListItem {
   display: flex;
   align-items: center;
-  border-top: #ABABAB solid 1px;
+  border-top: var(--fieldBorderColor) solid 1px;
   width: 100%;
   padding: 10px;
   background-color: var(--fieldColor);
