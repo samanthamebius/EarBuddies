@@ -61,7 +61,9 @@ function useStudioPost() {
       });
       navigate(`/studio/${response.data._id}`);
     } catch (err) {
-      const navigate = useNavigate();
+      if (err.response.status === 403) {
+        navigate("/400");
+      }
       navigate("/500");
     }
   };

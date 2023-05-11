@@ -37,7 +37,7 @@ export default function AssignNewHostDialog({
 	};
 
 	const handleSubmitConfirm = () => {
-		// axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
+		axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
 		socket.emit('send_new_host', { room: studio_id, newHost: newHost });
 		setIsConfirmOpen(false);
 		handleClose();
