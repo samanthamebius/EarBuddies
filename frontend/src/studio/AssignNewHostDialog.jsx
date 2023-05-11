@@ -36,11 +36,17 @@ export default function AssignNewHostDialog({
 		}
 	};
 
-	const handleSubmitConfirm = () => {
+	const handleSubmitConfirm = async () => {
 		// axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
 		socket.emit('send_new_host', { room: studio_id, newHost: newHost });
-		setIsConfirmOpen(false);
-		handleClose();
+		const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
+		const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
+		if (current_user_id === studio.data.studioHost) {
+			setIsConfirmOpen(false);
+			handleClose();
+		} else {
+			<p className={styles.helperText}>You must select a host</p>;
+		}
 	};
 
 	useEffect(() => {
