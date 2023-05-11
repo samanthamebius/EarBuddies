@@ -8,10 +8,14 @@ import SongListItem from "./SongListItem";
 
 export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 	const [songSearchResults, setSongSearchResults] = useState([]);
+	const isHost =
+		studio.studioHost ===
+		localStorage.getItem('current_user_id').replace(/"/g, '');
 
 	return (
 		<div className={styles.songselection}>
-			<SearchBar
+			{isHost && (
+				<SearchBar
 				searchType={"songs"}
 				label={"Search Spotify..."}
 				studioId={""}
@@ -19,6 +23,7 @@ export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 				studio={studio}
 				onInputChange={() => {}}
 			/>
+			)}
 			{songSearchResults.length > 0 ? (
 				<List className={styles.searchResults}>
 					{songSearchResults.map((result) => (
