@@ -41,7 +41,7 @@ export default function AssignNewHostDialog({ isAssignDialogOpened, handleCloseA
         socket.on("recieve_new_host", (data) => {
             console.log("recieve_new_host", data);
             const { newHost } = data;
-            const current_user_id = localStorage.getItem("current_user_id").replace(/"/g, '');
+            const current_user_id = JSON.parse(localStorage.getItem("current_user_id"));
             if (newHost === current_user_id) {
                 axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
             }
