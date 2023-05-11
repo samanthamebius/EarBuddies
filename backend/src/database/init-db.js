@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import { User, Studio } from './schema';
 
 const users = [
-    { username: 'samzieskates12', userDisplayName: "Samantha Mebius", profilePic: "/src/assets/profile/anaconda.png", userIsActive: true, userStudios: [] },
+    { username: 'samzieskates12', userDisplayName: "Samantha Mebius", profilePic: "/src/assets/profile/penguin.png", userIsActive: true, userStudios: [] },
     { username: 'brejury', userDisplayName: "Breanna Jury", profilePic: "/src/assets/profile/snail.png", userIsActive: false, userStudios: [] },
     { username: 'ananya2001', userDisplayName: "Ananya Ahluwalia", profilePic: "/src/assets/profile/bunny.png", userIsActive: true, userStudios: [] },
     { username: 'amy.rimmer01', userDisplayName: "Amy Rimmer", profilePic: "/src/assets/profile/clown-fish.png", userIsActive: false, userStudios: [] },
