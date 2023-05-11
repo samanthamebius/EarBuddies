@@ -41,7 +41,7 @@ const StyledSlider = styled(Slider)({
 	},
 });
 
-function SongInfo({ socket, studio }) {
+function SongInfo({ socket, studio, queueIsEmpty }) {
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const [songTitle, setSongTitle] = useState("");
 	const [artistName, setArtistName] = useState("");
@@ -98,18 +98,18 @@ function SongInfo({ socket, studio }) {
 		<div className={styles.songSection}>
 			<h3
 				className={styles.song}
-				style={{ display: songTitle ? "flex" : "none" }}
+				style={{ display: songTitle && !queueIsEmpty ? "flex" : "none" }}
 			>
 				{songTitle}
 			</h3>
 			<div className={styles.artist}>
 				<img
-					style={{ display: artistImg ? "flex" : "none" }}
+					style={{ display: artistImg  && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistImg}
 					src={artistImg}
 				/>
 				<div
-					style={{ display: artistName ? "flex" : "none" }}
+					style={{ display: artistName  && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistName}
 				>
 					{artistName ? artistName : null}
@@ -117,7 +117,7 @@ function SongInfo({ socket, studio }) {
 			</div>
 			<img
 				className={styles.albumArtwork}
-				src={albumArtwork ? albumArtwork : placeholder_album}
+				src={albumArtwork  && !queueIsEmpty ? albumArtwork  : placeholder_album}
 			/>
 		</div>
 	);
@@ -582,7 +582,7 @@ function WebPlayback(props) {
 		<>
 			<div className="container">
 				<div className="main-wrapper">
-					<SongInfo socket={socket} studio={studio} />
+					<SongInfo socket={socket} studio={studio} queueIsEmpty={queueIsEmpty} />
 					<ControlPanel
 						deviceId={myDeviceId}
 						studio={studio}
