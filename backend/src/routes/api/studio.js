@@ -424,7 +424,8 @@ router.put("/:studio_id/:username", async (req, res) => {
 	}
 });
 
-router.post('/:studio_id/new_host/:host', async (req, res) => {
+router.put('/:studio_id/new_host/:host', async (req, res) => {
+	//requires you to be logged in as the new host
 	try {
 		const { studio_id, host } = req.params;
 		const studio = await getStudio(studio_id);

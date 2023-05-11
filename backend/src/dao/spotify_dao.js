@@ -121,7 +121,7 @@ async function getPlaybackState(thisSpotifyApi, deviceId) {
 }
 
 async function createNewStudioPlaylist(studio) {
-  const playlist_name = 'Earbuddies - ' + studio.studioName;
+  const playlist_name = 'Earbuddies - ' + studio[0].studioName;
 	const api = getSpotifyApi();
 	if (!api) {
 		console.log('No Spotify API connection');
@@ -143,7 +143,7 @@ async function copyPlaylist(old_playlist, new_playlist) {
     .then(function (data) {
       const tracks = [];
       for (var i = 0; i < data.body.items.length; i++) {
-        tracks.push('spotify:' + data.body.items[i].track.type + ':' + data.body.items[i].track.uri);
+        tracks.push(data.body.items[i].track.uri);
       }
       api.addTracksToPlaylist(new_playlist, tracks)
         .then(function (data) {
