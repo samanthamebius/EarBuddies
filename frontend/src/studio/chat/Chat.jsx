@@ -107,7 +107,7 @@ export default function Chat(props) {
 				.filter((message) => message.username === "chat_bot")
 				.pop();
 
-			if (trackTitle && lastChatBotMessage?.id !== messageId && isStudioHost) {
+			if (trackTitle && lastChatBotMessage.id !== messageId && isStudioHost) {
 				setMessages((messages) => [
 					...messages,
 					{
