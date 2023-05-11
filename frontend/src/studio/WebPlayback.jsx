@@ -104,12 +104,12 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 			</h3>
 			<div className={styles.artist}>
 				<img
-					style={{ display: artistImg  && !queueIsEmpty ? "flex" : "none" }}
+					style={{ display: artistImg && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistImg}
 					src={artistImg}
 				/>
 				<div
-					style={{ display: artistName  && !queueIsEmpty ? "flex" : "none" }}
+					style={{ display: artistName && !queueIsEmpty ? "flex" : "none" }}
 					className={styles.artistName}
 				>
 					{artistName ? artistName : null}
@@ -117,7 +117,7 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 			</div>
 			<img
 				className={styles.albumArtwork}
-				src={albumArtwork  && !queueIsEmpty ? albumArtwork  : placeholder_album}
+				src={albumArtwork && !queueIsEmpty ? albumArtwork : placeholder_album}
 			/>
 		</div>
 	);
@@ -569,8 +569,6 @@ function WebPlayback(props) {
 			navigate("/400");
 		}
 	}, []);
-
-	console.log(myDeviceId);
 
 	// useEffect(() => {
 	// 	return () => {
