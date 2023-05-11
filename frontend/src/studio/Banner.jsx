@@ -48,6 +48,13 @@ export default function Banner({ id, studio, socket }) {
 		window.location.reload(false);
 	};
 
+	const [controlEnabled, toggleControl] = useState(
+		studio.studioControlHostOnly
+	);
+	const handleControlToggle = () => {
+		toggleControl((current) => !current);
+		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
+	};
 	const users = studio.studioUsers;
 	const isAlone = (users.length <= 1) ? true : false;
 	const isListening = studio.studioIsActive;
@@ -68,6 +75,8 @@ export default function Banner({ id, studio, socket }) {
 			</div>
 			<div className={styles.bannerDropdownKebab}>
 				<DropdownKebab
+					controlEnabled={controlEnabled}
+					handleControlToggle={handleControlToggle}
 					handleDelete={handleDelete}
 					id={id}
 					studio={studio}
@@ -82,6 +91,8 @@ export default function Banner({ id, studio, socket }) {
 }
 
 export function DropdownKebab({
+	controlEnabled,
+	handleControlToggle,
 	handleDelete,
 	isHost,
 	id,
@@ -98,6 +109,7 @@ export function DropdownKebab({
 	const [isNicknameOpen, setIsNicknameOpen] = useState(false);
 	const [isManListOpen, setIsManListOpen] = useState(false);
 	const [isAssignOpen, setIsAssignOpen] = useState(false);
+	
 
 
 	const [isInLeave, setInLeave] = useState(false);
@@ -105,6 +117,7 @@ export function DropdownKebab({
 	const [isInManList, setInManList] = useState(false);
 	const [isInDelete, setInDelete] = useState(false);
 	const [isInAssign, setIsInAssign] = useState(false);
+	const [isInEnable, setIsInEnable] = useState(false);
 	const navigate = useNavigate();
 		
 	const handleClick = (event) => { 
@@ -126,6 +139,9 @@ export function DropdownKebab({
 	const enterAssign = () => {
 		setIsInAssign(true);
 	};
+	const enterEnable = () => {
+		setIsInEnable(true);
+	};
 
 	const leaveLeave = () => {
 		setInLeave(false);
@@ -141,6 +157,9 @@ export function DropdownKebab({
 	};
 	const leaveAssign = () => {
 		setIsInAssign(false);
+	};
+	const leaveEnable = () => {
+		setIsInEnable(false);
 	};
 
 	const handleClose = () => {
@@ -183,11 +202,11 @@ export function DropdownKebab({
 				studioUsers={studioUsers}
 				studio_id={id}
 			/>
-			<AssignNewHostDialog 
+			<AssignNewHostDialog
 				isAssignDialogOpened={isAssignOpen}
 				handleCloseAssignDialog={() => setIsAssignOpen(false)}
 				studioUsers={studioUsers}
-				studio_id={id} 
+				studio_id={id}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmDeleteOpen}
@@ -196,8 +215,8 @@ export function DropdownKebab({
 					handleClose;
 					handleDelete();
 				}} //TO DO: replace with delete functionality
-				message={"Are you sure you want to delete this studio?"}
-				actionText={"Delete"}
+				message={'Are you sure you want to delete this studio?'}
+				actionText={'Delete'}
 			/>
 			<ConfirmationDialog
 				isOpen={isConfirmLeaveOpen}
@@ -206,20 +225,24 @@ export function DropdownKebab({
 					handleClose;
 					handleLeaveStudio();
 				}} //TO DO: replace with leave functionality
-				message={"Are you sure you want to leave this studio?"}
-				actionText={"Leave"}
+				message={'Are you sure you want to leave this studio?'}
+				actionText={'Leave'}
 			/>
 			<NicknameDialog
 				isNicknameDialogOpened={isNicknameOpen}
 				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
 				studioId={id}
-				socket={socket}/>
+				socket={socket}
+			/>
 			<ManageListenersDialog
 				isManListDialogOpened={isManListOpen}
-				handleCloseManListDialog={() => setIsManListOpen(false)} 
-				studio={studio} />
+				handleCloseManListDialog={() => setIsManListOpen(false)}
+				studio={studio}
+			/>
 			<div onClick={handleClick} className={styles.dropdownButton}>
-			<MoreVertRoundedIcon style={{ color: "white", fontSize: "30px" }} />
+				<MoreVertRoundedIcon
+					style={{ color: 'white', fontSize: '30px' }}
+				/>
 			</div>
 			<Menu
 				autoFocus={false}
@@ -235,23 +258,64 @@ export function DropdownKebab({
 				>
 					<DriveFileRenameOutlineRoundedIcon
 						className={styles.icon}
-						style={{ color: isInEdit ? "#B03EEE" : "#757575" }}
+						style={{ color: isInEdit ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Edit Nickname</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: "flex" }}
+					style={{
+						display: !isHost ? 'none' : 'flex',
+					}}
+					className={styles.menu_item}
+					onClick={() => {
+						handleClose;
+						handleControlToggle();
+					}}
+					onMouseEnter={enterEnable}
+					onMouseLeave={leaveEnable}
+				>
+					{!controlEnabled ? (
+						<>
+							<VideogameAssetOffRoundedIcon
+								className={styles.icon}
+								style={{
+									color: isInEnable ? '#B03EEE' : '#757575',
+								}}
+							/>
+							<p className={styles.menu_title}>Disable Control</p>
+						</>
+					) : (
+						<>
+							<VideogameAssetRoundedIcon
+								className={styles.icon}
+								style={{
+									color: isInEnable ? '#B03EEE' : '#757575',
+								}}
+							/>
+							<p className={styles.menu_title}>Enable Control</p>
+						</>
+					)}
+				</MenuItem>
+
+				<MenuItem
+					style={{ display: isHost || !controlEnabled ? 'flex' : 'none' }}
 					className={styles.menu_item}
 					onClick={handleManListOpen}
-					onMouseEnter={enterManList} 
-                    onMouseLeave={leaveManList}>
-					<GroupsIcon className={styles.icon} style={{ color: isInManList ? "#B03EEE" : "#757575" }} />
+					onMouseEnter={enterManList}
+					onMouseLeave={leaveManList}
+				>
+					<GroupsIcon
+						className={styles.icon}
+						style={{ color: isInManList ? '#B03EEE' : '#757575' }}
+					/>
 					<p className={styles.menu_title}>Manage Listeners</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: (!isHost || isAloneInStudio) ? "none" : "flex" }}
+					style={{
+						display: !isHost || isAloneInStudio ? 'none' : 'flex',
+					}}
 					className={styles.menu_item}
 					onClick={handleAssignOpen}
 					onMouseEnter={enterAssign}
@@ -259,13 +323,13 @@ export function DropdownKebab({
 				>
 					<StarRoundedIcon
 						className={styles.icon}
-						style={{ color: isInAssign ? "#B03EEE" : "#757575" }}
+						style={{ color: isInAssign ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Assign a New Host</p>
 				</MenuItem>
 
 				<MenuItem
-					style={{ display: isAloneInStudio ? "none" : "flex" }}
+					style={{ display: isAloneInStudio ? 'none' : 'flex' }}
 					className={styles.menu_item}
 					onClick={isHost ? handleLeaveOpen : handleLeaveConfirmation}
 					onMouseEnter={enterLeave}
@@ -273,13 +337,13 @@ export function DropdownKebab({
 				>
 					<ExitToAppRoundedIcon
 						className={styles.icon}
-						style={{ color: isInLeave ? "#B03EEE" : "#757575" }}
+						style={{ color: isInLeave ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Leave Studio</p>
 				</MenuItem>
-				
+
 				<MenuItem
-					style={{ display: isHost ? "flex" : "none" }}
+					style={{ display: isHost ? 'flex' : 'none' }}
 					className={styles.menu_item}
 					onClick={handleConfirmDeleteOpen}
 					onMouseEnter={enterDelete}
@@ -287,13 +351,11 @@ export function DropdownKebab({
 				>
 					<GroupRemoveRoundedIcon
 						className={styles.icon}
-						style={{ color: isInDelete ? "#B03EEE" : "#757575" }}
+						style={{ color: isInDelete ? '#B03EEE' : '#757575' }}
 					/>
 					<p className={styles.menu_title}>Delete Studio</p>
 				</MenuItem>
-
 			</Menu>
 		</div>
-	
-	)};
+	);};
 
