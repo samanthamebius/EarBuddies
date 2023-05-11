@@ -289,7 +289,7 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
 	if (!studio) {
 		return res.status(404).json({ msg: "Studio not found" });
 	}
-	const user = await getUser(username);
+	const user = await getUser(JSON.parse(username));
 	if (!user) {
 		return res.status(404).json({ msg: "User not found" });
 	}
