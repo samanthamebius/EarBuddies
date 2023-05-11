@@ -95,6 +95,7 @@
     margin: 4px;
     border-radius: 4px;
     border: solid 2px white;
+    object-fit: cover;
 }
 
 .avatarOption:hover {

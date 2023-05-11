@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Slider from "@mui/material/Slider";
 import styles from "./StudioPage.module.css";
 import Box from "@mui/material/Box";
@@ -9,14 +9,16 @@ import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
 import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
 import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
 import VolumeOffRoundedIcon from "@mui/icons-material/VolumeOffRounded";
-import placeholder_album from "../assets/now_playing/placeholder_ablum.png";
+import placeholder_album from "../assets/now_playing/placeholder_album.png";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
+let songNumber = 0;
 
 const StyledSlider = styled(Slider)({
     color: "#ffffff",
@@ -39,54 +41,87 @@ const StyledSlider = styled(Slider)({
     },
 });
 
-function SongInfo() {
+function SongInfo({ socket, studio, queueIsEmpty }) {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const [songTitle, setSongTitle] = useState('');
-    const [artistName, setArtistName] = useState('');
-    const [artistImg, setArtistImg] = useState('');
-    const [albumArtwork, setAlbumArtwork] = useState('');
-
+    const [songTitle, setSongTitle] = useState("");
+    const [artistName, setArtistName] = useState("");
+    const [artistImg, setArtistImg] = useState("");
+    const [albumArtwork, setAlbumArtwork] = useState("");
 
     useEffect(() => {
         const fetchSongInfo = async () => {
             const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-            if (track.data.item.type === "episode") {
+            if (track.data?.item?.type === "episode") {
                 setSongTitle(track.data.item.name);
                 setAlbumArtwork(track.data.item.images[0].url);
                 setArtistName(track.data.item.show.name);
                 setArtistImg(null);
             } else {
-                setSongTitle(track.data.item.name);
-                setAlbumArtwork(track.data.item.album.images[0].url);
-                setArtistName(track.data.item.artists[0].name);
-                const artist_id = track.data.item.artists[0].id;
-                const artist = await axios.get(`${BASE_URL}/api/spotify/artist/${artist_id}`);
-                setArtistImg(artist.data.images[0].url);
+                setSongTitle(track.data?.item?.name);
+                setAlbumArtwork(track.data?.item?.album.images[0].url);
+                setArtistName(track.data?.item?.artists[0].name);
+                // const artist_id = track.data?.item?.artists[0].id;
+                // if (artist_id) {
+                // 	const artist = await axios.get(
+                // 		`${BASE_URL}/api/spotify/artist/${artist_id}`
+                // 	);
+                // 	setArtistImg(artist.data.images[0].url);
+                // }
             }
-        }
+
+            socket.emit("send_currently_playing", {
+                room: studio._id,
+                track: track.data.item,
+            });
+        };
         fetchSongInfo();
 
+        // CHANGE THIS POLLING BACK
         // Polling mechanism to update song info
-        const interval = setInterval(fetchSongInfo, 1000);
+        const interval = setInterval(fetchSongInfo, 5000);
 
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
+    }, [songTitle, songNumber]);
 
+    // send the now playing song to chat only when it changes
+    useEffect(() => {
+        if (songTitle !== "") {
+            socket.emit("send_to_chat_currently_playing", {
+                room: studio._id,
+                trackTitle: songTitle,
+            });
+        }
     }, [songTitle]);
 
     return (
         <div className={styles.songSection}>
-            <h3 className={styles.song} style={{ visibility: songTitle ? "visible" : "hidden" }}>Test</h3>
-            <div className={styles.artist} >
-                <img style={{ visibility: artistImg ? "visible" : "hidden" }} className={styles.artistImg} src={artistImg} />
-                <div style={{ visibility: artistName ? "visible" : "hidden" }} className={styles.artistName}>{artistName ? artistName : null}</div>
+            <h3
+                className={styles.song}
+                style={{ visibility: songTitle && !queueIsEmpty ? "visible" : "hidden" }}
+            >
+                {songTitle}
+            </h3>
+            <div className={styles.artist}>
+                <img
+                    style={{ visibility: artistImg && !queueIsEmpty ? "visible" : "hidden" }}
+                    className={styles.artistImg}
+                    src={artistImg}
+                />
+                <div
+                    style={{ visibility: artistName && !queueIsEmpty ? "visible" : "hidden" }}
+                    className={styles.artistName}
+                >
+                    {artistName ? artistName : null}
+                </div>
             </div>
-            <img className={styles.albumArtwork} src={albumArtwork ? albumArtwork : placeholder_album} />
+            <img
+                className={styles.albumArtwork}
+                src={albumArtwork && !queueIsEmpty ? albumArtwork : placeholder_album}
+            />
         </div>
     );
 }
-
-
 
 export function VolumeSlider({ player }) {
     const [value, setValue] = useState(30);
@@ -111,7 +146,7 @@ export function VolumeSlider({ player }) {
         if (player) {
             player.setVolume(value / 100);
         }
-    }
+    };
 
     return (
         <div className={styles.volume}>
@@ -147,34 +182,33 @@ export function VolumeSlider({ player }) {
     );
 }
 
-export function TimeSlider({ player }) {
+export function TimeSlider({ player, queueIsEmpty }) {
     const [duration, setDuration] = useState(0);
     const [position, setPosition] = useState(0);
 
-    useEffect(() => {
-        const fetchDuration = async () => {
-            const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-            setDuration(Math.round(track.data.item.duration_ms / 1000));
-        }
-        fetchDuration();
-    }, []);
+    // PUT THIS BACK IN
+    // useEffect(() => {
+    // 	const fetchDuration = async () => {
+    // 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+    // 		setDuration(Math.round(track.data.item.duration_ms / 1000));
+    // 	};
+    // 	fetchDuration();
+    // }, []);
 
-    useEffect(() => {
-        const fetchPosition = async () => {
-            axios
-                .get(`${BASE_URL}/api/spotify/songinfo`)
-                .then((response) => {
-                    setPosition(Math.round(response.data.progress_ms / 1000));
-                });
-        };
-        fetchPosition();
+    // useEffect(() => {
+    // 	const fetchPosition = async () => {
+    // 		axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
+    // 			setPosition(Math.round(response.data.progress_ms / 1000));
+    // 		});
+    // 	};
+    // 	fetchPosition();
 
-        // Polling mechanism to continuously update position
-        const interval = setInterval(fetchPosition, 1000);
+    // 	// Polling mechanism to continuously update position
+    // 	const interval = setInterval(fetchPosition, 1000);
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(interval);
-    }, []);
+    // 	// Cleanup interval on component unmount
+    // 	return () => clearInterval(interval);
+    // }, []);
 
     const TinyText = styled(Typography)({
         fontSize: "0.75rem",
@@ -208,6 +242,7 @@ export function TimeSlider({ player }) {
                 max={duration}
                 color="secondary"
                 onChange={handleChange}
+                style={{ pointerEvents: queueIsEmpty ? "none" : "auto" }}
             />
             <Box
                 sx={{
@@ -232,17 +267,22 @@ export function TimeSlider({ player }) {
     );
 }
 
-function ControlPanel({ deviceId, studio, player }) {
+function ControlPanel(props) {
+    const { studio, player, socket, queueIsEmpty } = props;
     const [isPlaying, setPlaying] = useState(false);
     const navigate = useNavigate();
+    const { myDeviceId } = useContext(AppContext);
+    const [isInPrevious, setInPrevious] = useState(false);
+    const [isInPause, setInPause] = useState(false);
+    const [isInPlay, setInPlay] = useState(false);
+    const [isInNext, setInNext] = useState(false);
 
-    function spotifyPlayer({ studio, deviceId }) {
-        console.log("playing in " + studio);
+    function spotifyPlayer(studio, myDeviceId) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/play`, {
-                    uri: "spotify:playlist:" + studio.studioPlaylist,
-                    deviceId: deviceId,
+                    uri: "spotify:playlist:" + studio?.studioPlaylist,
+                    deviceId: myDeviceId,
                 })
                 .then((response) => {
                     console.log(response);
@@ -256,11 +296,11 @@ function ControlPanel({ deviceId, studio, player }) {
         }
     }
 
-    function spotifyPauser({ deviceId }) {
+    function spotifyPauser(myDeviceId) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/pause`, {
-                    deviceId: deviceId,
+                    deviceId: myDeviceId,
                 })
                 .then((response) => {
                     console.log(response);
@@ -274,91 +314,214 @@ function ControlPanel({ deviceId, studio, player }) {
         }
     }
 
-    function spotifyNext(deviceId, studio) {
+    function spotifyNext(myDeviceId, studio) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/next`, {
-                    deviceId: deviceId,
+                    deviceId: myDeviceId,
                     studio: studio,
                 })
                 .then((response) => {
                     console.log(response);
                 })
                 .catch((error) => {
-                    localStorage.removeItem("access_token");
-                    localStorage.removeItem("refresh_token");
-                    localStorage.removeItem("expires_in");
-                    localStorage.removeItem("current_user_id");
-                    navigate("/login");
-                    return <p>Could not play next track</p>;
+                    navigate("/400");
                 });
         } catch (error) {
             console.log(error);
+            navigate("/400");
         }
     }
 
-    function spotifyPrevious(deviceId) {
+    function spotifyPrevious(myDeviceId) {
         try {
             axios
                 .put(`${BASE_URL}/api/spotify/previous`, {
-                    deviceId: deviceId,
+                    deviceId: myDeviceId,
                 })
                 .then((response) => {
                     console.log(response);
                 })
                 .catch((error) => {
-                    localStorage.removeItem("access_token");
-                    localStorage.removeItem("refresh_token");
-                    localStorage.removeItem("expires_in");
-                    localStorage.removeItem("current_user_id");
-                    navigate("/login");
-                    return <p>Could not play previous track</p>;
+                    navigate("/400");
                 });
         } catch (error) {
             console.log(error);
+            navigate("/400");
         }
     }
 
-    function playButton(studio, deviceId) {
-        console.log(deviceId);
-        setPlaying(!isPlaying);
-        spotifyPlayer({ studio, deviceId });
+    console.log(studio);
+
+    function playButton(studio) {
+        songNumber++;
+
+        socket.emit("send_play_song", {
+            room: studio._id,
+            isPlaying: true,
+            studio: studio,
+        });
     }
 
-    function pauseButton(deviceId) {
-        console.log(deviceId);
-        setPlaying(!isPlaying);
-        spotifyPauser({ deviceId });
+    function pauseButton(studio) {
+        songNumber++;
+
+        socket.emit("send_pause_song", {
+            room: studio._id,
+            isPlaying: false,
+        });
     }
+
+    function previousButton(studio) {
+        songNumber++;
+
+        socket.emit("send_previous_song", {
+            room: studio._id,
+        });
+    }
+
+    function skipButton(studio) {
+        songNumber++;
+
+        socket.emit("send_skip_song", {
+            room: studio._id,
+            studio: studio,
+        });
+    }
+
+    // socket is listening to when a song should be played
+    useEffect(() => {
+        socket.on("receive_play_song", (data) => {
+            const { isPlaying, studio } = data;
+            if (Object.keys(myDeviceId).length !== 0) {
+                setPlaying(isPlaying);
+                spotifyPlayer(studio, myDeviceId);
+            }
+            console.log("received play");
+        });
+    }, [socket, myDeviceId]);
+
+    // socket is listening to when a song should be paused
+    useEffect(() => {
+        socket.on("receive_pause_song", (data) => {
+            const { isPlaying } = data;
+            if (Object.keys(myDeviceId).length !== 0) {
+                setPlaying(isPlaying);
+                spotifyPauser(myDeviceId);
+            }
+            console.log("received pause");
+        });
+    }, [socket, myDeviceId]);
+
+    // socket is listening to when a song should be skipped
+    useEffect(() => {
+        socket.on("receive_previous_song", () => {
+            if (Object.keys(myDeviceId).length !== 0) {
+                spotifyPrevious(myDeviceId);
+            }
+            console.log("received previous");
+        });
+    }, [socket, myDeviceId]);
+
+    // socket is listening to when a song should go back to the previous song
+    useEffect(() => {
+        socket.on("receive_skip_song", (data) => {
+            const { studio } = data;
+            if (Object.keys(myDeviceId).length !== 0) {
+                spotifyNext(myDeviceId, studio);
+            }
+            console.log("received skip");
+        });
+    }, [socket, myDeviceId]);
+
+    const enterPrevious = () => {
+        setInPrevious(true);
+    };
+
+    const enterPause = () => {
+        setInPause(true);
+    };
+
+    const enterPlay = () => {
+        setInPlay(true);
+    };
+
+    const enterNext = () => {
+        setInNext(true);
+    };
+
+    const leavePrevious = () => {
+        setInPrevious(false);
+    };
+
+    const leavePause = () => {
+        setInPause(false);
+    };
+
+    const leavePlay = () => {
+        setInPlay(false);
+    };
+
+    const leaveNext = () => {
+        setInNext(false);
+    };
 
     return (
         <div className={styles.controlPanel}>
             <div className={styles.playbackCntrls}>
                 <SkipPreviousRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }}
-                    onClick={() => spotifyPrevious(deviceId)}
+                    style={{
+                        fontSize: "40px",
+                        color: queueIsEmpty || isInPrevious ? "#e7bcf7" : "white",
+                        pointerEvents: queueIsEmpty ? "none" : "auto",
+                    }}
+                    onClick={() => previousButton(studio)}
+                    onMouseEnter={enterPrevious}
+                    onMouseLeave={leavePrevious}
+                    disabled={queueIsEmpty}
                 />
                 {!isPlaying ? (
                     <PlayCircleFilledRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
-                        onClick={() => playButton(studio, deviceId)}
+                        style={{
+                            fontSize: "40px",
+                            color: queueIsEmpty || isInPlay ? "#e7bcf7" : "white",
+                            pointerEvents: queueIsEmpty ? "none" : "auto",
+                        }}
+                        onClick={() => playButton(studio)}
+                        onMouseEnter={enterPlay}
+                        onMouseLeave={leavePlay}
+                        disabled={queueIsEmpty}
                     />
                 ) : (
                     <PauseCircleRoundedIcon
                         sx={{ "&:hover": { cursor: "pointer" } }}
-                        style={{ color: "white", fontSize: "40px" }}
-                        onClick={() => pauseButton(deviceId)}
+                        style={{
+                            fontSize: "40px",
+                            color: queueIsEmpty || isInPause ? "#e7bcf7" : "white",
+                            pointerEvents: queueIsEmpty ? "none" : "auto",
+                        }}
+                        onClick={() => pauseButton(studio)}
+                        onMouseEnter={enterPause}
+                        onMouseLeave={leavePause}
+                        disabled={queueIsEmpty}
                     />
                 )}
                 <SkipNextRoundedIcon
                     sx={{ "&:hover": { cursor: "pointer" } }}
-                    style={{ color: "white", fontSize: "40px" }}
-                    onClick={() => spotifyNext(deviceId, studio)}
+                    style={{
+                        fontSize: "40px",
+                        color: queueIsEmpty || isInNext ? "#e7bcf7" : "white",
+                        pointerEvents: queueIsEmpty ? "none" : "auto",
+                    }}
+                    onClick={() => skipButton(studio)}
+                    onMouseEnter={enterNext}
+                    onMouseLeave={leaveNext}
+                    disabled={queueIsEmpty}
                 />
             </div>
-            <TimeSlider player={player} />
+            <TimeSlider player={player} queueIsEmpty={queueIsEmpty} />
             <VolumeSlider player={player} />
         </div>
     );
@@ -366,8 +529,9 @@ function ControlPanel({ deviceId, studio, player }) {
 
 function WebPlayback(props) {
     const [player, setPlayer] = useState({});
-    const [myDeviceId, setDeviceId] = useState({});
-    const { studio } = props;
+    const { myDeviceId, setMyDeviceId } = useContext(AppContext);
+    const { studio, socket, token, queueIsEmpty } = props;
+    navigate = useNavigate();
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -380,9 +544,9 @@ function WebPlayback(props) {
         try {
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const player = new window.Spotify.Player({
-                    name: "Ear Buddies",
+                    name: "EarBuddies",
                     getOAuthToken: (cb) => {
-                        cb(props.token);
+                        cb(token);
                     },
                     volume: 0.5,
                 });
@@ -391,7 +555,7 @@ function WebPlayback(props) {
 
                 player.addListener("ready", ({ device_id }) => {
                     console.log("Ready with Device ID", device_id);
-                    setDeviceId(device_id);
+                    setMyDeviceId(device_id);
                 });
 
                 player.addListener("not_ready", ({ device_id }) => {
@@ -400,23 +564,33 @@ function WebPlayback(props) {
 
                 player.connect();
             };
-        }
-        catch (error) {
+        } catch (error) {
             console.log(error);
             navigate("/400");
         }
-
-
     }, []);
 
     console.log(myDeviceId);
-    navigate = useNavigate();
+
+    // useEffect(() => {
+    // 	return () => {
+    // 		window.location.reload(false);
+    // 	};
+    // }, []);
 
     return (
         <>
-            <div className={styles.webPlayback}>
-                <SongInfo />
-                <ControlPanel deviceId={myDeviceId} studio={studio} player={player} />
+            <div className="container">
+                <div className="main-wrapper">
+                    <SongInfo socket={socket} studio={studio} queueIsEmpty={queueIsEmpty} />
+                    <ControlPanel
+                        deviceId={myDeviceId}
+                        studio={studio}
+                        player={player}
+                        socket={socket}
+                        queueIsEmpty={queueIsEmpty}
+                    />
+                </div>
             </div>
         </>
     );

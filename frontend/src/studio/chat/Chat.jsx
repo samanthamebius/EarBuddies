@@ -13,34 +13,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { AppContext } from "../../AppContextProvider";
 import axios from "axios";
-
-// DELETE this when the real data goes in
-const mockStudios = [
-	{
-		id: 1,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 2,
-		studioName: `smeb's studio`,
-		studioIsActive: true,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 3,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-	{
-		id: 4,
-		studioName: `smeb's studio`,
-		studioIsActive: false,
-		studioGenres: ["rock", "pop", "jazz"],
-	},
-];
+import QuickAddPill from "./QuickAddPill";
 
 const StyledTextField = styled(TextField)({
 	"& .MuiInputBase-root": {
@@ -60,6 +33,7 @@ export default function Chat(props) {
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyMessage, setReplyMessage] = useState("");
 	const [nickname, setNickname] = useState("");
+	const [nowPlaying, setNowPlaying] = useState({});
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
 		: pinnedMessages.slice(0, 1);
@@ -122,6 +96,36 @@ export default function Chat(props) {
 		});
 	}, [socket]);
 
+	// continously set the live messages received from currently playing
+	useEffect(() => {
+		socket.on("receive_user_currently_playing_song", (trackTitle) => {
+			console.log(trackTitle);
+			if (trackTitle) {
+				const messageId = uuid();
+				setMessages((messages) => [
+					...messages,
+					{
+						id: messageId,
+						username: "chat_bot",
+						displayName: "chat_bot",
+						message: `Now playing: ${trackTitle}`,
+						isReply: false,
+						replyMessage: "",
+					},
+				]);
+				// save the message to DB
+				axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
+					id: messageId,
+					username: "chat_bot",
+					displayName: "chat_bot",
+					message: `Now playing: ${trackTitle}`,
+					isReply: false,
+					replyMessage: "",
+				});
+			}
+		});
+	}, [socket]);
+
 	// continously set the pinned messages received
 	useEffect(() => {
 		socket.on("receive_pinned_message", (data) => {
@@ -154,6 +158,20 @@ export default function Chat(props) {
 		});
 	});
 
+	// continously get the currently playing song to display quick add options
+	useEffect(() => {
+		socket.on("receive_currently_playing", (data) => {
+			if (data) {
+				setNowPlaying({
+					type: data?.type,
+					name: data?.name,
+					artist: `${data?.type === "track" ? data?.artists[0]?.name : ""}`,
+					album: `${data?.type === "track" ? data?.album?.name : ""}`,
+				});
+			}
+		});
+	}, [socket]);
+
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
@@ -177,7 +195,7 @@ export default function Chat(props) {
 				replyMessage,
 			});
 
-			// save the image to DB
+			// save the message to DB
 			await axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 				id: messageId,
 				username: username,
@@ -238,50 +256,65 @@ export default function Chat(props) {
 					<div ref={messagesRef}></div>
 				</div>
 			</div>
-			<div
-				className={styles.chatInput}
-				onClick={() => textInput.current.focus()}
-			>
-				<div className={styles.inputContent}>
-					{replyMessage !== "" && (
-						<div className={styles.replyMessage}>
-							<p className={styles.replyMessageText}>{replyMessage}</p>
-							<CloseRoundedIcon
-								fontSize="small"
-								className={styles.dismissReply}
-								onClick={() => setReplyMessage("")}
-							/>
-						</div>
-					)}
-					<StyledTextField
-						inputRef={textInput}
-						variant="standard"
-						multiline
-						placeholder="Message ..."
-						value={message}
-						onChange={(e) => setMessage(e.target.value)}
-						onKeyDown={(event) => {
-							if (event.key === "Enter") {
-								event.preventDefault();
-								handleSendMessage();
-							}
+			<div className={styles.chatInputContainer}>
+				<div
+					className={styles.chatInput}
+					onClick={() => textInput.current.focus()}
+				>
+					<div className={styles.inputContent}>
+						{replyMessage !== "" && (
+							<div className={styles.replyMessage}>
+								<p className={styles.replyMessageText}>{replyMessage}</p>
+								<CloseRoundedIcon
+									fontSize="small"
+									className={styles.dismissReply}
+									onClick={() => setReplyMessage("")}
+								/>
+							</div>
+						)}
+						<StyledTextField
+							inputRef={textInput}
+							variant="standard"
+							multiline
+							placeholder="Message ..."
+							value={message}
+							onChange={(e) => setMessage(e.target.value)}
+							onKeyDown={(event) => {
+								if (event.key === "Enter") {
+									event.preventDefault();
+									handleSendMessage();
+								}
+							}}
+							InputProps={{
+								disableUnderline: true,
+								style: { color: "#797979" },
+							}}
+						/>
+					</div>
+					<SendRoundedIcon
+						onClick={() => handleSendMessage()}
+						style={{
+							opacity: `${message !== "" ? "0.5" : "0.2"}`,
+							padding: `${replyMessage !== "" ? "14px" : "12px"} 10px 0 0`,
+							margin: "0",
+							cursor: "pointer",
+							position: "sticky",
+							top: "0",
+							justifySelf: "end",
 						}}
-						InputProps={{ disableUnderline: true, style: { color: "#797979" } }}
+						fontSize="small"
 					/>
 				</div>
-				<SendRoundedIcon
-					onClick={() => handleSendMessage()}
-					style={{
-						opacity: `${message !== "" ? "0.5" : "0.2"}`,
-						padding: `${replyMessage !== "" ? "14px" : "12px"} 10px 0 0`,
-						margin: "0",
-						cursor: "pointer",
-						position: "sticky",
-						top: "0",
-						justifySelf: "end",
-					}}
-					fontSize="small"
-				/>
+				<div className={styles.pillContainer}>
+					<b className={styles.quickAddText}>Quick Add:</b>
+					{Object.keys(nowPlaying).length > 0 && (
+						<QuickAddPill
+							nowPlaying={nowPlaying}
+							message={message}
+							setMessage={setMessage}
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

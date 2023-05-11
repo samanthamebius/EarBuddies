@@ -1,18 +1,16 @@
 import { TextField, Button, Dialog, DialogActions, DialogContent, Tooltip, List } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './CreateStudioDialog.module.css';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FileDropZone from "./FileDropZone";
 import ControlSwitch from "./ControlSwitch";
-import SearchBar from "../shared/SearchBar";
+import AddListenersBlock from "../shared/AddListenersBlock";
 import SelectedGenreTag from "./SelectedGenreTag";
 import UnselectedGenreTag from "./UnselectedGenreTag";
 import { styled } from '@mui/material/styles';
 import { tooltipClasses } from '@mui/material/Tooltip';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ListItem, ListItemText, ListItemAvatar, Avatar, Menu, MenuItem } from "@mui/material";
-import ClearRounded from "@mui/icons-material/ClearRounded";
 
 function useStudioPost() {
   const postStudio = async (
@@ -89,8 +87,8 @@ function SwitchWithTooltip({ checked, onChange }) {
   }));
 
   const title = checked
-    ? 'Only you can queue, skip, and pause songs.'
-    : 'Other users can queue, skip, and pause songs.';
+    ? 'Only you can manage listeners'
+    : 'Other users can add listeners to the studio';
 
   return (
     <ToolTip title={title} placement="right-end" arrow>
@@ -109,6 +107,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
   const [isHostOnly, setIsHostOnly] = useState(false);
   const [genreInput, setGenreInput] = useState('');
   const [studioNameInput, setStudioNameInput] = useState('');
+  const [listeners, setNewStudioListeners] = useState([]);
   const [genres, setGenres] = useState([
     { name: "Rap", isSelected: false },
     { name: "Rock", isSelected: false },
@@ -120,14 +119,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     { name: "Pop", isSelected: false }
   ]);
   const [file, setFile] = useState(null);
-  const [listenerSearchResults, setListenerSearchResults] = useState([]);
-  const [displayedSearchResults, setDisplayedSearchResults] = useState([]);
-  const [listeners, setListeners] = useState([]);
-
-  useEffect(() => {
-    const difference = listenerSearchResults.filter(x => !listeners.some(y => y._id === x._id));
-    setDisplayedSearchResults(difference);
-  }, [listenerSearchResults, listeners])
 
   const handleFileChange = (selectedFile) => { setFile(selectedFile); };
 
@@ -165,7 +156,8 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     } else {
       setIsStudioNameErrorMessage(false);
       const selecetedGenres = getSelectedGenres();
-      postStudio(navigate, studioNameInput, selecetedGenres, file, [], isHostOnly);
+      const listenerUsernames = getListenerUsernames();
+      postStudio(navigate, studioNameInput, selecetedGenres, file, listenerUsernames, isHostOnly);
     }
   }
 
@@ -173,6 +165,12 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
     const selectedGenres = genres.filter(obj => obj.isSelected);
     const selectedGenreNames = selectedGenres.map(obj => obj.name);
     return selectedGenreNames;
+  }
+
+  function getListenerUsernames() {
+    const usernames = listeners.map(listener => listener.username);
+    console.log(usernames);
+    return usernames;
   }
 
   const handleClose = () => { handleCloseDialog(false) };
@@ -190,24 +188,6 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
       },
     },
   });
-
-  function addListener(listener) {
-    const isFound = listeners.some(obj => {
-      if (obj === listener) {
-        return true;
-      }
-    });
-
-    if (!isFound) {
-      setListeners(oldListeners => [...oldListeners, listener]);
-    }
-  }
-
-  function removeListener(listener) {
-    setListeners((oldListeners) =>
-      oldListeners.filter((oldListener) => oldListener !== listener)
-    );
-  }
 
   return (
     <div>
@@ -245,7 +225,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               <TextField
                 color="secondary"
                 margin="dense"
-                id="name"
+                id="genres"
                 label="Add your own genres ..."
                 type="text"
                 fullWidth
@@ -267,66 +247,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
             <h2 className={styles.sectionHeading}>Only I Have Control</h2>
             <SwitchWithTooltip checked={isHostOnly} onChange={handleSwitchToggle} />
           </div>
-
-          {/* Add Listeners */}
-          <h2 className={styles.sectionHeading}>Add Listeners</h2>
-          <SearchBar
-            searchType={"users"}
-            label={"Search using Spotify username ..."}
-            studioId={""}
-            setResults={setListenerSearchResults}
-            studio={""} />
-
-          {/* Map search results */}
-          {displayedSearchResults.length > 0 ? <List className={styles.searchResults}>
-            {displayedSearchResults.map((listener, i) => (
-              <ListItem
-                key={i}
-                secondaryAction={
-                  <Button
-                    edge="end"
-                    aria-label="more options"
-                    sx={{ fontWeight: 600 }}
-                    variant="contained"
-                    onClick={() => addListener(listener)}>
-                    Add
-                  </ Button>
-                }>
-                <ListItemAvatar>
-                  <Avatar>
-                    <img className={styles.image} src={listener.profilePicture} />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={listener.userDisplayName} />
-              </ListItem>
-            ))}
-          </List> : null}
-
-          {/* Map Listeners */}
-          {listeners.length > 0 ?
-            <>
-              <h2 className={styles.sectionHeading}>Listeners</h2>
-              <List className={styles.listeners}>
-                {listeners.map((listener, i) => (
-                  <ListItem
-                    key={i}
-                    secondaryAction={
-                      <ClearRounded
-                        edge="end"
-                        style={{ color: "#757575" }}
-                        className={styles.clearIcon}
-                        onClick={() => removeListener(listener)} />
-                    }>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <img className={styles.image} src={listener.profilePicture} />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={listener.userDisplayName} />
-                  </ListItem>
-                ))}
-              </List>
-            </> : null}
+          
+          <AddListenersBlock studio={null} setNewStudioListeners={setNewStudioListeners}/>
+          
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }} className={styles.buttons}>
           <Button sx={{ fontWeight: 600, color: '#757575' }} variant="contained" className={styles.cancelButton} onClick={handleClose}>Cancel</Button>
