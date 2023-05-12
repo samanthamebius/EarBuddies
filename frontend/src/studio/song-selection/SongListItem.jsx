@@ -165,7 +165,7 @@ function SongListItem(props) {
 				onClick={type === 'search' ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{type === 'queue' && (
+						{isHost && type === 'queue' && (
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}

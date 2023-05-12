@@ -41,22 +41,30 @@ function VolumeSlider({ player, isHost }) {
 					alignItems='center'>
 					{isMute ? (
 						<VolumeOffRoundedIcon
-							sx={{ '&:hover': { cursor: 'pointer' } }}
-							style={{ color: 'white', fontSize: '25px' }}
+							sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
+							style={{
+								color: isHost ? 'white' : '#e7bcf7',
+								fontSize: '25px',
+							}}
 							className={styles.controlBtn}
-							onClick={handleUnmute}
+							onClick={isHost ? () => handleUnmute() : undefined}
+							disabled={!isHost}
 						/>
 					) : (
 						<VolumeUpRoundedIcon
-							sx={{ '&:hover': { cursor: 'pointer' } }}
-							style={{ color: 'white', fontSize: '25px' }}
+							sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
+							style={{
+								color: isHost ? 'white' : '#e7bcf7',
+								fontSize: '25px',
+							}}
 							className={styles.controlBtn}
-							onClick={handleMute}
+							onClick={isHost ? () => handleMute() : undefined}
+							disabled={!isHost}
 						/>
 					)}
 					<StyledSlider
 						size='small'
-						disabled={isMute}
+						disabled={isMute || !isHost}
 						className={styles.slider}
 						aria-label='Volume'
 						value={value}

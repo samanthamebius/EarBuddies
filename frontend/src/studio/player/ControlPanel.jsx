@@ -189,55 +189,60 @@ function ControlPanel(props) {
 		<div className={styles.controlPanel}>
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
-					sx={{ '&:hover': { cursor: 'pointer' } }}
+					sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
 					style={{
 						fontSize: '40px',
-						color: queueIsEmpty || isInPrevious ? '#e7bcf7' : 'white',
+						color:
+							queueIsEmpty || isInPrevious || !isHost ? '#e7bcf7' : 'white',
 						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
-					onClick={() => previousButton()}
+					onClick={isHost ? () => previousButton() : undefined}
 					onMouseEnter={enterPrevious}
 					onMouseLeave={leavePrevious}
-					disabled={queueIsEmpty}
+					disabled={queueIsEmpty || !isHost}
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
-						sx={{ '&:hover': { cursor: 'pointer' } }}
+						sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
 						style={{
 							fontSize: '40px',
-							color: queueIsEmpty || isInPlay ? '#e7bcf7' : 'white',
+							color:
+								queueIsEmpty || isInPlay || !isHost ? '#e7bcf7' : 'white',
 							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
-						onClick={() => playButton(studio)}
+						onClick={isHost ? () => playButton(studio) : undefined}
 						onMouseEnter={enterPlay}
 						onMouseLeave={leavePlay}
-						disabled={queueIsEmpty}
+						disabled={queueIsEmpty || !isHost}
 					/>
 				) : (
 					<PauseCircleRoundedIcon
-						sx={{ '&:hover': { cursor: 'pointer' } }}
+						sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
 						style={{
 							fontSize: '40px',
-							color: queueIsEmpty || isInPause ? '#e7bcf7' : 'white',
+							color:
+								queueIsEmpty || isInPause || !isHost
+									? '#e7bcf7'
+									: 'white',
 							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
-						onClick={() => pauseButton(studio)}
+						onClick={isHost ? () => pauseButton(studio) : undefined}
 						onMouseEnter={enterPause}
 						onMouseLeave={leavePause}
-						disabled={queueIsEmpty}
+						disabled={queueIsEmpty || !isHost}
 					/>
 				)}
 				<SkipNextRoundedIcon
-					sx={{ '&:hover': { cursor: 'pointer' } }}
+					sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
 					style={{
 						fontSize: '40px',
-						color: queueIsEmpty || isInNext ? '#e7bcf7' : 'white',
+						color: queueIsEmpty || isInNext || !isHost ? '#e7bcf7' : 'white',
 						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
-					onClick={() => skipButton(studio)}
+					onClick={isHost ? () => skipButton(studio) : undefined}
 					onMouseEnter={enterNext}
 					onMouseLeave={leaveNext}
-					disabled={queueIsEmpty}
+					disabled={queueIsEmpty || !isHost}
 				/>
 			</div>
 			<TimeSlider

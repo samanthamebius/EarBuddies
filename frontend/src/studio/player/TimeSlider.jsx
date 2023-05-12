@@ -65,8 +65,9 @@ export function TimeSlider(props) {
 				step={1}
 				max={duration}
 				color='secondary'
-				onChange={handleChange}
+				onChange={isHost ? () => handleChange : undefined}
 				style={{ pointerEvents: queueIsEmpty ? 'none' : 'auto' }}
+				disabled={!isHost}
 			/>
 			<Box
 				sx={{
