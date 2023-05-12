@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import {
 	getChat,
 	createChat,
@@ -9,12 +9,17 @@ import {
 	removePinnedMessage,
 	addANewReaction,
 	updateReaction,
-} from "../../dao/chat_dao";
+} from '../../dao/chat_dao';
 
 const router = express.Router();
 
-// create a new chat
-router.post("/:id", async (req, res) => {
+/**
+ * @route   POST api/chat/:id
+ * @desc    Create a chat room
+ * @params   id: String
+ * @returns  201 if successful
+ */
+router.post('/:id', async (req, res) => {
 	const { id } = req.params;
 	const dbChat = await getChat(id);
 
@@ -26,15 +31,27 @@ router.post("/:id", async (req, res) => {
 	res.sendStatus(201);
 });
 
-// get all messages in the chat room
-router.get("/all-messages/:id", async (req, res) => {
+/**
+ * @route   GET api/chat/all-messages/:id
+ * @desc    Get all messages from a chat room
+ * @params  id: String
+ * @returns 200 if successful
+ */
+router.get('/all-messages/:id', async (req, res) => {
 	const { id } = req.params;
 	const messages = await getMessages(id);
 	res.status(200).json(messages);
 });
 
-// update message history
-router.put("/new-message/:id", async (req, res) => {
+/**
+ * @route   PUT api/chat/new-message/:id'
+ * @desc    Get new messages and update the chat history
+ * @params  id: String
+ * @body 	message: String
+ * @returns 204 if successful
+ * @throws  404 if unsuccessful
+ */
+router.put('/new-message/:id', async (req, res) => {
 	const { id } = req.params;
 	const message = req.body;
 
@@ -43,8 +60,15 @@ router.put("/new-message/:id", async (req, res) => {
 	res.sendStatus(success ? 204 : 404);
 });
 
-// update pinned message history
-router.put("/pinned-messages/:id", async (req, res) => {
+/**
+ * @route   PUT api/chat/pinned-messages/:id
+ * @desc    Get all pinned messages from a chat room and show them
+ * @params  id: String
+ * @body 	pinnedMessage: Object
+ * @returns 204 if successful
+ * @throws  404 if unsuccessful
+ */
+router.put('/pinned-messages/:id', async (req, res) => {
 	const { id } = req.params;
 	const pinnedMessage = req.body;
 
@@ -53,8 +77,15 @@ router.put("/pinned-messages/:id", async (req, res) => {
 	res.sendStatus(success ? 204 : 404);
 });
 
-// delete pinned message
-router.put("/remove-pinned-message/:id", async (req, res) => {
+/**
+ * @route   PUT api/chat/remove-pinned-message/:id
+ * @desc    Remove a pinned message from a chat room
+ * @params  id: String
+ * @body 	pinnedMessage: Object
+ * @returns 204 if successful
+ * @throws  404 if unsuccessful
+ */
+router.put('/remove-pinned-message/:id', async (req, res) => {
 	const { id } = req.params;
 	const pinnedMessage = req.body;
 
@@ -63,8 +94,16 @@ router.put("/remove-pinned-message/:id", async (req, res) => {
 	res.sendStatus(success ? 204 : 404);
 });
 
-// add a new or update the reaction
-router.put("/new-reaction/:id", async (req, res) => {
+/**
+ * @route   PUT api/chat/new-reaction/:id
+ * @desc    Add a new reaction to a message or update an existing reaction
+ * @params  id: String
+ * @body 	messageId: String
+ * 		 	reaction: String
+ * @returns 204 if successful
+ * @throws  404 if unsuccessful
+ */
+router.put('/new-reaction/:id', async (req, res) => {
 	const { id } = req.params;
 	const { messageId, reaction } = req.body;
 

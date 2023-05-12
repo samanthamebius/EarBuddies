@@ -1,16 +1,34 @@
 import express from 'express';
-import { getSpotifyApi } from '../../dao/spotify_dao';
 import {
+	getSpotifyApi,
 	searchSpotify,
 	getCurrentTrack,
 	getCurrentTrackId,
 	getArtist,
 	getLastPlaylistTrackId,
 	getPlaybackState,
+	addPlaylistTrackAndQueue,
+	getPlaylist,
+	removePlaylistTrack,
+	playSpotify,
+	resumeSpotify,
+	pauseSpotify,
+	skipNext,
+	skipPrevious,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
 
+/**
+ * @route   GET api/spotify/search/:playlist_id/:query
+ * @desc    Search Spotify for tracks or podcasts to add to a playlist based on a query
+ * @params  playlist_id: String
+ * 			query: String
+ * @returns 200 if successful with search results
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/search/:playlist_id/:query', async (req, res) => {
 	try {
 		const { playlist_id, query } = req.params;
@@ -19,7 +37,7 @@ router.get('/search/:playlist_id/:query', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		const results = await searchSpotify(query, thisSpotifyApi, playlist_id);
-		return res.status(200).json(results);
+		res.status(200).json(results);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -29,33 +47,27 @@ router.get('/search/:playlist_id/:query', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/queue
+ * @desc    Add the selected track from search into the playlist queue
+ * @body	playlist_id: String
+ * 			track_id: String
+ * 			type: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/queue', async (req, res) => {
 	try {
 		const { playlist_id, track_id, type } = req.body;
+		// Add tracks to a playlist
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		// Add tracks to a playlist
-		thisSpotifyApi
-			.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
-			.then(
-				function (data) {
-					thisSpotifyApi.addToQueue('spotify:' + type + ':' + track_id).then(
-						function (data) {
-							console.log('Added track to queue!');
-						},
-						function (err) {
-							console.log('Something went wrong!', err);
-						}
-					);
-					console.log('Added tracks to playlist!');
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
-		return res.status(200).json({ msg: 'Added track to playlist' });
+		await addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotifyApi);
+		res.status(200).json({ msg: 'Added track to playlist' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -65,6 +77,15 @@ router.put('/queue', async (req, res) => {
 	}
 });
 
+/**
+ * @route   GET api/spotify/queue/:playlist_id
+ * @desc	Get a playlist from specific id
+ * @params  playlist_id: String
+ * @returns 200 if successful with playlist object
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/queue/:playlist_id', async (req, res) => {
 	try {
 		const { playlist_id } = req.params;
@@ -72,14 +93,8 @@ router.get('/queue/:playlist_id', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		thisSpotifyApi.getPlaylist(playlist_id).then(
-			function (data) {
-				return res.status(200).json(data.body);
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		const playlist = await getPlaylist(playlist_id, thisSpotifyApi);
+		return res.status(200).json(playlist);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -89,6 +104,18 @@ router.get('/queue/:playlist_id', async (req, res) => {
 	}
 });
 
+/**
+ * @route   DELETE api/spotify/queue/:playlist_id/:track_id
+ * @desc    Remove the selected track from the playlist queue
+ * @params  playlist_id: String
+ * 			track_id: String
+ * @body	snapshot_id: String
+ * 			type: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 	try {
 		const { playlist_id, track_id } = req.params;
@@ -98,20 +125,14 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		// Remove tracks from a playlist
-		thisSpotifyApi
-			.removeTracksFromPlaylist(
-				playlist_id,
-				[{ uri: 'spotify:' + type + ':' + track_id }],
-				{ snapshot_id: snapshot_id }
-			)
-			.then(
-				function (data) {
-					return res.status(200).json({ msg: 'Removed track from playlist' });
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+		await removePlaylistTrack(
+			playlist_id,
+			track_id,
+			snapshot_id,
+			type,
+			thisSpotifyApi
+		);
+		res.status(200).json({ msg: 'Removed track from playlist' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -121,6 +142,16 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/play
+ * @desc    Play a playlist on a device - either starts from beginning of playlist or resumes
+ * @body	uri: String
+ * 			deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/play', async (req, res) => {
 	try {
 		const { uri, deviceId } = req.body;
@@ -128,46 +159,13 @@ router.put('/play', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		console.log('PLAYING ON ' + deviceId);
-		// Play a track if not playing already
-		// will need an if statement to check where it finished to pick it up at correct point
-		// ooh or just called with no uri and it will resume
-		console.log(await getPlaybackState(thisSpotifyApi, deviceId));
+		// check if spotify is active - if yes then resume playing if no then play playlist
 		if (await getPlaybackState(thisSpotifyApi, deviceId)) {
-			thisSpotifyApi.play({ device_id: deviceId }).then(
-				function () {
-					thisSpotifyApi.setRepeat('context', { device_id: deviceId }).then(
-						function () {},
-						function (err) {
-							console.log('Something went wrong!', err);
-						}
-					);
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
-			return res.status(200).json({ msg: 'Resuming track' });
+			await resumeSpotify(thisSpotifyApi, deviceId);
+			res.status(200).json({ msg: 'Resuming track' });
 		} else {
-			thisSpotifyApi
-				.play({
-					context_uri: uri,
-					device_id: deviceId,
-					offset: { position: 0 },
-				})
-				.then(
-					function () {
-						thisSpotifyApi.setRepeat('context', { device_id: deviceId }).then(
-							function () {},
-							function (err) {
-								console.log('Something went wrong!', err);
-							}
-						);
-					},
-					function (err) {
-						console.log('Something went wrong!', err);
-					}
-				);
+			await playSpotify(thisSpotifyApi, uri, deviceId);
+			res.status(200).json({ msg: 'Playing Playlist' });
 		}
 	} catch (err) {
 		console.log(err);
@@ -178,23 +176,25 @@ router.put('/play', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/pause
+ * @desc    Pause a playlist on a device
+ * @body	deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/pause', async (req, res) => {
 	try {
 		const { deviceId } = req.body;
-		console.log(deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		// Pause a track if not paused already
-		thisSpotifyApi.pause({ device_id: deviceId }).then(
-			function () {
-				console.log('Paused track!');
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		// Pause whatever the device is playing
+		await pauseSpotify(deviceId, thisSpotifyApi);
+		res.status(200).json({ msg: 'Pausing Spotify' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -204,10 +204,19 @@ router.put('/pause', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/next
+ * @desc    Skip to the next song in the playlist - if last one restart from beginning
+ * @body	deviceId: String
+ * 			studio: Object
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/next', async (req, res) => {
 	try {
 		const { deviceId, studio } = req.body;
-		console.log('device id ' + deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
@@ -216,33 +225,17 @@ router.put('/next', async (req, res) => {
 		//other wise skip to next
 		let currentId = await getCurrentTrackId(thisSpotifyApi);
 		let lastId = await getLastPlaylistTrackId(thisSpotifyApi, studio.studioPlaylist);
-		console.log('current ' + currentId);
-		console.log('last ' + lastId);
 		if (currentId === lastId) {
-			thisSpotifyApi
-				.play({
-					context_uri: 'spotify:playlist:' + studio.studioPlaylist,
-					device_id: deviceId,
-					offset: { position: 0 },
-				})
-				.then(
-					function () {
-						console.log('Playing track!');
-					},
-					function (err) {
-						console.log('Something went wrong!', err);
-					}
-				);
+			await playSpotify(
+				thisSpotifyApi,
+				'spotify:playlist:' + studio.studioPlaylist,
+				deviceId
+			);
+			res.status(200).json({ msg: 'Next restart' });
 		} else {
 			// Skip to next track
-			thisSpotifyApi.skipToNext({ device_id: deviceId }).then(
-				function () {
-					console.log('Skipped to next track!');
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+			await skipNext(thisSpotifyApi, deviceId);
+			res.status(200).json({ msg: 'Skip to next' });
 		}
 	} catch (err) {
 		console.log(err);
@@ -253,23 +246,25 @@ router.put('/next', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/previous
+ * @desc    Go to the previous song in the playlist - if first one restart from beginning
+ * @body	deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/previous', async (req, res) => {
 	try {
 		const { deviceId } = req.body;
-		console.log('device id ' + deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		// Skip to previous track
-		thisSpotifyApi.skipToPrevious({ device_id: deviceId }).then(
-			function () {
-				console.log('Skipped to previous track!');
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		await skipPrevious(thisSpotifyApi, deviceId);
+		res.status(200).json({ msg: 'Skip to previous' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -279,23 +274,54 @@ router.put('/previous', async (req, res) => {
 	}
 });
 
+/**
+ * @route   GET api/spotify/songinfo
+ * @desc    Get info about currently playng track
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/songinfo', async (req, res) => {
 	try {
 		const thisSpotifyApi = getSpotifyApi();
+		if (!thisSpotifyApi) {
+			return res.status(403).json({ msg: 'No Spotify API connection' });
+		}
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
 		res.status(200).json(currentTrack);
 	} catch (err) {
+		console.log(err);
+		if (err.statusCode === 401) {
+			return res.status(401).json({ msg: 'Unauthorized' });
+		}
 		res.status(500).json(err);
 	}
 });
 
+/**
+ * @route   GET api/spotify/artist/:artist_id
+ * @desc    Get info about the artist whose song is currently playing
+ * @params	artist_id: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/artist/:artist_id', async (req, res) => {
 	try {
 		const { artist_id } = req.params;
 		const thisSpotifyApi = getSpotifyApi();
+		if (!thisSpotifyApi) {
+			return res.status(403).json({ msg: 'No Spotify API connection' });
+		}
 		const artist = await getArtist(artist_id, thisSpotifyApi);
 		res.status(200).json(artist);
 	} catch (err) {
+		console.log(err);
+		if (err.statusCode === 401) {
+			return res.status(401).json({ msg: 'Unauthorized' });
+		}
 		res.status(500).json(err);
 	}
 });
