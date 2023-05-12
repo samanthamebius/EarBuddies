@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
-import styles from '../StudioPage.module.css';
+import styles from './SongInfo.module.css';
 import placeholder_album from '../../assets/now_playing/placeholder_album.png';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
