@@ -196,6 +196,6 @@ export {
 	updateUserDisplayName,
 	updateUserProfilePic,
 	updateUserSpotifyPic,
-	getActiveStudios,,
+	getActiveStudios,
 	addStudio,
 };

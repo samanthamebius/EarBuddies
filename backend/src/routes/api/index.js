@@ -1,15 +1,15 @@
-import express from "express";
+import express from 'express';
 
 const router = express.Router();
 
-import login from "./login";
-router.use("/login", login);
+import login from './login';
+router.use('/login', login);
 
-import refresh from "./refresh";
-router.use("/refresh", refresh);
+import refresh from './refresh';
+router.use('/refresh', refresh);
 
-import chat from "./chat";
-router.use("/chat", chat);
+import chat from './chat';
+router.use('/chat', chat);
 
 import user from './user';
 router.use('/user', user);

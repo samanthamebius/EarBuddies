@@ -1,7 +1,7 @@
-import express from "express";
-import fs from "fs";
-import multer from "multer";
-import { v4 as uuid } from "uuid";
+import express from 'express';
+import fs from 'fs';
+import multer from 'multer';
+import { v4 as uuid } from 'uuid';
 import {
 	createStudio,
 	getStudio,
@@ -13,18 +13,18 @@ import {
 	setNickname,
 	removeNickname,
 } from '../../dao/studio_dao.js';
-import { getUser, getStudiosId, updateStudios, addStudio } from "../../dao/user_dao.js";
-import { getSpotifyApi, transferPlaylist, createStudioPlaylist } from "../../dao/spotify_dao.js";
-import { Types as mongooseTypes } from "mongoose";
+import { getUser, getStudiosId, updateStudios, addStudio } from '../../dao/user_dao.js';
+import { getSpotifyApi, transferPlaylist, createStudioPlaylist } from '../../dao/spotify_dao.js';
+import { Types as mongooseTypes } from 'mongoose';
 import {
 	deleteChat,
 	updateChatMessageDisplayName,
-} from "../../dao/chat_dao.js";
+} from '../../dao/chat_dao.js';
 
 const router = express.Router();
 
 const upload = multer({
-	dest: "./uploads",
+	dest: './uploads',
 });
 
 /**
@@ -42,7 +42,7 @@ const upload = multer({
  * @throws 403 if no Spotify API connection
  * @throws 500 if server error
  */
-router.post("/new", async (req, res) => {
+router.post('/new', async (req, res) => {
   try {
     const {
       name,
@@ -57,7 +57,7 @@ router.post("/new", async (req, res) => {
     if (!name || !listeners || !host) {
       return res
         .status(400)
-        .json({ msg: "Please provide all required fields" });
+        .json({ msg: 'Please provide all required fields' });
     }
 
 	//create studio 
@@ -81,7 +81,7 @@ router.post("/new", async (req, res) => {
     res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
@@ -95,27 +95,27 @@ router.post("/new", async (req, res) => {
  * @throws 404 if studio not found
  * @throws 500 if server error
  */
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
 		if (!mongooseTypes.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid ID" });
+			return res.status(400).json({ error: 'Invalid ID' });
 		}
 
 		const api = getSpotifyApi();
 		if (!api) {
-			return res.status(403).json({ msg: "No Spotify API connection" });
+			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 
 		const studio = await getStudio(id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 
 		res.status(200).json(studio);
 	} catch (err) {
 		console.log(err);
-    	res.status(500).json({ msg: "Server error" });
+    	res.status(500).json({ msg: 'Server error' });
 	}
 });
 
@@ -127,21 +127,21 @@ router.get("/:id", async (req, res) => {
  * @throws 404 if studio not found
  * @throws 500 if server error
  */
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
 		const studio = await getStudio(id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 		await removeStudioFromUsers(studio);
 		await deleteChat(id);
 		await deleteStudio(id);
 
-		res.status(204).json({msg: "studio deleted"});
+		res.status(204).json({msg: 'studio deleted'});
 	} catch (err) {
 		console.log(err);
-    	res.status(500).json({ msg: "Server error" });
+    	res.status(500).json({ msg: 'Server error' });
 	}
 });
 
@@ -153,20 +153,20 @@ router.delete("/:id", async (req, res) => {
  * @throws 404 if studio not found
  * @throws 500 if server error
  */
-router.put("/:id/isHostOnly", async (req, res) => {
+router.put('/:id/isHostOnly', async (req, res) => {
 	try {
 		const { id } = req.params;
 		const studio = await getStudio(id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 		const control = studio[0].studioControlHostOnly;
 		await updateStudioControlHostOnly(id, !control);
 
-		res.status(200).json({msg: "control updated"});
+		res.status(200).json({msg: 'control updated'});
 	} catch (err) {
 		console.log(err);
-    	res.status(500).json({ msg: "Server error" });
+    	res.status(500).json({ msg: 'Server error' });
 	}
 });
 
@@ -176,10 +176,10 @@ router.put("/:id/isHostOnly", async (req, res) => {
  * @body image: File
  * @returns 201 The location of the newly created image
  */
-router.post("/upload-image", upload.single("image"), (req, res) => {
+router.post('/upload-image', upload.single('image'), (req, res) => {
 	const oldPath = req.file.path;
 	const extension = req.file.originalname.substring(
-		req.file.originalname.lastIndexOf(".")
+		req.file.originalname.lastIndexOf('.')
 	);
 	const newFileName = `${uuid()}${extension}`;
 	const newPath = `./public/images/${newFileName}`;
@@ -188,8 +188,8 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 
 	res
 		.status(201)
-		.header("Location", `/images/${newFileName}`)
-		.header("Access-Control-Expose-Headers", "Location")
+		.header('Location', `/images/${newFileName}`)
+		.header('Access-Control-Expose-Headers', 'Location')
 		.send();
 });
 
@@ -202,7 +202,7 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
  * @returns 200 The updated messages and nickname
  * @throws 500 if server error
  */
-router.put("/:studioId/:userId/nickname", async (req, res) => {
+router.put('/:studioId/:userId/nickname', async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const nickname = req.body.nickname;
@@ -230,7 +230,7 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
  * @returns 200 The nickname
  * @throws 500 if server error
  */
-router.get("/:studioId/:userId/nickname", async (req, res) => {
+router.get('/:studioId/:userId/nickname', async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const studio = await getStudio(studioId);
@@ -252,16 +252,16 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
  * @throws 404 if studio or user not found
  * @throws 500 if server error
  */
-router.put("/:studio_id/leave/:username", async (req, res) => {
+router.put('/:studio_id/leave/:username', async (req, res) => {
   try {
     const { studio_id, username } = req.params;
     const studio = await getStudio(studio_id);
 	if (!studio) {
-		return res.status(404).json({ msg: "Studio not found" });
+		return res.status(404).json({ msg: 'Studio not found' });
 	}
 	const user = await getUser(username);
 	if (!user) {
-		return res.status(404).json({ msg: "User not found" });
+		return res.status(404).json({ msg: 'User not found' });
 	}
 
 	//remove user from nickname list
@@ -278,10 +278,10 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
     const newStudios = studios.filter((studio) => studio._id !== studio_id);
     updateStudios(username, newStudios);
 
-    res.status(200).json({ msg: "User left studio" });
+    res.status(200).json({ msg: 'User left studio' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
@@ -294,20 +294,20 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
  * @throws 404 if studio or user not found
  * @throws 500 if server error
  */
-router.put("/:studio_id/newHost/:host_name", async (req, res) => {
+router.put('/:studio_id/newHost/:host_name', async (req, res) => {
   	try {
 		const { studio_id, host_name } = req.params;
 		const host = await getUser(host_name)
 		if (!host) {
-			return res.status(404).json({ msg: "Invalid host provided" });
+			return res.status(404).json({ msg: 'Invalid host provided' });
 		}
 		
 		await transferPlaylist(studio_id, host_name);
 
-		res.status(204).json({ msg: "Host Updated" })
+		res.status(204).json({ msg: 'Host Updated' })
 	} catch (err) {
 		console.log(err);
-		res.status(500).json({ msg: "Server error" });
+		res.status(500).json({ msg: 'Server error' });
 	}
 });
 
@@ -319,12 +319,12 @@ router.put("/:studio_id/newHost/:host_name", async (req, res) => {
  * @throws 404 if studio not found
  * @throws 500 if server error
  */
-router.get("/:studio_id/host", async (req, res) => {
+router.get('/:studio_id/host', async (req, res) => {
 	try {
 		const { studio_id } = req.params;
 		const studio = await getStudio(studio_id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 
 		const host = await getUser(studio[0].studioHost);
@@ -343,16 +343,16 @@ router.get("/:studio_id/host", async (req, res) => {
  * @throws 404 if studio or user not found
  * @throws 500 if server error
  */
-router.delete("/:studio_id/:username", async (req, res) => {
+router.delete('/:studio_id/:username', async (req, res) => {
 	try {
 		const { studio_id, username } = req.params;
 		const studio = await getStudio(studio_id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 		const user = await getUser(username);
 		if (!user) {
-			return res.status(404).json({ msg: "User not found" });
+			return res.status(404).json({ msg: 'User not found' });
 		}
 
 		// remove the studio from the user
@@ -367,10 +367,10 @@ router.delete("/:studio_id/:username", async (req, res) => {
 
 		await removeNickname(studio, username);
 		
-		res.status(204).json({ msg: "User removed from studio" });
+		res.status(204).json({ msg: 'User removed from studio' });
 	} catch (err) {
 		console.log(err);
-		res.status(500).json({ msg: "Server error" });
+		res.status(500).json({ msg: 'Server error' });
 	}
 });
 
@@ -382,16 +382,16 @@ router.delete("/:studio_id/:username", async (req, res) => {
  * @returns 204
  * @throws 404 if studio or user not found
  */
-router.put("/:studio_id/:username", async (req, res) => {
+router.put('/:studio_id/:username', async (req, res) => {
 	try {
 		const { studio_id, username } = req.params;
 		const studio = await getStudio(studio_id);
 		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: 'Studio not found' });
 		}
 		const user = await getUser(username);
 		if (!user) {
-			return res.status(404).json({ msg: "User not found" });
+			return res.status(404).json({ msg: 'User not found' });
 		}
 
 		// add the studio to the user
@@ -405,10 +405,10 @@ router.put("/:studio_id/:username", async (req, res) => {
 		studio[0].studioNames.push(user.userDisplayName);
 		updateStudioNames(studio_id, studio[0].studioNames);
 		
-		res.status(204).json({ msg: "User added to studio" });
+		res.status(204).json({ msg: 'User added to studio' });
 	} catch (err) {
 		console.log(err);
-		res.status(500).json({ msg: "Server error" });
+		res.status(500).json({ msg: 'Server error' });
 	}
 });
 

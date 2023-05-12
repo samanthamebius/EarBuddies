@@ -24,17 +24,17 @@ const router = express.Router();
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.get("/:username", async (req, res) => {
+router.get('/:username', async (req, res) => {
   const { username } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
     return res.status(200).json(user);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -49,13 +49,13 @@ router.get("/:username", async (req, res) => {
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.put("/:username", async (req, res) => {
+router.put('/:username', async (req, res) => {
   const { username } = req.params;
   const { userDisplayName, profilePic, spotifyPic } = req.body;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     if (userDisplayName) {
@@ -68,10 +68,10 @@ router.put("/:username", async (req, res) => {
       await updateUserSpotifyPic(username, spotifyPic);
     }
 
-    return res.status(204).json({ msg: "User updated" });
+    return res.status(204).json({ msg: 'User updated' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -83,12 +83,12 @@ router.put("/:username", async (req, res) => {
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.delete("/:username", async (req, res) => {
+router.delete('/:username', async (req, res) => {
   const { username } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     //delete user from all studios
@@ -98,10 +98,10 @@ router.delete("/:username", async (req, res) => {
     }
     await deleteUser(username);
 
-    return res.status(204).json({ msg: "User deleted" });
+    return res.status(204).json({ msg: 'User deleted' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -113,12 +113,12 @@ router.delete("/:username", async (req, res) => {
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.put("/:username/logout", async (req, res) => {
+router.put('/:username/logout', async (req, res) => {
   const { username } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
     
     //set user to inactive
@@ -127,10 +127,10 @@ router.put("/:username/logout", async (req, res) => {
       await setStudioStatus(studio);
     });
 
-    return res.status(204).json({ msg: "User logged out" });
+    return res.status(204).json({ msg: 'User logged out' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -145,19 +145,19 @@ router.put("/:username/logout", async (req, res) => {
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.get("/users/:username/:query", async (req, res) => {
+router.get('/users/:username/:query', async (req, res) => {
   const { username, query } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     const users = await searchUsers(query, username);
     return res.status(200).json(users);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -171,19 +171,19 @@ router.get("/users/:username/:query", async (req, res) => {
  * @throws 404 If the user is not found
  * @throws 500 If there is an internal server error
  */
-router.get("/users/:username/:query/:studioId", async (req, res) => {
+router.get('/users/:username/:query/:studioId', async (req, res) => {
   const { username, query, studioId } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     const users = await searchStudioUsers(studioId, query, username);
     return res.status(200).json(users);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -196,12 +196,12 @@ router.get("/users/:username/:query/:studioId", async (req, res) => {
  * @throws 500 if Internal server error
  * @throws 404 if no user or studios found
  */
-router.get("/:username/studios/:query", async (req, res) => {
+router.get('/:username/studios/:query', async (req, res) => {
   const { username, query } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     const studios = await searchStudios(username, query);
@@ -211,7 +211,7 @@ router.get("/:username/studios/:query", async (req, res) => {
 		return res.json(studios);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -224,22 +224,22 @@ router.get("/:username/studios/:query", async (req, res) => {
  * @throws 500 if Internal server error
  * @throws 404 if no user or studios found
  */
-router.get("/:username/active/:query", async (req, res) => {
+router.get('/:username/active/:query', async (req, res) => {
   const { username, query } = req.params;
   try {
     const user = await getUser(username);
     if (!user) {
-      return res.status(404).json({ msg: "No user found" });
+      return res.status(404).json({ msg: 'No user found' });
     }
 
     const studios = await searchActiveStudios(username, query);
     if (!studios) {
-      return res.status(404).json({ msg: "No studios found" });
+      return res.status(404).json({ msg: 'No studios found' });
     }
     return res.json(studios);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

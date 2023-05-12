@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import SpotifyWebApi from "spotify-web-api-node";
+import SpotifyWebApi from 'spotify-web-api-node';
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const router = express.Router();
  * @returns object: The access token and expiration time
  * @throws 400 If there is an error refreshing the token
  */
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const refresh_token = req.body.refresh_token
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
