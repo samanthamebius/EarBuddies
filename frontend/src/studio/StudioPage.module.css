@@ -6,11 +6,12 @@
 	grid-gap: 20px;
 	padding: 20px;
 	box-sizing: border-box;
+	background-color: var(--backgroundColor);
 	overflow-y: auto;
 }
 
 .greyheading {
-	color: #606060;
+	color: var(--headingColor);
 	font-size: 36px;
 	font-weight: bolder;
 	display: flex;
@@ -57,16 +58,12 @@
 	pointer-events: none;
 }
 
-.menu_item {
-	color: #606060;
-}
-
 .menu_item:hover .menu_title {
 	color: #b03eee;
 }
 
 .menu_title {
-	color: #757575;
+	color: var(--headingColor);
 	margin: 5px 0px 5px 10px;
 	font-size: 16px;
 }
@@ -99,7 +96,7 @@
 }
 
 .webPlayback {
-	background-color: #e9dcf1;
+	background-color: var(--nowPlayingBackgroundColor);
 	grid-row: 2 / 2;
 	grid-column: 1;
 	border-radius: 4px;
@@ -121,7 +118,6 @@
 }
 
 .chat {
-	background-color: #c68eef;
 	grid-row-start: 1;
 	grid-row-end: 3;
 	/* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
@@ -232,7 +228,7 @@
 	overflow: auto;
 	border: 1px solid #c4c4c4;
 	border-radius: 0px 0px 4px 4px;
-	background-color: white;
+	background-color: var(--fieldColor);
 	max-height: 40%;
 }
 
@@ -242,7 +238,7 @@
 }
 
 .result:hover {
-	background-color: #f1f1f1;
+	background-color: var(--fieldHoverColor);
 	cursor: pointer;
 }
 
@@ -258,12 +254,15 @@
 }
 
 .resultTitle {
-	font-size: 14px;
-	color: #757575;
-	padding-left: 15px;
+	color: var(--headingColor);
+	padding: 0px 0px 0px 15px;
+	margin: 0px;
+	font-weight: bold;
 }
 
 .resultTitleDetail {
+	color: var(--headingColor);
+	padding: 0px 0px 0px 15px;
 	margin: 0px;
 }
 
