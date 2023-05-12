@@ -163,3 +163,10 @@ If everything breaks, please log out and log in again or refresh the page
 If a 429 error occurs, the webpage has exceeded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
 
 Happy Listening!
+
+# Resources
+Thanks to these sites and people for the images used in our website:
+
+- [Icons](https://www.freepik.com/)
+- [File drop zone](https://react-dropzone.org/#!/Examples)
+- [MUI Switch](https://mui.com/material-ui/react-switch/)
