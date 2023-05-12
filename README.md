@@ -114,7 +114,7 @@ Log out or delete your account ☹️👋
 ### Now Playing 🎵
 View the song playing  
 Control the volume in the studio (host only)  
-Play, pause, skip and seek songs (host only)  
+Play, pause and skip songs (host only)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/92f958f7-fc07-40b4-b48f-bf2a117f194d)
 
 
@@ -139,7 +139,7 @@ See people's custom nicknames
 
 ### Manage Studio 🖊️
 Leave studio  
-Edit nickname (specific to this studio)  
+Edit nickname (specific to a studio)  
 Add listeners (if the host has enabled control)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/023798b0-b83c-4cd0-8318-91442c4d13fb)
 
@@ -156,7 +156,7 @@ Handle any errors gracefully
 
 # Notes
 If studios don't show on the home page, try refreshing the page  
-If everything breaks, please log out and log in again
+If everything breaks, please log out and log in again or refresh the page
 
 If a 429 error occurs, the webpage has exceeded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
 
