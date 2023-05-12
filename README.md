@@ -25,9 +25,9 @@ cd ./frontend/
 npm install
 npm run dev
 ```
-5. Open [localhost](http://127.0.0.1:5173/) in your browser. Please use Google Chrome, as the system has not been comprehensively tested on other browsers, and you may encounter unexpected errors. 
+4. Open [localhost](http://127.0.0.1:5173/) in your browser. Please use Google Chrome, as the system has not been comprehensively tested on other browsers, and you may encounter unexpected errors. 
 
-7. Log in with a Spotify account. Please use one of the following accounts as others will not work due to being in development and having to manually add approved users:  
+5. Log in with a Spotify account. Please use one of the following accounts as others will not work due to being in development and having to manually add approved users:  
 (In the future if production goes ahead, only Premium accounts will be able to use the full functionality of Ear Buddies such as player functionality due to Spotify policy)
 
 Testing account 1  (Taylor Swift)  
@@ -147,7 +147,7 @@ Add listeners (if the host has enabled control)
 
 And if you're the host:
 - delete listeners
-- assign a new host - host must be an actual account and present in the studio.
+- assign a new host - host must be an actual account and present in the studio i.e not a dummy data account from the init-db command
 - enable/disable control
 - delete studio  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/f69adfa5-e130-48b9-acea-a6a35234418b)
