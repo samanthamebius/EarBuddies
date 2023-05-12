@@ -25,8 +25,10 @@ cd ./frontend/
 npm install
 npm run dev
 ```
-5. Open [localhost](http://127.0.0.1:5173/) in your browser. Please use Google Chrome, as the system has not been comprehensively tested on other browsers, and you may encounter unexpected errors. 
-7. Log in with a Spotify account. Please use one of the following accounts:  
+4. Open [localhost](http://127.0.0.1:5173/) in your browser. Please use Google Chrome, as the system has not been comprehensively tested on other browsers, and you may encounter unexpected errors. 
+
+5. Log in with a Spotify account. Please use one of the following accounts as others will not work due to being in development and having to manually add approved users:  
+(In the future if production goes ahead, only Premium accounts will be able to use the full functionality of Ear Buddies such as player functionality due to Spotify policy)
 
 Testing account 1  (Taylor Swift)  
 
@@ -42,7 +44,7 @@ Testing account 2  (Florence Welch)
 To generate some initialised data, run the following:
 ```
 cd ./backend/
-npm run init_db
+npm run init-db
 ```
 
 ## Testing
@@ -139,13 +141,13 @@ See people's custom nicknames
 
 ### Manage Studio 🖊️
 Leave studio  
-Edit nickname (specific to this studio)  
+Edit nickname (specific to a studio)  
 Add listeners (if the host has enabled control)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/023798b0-b83c-4cd0-8318-91442c4d13fb)
 
 And if you're the host:
 - delete listeners
-- assign a new host
+- assign a new host - host must be an actual account and present in the studio i.e not a dummy data account from the init-db command
 - enable/disable control
 - delete studio  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/f69adfa5-e130-48b9-acea-a6a35234418b)
@@ -156,7 +158,7 @@ Handle any errors gracefully
 
 # Notes
 If studios don't show on the home page, try refreshing the page  
-If everything breaks, please log out and log in again
+If everything breaks, please log out and log in again or refresh the page
 
 If a 429 error occurs, the webpage has exceeded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
 
