@@ -9,7 +9,8 @@ import {
   updateUserDisplayName,
   updateUserProfilePic,
   setUserInactive,
-  updateUserSpotifyPic
+  updateUserSpotifyPic,
+  getActiveStudios
 } from "../../dao/user_dao";
 import { deleteUserFromStudio, setStudioStatus } from "../../dao/studio_dao";
 
@@ -161,6 +162,24 @@ router.get("/:username/active/:query", async (req, res) => {
       return res.status(404).json({ msg: "No user found" });
     }
     const studios = await searchActiveStudios(username, query);
+    if (!studios) {
+      return res.status(404).json({ msg: "No active studios found" });
+    }
+    return res.json(studios);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/:username/active/", async (req, res) => {
+  const { username, query } = req.params;
+  try {
+    const user = await getUser(username);
+    if (!user) {
+      return res.status(404).json({ msg: "No user found" });
+    }
+    const studios = await getActiveStudios(username);
     if (!studios) {
       return res.status(404).json({ msg: "No active studios found" });
     }
