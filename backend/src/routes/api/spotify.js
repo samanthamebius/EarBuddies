@@ -14,6 +14,7 @@ import {
 	resumeSpotify,
 	pauseSpotify,
 	skipNext,
+	skipPrevious,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -244,23 +245,25 @@ router.put('/next', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/previous
+ * @desc    Go to the previous song in the playlist - if first one restart from beginning
+ * @body	deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/previous', async (req, res) => {
 	try {
 		const { deviceId } = req.body;
-		console.log('device id ' + deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		// Skip to previous track
-		thisSpotifyApi.skipToPrevious({ device_id: deviceId }).then(
-			function () {
-				console.log('Skipped to previous track!');
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		await skipPrevious(thisSpotifyApi, deviceId);
+		return res.status(200).json({ msg: 'Skip to previous' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {

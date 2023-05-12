@@ -292,6 +292,12 @@ async function skipNext(thisSpotifyApi, deviceId) {
 	});
 }
 
+async function skipPrevious(thisSpotifyApi, deviceId) {
+	thisSpotifyApi.skipToPrevious({ device_id: deviceId }).then(function (err) {
+		console.log('Something went wrong!', err);
+	});
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -311,4 +317,5 @@ export {
 	playSpotify,
 	pauseSpotify,
 	skipNext,
+	skipPrevious,
 };
