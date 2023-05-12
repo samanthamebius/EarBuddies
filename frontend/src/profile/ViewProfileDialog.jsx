@@ -37,258 +37,272 @@ import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Dialog to display and edit profile information.
+ * @param {Boolean} isViewProfileOpen - Determines whether dialog is open or closed.
+ * @param {Function} handleViewProfileClose - Handles closing the dialog.
+ * @param {Function} handleViewProfileSave - Handles saving changed profile information.
+ * @returns {JSX.Element} - The ViewProfileDialog component.
+ */
 export default function ViewProfileDialog({
-    isViewProfileOpen,
-    handleViewProfileClose,
-    handleViewProfileSave,
+	isViewProfileOpen,
+	handleViewProfileClose,
+	handleViewProfileSave,
 }) {
-    const [displayPhoto, setDisplayPhoto] = useState();
-    const [displayName, setDisplayName] = useState('username');
-    const [isInDisplayName, setInDisplayName] = useState(false);
-    const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
-    const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
-    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [spotifyPhoto, setSpotifyPhoto] = useState('');
+	const [displayPhoto, setDisplayPhoto] = useState();
+	const [displayName, setDisplayName] = useState('username');
+	const [isInDisplayName, setInDisplayName] = useState(false);
+	const [isInDisplayPhoto, setInDisplayPhoto] = useState(false);
+	const [isAvatarOptionsOpen, setAvatarOptionsOpen] = useState(false);
+	const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+	const [spotifyPhoto, setSpotifyPhoto] = useState('');
 
-    const handleConfirmDeleteOpen = () => {
-        setConfirmDeleteOpen(true);
-    };
+	const handleConfirmDeleteOpen = () => {
+		setConfirmDeleteOpen(true);
+	};
 
-    // get user info
-    const current_user_id = localStorage.getItem('current_user_id');
-    const id = JSON.parse(current_user_id);
-    const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
-    useEffect(() => {
-        if (user) {
-            setDisplayName(user.userDisplayName);
-            setDisplayPhoto(user.profilePic);
-            console.log(user.spotifyPic);
-            setSpotifyPhoto(user.spotifyPic);
-        }
-    }, [user]);
+	// Populate user information
+	const current_user_id = localStorage.getItem('current_user_id');
+	const id = JSON.parse(current_user_id);
+	const { data: user, isLoading: userIsLoading } = useGet(`/api/user/${id}`);
+	useEffect(() => {
+		if (user) {
+			setDisplayName(user.userDisplayName);
+			setDisplayPhoto(user.profilePic);
+			setSpotifyPhoto(user.spotifyPic);
+		}
+	}, [user]);
 
-    const avatars = [
-        spotifyPhoto,
-        AnacondaAvatar,
-        BeaverAvatar,
-        BoarAvatar,
-        BunnyAvatar,
-        CatAvatar,
-        ClownFishAvatar,
-        CowAvatar,
-        GiraffeAvatar,
-        JaguarAvatar,
-        JellyfishAvatar,
-        MonkeyAvatar,
-        PandaAvatar,
-        PelicanAvatar,
-        PenguinAvatar,
-        ScorpionAvatar,
-        SharkAvatar,
-        SheepAvatar,
-        SnailAvatar,
-        TurtleAvatar,
-        WhaleAvatar,
-    ];
+	const avatars = [
+		spotifyPhoto,
+		AnacondaAvatar,
+		BeaverAvatar,
+		BoarAvatar,
+		BunnyAvatar,
+		CatAvatar,
+		ClownFishAvatar,
+		CowAvatar,
+		GiraffeAvatar,
+		JaguarAvatar,
+		JellyfishAvatar,
+		MonkeyAvatar,
+		PandaAvatar,
+		PelicanAvatar,
+		PenguinAvatar,
+		ScorpionAvatar,
+		SharkAvatar,
+		SheepAvatar,
+		SnailAvatar,
+		TurtleAvatar,
+		WhaleAvatar,
+	];
 
-    const toggleInDisplayName = () => {
-        setInDisplayName(!isInDisplayName);
-    };
-    const toggleInDisplayPhoto = () => {
-        setInDisplayPhoto(!isInDisplayPhoto);
-    };
+	const toggleInDisplayName = () => {
+		setInDisplayName(!isInDisplayName);
+	};
+	const toggleInDisplayPhoto = () => {
+		setInDisplayPhoto(!isInDisplayPhoto);
+	};
 
-    const openAvatarOptions = () => {
-        setAvatarOptionsOpen(true);
-    };
-    const closeAvatarOptions = () => {
-        setAvatarOptionsOpen(false);
-    };
+	const openAvatarOptions = () => {
+		setAvatarOptionsOpen(true);
+	};
+	const closeAvatarOptions = () => {
+		setAvatarOptionsOpen(false);
+	};
 
-    const onClose = () => {
-        setAvatarOptionsOpen(false);
-        handleViewProfileClose();
-    };
-    const navigate = useNavigate();
+	const onClose = () => {
+		setAvatarOptionsOpen(false);
+		handleViewProfileClose();
+	};
+	const navigate = useNavigate();
 
-    const handleDelete = () => {
-        axios.delete(`${BASE_URL}/api/user/${id}`).then((res) => {
-            console.log(res);
-        });
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('expires_in');
-        localStorage.removeItem('current_user_id');
-        navigate('/');
-    };
+	const handleDelete = () => {
+		axios.delete(`${BASE_URL}/api/user/${id}`).then((res) => {
+			console.log(res);
+		});
+		localStorage.removeItem('access_token');
+		localStorage.removeItem('refresh_token');
+		localStorage.removeItem('expires_in');
+		localStorage.removeItem('current_user_id');
+		navigate('/');
+	};
 
-    const handleAccountLink = () => {
-        window.open('https://www.spotify.com/us/account/overview/', '_blank');
-    };
+	const handleAccountLink = () => {
+		window.open('https://www.spotify.com/us/account/overview/', '_blank');
+	};
 
-    const handleSave = () => {
-        axios.put(`${BASE_URL}/api/user/${id}`, {
-            userDisplayName: displayName,
-            profilePic: displayPhoto,
-        });
-        setAvatarOptionsOpen(false);
-        handleViewProfileClose();
-        handleViewProfileSave();
-    };
+	const handleSave = () => {
+		axios.put(`${BASE_URL}/api/user/${id}`, {
+			userDisplayName: displayName,
+			profilePic: displayPhoto,
+		});
+		setAvatarOptionsOpen(false);
+		handleViewProfileClose();
+		handleViewProfileSave();
+	};
 
-    const theme = createTheme({
-        palette: {
-            secondary: {
-                main: '#CA3FF3',
-            },
-        },
-    });
+	const theme = createTheme({
+		palette: {
+			secondary: {
+				main: '#CA3FF3',
+			},
+		},
+	});
 
-    return (
-        <>
-            <ConfirmationDialog
-                isOpen={isConfirmDeleteOpen}
-                handleClose={() => setConfirmDeleteOpen(false)}
-                handleAction={() => {
-                    setConfirmDeleteOpen(false);
-                    handleDelete();
-                }} //TO DO: replace with delete functionality
-                message={'Are you sure you want to delete your Ear Buddies Account?'}
-                actionText={'Delete'}
-            />
-            <div>
-                <Dialog
-                    fullWidth
-                    maxWidth='sm'
-                    open={isViewProfileOpen}
-                    onClose={onClose}
-                    PaperProps={{ style: { backgroundColor: 'var(--dialogColor' } }}>
-                    <h1 className={styles.heading}>My Profile</h1>
-                    <DialogContent>
-                        <h2 className={styles.sectionHeading}>Display Name</h2>
-                        <ThemeProvider theme={theme}>
-                            <TextField
-                                color='secondary'
-                                onMouseEnter={toggleInDisplayName}
-                                onMouseLeave={toggleInDisplayName}
-                                value={displayName}
-                                required
-                                margin='dense'
-                                id='name'
-                                type='text'
-                                fullWidth
-                                variant='outlined'
-                                onChange={(event) => setDisplayName(event.target.value)}
-                                className={styles.textfield}
-                                autoComplete='off'
-                                InputProps={{
-                                    style: { color: 'var(--headingColor)' },
-                                    endAdornment: (
-                                        <InputAdornment position='end'>
-                                            <EditRoundedIcon
-                                                style={{
-                                                    pointerEvents: 'none',
-                                                    color: isInDisplayName
-                                                        ? '#B03EEE'
-                                                        : 'var(--iconColor)',
-                                                }}
-                                            />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </ThemeProvider>
-                        <h2 className={styles.sectionHeading}>Display Photo</h2>
+	return (
+		<>
+			<ConfirmationDialog
+				isOpen={isConfirmDeleteOpen}
+				handleClose={() => setConfirmDeleteOpen(false)}
+				handleAction={() => {
+					setConfirmDeleteOpen(false);
+					handleDelete();
+				}}
+				message={'Are you sure you want to delete your Ear Buddies Account?'}
+				actionText={'Delete'}
+			/>
+			<div>
+				<Dialog
+					fullWidth
+					maxWidth='sm'
+					open={isViewProfileOpen}
+					onClose={onClose}
+					PaperProps={{ style: { backgroundColor: 'var(--dialogColor' } }}>
+					<h1 className={styles.heading}>My Profile</h1>
+					<DialogContent>
+						{/* Display name */}
+						<h2 className={styles.sectionHeading}>Display Name</h2>
+						<ThemeProvider theme={theme}>
+							<TextField
+								color='secondary'
+								onMouseEnter={toggleInDisplayName}
+								onMouseLeave={toggleInDisplayName}
+								value={displayName}
+								required
+								margin='dense'
+								id='name'
+								type='text'
+								fullWidth
+								variant='outlined'
+								onChange={(event) => setDisplayName(event.target.value)}
+								className={styles.textfield}
+								autoComplete='off'
+								InputProps={{
+									style: { color: 'var(--headingColor)' },
+									endAdornment: (
+										<InputAdornment position='end'>
+											<EditRoundedIcon
+												style={{
+													pointerEvents: 'none',
+													color: isInDisplayName
+														? '#B03EEE'
+														: 'var(--iconColor)',
+												}}
+											/>
+										</InputAdornment>
+									),
+								}}
+							/>
+						</ThemeProvider>
 
-                        <div
-                            className={styles.displayPhotoContainer}
-                            onMouseEnter={toggleInDisplayPhoto}
-                            onMouseLeave={toggleInDisplayPhoto}>
-                            <div
-                                onClick={
-                                    isAvatarOptionsOpen
-                                        ? closeAvatarOptions
-                                        : openAvatarOptions
-                                }
-                                className={styles.currentDisplayPhotoContainter}>
-                                <img
-                                    src={displayPhoto}
-                                    className={styles.displayPhoto}
-                                />
-                                <div className={styles.editIconContainer}>
-                                    <EditRoundedIcon
-                                        style={{
-                                            color: isInDisplayPhoto
-                                                ? '#B03EEE'
-                                                : 'var(--iconColor)',
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                className={styles.hiddenPhotoSection}
-                                style={{ display: isAvatarOptionsOpen ? '' : 'none' }}>
-                                <div className={styles.avatars}>
-                                    {Array.isArray(avatars)
-                                        ? avatars.map((avatar, i) => (
-                                              <img
-                                                  style={{
-                                                      border:
-                                                          avatar === displayPhoto
-                                                              ? 'solid 2px #CA3FF3'
-                                                              : '',
-                                                  }}
-                                                  key={i}
-                                                  src={avatar}
-                                                  className={styles.avatarOption}
-                                                  onClick={() => setDisplayPhoto(avatar)}
-                                              />
-                                          ))
-                                        : null}
-                                </div>
-                            </div>
-                        </div>
-                        <h2 className={styles.sectionHeading}></h2>
-                        <Button
-                            size={'large'}
-                            sx={{ fontWeight: 600, color: '#757575' }}
-                            variant='contained'
-                            className={styles.linkButton}
-                            onClick={handleAccountLink}>
-                            <OpenInNewRoundedIcon className={styles.buttonIcon} />
-                            Link To Spotify Account
-                        </Button>
-                        <h2 className={styles.sectionHeading}></h2>
-                        <Button
-                            size={'large'}
-                            sx={{ fontWeight: 600, color: '#757575' }}
-                            variant='contained'
-                            className={styles.linkButton}
-                            onClick={handleConfirmDeleteOpen}>
-                            <DeleteRoundedIcon className={styles.buttonIcon} />
-                            Delete Ear Buddies Account
-                        </Button>
-                    </DialogContent>
-                    <DialogActions
-                        sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}
-                        className={styles.buttons}>
-                        <Button
-                            sx={{ fontWeight: 600, color: '#757575' }}
-                            variant='contained'
-                            className={styles.cancelButton}
-                            onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button
-                            sx={{ fontWeight: 600 }}
-                            variant='contained'
-                            className={styles.createButton}
-                            onClick={handleSave}>
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        </>
-    );
+						{/* Display Photo */}
+						<h2 className={styles.sectionHeading}>Display Photo</h2>
+						<div
+							className={styles.displayPhotoContainer}
+							onMouseEnter={toggleInDisplayPhoto}
+							onMouseLeave={toggleInDisplayPhoto}>
+							<div
+								onClick={
+									isAvatarOptionsOpen
+										? closeAvatarOptions
+										: openAvatarOptions
+								}
+								className={styles.currentDisplayPhotoContainter}>
+								<img
+									src={displayPhoto}
+									alt='User display photo'
+									className={styles.displayPhoto}
+								/>
+								<div className={styles.editIconContainer}>
+									<EditRoundedIcon
+										style={{
+											color: isInDisplayPhoto
+												? '#B03EEE'
+												: 'var(--iconColor)',
+										}}
+									/>
+								</div>
+							</div>
+							<div
+								className={styles.hiddenPhotoSection}
+								style={{ display: isAvatarOptionsOpen ? '' : 'none' }}>
+								<div className={styles.avatars}>
+									{Array.isArray(avatars)
+										? avatars.map((avatar, i) => (
+												<img
+													style={{
+														border:
+															avatar === displayPhoto
+																? 'solid 2px #CA3FF3'
+																: '',
+													}}
+													key={i}
+													src={avatar}
+													alt='Avatar'
+													className={styles.avatarOption}
+													onClick={() =>
+														setDisplayPhoto(avatar)
+													}
+												/>
+										  ))
+										: null}
+								</div>
+							</div>
+						</div>
+
+						{/* Buttons */}
+						<h2 className={styles.sectionHeading}></h2>
+						<Button
+							size={'large'}
+							sx={{ fontWeight: 600, color: '#757575' }}
+							variant='contained'
+							className={styles.linkButton}
+							onClick={handleAccountLink}>
+							<OpenInNewRoundedIcon className={styles.buttonIcon} />
+							Link To Spotify Account
+						</Button>
+						<h2 className={styles.sectionHeading}></h2>
+						<Button
+							size={'large'}
+							sx={{ fontWeight: 600, color: '#757575' }}
+							variant='contained'
+							className={styles.linkButton}
+							onClick={handleConfirmDeleteOpen}>
+							<DeleteRoundedIcon className={styles.buttonIcon} />
+							Delete Ear Buddies Account
+						</Button>
+					</DialogContent>
+					<DialogActions
+						sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}
+						className={styles.buttons}>
+						<Button
+							sx={{ fontWeight: 600, color: '#757575' }}
+							variant='contained'
+							className={styles.cancelButton}
+							onClick={onClose}>
+							Close
+						</Button>
+						<Button
+							sx={{ fontWeight: 600 }}
+							variant='contained'
+							className={styles.createButton}
+							onClick={handleSave}>
+							Save
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</div>
+		</>
+	);
 }
