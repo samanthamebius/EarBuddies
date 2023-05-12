@@ -15,7 +15,7 @@ import { AppContext } from '../../AppContextProvider';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Component container for all the playback controls for a song
  * @param studio - The current studio
  * @param player - The player connected to the current browser
  * @param socket - Communication channel between client and server

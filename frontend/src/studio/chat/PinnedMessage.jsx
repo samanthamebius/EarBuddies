@@ -8,7 +8,7 @@ import defaultProfilePicture from '../../assets/profilepic.png';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Component for displaying a single pinned message
  * @param pinnedMessage - Object of the currently pinned message
  * @param room - The id of the studio of the pinned message
  * @param socket - Communication channel between client and server

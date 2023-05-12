@@ -9,7 +9,7 @@ import styles from '../StudioPage.module.css';
 import { StyledSlider } from './StyledSlider';
 
 /**
- *
+ * Volume slider component within the now playing section in the studio
  * @param player - The current player in the browser
  * @param isHost - Boolean to check if the current user is the host
  */

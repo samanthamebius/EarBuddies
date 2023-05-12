@@ -9,7 +9,7 @@ import placeholder_album from '../../assets/now_playing/placeholder_album.png';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Display the information for the currently playing song
  * @param socket - Communication channel between client and server
  * @param studio - The current studio
  * @param queueIsEmpty - Boolean to check if the queue is empty

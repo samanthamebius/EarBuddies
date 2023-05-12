@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { StyledSlider } from './StyledSlider';
 
 /**
- *
+ * Time slider to adjust and see the current elapsed time in a song
  * @param player - The current player in the browser
  * @param queueIsEmpty - Boolean to check if the queue is empty
  * @param isHost - Boolean to check if the current user is the host

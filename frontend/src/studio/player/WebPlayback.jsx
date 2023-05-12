@@ -6,7 +6,7 @@ import { AppContext } from '../../AppContextProvider';
 import { useNavigate } from 'react-router-dom';
 
 /**
- *
+ * Component to determine the now playing section
  * @param studio - The current studio
  * @param socket - Communication channel between client and server
  * @param token - The access token for the current user

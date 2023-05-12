@@ -28,7 +28,7 @@ const StyledTextField = styled(TextField)({
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Chat component in the studio
  * @param socket - Communication channel between client and server
  * @param messages - Array of messages inside the studio
  * @param setMessages - Function to set the array of messages inside the studio

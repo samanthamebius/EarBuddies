@@ -24,7 +24,7 @@ const defaultReactions = [
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Component for displaying a single chat message
  * @param newMessage - The message to be displayed
  * @param setReplyMessage - Function to set the reply message
  * @param replyMessage - The message for the reply (if there is one)
