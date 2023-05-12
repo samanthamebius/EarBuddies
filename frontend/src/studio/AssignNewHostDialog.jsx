@@ -24,7 +24,7 @@ export default function AssignNewHostDialog({
 	const [isHelperTextMessage, setIsHelperTextMessage] = useState(false);
 	const handleClose = () => {
 		handleCloseAssignDialog(false);
-		// window.location.reload();
+		window.location.reload();
 	};
 	const [newHost, setNewHost] = useState(null);
 
@@ -37,26 +37,31 @@ export default function AssignNewHostDialog({
 		}
 	};
 
+	const handleCancel = () => {
+		setIsConfirmOpen(false);
+		setIsHelperTextMessage(false);
+	};
+
 	const handleSubmitConfirm = async () => {
 		// axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
 		socket.emit('send_new_host', { room: studio_id, newHost: newHost });
 		const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
-		const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
-		if (current_user_id === studio.data[0].studioHost) {
-			setIsHelperTextMessage(true);
-		} else {
-			setIsConfirmOpen(false);
-			handleClose();
-		}
 	};
 
 	useEffect(() => {
-		socket.on('receive_new_host', (data) => {
+		socket.on('receive_new_host', async (data) => {
 			console.log('receive_new_host', data);
 			const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
 			if (data === current_user_id) {
-				axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${data}`);
-				axios.put(`${BASE_URL}/api/studio/${studio_id}/new_host/${data}`);
+				await axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${data}`);
+				await axios.put(`${BASE_URL}/api/studio/${studio_id}/new_host/${data}`);
+			}
+			const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
+			if (current_user_id === studio.data[0].studioHost) {
+				setIsHelperTextMessage(true);
+			} else {
+				setIsConfirmOpen(false);
+				handleClose();
 			}
 		});
 	}, [socket, newHost]);
@@ -107,7 +112,7 @@ export default function AssignNewHostDialog({
 				</DialogActions>
 				<ConfirmationDialog
 					isOpen={isConfirmOpen}
-					handleClose={() => setIsConfirmOpen(false)}
+					handleClose={handleCancel}
 					handleAction={handleSubmitConfirm}
 					message={'Are you sure you want to give up your role as host?'}
 					actionText={'Yes'}
