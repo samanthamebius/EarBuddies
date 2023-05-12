@@ -1,4 +1,4 @@
-import { Chat } from "../database/schema";
+import { Chat } from '../database/schema';
 
 async function getChat(id) {
 	return await Chat.findOne({ roomId: id.toString() });
@@ -17,10 +17,13 @@ async function getMessages(id) {
 }
 
 async function addANewMessage(id, message) {
-	return await Chat.updateOne(
-		{ roomId: id.toString() },
-		{ $push: { messages: message } }
-	);
+	console.log('new message');
+	if (message.message !== 'Now playing: ') {
+		return await Chat.updateOne(
+			{ roomId: id.toString() },
+			{ $push: { messages: message } }
+		);
+	}
 }
 
 async function addANewPinnedMessage(id, pinnedMessage) {
@@ -43,15 +46,15 @@ async function getReactionWithUsername(id, messageId, reaction) {
 	return await Chat.findOne({
 		roomId: id.toString(),
 		messages: {
-			$elemMatch: { id: messageId, "reactions.username": reaction.username },
+			$elemMatch: { id: messageId, 'reactions.username': reaction.username },
 		},
 	});
 }
 
 async function addANewReaction(id, messageId, reaction) {
 	return await Chat.findOneAndUpdate(
-		{ roomId: id.toString(), "messages.id": messageId },
-		{ $push: { "messages.$.reactions": reaction } }
+		{ roomId: id.toString(), 'messages.id': messageId },
+		{ $push: { 'messages.$.reactions': reaction } }
 	);
 }
 
@@ -59,17 +62,17 @@ async function updateReaction(id, messageId, reaction) {
 	return await Chat.updateOne(
 		{
 			roomId: id.toString(),
-			"messages.id": messageId,
+			'messages.id': messageId,
 		},
 		{
 			$set: {
-				"messages.$[message].reactions.$[reaction].label": reaction.label,
+				'messages.$[message].reactions.$[reaction].label': reaction.label,
 			},
 		},
 		{
 			arrayFilters: [
-				{ "message.id": messageId },
-				{ "reaction.username": reaction.username },
+				{ 'message.id': messageId },
+				{ 'reaction.username': reaction.username },
 			],
 		}
 	);
@@ -79,20 +82,20 @@ async function updateChatMessageDisplayName(username, studioId, nickname) {
 	await Chat.findOneAndUpdate(
 		{
 			roomId: studioId.toString(),
-			"messages.username": username,
+			'messages.username': username,
 		},
 		{
 			$set: {
-				"messages.$[message].displayName": nickname,
+				'messages.$[message].displayName': nickname,
 			},
 		},
 		{
-			arrayFilters: [{ "message.username": username }],
+			arrayFilters: [{ 'message.username': username }],
 		}
 	);
 
 	return await getChat(studioId);
-	}
+}
 
 //delete chat of a room
 async function deleteChat(id) {

@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { getStudio, updateStudioHost, updateStudioPlaylist } from './studio_dao';
 dotenv.config();
 
 var spotifyApi = null;
@@ -141,6 +142,58 @@ async function getPlaybackState(thisSpotifyApi, deviceId) {
 	});
 }
 
+async function createNewStudioPlaylist(studio) {
+	const playlist_name = 'Earbuddies - ' + studio[0].studioName;
+	const api = getSpotifyApi();
+	if (!api) {
+		console.log('No Spotify API connection');
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	const createPlaylistRes = await api.createPlaylist(playlist_name, {
+		public: true,
+	});
+	return createPlaylistRes.body.id;
+}
+
+async function copyPlaylist(old_playlist, new_playlist) {
+	const api = getSpotifyApi();
+	if (!api) {
+		console.log('No Spotify API connection');
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	api.getPlaylistTracks(old_playlist).then(function (data) {
+		const tracks = [];
+		for (var i = 0; i < data.body.items.length; i++) {
+			tracks.push(data.body.items[i].track.uri);
+		}
+		if (tracks.length > 0) {
+			api.addTracksToPlaylist(new_playlist, tracks).then(
+				function (data) {
+					console.log('Added tracks to playlist!');
+				},
+				function (err) {
+					console.log('Something went wrong!', err);
+				}
+			);
+		}
+	});
+}
+
+async function transferPlaylist(studio_id, host) {
+	console.log('Transfering playlist');
+	const studio = await getStudio(studio_id);
+	const old_playlist = studio[0].studioPlaylist;
+	const new_playlist = await createNewStudioPlaylist(studio);
+	console.log(new_playlist);
+	await copyPlaylist(old_playlist, new_playlist);
+	await updateStudioPlaylist(studio_id, new_playlist);
+	console.log('set new host ' + host);
+	await updateStudioHost(studio_id, host);
+	console.log(await getStudio(studio_id));
+	const updated_studio = await getStudio(studio_id);
+	return updated_studio.studioHost;
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -150,4 +203,7 @@ export {
 	getArtist,
 	getLastPlaylistTrackId,
 	getPlaybackState,
+	createNewStudioPlaylist,
+	copyPlaylist,
+	transferPlaylist,
 };

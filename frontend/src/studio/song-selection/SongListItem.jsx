@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import styles from '../StudioPage.module.css';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import PodcastsRoundedIcon from '@mui/icons-material/PodcastsRounded';
 import MusicNoteRoundedIcon from '@mui/icons-material/MusicNoteRounded';
 import equalizer_icon from '../../assets/now_playing/equalizer.gif';
 import { Box, Icon, ListItem, ListItemText } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../AppContextProvider';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,9 +17,8 @@ function SongListItem(props) {
 	const [isHover, setHover] = useState(false);
 	const [isIconHover, setIconHover] = useState(false);
 	const [nowPlayingSong, setNowPlayingSong] = useState('');
-
-	const isHost =
-		studio.studioHost === JSON.parse(localStorage.getItem('current_user_id'));
+	const { username } = useContext(AppContext);
+	const isHost = username === studio.studioHost;
 
 	// continously get the currently playing song
 	useEffect(() => {
@@ -84,14 +83,14 @@ function SongListItem(props) {
 			return (
 				<PodcastsRoundedIcon
 					fontSize='small'
-					style={{ color: '#c4c4c4', marginRight: '10px' }}
+					style={{ color: 'var(--iconColor)', marginRight: '10px' }}
 				/>
 			);
 		} else if (song.type === 'track') {
 			return (
 				<MusicNoteRoundedIcon
 					fontSize='small'
-					style={{ color: '#c4c4c4', marginRight: '10px' }}
+					style={{ color: 'var(--iconColor)', marginRight: '10px' }}
 				/>
 			);
 		}
@@ -126,8 +125,7 @@ function SongListItem(props) {
 	const displaySongText = () => {
 		return (
 			<ListItemText
-				className={styles.resultTitle}
-				primary={<b>{song.name}</b>}
+				primary={<p className={styles.resultTitle}>{song.name}</p>}
 				secondary={
 					<p className={styles.resultTitleDetail}>
 						{song.artists?.length > 0 ? song.artists[0] : song.artists}
@@ -166,7 +164,9 @@ function SongListItem(props) {
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
-								style={{ color: isIconHover ? '#B03EEE' : '#757575' }}
+								style={{
+									color: isIconHover ? '#B03EEE' : 'var(--iconColor)',
+								}}
 								fontSize='small'
 								onClick={() => handleRemoveFromQueue()}
 							/>

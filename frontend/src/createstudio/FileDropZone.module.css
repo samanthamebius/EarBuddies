@@ -1,8 +1,8 @@
 .dropBox {
-    background-color: white;
+    background-color: var(--fieldColor);
     border-radius: 4px;
     border-style: dashed;
-    border-color: #C4C4C4;
+    border-color: var(--fieldBorderColor);
     padding: 20px;
 }
 
@@ -19,29 +19,29 @@
 }
 
 .uploadedfileText {
-	color: black;
-	font-size: 16px;
-	position: relative;
+    color: var(--headingColor);
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 20px
+    padding: 10px 0px 10px 20px;
 }
 
 .dropBox:hover {
     cursor: pointer;
-    border-color: #212121;
+    border-color: var(--fieldBorderColor);
 }
 
 .focusText {
     font-weight: bold;
-	color: #CA3FF3;
-	font-size: 16px;
-	position: relative;
+    color: #ca3ff3;
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 0px
+    padding: 10px 0px 10px 0px;
 }
 
 p {
-  margin: 10px 0px 10px 0px;  
+    margin: 10px 0px 10px 0px;
 }
 
 .closeIcon {
