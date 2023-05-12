@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 
 import axios from 'axios';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
@@ -14,7 +14,6 @@ import PinnedMessage from './PinnedMessage';
 import QuickAddPill from './QuickAddPill';
 import styles from './Chat.module.css';
 import { AppContext } from '../../AppContextProvider';
-import { useEffect } from 'react';
 
 // Styling for a text field
 const StyledTextField = styled(TextField)({
@@ -138,11 +137,9 @@ export default function Chat(props) {
 	useEffect(() => {
 		socket.on('receive_pinned_message', (data) => {
 			const { newMessage, pinnedMessages } = data;
-
 			const messageExists = pinnedMessages.find(
 				(message) => message.id === newMessage.id
 			);
-
 			if (!messageExists) {
 				setPinnedMessages((pinnedMessages) => [
 					...pinnedMessages,
