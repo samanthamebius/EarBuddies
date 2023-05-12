@@ -18,6 +18,19 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 
+/**
+* A StudioMenu component that displays menu options for controlling the studio.
+* @param {boolean} controlEnabled - Whether control is enabled for the studio.
+* @param {function} handleControlToggle - The function to handle toggling control for the studio.
+* @param {function} handleDelete - The function to handle deleting the studio.
+* @param {boolean} isHost - Whether the current user is the host of the studio.
+* @param {string} id - The ID of the studio.
+* @param {Object} studio - The studio object.
+* @param {Array} studioUsers - An array of users in the studio.
+* @param {boolean} isAloneInStudio - Whether the current user is the only one in the studio.
+* @param {Object} socket - The socket object.
+* @returns {JSX.Element} - The StudioMenu component JSX.
+*/
 export default function StudioMenu({
 	controlEnabled,
 	handleControlToggle,
@@ -49,6 +62,8 @@ export default function StudioMenu({
 	const handleClick = (event) => {
 		setOpen(event.currentTarget);
 	};
+
+	{/* Handle hover styling */}
 
 	const enterLeave = () => {
 		setInLeave(true);
@@ -87,6 +102,8 @@ export default function StudioMenu({
 	const leaveEnable = () => {
 		setIsInEnable(false);
 	};
+
+	{/* Handle dialog states */}
 
 	const handleClose = () => {
 		setOpen(null);
@@ -143,7 +160,7 @@ export default function StudioMenu({
 				handleAction={() => {
 					handleClose;
 					handleDelete();
-				}} //TO DO: replace with delete functionality
+				}}
 				message={'Are you sure you want to delete this studio?'}
 				actionText={'Delete'}
 			/>
@@ -153,7 +170,7 @@ export default function StudioMenu({
 				handleAction={() => {
 					handleClose;
 					handleLeaveStudio();
-				}} //TO DO: replace with leave functionality
+				}}
 				message={'Are you sure you want to leave this studio?'}
 				actionText={'Leave'}
 			/>
