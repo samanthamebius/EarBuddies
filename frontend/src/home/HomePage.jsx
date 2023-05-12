@@ -102,7 +102,7 @@ function HomePage({ socket }) {
 						<img
 							src={SoundWavesGradient}
 							className={styles.soundWaves}
-							alt='Pink Sound Waves'></img>
+							alt='Pink sound waves'></img>
 					</div>
 				</div>
 				<SearchBar

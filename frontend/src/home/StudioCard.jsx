@@ -55,6 +55,7 @@ export default function StudioCard({ socket, studio }) {
 						<img
 							className={styles.soundWaves}
 							src={SoundWaves}
+							alt='White sound waves'
 							style={isListening ? {} : { display: 'none' }}
 						/>
 					</div>
