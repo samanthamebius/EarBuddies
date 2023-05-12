@@ -198,23 +198,6 @@ async function updateStudioPlaylist(id, playlist) {
 }
 
 /**
- * Removes studio from all users
- * @param studio
- */
-async function removeStudioFromUsers(studio) {
-	const listeners = studio[0].studioUsers;
-
-	listeners.forEach(async (listener) => {
-		const studios = await getStudiosId(listener);
-		const newStudios = studios.filter(
-			(this_studio) => {
-				JSON.parse(JSON.stringify(this_studio._id)) !== studio[0]._id}
-		);
-		await updateStudios(listener, newStudios);
-	});
-}
-
-/**
  * Sets a users nickname in a studio
  * @param studio_id
  * @param username: user to update
@@ -259,7 +242,6 @@ export {
 	deleteUserFromStudio,
 	setStudioStatus,
 	updateStudioPlaylist,
-	removeStudioFromUsers,
 	setNickname,
 	removeNickname,
 };
