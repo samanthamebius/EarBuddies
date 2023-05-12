@@ -37,7 +37,7 @@ router.get('/search/:playlist_id/:query', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		const results = await searchSpotify(query, thisSpotifyApi, playlist_id);
-		return res.status(200).json(results);
+		res.status(200).json(results);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -67,7 +67,7 @@ router.put('/queue', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		await addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotifyApi);
-		return res.status(200).json({ msg: 'Added track to playlist' });
+		res.status(200).json({ msg: 'Added track to playlist' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -132,7 +132,7 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 			type,
 			thisSpotifyApi
 		);
-		return res.status(200).json({ msg: 'Removed track from playlist' });
+		res.status(200).json({ msg: 'Removed track from playlist' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -162,10 +162,10 @@ router.put('/play', async (req, res) => {
 		// check if spotify is active - if yes then resume playing if no then play playlist
 		if (await getPlaybackState(thisSpotifyApi, deviceId)) {
 			await resumeSpotify(thisSpotifyApi, deviceId);
-			return res.status(200).json({ msg: 'Resuming track' });
+			res.status(200).json({ msg: 'Resuming track' });
 		} else {
 			await playSpotify(thisSpotifyApi, uri, deviceId);
-			return res.status(200).json({ msg: 'Playing Playlist' });
+			res.status(200).json({ msg: 'Playing Playlist' });
 		}
 	} catch (err) {
 		console.log(err);
@@ -194,7 +194,7 @@ router.put('/pause', async (req, res) => {
 		}
 		// Pause whatever the device is playing
 		await pauseSpotify(deviceId, thisSpotifyApi);
-		return res.status(200).json({ msg: 'Pausing Spotify' });
+		res.status(200).json({ msg: 'Pausing Spotify' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -231,11 +231,11 @@ router.put('/next', async (req, res) => {
 				'spotify:playlist:' + studio.studioPlaylist,
 				deviceId
 			);
-			return res.status(200).json({ msg: 'Next restart' });
+			res.status(200).json({ msg: 'Next restart' });
 		} else {
 			// Skip to next track
 			await skipNext(thisSpotifyApi, deviceId);
-			return res.status(200).json({ msg: 'Skip to next' });
+			res.status(200).json({ msg: 'Skip to next' });
 		}
 	} catch (err) {
 		console.log(err);
@@ -264,7 +264,7 @@ router.put('/previous', async (req, res) => {
 		}
 		// Skip to previous track
 		await skipPrevious(thisSpotifyApi, deviceId);
-		return res.status(200).json({ msg: 'Skip to previous' });
+		res.status(200).json({ msg: 'Skip to previous' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -289,7 +289,7 @@ router.get('/songinfo', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
-		return res.status(200).json(currentTrack);
+		res.status(200).json(currentTrack);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -316,7 +316,7 @@ router.get('/artist/:artist_id', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		const artist = await getArtist(artist_id, thisSpotifyApi);
-		return res.status(200).json(artist);
+		res.status(200).json(artist);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
