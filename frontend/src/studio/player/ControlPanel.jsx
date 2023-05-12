@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
+
 import axios from 'axios';
 import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 import { useNavigate } from 'react-router';
+
 import styles from './ControlPanel.module.css';
 import TimeSlider from './TimeSlider';
 import VolumeSlider from './VolumeSlider';
@@ -12,16 +14,25 @@ import { AppContext } from '../../AppContextProvider';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ *
+ * @param studio - The current studio
+ * @param player - The player connected to the current browser
+ * @param socket - Communication channel between client and server
+ * @param queueIsEmpty - Boolean to check if the queue is empty
+ * @param isHost - Boolean to check if the current user is the host
+ */
 function ControlPanel(props) {
 	const { studio, player, socket, queueIsEmpty, isHost } = props;
 	const [isPlaying, setPlaying] = useState(false);
-	const navigate = useNavigate();
-	const { myDeviceId } = useContext(AppContext);
 	const [isInPrevious, setInPrevious] = useState(false);
 	const [isInPause, setInPause] = useState(false);
 	const [isInPlay, setInPlay] = useState(false);
 	const [isInNext, setInNext] = useState(false);
+	const { myDeviceId } = useContext(AppContext);
+	const navigate = useNavigate();
 
+	// Play a song on the current device
 	function spotifyPlayer(studio, myDeviceId) {
 		try {
 			axios
@@ -41,6 +52,7 @@ function ControlPanel(props) {
 		}
 	}
 
+	// Pause a song on the current device
 	function spotifyPauser(myDeviceId) {
 		try {
 			axios
@@ -59,6 +71,7 @@ function ControlPanel(props) {
 		}
 	}
 
+	// Skip a song on the current device
 	function spotifyNext(myDeviceId, studio) {
 		try {
 			axios
@@ -78,6 +91,7 @@ function ControlPanel(props) {
 		}
 	}
 
+	// Go back to the previous song on the current device
 	function spotifyPrevious(myDeviceId) {
 		try {
 			axios
@@ -96,35 +110,38 @@ function ControlPanel(props) {
 		}
 	}
 
+	// Trigger playing
 	function playButton(studio) {
-		// only play if host
 		if (isHost) {
-			console.log('playing');
 			spotifyPlayer(studio, myDeviceId);
 		}
+		// send the now playing song to all sockets in the studio
 		socket.emit('send_play_song', {
 			room: studio._id,
 			isPlaying: true,
 		});
 	}
 
+	// Trigger pausing
 	function pauseButton(studio) {
-		// only pause if host
 		if (isHost) {
 			spotifyPauser(myDeviceId);
 		}
+		// send the paused song to all sockets in the studio
 		socket.emit('send_pause_song', {
 			room: studio._id,
 			isPlaying: false,
 		});
 	}
 
+	// Trigger go back to the previous song
 	function previousButton() {
 		if (isHost) {
 			spotifyPrevious(myDeviceId);
 		}
 	}
 
+	// Trigger skipping the current song
 	function skipButton(studio) {
 		if (isHost) {
 			spotifyNext(myDeviceId, studio);
@@ -138,7 +155,6 @@ function ControlPanel(props) {
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 			}
-			console.log('received play');
 		});
 	}, [socket, myDeviceId]);
 
@@ -149,10 +165,10 @@ function ControlPanel(props) {
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 			}
-			console.log('received pause');
 		});
 	}, [socket, myDeviceId]);
 
+	// Functions to set the on hover styling for control panel buttons
 	const enterPrevious = () => {
 		setInPrevious(true);
 	};
@@ -187,6 +203,7 @@ function ControlPanel(props) {
 
 	return (
 		<div className={styles.controlPanel}>
+			{/* Playback Controls */}
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
 					sx={{ '&:hover': { cursor: isHost && 'pointer' } }}
