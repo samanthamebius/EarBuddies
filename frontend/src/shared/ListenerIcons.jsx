@@ -50,7 +50,6 @@ export default function StudioCard({ studioUsers, isListening, isHomeCard }) {
 	// Get user data
 	useEffect(() => {
 		if (!studioUsers || !Array.isArray(studioUsers)) {
-			console.log('no studio users');
 			return;
 		}
 		async function fetchUserData() {
