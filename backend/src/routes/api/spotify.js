@@ -13,6 +13,7 @@ import {
 	playSpotify,
 	resumeSpotify,
 	pauseSpotify,
+	skipNext,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -129,6 +130,7 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 			type,
 			thisSpotifyApi
 		);
+		return res.status(200).json({ msg: 'Removed track from playlist' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -200,10 +202,19 @@ router.put('/pause', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/next
+ * @desc    Skip to the next song in the playlist - if last one restart from beginning
+ * @body	deviceId: String
+ * 			studio: Object
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/next', async (req, res) => {
 	try {
 		const { deviceId, studio } = req.body;
-		console.log('device id ' + deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
@@ -212,33 +223,17 @@ router.put('/next', async (req, res) => {
 		//other wise skip to next
 		let currentId = await getCurrentTrackId(thisSpotifyApi);
 		let lastId = await getLastPlaylistTrackId(thisSpotifyApi, studio.studioPlaylist);
-		console.log('current ' + currentId);
-		console.log('last ' + lastId);
 		if (currentId === lastId) {
-			thisSpotifyApi
-				.play({
-					context_uri: 'spotify:playlist:' + studio.studioPlaylist,
-					device_id: deviceId,
-					offset: { position: 0 },
-				})
-				.then(
-					function () {
-						console.log('Playing track!');
-					},
-					function (err) {
-						console.log('Something went wrong!', err);
-					}
-				);
+			await playSpotify(
+				thisSpotifyApi,
+				'spotify:playlist:' + studio.studioPlaylist,
+				deviceId
+			);
+			return res.status(200).json({ msg: 'Next restart' });
 		} else {
 			// Skip to next track
-			thisSpotifyApi.skipToNext({ device_id: deviceId }).then(
-				function () {
-					console.log('Skipped to next track!');
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+			await skipNext(thisSpotifyApi, deviceId);
+			return res.status(200).json({ msg: 'Skip to next' });
 		}
 	} catch (err) {
 		console.log(err);

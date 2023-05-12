@@ -222,14 +222,9 @@ async function removePlaylistTrack(
 			[{ uri: 'spotify:' + type + ':' + track_id }],
 			{ snapshot_id: snapshot_id }
 		)
-		.then(
-			function (data) {
-				return res.status(200).json({ msg: 'Removed track from playlist' });
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		.then(function (err) {
+			console.log('Something went wrong!', err);
+		});
 }
 
 async function getPlaylist(playlist_id, thisSpotifyApi) {
@@ -291,6 +286,12 @@ async function pauseSpotify(deviceId, thisSpotifyApi) {
 	);
 }
 
+async function skipNext(thisSpotifyApi, deviceId) {
+	thisSpotifyApi.skipToNext({ device_id: deviceId }).then(function (err) {
+		console.log('Something went wrong!', err);
+	});
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -309,4 +310,5 @@ export {
 	resumeSpotify,
 	playSpotify,
 	pauseSpotify,
+	skipNext,
 };
