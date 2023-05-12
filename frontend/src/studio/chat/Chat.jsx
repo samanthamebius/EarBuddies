@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
+
 import axios from 'axios';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
@@ -7,6 +8,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { TextField, styled } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+
 import ChatMessage from './ChatMessage';
 import PinnedMessage from './PinnedMessage';
 import QuickAddPill from './QuickAddPill';
@@ -14,6 +16,7 @@ import styles from './Chat.module.css';
 import { AppContext } from '../../AppContextProvider';
 import { useEffect } from 'react';
 
+// Styling for a text field
 const StyledTextField = styled(TextField)({
 	'& .MuiInputBase-root': {
 		padding: '0',
@@ -24,22 +27,30 @@ const StyledTextField = styled(TextField)({
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ *
+ * @param socket - Communication channel between client and server
+ * @param messages - Array of messages inside the studio
+ * @param setMessages - Function to set the array of messages inside the studio
+ */
 export default function Chat(props) {
-	const { socket, studio, messages, setMessages } = props;
+	const { socket, messages, setMessages } = props;
 	const [message, setMessage] = useState('');
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
 	const [replyMessage, setReplyMessage] = useState('');
 	const [nickname, setNickname] = useState('');
 	const [nowPlaying, setNowPlaying] = useState({});
-	const displayedPinnedMessages = expandedPinnedMessages
-		? pinnedMessages
-		: pinnedMessages.slice(0, 1);
+
+	const textInput = useRef(null);
+	const messagesRef = useRef(null);
 	const { username } = useContext(AppContext);
 	const { id } = useParams();
 	const room = id;
-	const textInput = useRef(null);
-	const messagesRef = useRef(null);
+
+	const displayedPinnedMessages = expandedPinnedMessages
+		? pinnedMessages
+		: pinnedMessages.slice(0, 1);
 
 	// scroll to the bottom of the chat container when it's overflowed
 	useEffect(() => {
@@ -79,7 +90,6 @@ export default function Chat(props) {
 	// continously set the live messages received
 	useEffect(() => {
 		socket.on('receive_message', (data) => {
-			console.log(data);
 			setMessages((messages) => [
 				...messages,
 				{
@@ -208,7 +218,9 @@ export default function Chat(props) {
 
 	return (
 		<div className={styles.chat}>
+			{/* Chat Content */}
 			<div className={styles.chatContent}>
+				{/* Pinned  Messages*/}
 				<div className={styles.pinnedMessages}>
 					<div className={styles.pinnedMessagesContent}>
 						{displayedPinnedMessages.map((message, index) => (
@@ -238,6 +250,7 @@ export default function Chat(props) {
 						</div>
 					)}
 				</div>
+				{/* Messages */}
 				<div className={styles.messagesContainer}>
 					{messages.map((message, index) => (
 						<ChatMessage
@@ -254,11 +267,13 @@ export default function Chat(props) {
 					<div ref={messagesRef}></div>
 				</div>
 			</div>
+			{/* Chat Input */}
 			<div className={styles.chatInputContainer}>
 				<div
 					className={styles.chatInput}
 					onClick={() => textInput.current.focus()}>
 					<div className={styles.inputContent}>
+						{/* Reply Message */}
 						{replyMessage !== '' && (
 							<div className={styles.replyMessage}>
 								<p className={styles.replyMessageText}>{replyMessage}</p>
@@ -303,10 +318,10 @@ export default function Chat(props) {
 						fontSize='small'
 					/>
 				</div>
+				{/* Quick Add Pills */}
 				{Object.keys(nowPlaying).length > 0 && (
 					<div className={styles.pillContainer}>
 						<b className={styles.quickAddText}>Quick Add:</b>
-
 						<QuickAddPill
 							nowPlaying={nowPlaying}
 							message={message}
