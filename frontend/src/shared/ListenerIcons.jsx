@@ -1,5 +1,6 @@
 import useGet from "../hooks/useGet";
 import styles from "./ListenerIcons.module.css";
+import AddIcon from "../assets/addListenerIcon.png";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,11 +29,10 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 export default function StudioCard({
 	studioUsers,
 	isListening,
-	profileImages,
-	profileStatus,
     isHomeCard
 }) {
 	const [userList, setUserList] = useState([]);
+
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
 		if (!studioUsers || !Array.isArray(studioUsers)) {
@@ -46,8 +46,18 @@ export default function StudioCard({
 		}
 		fetchUserData();
 	}, [studioUsers]);
-	profileImages = userList.map(user => user.profilePic);
-	profileStatus = userList.map(user => user.userIsActive);
+
+
+	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
+
+	const profileImages = activeFirst.map(user => user.profilePic);
+	const profileStatus = activeFirst.map(user => user.userIsActive);
+
+	if (!isHomeCard) {
+		profileStatus.unshift(true);
+		profileStatus.reverse();
+	}
+	
 	return (
 		<div className={styles.listenersImages}>
 			{Array.isArray(profileImages)

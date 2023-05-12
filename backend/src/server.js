@@ -71,9 +71,64 @@ io.on("connection", (socket) => {
 		io.in(room).emit("receive_message_reaction", data);
 	});
 
+	// reload the chat messages if the nickname of users in the studio changes
+	socket.on("reload_chat_messages", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_reload_chat_messages", data);
+	});
+
+	// send the currently playing song to the chat
+	socket.on("send_currently_playing", (data) => {
+		const { room, track } = data;
+		io.in(room).emit("receive_currently_playing", track);
+	});
+
+	// add a song to the queue
+	socket.on("send_new_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_new_song", data);
+	});
+
+	// remove song from the queue
+	socket.on("remove_from_studio_queue", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_remove_from_studio_queue", data);
+	});
+
+	// play a song from the playlist in studio
+	socket.on("send_play_song", (data) => {
+		const { room } = data;
+		console.log(room);
+		io.in(room).emit("receive_play_song", data);
+	});
+
+	// pause a song from the playlist in studio
+	socket.on("send_pause_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_pause_song", data);
+	});
+
+	// go to a previous song in the playlist in studio
+	socket.on("send_previous_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_previous_song");
+	});
+
+	// skip to the next song in the playlist in studio
+	socket.on("send_skip_song", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_skip_song", data);
+	});
+
+	// send the user's currently playing song to chat
+	socket.on("send_to_chat_currently_playing", (data) => {
+		const { room } = data;
+		io.in(room).emit("receive_user_currently_playing_song", data.trackTitle);
+	});
+
 	// remove the user so they don't receive messages while they are gone
 	socket.on("leave_room", (data) => {
-		const { displayName, room } = data;
+		const { nickname: displayName, room } = data;
 		socket.leave(room);
 		console.log(`${displayName} has left the chat`);
 	});

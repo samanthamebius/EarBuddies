@@ -1,120 +1,121 @@
 .heading {
-  font-weight: 800;
-  color: #757575;
-  font-size: 32px;
-  position: relative;
-  margin: 0px;
-  padding: 0px 24px 0px 24px
+    font-weight: 800;
+    color: var(--headingColor);
+    font-size: 32px;
+    position: relative;
+    margin: 0px;
+    padding: 0px 24px 0px 24px;
 }
 
 .subHeading {
-  font-weight: 800;
-  color: #757575;
-  font-size: 16px;
-  margin: 0px 0px 0px 24px;
-  padding: 0px 0px 20px 0px;
-  display: flex;
+    font-weight: 800;
+    color: var(--headingColor);
+    font-size: 16px;
+    margin: 0px 0px 0px 24px;
+    padding: 0px 0px 20px 0px;
+    display: flex;
 }
 
 .dialogHeader {
-  margin: 20px 20px 0px 20px;
-  display: flex;
-  align-items: center;
+    margin: 20px 20px 0px 20px;
+    display: flex;
+    align-items: center;
 }
 
-.helperText{
-  color:rgb(218, 0, 0);
+.helperText {
+    color: rgb(218, 0, 0);
+    font-size: 16px;
 }
 
 .secondaryButton {
-  background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#bebebe, #ededed);
 }
 
 .dialogContent {
-  text-align: center;
-font-weight: 800;
-color: #757575;
-font-size: 32px;
-position: relative;
-margin: 0px;
-padding: 0px 24px 0px 24px
+    text-align: center;
+    font-weight: 800;
+    color: var(--headingColor);
+    font-size: 32px;
+    position: relative;
+    margin: 0px;
+    padding: 0px 24px 0px 24px;
 }
 
 .listenerList {
-  display: flex;
-  flex-wrap: wrap;
-  border: #ABABAB solid 1px;
-  border-radius: 10px;
-  height: calc(100vh - 460px);
-  overflow: scroll;
-  margin: 0 20px 20px 20px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  overflow-x: hidden;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+    display: flex;
+    flex-wrap: wrap;
+    border: #ababab solid 1px;
+    border-radius: 10px;
+    max-height: calc(100vh - 460px);
+    overflow: scroll;
+    margin: 0 20px 20px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 .listenerList::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .listenerListItem {
-  display: flex;
-  align-items: center;
-  border-top: #ABABAB solid 1px;
-  width: 100%;
-  padding: 10px;
-  background-color: #FFF;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-top: var(--fieldBorderColor) solid 1px;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--fieldColor);
+    cursor: pointer;
 }
 
 .listenerListItem:hover {
-  background-color: #f1f1f1;
+    background-color: var(--fieldHoverColor);
 }
 
 .listenerListItem:hover p {
-  color: #B03EEE;
+    color: #b03eee;
 }
 
 .listenerListItem img {
-  height: 35px;
-  margin-right: 10px;
-  object-fit: cover;
-  border-radius: 50%;
+    object-fit: cover;
+    height: 35px;
+    width: 35px;
+    margin-right: 10px;
+    border-radius: 50%;
 }
 
 .listenerListItem p {
-  margin: 0;
-  font-size: 16px;
-  font-weight: bold;
+    margin: 0;
+    font-size: 16px;
 }
 
 .hostIcon {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .purpleButton {
-  background: linear-gradient(#B03EEE, #E640F8);
-  font-weight: 700;
-  width: 200px;
+    background: linear-gradient(#b03eee, #e640f8);
+    font-weight: 700;
+    width: 200px;
 }
 
 .greyButton {
-  background: linear-gradient(#BEBEBE, #EDEDED);
-  font-weight: 700;
-  text-align: center;
-  width: 200px;
+    background: linear-gradient(#bebebe, #ededed);
+    font-weight: 700;
+    text-align: center;
+    width: 200px;
 }
 
 .secondaryButton {
-  background: linear-gradient(#BEBEBE, #EDEDED);
+    background: linear-gradient(#bebebe, #ededed);
 }
 
 .createButton {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .cancelButton {
-  background: linear-gradient(#EDEDED, #BEBEBE);
-  font-weight: 700;
+    background: linear-gradient(#ededed, #bebebe);
+    font-weight: 700;
 }

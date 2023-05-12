@@ -1,28 +1,28 @@
 .heading {
     font-weight: 800;
-	color: #757575;
-	font-size: 32px;
-	position: relative;
+    color: var(--headingColor);
+    font-size: 32px;
+    position: relative;
     margin: 0px;
-    padding: 20px 24px 0px 24px
+    padding: 20px 24px 0px 24px;
 }
 
 .sectionHeading {
     font-weight: 800;
-	color: #757575;
-	font-size: 16px;
-	position: relative;
+    color: var(--headingColor);
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 20px 0px 10px 0px
+    padding: 20px 0px 10px 0px;
 }
 
 .focusText {
     font-weight: 800;
-	color: #CA3FF3;
-	font-size: 16px;
-	position: relative;
+    color: var(--focusText);
+    font-size: 16px;
+    position: relative;
     margin: 0px;
-    padding: 10px 0px 10px 0px
+    padding: 10px 0px 10px 0px;
 }
 
 .controlSection {
@@ -40,7 +40,7 @@
 }
 
 .cancelButton {
-    background: linear-gradient(#EDEDED, #BEBEBE);
+    background: linear-gradient(#ededed, #bebebe);
     font-weight: 700;
 }
 
@@ -54,6 +54,35 @@
     display: flex;
     align-items: center;
 }
+
 .spacing {
     width: 10px;
+}
+
+.searchResults {
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 0px 0px 4px 4px;
+    background-color: var(--fieldColor);
+}
+
+.clearIcon:hover {
+    cursor: pointer;
+}
+
+.listeners {
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: var(--fieldColor);
+}
+
+.image {
+    object-fit: cover;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    pointer-events: none;
 }
