@@ -157,3 +157,7 @@ Handle any errors gracefully
 # Notes
 If studios don't show in the home page, try refreshing the page  
 If everything breaks, please log out and log in again
+
+If a 429 error occurs, the webpage has excedded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
+
+Happy Listening!
