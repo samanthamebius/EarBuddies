@@ -33,7 +33,6 @@ export default function StudioCard({ socket, studio }) {
 	}, []);
 
 	const handleJoinStudio = () => {
-		console.log('Joining studio ' + studio.id);
 		navigate(`studio/${studio._id}`);
 	};
 

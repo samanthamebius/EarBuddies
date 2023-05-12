@@ -62,7 +62,6 @@ export default function ViewProfileDialog({
         if (user) {
             setDisplayName(user.userDisplayName);
             setDisplayPhoto(user.profilePic);
-            console.log(user.spotifyPic);
             setSpotifyPhoto(user.spotifyPic);
         }
     }, [user]);
