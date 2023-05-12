@@ -89,27 +89,21 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		const currentTrackId = await getCurrentTrackId(thisSpotifyApi);
-		if (currentTrackId === track_id) {
-		} else {
-			// Remove tracks from a playlist
-			thisSpotifyApi
-				.removeTracksFromPlaylist(
-					playlist_id,
-					[{ uri: 'spotify:' + type + ':' + track_id }],
-					{ snapshot_id: snapshot_id }
-				)
-				.then(
-					function (data) {
-						return res
-							.status(200)
-							.json({ msg: 'Removed track from playlist' });
-					},
-					function (err) {
-						console.log('Something went wrong!', err);
-					}
-				);
-		}
+		// Remove tracks from a playlist
+		thisSpotifyApi
+			.removeTracksFromPlaylist(
+				playlist_id,
+				[{ uri: 'spotify:' + type + ':' + track_id }],
+				{ snapshot_id: snapshot_id }
+			)
+			.then(
+				function (data) {
+					return res.status(200).json({ msg: 'Removed track from playlist' });
+				},
+				function (err) {
+					console.log('Something went wrong!', err);
+				}
+			);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
