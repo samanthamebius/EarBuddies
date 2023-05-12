@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import styles from '../StudioPage.module.css';
 import { styled } from '@mui/material/styles';
 import { StyledSlider } from './StyledSlider';
-import { useEffect } from 'react';
 import axios from 'axios';
 
 /**

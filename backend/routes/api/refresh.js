@@ -10,7 +10,6 @@ var refreshAccessToken = function () {
               var access_token = data.body['access_token'];
               var expires_in = data.body['expires_in'];
               thisSpotifyApi.setAccessToken(access_token);
-              console.log('The access token has been refreshed!');
             }).catch(function (err) {
               console.log(err);
             });

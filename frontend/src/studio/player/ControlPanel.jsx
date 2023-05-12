@@ -42,7 +42,6 @@ function ControlPanel(props) {
 					deviceId: myDeviceId,
 				})
 				.then((response) => {
-					console.log(response);
 				})
 				.catch((error) => {
 					navigate('/400');
@@ -61,7 +60,6 @@ function ControlPanel(props) {
 					deviceId: myDeviceId,
 				})
 				.then((response) => {
-					console.log(response);
 				})
 				.catch((error) => {
 					navigate('/400');
@@ -81,7 +79,6 @@ function ControlPanel(props) {
 					studio: studio,
 				})
 				.then((response) => {
-					console.log(response);
 				})
 				.catch((error) => {
 					navigate('/400');
@@ -100,7 +97,6 @@ function ControlPanel(props) {
 					deviceId: myDeviceId,
 				})
 				.then((response) => {
-					console.log(response);
 				})
 				.catch((error) => {
 					navigate('/400');
