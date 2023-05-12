@@ -211,6 +211,21 @@ async function addPlaylistTrackAndQueue(playlist_id, track_id, type) {
 	);
 }
 
+async function getPlaylist(playlist_id) {
+	const api = getSpotifyApi();
+	if (!api) {
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	api.getPlaylist(playlist_id).then(
+		function (data) {
+			return data.body;
+		},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -224,4 +239,5 @@ export {
 	copyPlaylist,
 	transferPlaylist,
 	addPlaylistTrackAndQueue,
+	getPlaylist,
 };
