@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
 
 import Banner from "./Banner";
 import Chat from "./chat/Chat";
-import WebPlayback from "./WebPlayback";
+import WebPlayback from "./player/WebPlayback";
 import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 
 function StudioPage({ socket }) {
 	const accessToken = localStorage.getItem("access_token");
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
+	const [messages, setMessages] = useState([]);
+	const { username } = useContext(AppContext);
 
 	const {
 		data: studio,
@@ -47,6 +50,7 @@ function StudioPage({ socket }) {
 						socket={socket}
 						token={accessToken.replace(/['"]+/g, "")}
 						queueIsEmpty={queueIsEmpty}
+						messages={messages}
 					/>
 				</div>
 				<SongSelection
@@ -54,7 +58,12 @@ function StudioPage({ socket }) {
 					socket={socket}
 					setQueueIsEmpty={setQueueIsEmpty}
 				/>
-				<Chat socket={socket} />
+				<Chat
+					socket={socket}
+					studio={studio[0]}
+					messages={messages}
+					setMessages={setMessages}
+				/>
 			</div>
 		);
 	}
