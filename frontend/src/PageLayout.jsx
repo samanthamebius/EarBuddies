@@ -46,7 +46,7 @@ function NavMenu() {
 					<img
 						src={logo}
 						className={styles.logo}
-						alt='Ear Buddies Logo'
+						alt='Ear Buddies logo'
 					/>
 					<h1 className={styles.brandName}>EAR BUDDIES</h1>
 				</div>
@@ -109,6 +109,7 @@ function UserInfo() {
 			<div className={styles.profile_layout}>
 				<img
 					src={profilePicture}
+					alt='Profile picture of the user'
 					className={styles.profilePic}
 				/>
 				<p className={styles.username}>{username} </p>

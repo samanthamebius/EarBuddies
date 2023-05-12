@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
+
 import styles from '../StudioPage.module.css';
 import { StyledSlider } from './StyledSlider';
 
+/**
+ * Volume slider component within the now playing section in the studio
+ * @param player - The current player in the browser
+ * @param isHost - Boolean to check if the current user is the host
+ */
 function VolumeSlider({ player, isHost }) {
 	const [value, setValue] = useState(30);
 	const [isMute, setMute] = useState(false);
 
+	// Set the current volume
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 		if (player) {
@@ -17,6 +25,7 @@ function VolumeSlider({ player, isHost }) {
 		}
 	};
 
+	// Mute the current song
 	const handleMute = () => {
 		setMute(true);
 		if (player) {
@@ -24,6 +33,7 @@ function VolumeSlider({ player, isHost }) {
 		}
 	};
 
+	// Unmute the current song
 	const handleUnmute = () => {
 		setMute(false);
 		if (player) {

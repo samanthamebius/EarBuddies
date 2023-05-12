@@ -79,7 +79,8 @@ export default function AssignNewHostDialog({
 					Choose another listener to be a host
 				</h2>
 				<h2 className={styles.subsubHeading}>
-					Note: the user must be currently active in this studio to successfully be set as host
+					Note: the user must be currently active in this studio to successfully
+					be set as host
 				</h2>
 				<NewHostSelection
 					newHost={newHost}

@@ -12,6 +12,16 @@ import { AppContext } from '../../AppContextProvider';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Component to display a song
+ * @param song - The current song
+ * @param studio - The current studio
+ * @param socket - Communication channel between client and server
+ * @param type - The type of the track e.g. song
+ * @param snapshotId - Id to determine the current song
+ * @param setResults - Function to set the search results
+ * @returns
+ */
 function SongListItem(props) {
 	const { song, studio, socket, type, snapshotId = null, setResults } = props;
 	const [isHover, setHover] = useState(false);
@@ -27,6 +37,7 @@ function SongListItem(props) {
 		});
 	}, [socket]);
 
+	// handle the on hover styling for a song
 	const handleItemMouseEnter = () => {
 		setHover(true);
 	};
@@ -71,6 +82,7 @@ function SongListItem(props) {
 		});
 	};
 
+	// Determine which icon should be displayed
 	const displaySongTypeIcon = () => {
 		if (nowPlayingSong === song.name && type === 'queue') {
 			return (
@@ -96,10 +108,16 @@ function SongListItem(props) {
 		}
 	};
 
+	// Determine which song image should be displayed
 	const displaySongImage = () => {
 		return (
-			<Box className={styles.resultImgBox} position='relative'>
-				<img className={styles.resultImg} src={song.image} />
+			<Box
+				className={styles.resultImgBox}
+				position='relative'>
+				<img
+					className={styles.resultImg}
+					src={song.image}
+				/>
 				{/* For search results, onHover styles on listItem */}
 				{type === 'search' && (
 					<>
@@ -122,6 +140,7 @@ function SongListItem(props) {
 		);
 	};
 
+	// Determine the description of the song
 	const displaySongText = () => {
 		return (
 			<ListItemText
