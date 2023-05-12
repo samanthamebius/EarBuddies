@@ -134,13 +134,8 @@ test('toggle control of studio is successful', (done) => {
         studioControlHostOnly: true
     }
     request(app)
-        .post(`/${mockStudio1._id}/toggle`)
-        .expect(200)
-        .end((err, res) => {
-            if (err) return done(err);
-            expectStudio(res.body, updatedStudio);
-            done();
-        });
+		.put(`/${mockStudio1._id}/isHostOnly`)
+		.expect(200, done);
     }
 )
 
@@ -156,8 +151,6 @@ test("adding user to studio is successful", (done) => {
     .expect(200)
     .end((err, res) => {
       if (err) return done(err);
-      console.log("res NAMES " + res.body[0].studioNames);
-      console.log("res USERS " + res.body[0].studioUsers);
       expectStudio(res.body[0], updatedStudio);
       done();
     });
@@ -192,8 +185,6 @@ test('updating list of users in studio is successful', (done) => {
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
-      console.log("res NAMES " + res.body[0].studioNames);
-      console.log("res USERS " + res.body[0].studioUsers);
         expectStudio(res.body[0], updatedStudio);
         done();
       }
