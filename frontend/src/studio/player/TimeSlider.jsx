@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import styles from '../StudioPage.module.css';
 import { styled } from '@mui/material/styles';
 import { StyledSlider } from './StyledSlider';
-import { useEffect } from 'react';
 import axios from 'axios';
 
 /**
@@ -16,8 +15,7 @@ import axios from 'axios';
  * @param isHost - Boolean to check if the current user is the host
  * @returns {JSX.Element} - JSX creating the time slider component
  */
-export function TimeSlider(props) {
-	const { player, queueIsEmpty, isHost } = props;
+export function TimeSlider({ player }) {
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -30,7 +28,6 @@ export function TimeSlider(props) {
 		};
 		fetchDuration();
 	}, []);
-
 
 	// update the position of the current song as it plays
 	useEffect(() => {
