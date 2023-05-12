@@ -1,58 +1,74 @@
 .dropBox {
-    background-color: var(--fieldColor);
-    border-radius: 4px;
-    border-style: dashed;
-    border-color: var(--fieldBorderColor);
+/*Box model stuff*/
     padding: 20px;
+    border-color: var(--fieldBorderColor);
+    border-style: dashed;
+    border-radius: 4px;
+    background-color: var(--fieldColor);
 }
 
 .uploadView {
+/*Display stuff*/
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .uploadedView {
+/*Display stuff*/
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 .uploadedfileText {
-    color: var(--headingColor);
-    font-size: 16px;
+/*Positioning stuff*/
     position: relative;
+/*Box model stuff*/
     margin: 0px;
     padding: 10px 0px 10px 20px;
+/*Typography stuff*/
+    font-size: 16px;
+    color: var(--headingColor);
 }
 
 .dropBox:hover {
-    cursor: pointer;
+/*Box model stuff*/
     border-color: var(--fieldBorderColor);
+/*Miscellaneous*/
+    cursor: pointer;
 }
 
 .focusText {
-    font-weight: bold;
-    color: #ca3ff3;
-    font-size: 16px;
+/*Positioning stuff*/
     position: relative;
+/*Box model stuff*/
     margin: 0px;
     padding: 10px 0px 10px 0px;
+/*Typography stuff*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #ca3ff3;
 }
 
 p {
+/*Box model stuff*/
     margin: 10px 0px 10px 0px;
 }
 
 .closeIcon {
+/*Display stuff*/
     display: block;
+/*Box model stuff*/
     margin-left: auto;
 }
 
 .previewImg {
+/*Box model stuff*/
     height: 40px;
 }
 
 p {
+/*Typography stuff*/
     color: #666666;
 }

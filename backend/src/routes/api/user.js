@@ -1,17 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
-  getUser,
-  deleteUser,
-  searchStudios,
-  searchActiveStudios,
-  searchUsers,
-  searchStudioUsers,
-  updateUserDisplayName,
-  updateUserProfilePic,
-  setUserInactive,
-  updateUserSpotifyPic
-} from "../../dao/user_dao";
-import { deleteUserFromStudio, setStudioStatus } from "../../dao/studio_dao";
+	getUser,
+	deleteUser,
+	searchStudios,
+	searchActiveStudios,
+	searchUsers,
+	searchStudioUsers,
+	updateUserDisplayName,
+	updateUserProfilePic,
+	setUserInactive,
+	updateUserSpotifyPic,
+	getActiveStudios,
+} from '../../dao/user_dao';
+import { deleteUserFromStudio, setStudioStatus } from '../../dao/studio_dao';
 
 const router = express.Router();
 

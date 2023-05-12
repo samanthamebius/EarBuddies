@@ -1,14 +1,18 @@
 .genreButton {
+/*Box model stuff*/
     background: linear-gradient(#E640F8, #B03EEE);
 }
 
 .genreLabel {
+/*Box model stuff*/
     margin: 0px;
+/*Typography stuff*/
     font-weight: 600;
     color: white;
 }
 
 .genreIcon {
+/*Box model stuff*/
     height: 20px;
     padding-left: 10px;
 }

@@ -172,6 +172,12 @@ async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
 }
 
+async function getActiveStudios(username) {
+	const user = await getUser(username);
+	const studios = await Studio.find({ _id: { $in: user.userStudios }, studioIsActive: true });
+	return studios;
+}
+
 export {
 	createUser,
 	setUserActive,
@@ -190,5 +196,6 @@ export {
 	updateUserDisplayName,
 	updateUserProfilePic,
 	updateUserSpotifyPic,
+	getActiveStudios,,
 	addStudio,
 };

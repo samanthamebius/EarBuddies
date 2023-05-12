@@ -1,0 +1,47 @@
+    .sectionHeading {
+    /*Positioning stuff*/
+        position: relative;
+    /*Box model stuff*/
+        margin: 0px;
+        padding: 20px 0px 10px 0px;
+    /*Typography stuff*/
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--headingColor);
+    }
+    
+    .searchResults {
+    /*Box model stuff*/
+        max-height: 400px;
+        border: 1px solid #c4c4c4;
+        border-radius: 0px 0px 4px 4px;
+        background-color: var(--fieldColor);
+    /*Miscellaneous*/
+        overflow: auto;
+    }
+    
+    .clearIcon:hover {
+    /*Miscellaneous*/
+        cursor: pointer;
+    }
+    
+    .listeners {
+    /*Box model stuff*/
+        max-height: 400px;
+        border: 1px solid #c4c4c4;
+        border-radius: 4px;
+        background-color: var(--fieldColor);
+    /*Miscellaneous*/
+        overflow: auto;
+    }
+    
+    .image {
+    /*Box model stuff*/
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    /*Miscellaneous*/
+        object-fit: cover;
+        pointer-events: none;
+    }
+    
