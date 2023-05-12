@@ -20,14 +20,14 @@
 
 	/* Studio */
 	--nowPlayingBackgroundColor: #e9dcf1;
-	
+
 	/* Chat */
 	--chatBackgroundColor: #c68eef;
 	--replyBackgroundColor: #f6f9fa;
 	--replyTextColor: grey;
-	--pillBackgroundColor: #d8b3f2;
+	--pillBackgroundColor: #ffffff;
 	--pillContainerBackgroundColor: #e7e7e7;
-	--pillTextColor: grey;
+	--pillTextColor: #ca3ff3;
 	--pinnedBackgroundColor: #f8e9fc;
 
 	background-color: var(--backgroundColor);
