@@ -194,29 +194,46 @@ async function transferPlaylist(studio_id, host) {
 	return updated_studio.studioHost;
 }
 
-async function addPlaylistTrackAndQueue(playlist_id, track_id, type) {
-	const api = getSpotifyApi();
-	if (!api) {
-		return res.status(403).json({ msg: 'No Spotify API connection' });
-	}
-	api.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id]).then(
-		function (data) {
-			api.addToQueue('spotify:' + type + ':' + track_id).then(function (err) {
+async function addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotifyApi) {
+	thisSpotifyApi
+		.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
+		.then(
+			function (data) {
+				api.addToQueue('spotify:' + type + ':' + track_id).then(function (err) {
+					console.log('Something went wrong!', err);
+				});
+			},
+			function (err) {
 				console.log('Something went wrong!', err);
-			});
-		},
-		function (err) {
-			console.log('Something went wrong!', err);
-		}
-	);
+			}
+		);
 }
 
-async function getPlaylist(playlist_id) {
-	const api = getSpotifyApi();
-	if (!api) {
-		return res.status(403).json({ msg: 'No Spotify API connection' });
-	}
-	api.getPlaylist(playlist_id).then(
+async function removePlaylistTrack(
+	playlist_id,
+	track_id,
+	snapshot_id,
+	type,
+	thisSpotifyApi
+) {
+	thisSpotifyApi
+		.removeTracksFromPlaylist(
+			playlist_id,
+			[{ uri: 'spotify:' + type + ':' + track_id }],
+			{ snapshot_id: snapshot_id }
+		)
+		.then(
+			function (data) {
+				return res.status(200).json({ msg: 'Removed track from playlist' });
+			},
+			function (err) {
+				console.log('Something went wrong!', err);
+			}
+		);
+}
+
+async function getPlaylist(playlist_id, thisSpotifyApi) {
+	thisSpotifyApi.getPlaylist(playlist_id).then(
 		function (data) {
 			return data.body;
 		},
@@ -240,4 +257,5 @@ export {
 	transferPlaylist,
 	addPlaylistTrackAndQueue,
 	getPlaylist,
+	removePlaylistTrack,
 };

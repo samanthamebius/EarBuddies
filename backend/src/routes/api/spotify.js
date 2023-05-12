@@ -9,6 +9,7 @@ import {
 	getPlaybackState,
 	addPlaylistTrackAndQueue,
 	getPlaylist,
+	removePlaylistTrack,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -55,12 +56,12 @@ router.get('/search/:playlist_id/:query', async (req, res) => {
 router.put('/queue', async (req, res) => {
 	try {
 		const { playlist_id, track_id, type } = req.body;
+		// Add tracks to a playlist
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		// Add tracks to a playlist
-		await addPlaylistTrackAndQueue(playlist_id, track_id, type);
+		await addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotifyApi);
 		return res.status(200).json({ msg: 'Added track to playlist' });
 	} catch (err) {
 		console.log(err);
@@ -87,7 +88,7 @@ router.get('/queue/:playlist_id', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		return res.status(200).json(await getPlaylist(playlist_id));
+		return res.status(200).json(await getPlaylist(playlist_id, thisSpotifyApi));
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -97,6 +98,18 @@ router.get('/queue/:playlist_id', async (req, res) => {
 	}
 });
 
+/**
+ * @route   DELETE api/spotify/queue/:playlist_id/:track_id
+ * @desc    Remove the selected track from the playlist queue
+ * @params  playlist_id: String
+ * 			track_id: String
+ * @body	snapshot_id: String
+ * 			type: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 	try {
 		const { playlist_id, track_id } = req.params;
@@ -106,20 +119,13 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		// Remove tracks from a playlist
-		thisSpotifyApi
-			.removeTracksFromPlaylist(
-				playlist_id,
-				[{ uri: 'spotify:' + type + ':' + track_id }],
-				{ snapshot_id: snapshot_id }
-			)
-			.then(
-				function (data) {
-					return res.status(200).json({ msg: 'Removed track from playlist' });
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+		await removePlaylistTrack(
+			playlist_id,
+			track_id,
+			snapshot_id,
+			type,
+			thisSpotifyApi
+		);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
