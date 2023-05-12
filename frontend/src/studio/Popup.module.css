@@ -16,6 +16,15 @@
     display: flex;
 }
 
+.subsubHeading {
+  font-weight: 400;
+  color: #757575;
+  font-size: 15px;
+  margin: 0px 0px 0px 24px;
+  padding: 0px 0px 20px 0px;
+  display: flex;
+}
+
 .dialogHeader {
     margin: 20px 20px 0px 20px;
     display: flex;

@@ -58,21 +58,23 @@ function useStudioPost() {
             studioBannerImageUrl = imgUploadResponse.headers['location'];
         }
 
-        try {
-            const response = await axios.post(`${url}/new`, {
-                name,
-                listeners,
-                host,
-                genres,
-                studioBannerImageUrl,
-                isHostOnly,
-            });
-            navigate(`/studio/${response.data._id}`);
-        } catch (err) {
-            const navigate = useNavigate();
-            navigate('/500');
-        }
-    };
+    try {
+      const response = await axios.post(`${url}/new`, {
+        name,
+        listeners,
+        host,
+        genres,
+        studioBannerImageUrl,
+        isHostOnly,
+      });
+      navigate(`/studio/${response.data._id}`);
+    } catch (err) {
+      if (err.response.status === 403) {
+        navigate("/400");
+      }
+      navigate("/500");
+    }
+  };
 
     return { postStudio };
 }

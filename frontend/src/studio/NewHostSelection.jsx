@@ -30,7 +30,9 @@ export default function NewHostSelection({
             const potentialHosts = userDataList
                 .map((response) => response.data)
                 .filter((listener) => listener.username !== currentUser);
-            setListeners(potentialHosts);
+            //only show active users
+            const activeHosts = potentialHosts.filter((listener) => listener.userIsActive);
+            setListeners(activeHosts);
         }
         fetchUserData();
     }, [studioUsers]);

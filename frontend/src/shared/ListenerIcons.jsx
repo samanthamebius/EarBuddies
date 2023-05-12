@@ -1,18 +1,17 @@
-import useGet from "../hooks/useGet";
-import styles from "./ListenerIcons.module.css";
-import AddIcon from "../assets/addListenerIcon.png";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import useGet from '../hooks/useGet';
+import styles from './ListenerIcons.module.css';
+import AddIcon from '../assets/addListenerIcon.png';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
-    
-    let baseStyle = { transform: `translate(${70 * i}%)`, float: `right` };
+	let baseStyle = { transform: `translate(${70 * i}%)`, float: `right` };
 
-    if (isHomeCard) {
-        baseStyle = { transform: `translate(${-70 * i}%)`, float: `left` };
-    } 
-    
-	let greyStyle = { WebkitFilter: "brightness(30%)" };
+	if (isHomeCard) {
+		baseStyle = { transform: `translate(${-70 * i}%)`, float: `left` };
+	}
+
+	let greyStyle = { WebkitFilter: 'brightness(30%)' };
 	let listenerStyles = {};
 	if (isListening) {
 		if (profileStatus[i]) {
@@ -26,47 +25,49 @@ const setListenerImageStyles = (i, isListening, profileStatus, isHomeCard) => {
 	return listenerStyles;
 };
 
-export default function StudioCard({
-	studioUsers,
-	isListening,
-    isHomeCard
-}) {
+export default function StudioCard({ studioUsers, isListening, isHomeCard }) {
 	const [userList, setUserList] = useState([]);
 
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
 		if (!studioUsers || !Array.isArray(studioUsers)) {
-			console.log("no studio users")
+			console.log('no studio users');
 			return;
 		}
 		async function fetchUserData() {
-		const promises = studioUsers.map(user => axios.get(`${BASE_URL}/api/user/${user}`));
-		const userDataList = await Promise.all(promises);
-		setUserList(userDataList.map(response => response.data));
+			const promises = studioUsers.map((user) =>
+				axios.get(`${BASE_URL}/api/user/${user}`)
+			);
+			const userDataList = await Promise.all(promises);
+			setUserList(userDataList.map((response) => response.data));
 		}
 		fetchUserData();
 	}, [studioUsers]);
 
-
 	const activeFirst = [...userList].sort((a, b) => b.userIsActive - a.userIsActive);
 
-	const profileImages = activeFirst.map(user => user.profilePic);
-	const profileStatus = activeFirst.map(user => user.userIsActive);
+	const profileImages = activeFirst.map((user) => user.profilePic);
+	const profileStatus = activeFirst.map((user) => user.userIsActive);
 
 	if (!isHomeCard) {
-		profileStatus.unshift(true);
 		profileStatus.reverse();
+		profileImages.reverse();
 	}
-	
+
 	return (
 		<div className={styles.listenersImages}>
 			{Array.isArray(profileImages)
 				? profileImages.map((listenerImage, i) => (
 						<img
-							key={i} 
+							key={i}
 							className={styles.listenerImage}
 							src={listenerImage}
-							style={setListenerImageStyles(i, isListening, profileStatus, isHomeCard)}
+							style={setListenerImageStyles(
+								i,
+								isListening,
+								profileStatus,
+								isHomeCard
+							)}
 						/>
 				  ))
 				: null}

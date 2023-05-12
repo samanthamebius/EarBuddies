@@ -12,7 +12,6 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly, pl
 		const user = await getUser(username);
 		const displayName = user.userDisplayName.trim();
 		displayNames.push(displayName);
-		console.log(username)
 		if (user.userIsActive) {
 			numActive++;
 		}
@@ -21,20 +20,20 @@ async function createStudio(name, listeners, host, genres, photo, isHostOnly, pl
 	if (numActive > 1) {
 		isActive = true;
 	}
-	
-  const newStudio = new Studio({
-    studioName: name,
-    studioIsActive: isActive,
-    studioUsers: listeners,
-	studioNames: displayNames,
-    studioHost: host,
-    studioGenres: genres,
-    studioPicture: photo,
-    studioControlHostOnly: isHostOnly,
-    studioPlaylist: playlist,
-  });
-  const studio = await newStudio.save();
-  return studio;
+
+	const newStudio = new Studio({
+		studioName: name,
+		studioIsActive: isActive,
+		studioUsers: listeners,
+		studioNames: displayNames,
+		studioHost: host,
+		studioGenres: genres,
+		studioPicture: photo,
+		studioControlHostOnly: isHostOnly,
+		studioPlaylist: playlist,
+	});
+	const studio = await newStudio.save();
+	return studio;
 }
 
 async function getStudio(id) {
@@ -93,7 +92,7 @@ async function updateStudioHost(id, host) {
 }
 
 async function updateStudioNames(id, newNames) {
-	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames }, {new: true});
+	return await Studio.findOneAndUpdate({ _id: id }, { studioNames: newNames }, { new: true });
 }
 
 async function setStudioStatus(studio_id) {
@@ -105,15 +104,19 @@ async function setStudioStatus(studio_id) {
 		if (dbUser.userIsActive) {
 			numActive++;
 		}
-  	});
+	});
 
-  	await Promise.all(promises);
+	await Promise.all(promises);
 
 	if (numActive > 1) {
 		return await updateStudioIsActive(studio_id, true);
 	} else {
 		return await updateStudioIsActive(studio_id, false);
 	}
+}
+
+async function updateStudioPlaylist(id, playlist) {
+	return await Studio.findOneAndUpdate({ _id: id }, { studioPlaylist: playlist }, { new: true });
 }
 
 export {
@@ -128,4 +131,5 @@ export {
 	updateStudioNames,
 	deleteUserFromStudio,
 	setStudioStatus,
+	updateStudioPlaylist,
 };
