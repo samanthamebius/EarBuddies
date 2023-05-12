@@ -1,11 +1,11 @@
-import styles from './StudioCard.module.css';
-import SoundWaves from '../assets/studio_cards/soundwaves.png';
-import ProfilePicImg1 from '../assets/profilepic1.png';
-import GenreTag from './GenreTag';
-import ListenerIcons from '../shared/ListenerIcons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import styles from "./StudioCard.module.css";
+import SoundWaves from "../assets/studio_cards/soundwaves.png";
+import ProfilePicImg from "../assets/home/defaultprofilepic.png";
+import GenreTag from "./GenreTag";
+import ListenerIcons from "../shared/ListenerIcons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 /**
  * Card displayed on homepage for each of the user's studios.
@@ -14,7 +14,7 @@ import React, { useState, useEffect } from 'react';
  */
 export default function StudioCard({ studio }) {
 	const navigate = useNavigate();
-	const [hostImage, setHostImage] = useState(ProfilePicImg1);
+	const [hostImage, setHostImage] = useState(ProfilePicImg);
 
 	const isListening = studio.studioIsActive;
 

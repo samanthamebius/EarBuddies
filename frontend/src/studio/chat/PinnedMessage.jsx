@@ -3,7 +3,6 @@ import styles from './PinnedMessage.module.css';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import axios from 'axios';
-import defaultProfilePicture from '../../assets/profilepic.png';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
