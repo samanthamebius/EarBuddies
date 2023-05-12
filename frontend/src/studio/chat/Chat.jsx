@@ -1,36 +1,36 @@
-import React, { useContext, useRef, useState } from "react";
-import axios from "axios";
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { TextField, styled } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { v4 as uuid } from "uuid";
-import ChatMessage from "./ChatMessage";
-import PinnedMessage from "./PinnedMessage";
-import QuickAddPill from "./QuickAddPill";
-import styles from "./Chat.module.css";
-import { AppContext } from "../../AppContextProvider";
-import { useEffect } from "react";
+import React, { useContext, useRef, useState } from 'react';
+import axios from 'axios';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { TextField, styled } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
+import ChatMessage from './ChatMessage';
+import PinnedMessage from './PinnedMessage';
+import QuickAddPill from './QuickAddPill';
+import styles from './Chat.module.css';
+import { AppContext } from '../../AppContextProvider';
+import { useEffect } from 'react';
 
 const StyledTextField = styled(TextField)({
-	"& .MuiInputBase-root": {
-		padding: "0",
-		fontSize: "15px",
+	'& .MuiInputBase-root': {
+		padding: '0',
+		fontSize: '15px',
 	},
-	width: "100%",
+	width: '100%',
 });
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Chat(props) {
 	const { socket, studio, messages, setMessages } = props;
-	const [message, setMessage] = useState("");
+	const [message, setMessage] = useState('');
 	const [pinnedMessages, setPinnedMessages] = useState([]);
 	const [expandedPinnedMessages, setExpandedPinnedMessages] = useState(true);
-	const [replyMessage, setReplyMessage] = useState("");
-	const [nickname, setNickname] = useState("");
+	const [replyMessage, setReplyMessage] = useState('');
+	const [nickname, setNickname] = useState('');
 	const [nowPlaying, setNowPlaying] = useState({});
 	const displayedPinnedMessages = expandedPinnedMessages
 		? pinnedMessages
@@ -45,8 +45,8 @@ export default function Chat(props) {
 	useEffect(() => {
 		setTimeout(() => {
 			messagesRef.current.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
+				behavior: 'smooth',
+				block: 'center',
 			});
 		}, 100);
 	}, [messages]);
@@ -62,7 +62,7 @@ export default function Chat(props) {
 
 	// reload the chat messages if the nickname of a user changes
 	useEffect(() => {
-		socket.on("receive_reload_chat_messages", (data) => {
+		socket.on('receive_reload_chat_messages', (data) => {
 			setMessages(data.updatedMessages.messages);
 			setNickname(data.nickname);
 		});
@@ -78,7 +78,7 @@ export default function Chat(props) {
 
 	// continously set the live messages received
 	useEffect(() => {
-		socket.on("receive_message", (data) => {
+		socket.on('receive_message', (data) => {
 			console.log(data);
 			setMessages((messages) => [
 				...messages,
@@ -96,7 +96,7 @@ export default function Chat(props) {
 
 	// continously set the live messages received from currently playing
 	useEffect(() => {
-		socket.on("receive_user_currently_playing_song", (data) => {
+		socket.on('receive_user_currently_playing_song', (data) => {
 			const {
 				trackTitle,
 				messageId,
@@ -104,29 +104,29 @@ export default function Chat(props) {
 				isHost: isStudioHost,
 			} = data;
 			const lastChatBotMessage = messageHistory
-				.filter((message) => message.username === "chat_bot")
+				.filter((message) => message.username === 'chat_bot')
 				.pop();
 
-			if (trackTitle && lastChatBotMessage.id !== messageId && isStudioHost) {
+			if (trackTitle && lastChatBotMessage?.id !== messageId && isStudioHost) {
 				setMessages((messages) => [
 					...messages,
 					{
 						id: messageId,
-						username: "chat_bot",
-						displayName: "chat_bot",
+						username: 'chat_bot',
+						displayName: 'chat_bot',
 						message: `Now playing: ${trackTitle}`,
 						isReply: false,
-						replyMessage: "",
+						replyMessage: '',
 					},
 				]);
 				// save the message to DB
 				axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
 					id: messageId,
-					username: "chat_bot",
-					displayName: "chat_bot",
+					username: 'chat_bot',
+					displayName: 'chat_bot',
 					message: `Now playing: ${trackTitle}`,
 					isReply: false,
-					replyMessage: "",
+					replyMessage: '',
 				});
 			}
 		});
@@ -134,7 +134,7 @@ export default function Chat(props) {
 
 	// continously set the pinned messages received
 	useEffect(() => {
-		socket.on("receive_pinned_message", (data) => {
+		socket.on('receive_pinned_message', (data) => {
 			const { newMessage, pinnedMessages } = data;
 
 			const messageExists = pinnedMessages.find(
@@ -157,7 +157,7 @@ export default function Chat(props) {
 
 	// remove pinned messages
 	useEffect(() => {
-		socket.on("receive_remove_pinned_message", (data) => {
+		socket.on('receive_remove_pinned_message', (data) => {
 			setPinnedMessages(() =>
 				pinnedMessages.filter((message) => message.id !== data.newMessage.id)
 			);
@@ -166,13 +166,13 @@ export default function Chat(props) {
 
 	// continously get the currently playing song to display quick add options
 	useEffect(() => {
-		socket.on("receive_currently_playing", (data) => {
+		socket.on('receive_currently_playing', (data) => {
 			if (data) {
 				setNowPlaying({
 					type: data?.type,
 					name: data?.name,
-					artist: `${data?.type === "track" ? data?.artists[0]?.name : ""}`,
-					album: `${data?.type === "track" ? data?.album?.name : ""}`,
+					artist: `${data?.type === 'track' ? data?.artists[0]?.name : ''}`,
+					album: `${data?.type === 'track' ? data?.album?.name : ''}`,
 				});
 			}
 		});
@@ -181,17 +181,17 @@ export default function Chat(props) {
 	// user leaves the room when they navigate away
 	useEffect(() => {
 		return () => {
-			socket.emit("leave_room", { nickname, room });
+			socket.emit('leave_room', { nickname, room });
 		};
 	}, []);
 
 	// send the message
 	const handleSendMessage = async () => {
-		const isReply = replyMessage !== "";
+		const isReply = replyMessage !== '';
 		const messageId = uuid();
-		if (message !== "") {
+		if (message !== '') {
 			// send the message
-			socket.emit("send_message", {
+			socket.emit('send_message', {
 				room,
 				id: messageId,
 				username,
@@ -210,8 +210,8 @@ export default function Chat(props) {
 				isReply: isReply,
 				replyMessage: replyMessage,
 			});
-			setMessage("");
-			setReplyMessage("");
+			setMessage('');
+			setReplyMessage('');
 		}
 	};
 
@@ -232,8 +232,9 @@ export default function Chat(props) {
 					{pinnedMessages.length > 1 && (
 						<div
 							className={styles.expandPinnedMessages}
-							onClick={() => setExpandedPinnedMessages(!expandedPinnedMessages)}
-						>
+							onClick={() =>
+								setExpandedPinnedMessages(!expandedPinnedMessages)
+							}>
 							{expandedPinnedMessages ? (
 								<div className={styles.expandMessagesContent}>
 									show less <ExpandLessRoundedIcon />
@@ -265,50 +266,49 @@ export default function Chat(props) {
 			<div className={styles.chatInputContainer}>
 				<div
 					className={styles.chatInput}
-					onClick={() => textInput.current.focus()}
-				>
+					onClick={() => textInput.current.focus()}>
 					<div className={styles.inputContent}>
-						{replyMessage !== "" && (
+						{replyMessage !== '' && (
 							<div className={styles.replyMessage}>
 								<p className={styles.replyMessageText}>{replyMessage}</p>
 								<CloseRoundedIcon
-									fontSize="small"
+									fontSize='small'
 									className={styles.dismissReply}
-									onClick={() => setReplyMessage("")}
+									onClick={() => setReplyMessage('')}
 								/>
 							</div>
 						)}
 						<StyledTextField
 							inputRef={textInput}
-							variant="standard"
+							variant='standard'
 							multiline
-							placeholder="Message ..."
+							placeholder='Message ...'
 							value={message}
 							onChange={(e) => setMessage(e.target.value)}
 							onKeyDown={(event) => {
-								if (event.key === "Enter") {
+								if (event.key === 'Enter') {
 									event.preventDefault();
 									handleSendMessage();
 								}
 							}}
 							InputProps={{
 								disableUnderline: true,
-								style: { color: "#797979" },
+								style: { color: '#797979' },
 							}}
 						/>
 					</div>
 					<SendRoundedIcon
 						onClick={() => handleSendMessage()}
 						style={{
-							opacity: `${message !== "" ? "0.5" : "0.2"}`,
-							padding: `${replyMessage !== "" ? "14px" : "12px"} 10px 0 0`,
-							margin: "0",
-							cursor: "pointer",
-							position: "sticky",
-							top: "0",
-							justifySelf: "end",
+							opacity: `${message !== '' ? '0.5' : '0.2'}`,
+							padding: `${replyMessage !== '' ? '14px' : '12px'} 10px 0 0`,
+							margin: '0',
+							cursor: 'pointer',
+							position: 'sticky',
+							top: '0',
+							justifySelf: 'end',
 						}}
-						fontSize="small"
+						fontSize='small'
 					/>
 				</div>
 				<div className={styles.pillContainer}>
