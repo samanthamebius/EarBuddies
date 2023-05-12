@@ -1,21 +1,20 @@
-import styles from './StudioCard.module.css';
-import SoundWaves from '../assets/studio_cards/soundwaves.png';
-import ProfilePicImg1 from '../assets/profilepic1.png';
-import GenreTag from './GenreTag';
-import ListenerIcons from '../shared/ListenerIcons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import styles from "./StudioCard.module.css";
+import SoundWaves from "../assets/studio_cards/soundwaves.png";
+import ProfilePicImg from "../assets/home/defaultprofilepic.png";
+import GenreTag from "./GenreTag";
+import ListenerIcons from "../shared/ListenerIcons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 /**
  * Card displayed on homepage for each of the user's studios.
- * @param {Object} socket - Communication channel between client and server.
  * @param {Object} studio - Studio that the card is associated with.
  * @returns {JSX.Element} - JSX creating the StudioCard component.
  */
-export default function StudioCard({ socket, studio }) {
+export default function StudioCard({ studio }) {
 	const navigate = useNavigate();
-	const [hostImage, setHostImage] = useState(ProfilePicImg1);
+	const [hostImage, setHostImage] = useState(ProfilePicImg);
 
 	const isListening = studio.studioIsActive;
 
@@ -33,7 +32,6 @@ export default function StudioCard({ socket, studio }) {
 	}, []);
 
 	const handleJoinStudio = () => {
-		console.log('Joining studio ' + studio.id);
 		navigate(`studio/${studio._id}`);
 	};
 
@@ -55,6 +53,7 @@ export default function StudioCard({ socket, studio }) {
 						<img
 							className={styles.soundWaves}
 							src={SoundWaves}
+							alt='White sound waves'
 							style={isListening ? {} : { display: 'none' }}
 						/>
 					</div>

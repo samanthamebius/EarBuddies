@@ -6,10 +6,11 @@ import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 
 /**
- *
+ * Component to display the quick add pill options when a track is playing
  * @param nowPlaying - Object for the currently playing song
  * @param message - Array of messages inside the studio
  * @param setMessages - Function to set the array of messages inside the studio
+ * @returns {JSX.Element} - JSX creating the quick add pill component
  */
 function QuickAddPill({ nowPlaying, message, setMessage }) {
 	const handleAddToTextField = (type) => {

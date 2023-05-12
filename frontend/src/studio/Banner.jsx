@@ -4,7 +4,7 @@ import LeaveStudioDialog from './LeaveStudioDialog';
 import NicknameDialog from './NicknameDialog';
 import ManageListenersDialog from './ManageListenersDialog';
 import AssignNewHostDialog from './AssignNewHostDialog';
-import ProfilePicImg1 from '../assets/profilepic1.png';
+import ProfilePicImg from '../assets/home/defaultprofilepic.png';
 import ListenerIcons from '../shared/ListenerIcons';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,7 +23,7 @@ import ConfirmationDialog from '../shared/ConfirmationDialog';
 // TO DO: get if user is host or not
 // const isHost = false;
 
-const hostImage = ProfilePicImg1;
+const hostImage = ProfilePicImg;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? '';

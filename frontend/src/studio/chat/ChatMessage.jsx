@@ -24,7 +24,7 @@ const defaultReactions = [
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- *
+ * Component for displaying a single chat message
  * @param newMessage - The message to be displayed
  * @param setReplyMessage - Function to set the reply message
  * @param replyMessage - The message for the reply (if there is one)
@@ -32,7 +32,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param socket - Communication channel between client and server
  * @param pinnedMessages - The pinned messages for the chat
  * @param inputRef - Ref for focusing the the text field when replying to a message
- * @returns
+ * @returns {JSX.Element} - JSX creating the chat message component
  */
 function ChatMessage(props) {
 	const {

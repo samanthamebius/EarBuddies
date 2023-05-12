@@ -1,6 +1,4 @@
-import useGet from '../hooks/useGet';
 import styles from './ListenerIcons.module.css';
-import AddIcon from '../assets/addListenerIcon.png';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -62,6 +60,7 @@ export default function StudioCard({ studioUsers, isListening, isHomeCard }) {
 							key={i}
 							className={styles.listenerImage}
 							src={listenerImage}
+							alt={"Listener profile picture"}
 							style={setListenerImageStyles(
 								i,
 								isListening,
