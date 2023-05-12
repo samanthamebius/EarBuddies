@@ -11,6 +11,16 @@ import {
 
 const router = express.Router();
 
+/**
+ * @route   GET api/spotify/search/:playlist_id/:query
+ * @desc    Search Spotify for tracks or podcasts to add to a playlist based on a query
+ * @params  playlist_id: String
+ * 			query: String
+ * @returns 200 if successful with search results
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/search/:playlist_id/:query', async (req, res) => {
 	try {
 		const { playlist_id, query } = req.params;
@@ -29,6 +39,17 @@ router.get('/search/:playlist_id/:query', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/current_track
+ * @desc    Add the selected track from search into the playlist queue
+ * @body	playlist_id: String
+ * 			track_id: String
+ * 			type: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/queue', async (req, res) => {
 	try {
 		const { playlist_id, track_id, type } = req.body;
@@ -41,15 +62,11 @@ router.put('/queue', async (req, res) => {
 			.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
 			.then(
 				function (data) {
-					thisSpotifyApi.addToQueue('spotify:' + type + ':' + track_id).then(
-						function (data) {
-							console.log('Added track to queue!');
-						},
-						function (err) {
+					thisSpotifyApi
+						.addToQueue('spotify:' + type + ':' + track_id)
+						.then(function (err) {
 							console.log('Something went wrong!', err);
-						}
-					);
-					console.log('Added tracks to playlist!');
+						});
 				},
 				function (err) {
 					console.log('Something went wrong!', err);
