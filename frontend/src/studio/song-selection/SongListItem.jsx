@@ -98,13 +98,8 @@ function SongListItem(props) {
 
 	const displaySongImage = () => {
 		return (
-			<Box
-				className={styles.resultImgBox}
-				position='relative'>
-				<img
-					className={styles.resultImg}
-					src={song.image}
-				/>
+			<Box className={styles.resultImgBox} position='relative'>
+				<img className={styles.resultImg} src={song.image} />
 				{/* For search results, onHover styles on listItem */}
 				{type === 'search' && (
 					<>
@@ -165,7 +160,7 @@ function SongListItem(props) {
 				onClick={type === 'search' ? () => handleAddToQueue() : undefined} //For search results, listItem onClick adds to queue
 				secondaryAction={
 					<>
-						{isHost && type === 'queue' && (
+						{type === 'queue' && isHost && nowPlayingSong !== song.name && (
 							<CloseRoundedIcon // For queue results, close button as secondary action
 								onMouseEnter={handleIconMouseEnter}
 								onMouseLeave={handleIconMouseLeave}
