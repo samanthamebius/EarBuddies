@@ -32,6 +32,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param socket - Communication channel between client and server
  * @param messages - Array of messages inside the studio
  * @param setMessages - Function to set the array of messages inside the studio
+ * @returns {JSX.Element} - JSX creating the chat component
  */
 export default function Chat(props) {
 	const { socket, messages, setMessages } = props;

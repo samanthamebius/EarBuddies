@@ -15,6 +15,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param queueIsEmpty - Boolean to check if the queue is empty
  * @param messages - Array of the current messages in the studio
  * @param isHost - Boolean to check if the current user is the host
+ * @returns {JSX.Element} - JSX creating the song info component
  */
 function SongInfo(props) {
 	const { socket, studio, queueIsEmpty, messages, isHost } = props;

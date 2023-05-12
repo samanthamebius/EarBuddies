@@ -11,7 +11,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param pinnedMessage - Object of the currently pinned message
  * @param room - The id of the studio of the pinned message
  * @param socket - Communication channel between client and server
- * @returns
+ * @returns {JSX.Element} - JSX creating the pinned message component
  */
 function PinnedMessage({ pinnedMessage, room, socket }) {
 	const [profileImage, setProfileImage] = useState(defaultProfilePicture);

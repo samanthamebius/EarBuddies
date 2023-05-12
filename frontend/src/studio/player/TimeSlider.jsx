@@ -12,6 +12,7 @@ import { StyledSlider } from './StyledSlider';
  * @param player - The current player in the browser
  * @param queueIsEmpty - Boolean to check if the queue is empty
  * @param isHost - Boolean to check if the current user is the host
+ * @returns {JSX.Element} - JSX creating the time slider component
  */
 export function TimeSlider(props) {
 	const { player, queueIsEmpty, isHost } = props;

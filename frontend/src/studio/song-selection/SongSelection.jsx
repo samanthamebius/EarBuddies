@@ -13,7 +13,7 @@ import { AppContext } from '../../AppContextProvider';
  * @param studio - The current studio
  * @param socket - Communication channel between client and server
  * @param setQueueIsEmpty - Function to determine if the current queue is empty
- * @returns
+ * @returns {JSX.Element} - JSX creating the song selection component
  */
 export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 	const [songSearchResults, setSongSearchResults] = useState([]);
