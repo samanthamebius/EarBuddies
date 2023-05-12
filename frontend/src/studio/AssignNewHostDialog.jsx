@@ -54,16 +54,11 @@ export default function AssignNewHostDialog({
 			const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
 			if (data === current_user_id) {
 				await axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${data}`);
-				// await axios.put(`${BASE_URL}/api/studio/${studio_id}/new_host/${data}`);
 			}
 			const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
 			console.log('studio', studio.data[0].studioHost, current_user_id);
-			if (current_user_id === studio.data[0].studioHost) {
-				setIsHelperTextMessage(true);
-			} else {
-				setIsConfirmOpen(false);
-				handleClose();
-			}
+			setIsConfirmOpen(false);
+			handleClose();
 		});
 	}, [socket, newHost]);
 
@@ -82,6 +77,9 @@ export default function AssignNewHostDialog({
 			<DialogContent className={styles.dialogContent}>
 				<h2 className={styles.subHeading}>
 					Choose another listener to be a host
+				</h2>
+				<h2 className={styles.subsubHeading}>
+					Note: the user must be currently active in this studio to successfully be set as host
 				</h2>
 				<NewHostSelection
 					newHost={newHost}
