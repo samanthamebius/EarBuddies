@@ -102,21 +102,36 @@ async function getStudiosId(username) {
 async function searchStudios(username, query) {
 	const regex = new RegExp(`^${query}`, 'i');
 	const studiosId = await getStudiosId(username);
-	const studios = await Studio.find({
-		_id: { $in: studiosId },
-		studioName: regex
-	});
+	let studios;
+	if (query !== "") {
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioName: regex
+		});
+	} else {
+		studios = await Studio.find({
+			_id: { $in: studiosId }
+		});
+	}
 	return studios;
 }
 
 async function searchActiveStudios(username, query) {
 	const regex = new RegExp(`^${query}`, 'i');
 	const studiosId = await getStudiosId(username);
-	const studios = await Studio.find({
-		_id: { $in: studiosId },
-		studioName: regex,
-		studioIsActive: true
-	});
+	let studios;
+	if (query.length !== 0) {
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioName: regex,
+			studioIsActive: true
+		});
+	} else {	
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioIsActive: true
+		});
+	}
 	return studios;
 }
 

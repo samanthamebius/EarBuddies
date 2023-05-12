@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import styles from "./PageLayout.module.css";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import ViewProfileDialog from "./profile/ViewProfileDialog";
-import useAuth from "./hooks/useAuth";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import logo from "./assets/shared/earBuddiesLogo.png";
-import defaultProfilePic from "./assets/home/defaultprofilepic.png";
-import useGet from "./hooks/useGet";
+import React, { useContext, useEffect, useState } from 'react';
+import styles from './PageLayout.module.css';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import ViewProfileDialog from './profile/ViewProfileDialog';
+import useAuth from './hooks/useAuth';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import logo from './assets/shared/earBuddiesLogo.png';
+import defaultProfilePic from './assets/home/defaultprofilepic.png';
+import useGet from './hooks/useGet';
 import axios from 'axios';
-import { AppContext } from "./AppContextProvider";
-import ConfirmationDialog from "./shared/ConfirmationDialog";
+import { AppContext } from './AppContextProvider';
+import ConfirmationDialog from './shared/ConfirmationDialog';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,7 +23,7 @@ export default function PageLayout() {
     return (
         <React.Fragment>
             <NavMenu />
-            <div className="container">
+            <div className='container'>
                 <Outlet />
             </div>
         </React.Fragment>
@@ -32,9 +33,13 @@ export default function PageLayout() {
 function NavMenu() {
     return (
         <header className={styles.navmenu}>
-            <NavLink to=".">
+            <NavLink to='.'>
                 <div className={styles.navLink}>
-                    <img src={logo} className={styles.logo} alt='Ear Buddies Logo' />
+                    <img
+                        src={logo}
+                        className={styles.logo}
+                        alt='Ear Buddies Logo'
+                    />
                     <h1 className={styles.brandName}>EAR BUDDIES</h1>
                 </div>
             </NavLink>
@@ -44,9 +49,9 @@ function NavMenu() {
 }
 
 function UserInfo() {
-	const { setUsername, setDisplayName } = useContext(AppContext);
-	const current_user_id = localStorage.getItem("current_user_id");
-	const id = JSON.parse(current_user_id);
+    const { setUsername, setDisplayName } = useContext(AppContext);
+    const current_user_id = localStorage.getItem('current_user_id');
+    const id = JSON.parse(current_user_id);
 
     if (!current_user_id) {
         return <p>Could not load user</p>;
@@ -66,9 +71,9 @@ function UserInfo() {
     } else if (!user) {
         return <p>Could not load user</p>;
     } else {
-        var spotifyPicture = "";
-        var profilePicture = "";
-        var username = "";
+        var spotifyPicture = '';
+        var profilePicture = '';
+        var username = '';
         try {
             spotifyPicture = user.spotifyPic;
             profilePicture = user.profilePic;
@@ -77,17 +82,20 @@ function UserInfo() {
             console.log(error);
         }
         // If Spotify account doesn't have a profile picture, set to default
-        if (profilePicture === "") {
+        if (profilePicture === '') {
             axios.put(`${BASE_URL}/api/user/${id}`, {
                 profilePic: defaultProfilePic,
-                spotifyPic: defaultProfilePic
+                spotifyPic: defaultProfilePic,
             });
             window.location.reload(false);
         }
 
         return (
             <div className={styles.profile_layout}>
-                <img src={profilePicture} className={styles.profilePic} />
+                <img
+                    src={profilePicture}
+                    className={styles.profilePic}
+                />
                 <p className={styles.username}>{username} </p>
             </div>
         );
@@ -98,14 +106,14 @@ function UserInfo() {
  * Checks if user is logged in, if not, redirects to login page
  */
 function login() {
-    const access_token = localStorage.getItem("access_token");
-    const code = new URLSearchParams(window.location.search).get("code");
-    const current_user_id = localStorage.getItem("current_user_id");
+    const access_token = localStorage.getItem('access_token');
+    const code = new URLSearchParams(window.location.search).get('code');
+    const current_user_id = localStorage.getItem('current_user_id');
     if (access_token == null) {
         //check for code
         if (code == null) {
             //reroute to login page
-            window.location.href = "/login";
+            window.location.href = '/login';
             return;
         }
     }
@@ -136,15 +144,15 @@ export function DropdownMenu() {
 
     const handleLogout = () => {
         handleClose;
-        const username = JSON.parse(localStorage.getItem("current_user_id"));
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("expires_in");
-        localStorage.removeItem("current_user_id");
+        const username = JSON.parse(localStorage.getItem('current_user_id'));
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('expires_in');
+        localStorage.removeItem('current_user_id');
 
         axios.put(`${BASE_URL}/api/user/${username}/logout`);
 
-        navigate("/login");
+        navigate('/login');
     };
 
     const handleViewProfileOpen = () => {
@@ -166,6 +174,36 @@ export function DropdownMenu() {
         setInLogOut(!isInLogOut);
     };
 
+    const colorModePref = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const colorModeSetting = localStorage.getItem('selectedTheme');
+    const [isDarkMode, setIsDarkMode] = useState(
+        colorModeSetting ? colorModeSetting == 'dark' : colorModePref
+    );
+
+    const updateToDarkMode = () => {
+        document.querySelector('body').setAttribute('data-theme', 'dark');
+        localStorage.setItem('selectedTheme', 'dark');
+    };
+
+    const updateToLightMode = () => {
+        document.querySelector('body').setAttribute('data-theme', 'light');
+        localStorage.setItem('selectedTheme', 'light');
+    };
+
+    if (isDarkMode) {
+        updateToDarkMode();
+    }
+
+    const toggleTheme = (e) => {
+        if (isDarkMode) {
+            updateToLightMode();
+            setIsDarkMode(false);
+        } else {
+            updateToDarkMode();
+            setIsDarkMode(true);
+        }
+    };
+
     return (
         <>
             <ViewProfileDialog
@@ -181,55 +219,69 @@ export function DropdownMenu() {
                 isOpen={isConfirmLogoutOpen}
                 handleClose={() => setConfirmLogoutOpen(false)}
                 handleAction={() => handleLogout()}
-                message={"Are you sure you want to logout?"}
-                actionText={"Log Out"}
+                message={'Are you sure you want to logout?'}
+                actionText={'Log Out'}
             />
             <div className={styles.dropdown}>
                 <Button
                     sx={{ fontWeight: 600 }}
-                    variant="contained"
-                    size="large"
+                    variant='contained'
+                    size='large'
                     onClick={handleClick}
-                    className={styles.button}
-                >
+                    className={styles.button}>
                     <UserInfo />
                 </Button>
 
-                <Menu anchorEl={isOpen} open={open} onClose={handleClose}>
+                <Menu
+                    anchorEl={isOpen}
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}>
                     <MenuItem
                         className={styles.menu_item}
                         onClick={() => handleViewProfileOpen()}
                         onMouseEnter={toggleProfile}
-                        onMouseLeave={toggleProfile}
-                    >
+                        onMouseLeave={toggleProfile}>
                         <PersonRoundedIcon
                             className={styles.icon}
-                            style={{ color: isInProfle ? "#B03EEE" : "#757575" }}
+                            style={{ color: isInProfle ? '#B03EEE' : 'var(--iconColor)' }}
                         />
                         <p className={styles.menu_title}>My Profile</p>
                     </MenuItem>
 
                     <MenuItem
                         className={styles.menu_item}
-                        onClick={handleClose}
+                        onClick={toggleTheme}
                         onMouseEnter={toggleDarkMode}
-                        onMouseLeave={toggleDarkMode}
-                    >
-                        <DarkModeRoundedIcon
-                            className={styles.icon}
-                            style={{ color: isInDarkMode ? "#B03EEE" : "#757575" }}
-                        />
-                        <p className={styles.menu_title}>Dark Mode</p>
+                        onMouseLeave={toggleDarkMode}>
+                        {isDarkMode ? (
+                            <LightModeIcon
+                                className={styles.icon}
+                                style={{
+                                    color: isInDarkMode ? '#B03EEE' : 'var(--iconColor)',
+                                }}
+                            />
+                        ) : (
+                            <DarkModeRoundedIcon
+                                className={styles.icon}
+                                style={{
+                                    color: isInDarkMode ? '#B03EEE' : 'var(--iconColor)',
+                                }}
+                            />
+                        )}
+
+                        <p className={styles.menu_title}>
+                            {isDarkMode ? 'Light Mode' : 'Dark Mode'}{' '}
+                        </p>
                     </MenuItem>
                     <MenuItem
                         className={styles.menu_item}
                         onClick={handleConfirmLogoutOpen}
                         onMouseEnter={toggleLogOut}
-                        onMouseLeave={toggleLogOut}
-                    >
+                        onMouseLeave={toggleLogOut}>
                         <LogoutRoundedIcon
                             className={styles.icon}
-                            style={{ color: isInLogOut ? "#B03EEE" : "#757575" }}
+                            style={{ color: isInLogOut ? '#B03EEE' : 'var(--iconColor)' }}
                         />
                         <p className={styles.menu_title}>Log Out</p>
                     </MenuItem>

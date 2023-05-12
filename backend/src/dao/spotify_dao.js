@@ -12,7 +12,13 @@ function getSpotifyApi() {
   return spotifyApi;
 }
 
-async function searchSpotify(query, thisSpotifyApi) {
+async function searchSpotify(query, thisSpotifyApi, playlist) {
+  const tracks = [];
+  thisSpotifyApi.getPlaylistTracks(playlist).then(function (data) {
+		for (var i = 0; i < data.body.items.length; i++) {
+			tracks.push(data.body.items[i].track.uri);
+		}
+  });
   return new Promise((resolve, reject) => {
     thisSpotifyApi.search(query, ['track', 'episode'])
       .then(function (data) {
@@ -31,7 +37,9 @@ async function searchSpotify(query, thisSpotifyApi) {
             for (var j = 0; j < data.body.tracks.items[i].artists.length; j++) {
               track.artists.push(data.body.tracks.items[i].artists[j].name);
             }
-            results.push(track);
+            if (!tracks.includes(data.body.tracks.items[i].uri)) {
+              results.push(track);
+            }
           }
         }
         for (var i = 0; i < data.body.episodes.items.length; i++) {
