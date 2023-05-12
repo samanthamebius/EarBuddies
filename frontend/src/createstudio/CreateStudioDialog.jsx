@@ -318,6 +318,9 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 										? 'Input is already a genre option'
 										: ''
 								}
+								FormHelperTextProps={{
+									style: { backgroundColor: 'var(--dialogColor)' },
+								}}
 								InputLabelProps={{
 									style: { color: 'var(--headingColor)' },
 								}}

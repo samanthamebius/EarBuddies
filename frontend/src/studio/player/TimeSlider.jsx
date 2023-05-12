@@ -70,7 +70,7 @@ export function TimeSlider({ player }) {
 				step={1}
 				max={duration}
 				color='secondary'
-				style={{ pointerEvents: 'none' }}
+				style={{ pointerEvents: 'none', width: 350 }}
 			/>
 			<Box
 				sx={{
@@ -79,8 +79,8 @@ export function TimeSlider({ player }) {
 					justifyContent: 'space-between',
 					mt: -2,
 				}}>
-				<TinyText>{formatDuration(position)}</TinyText>
-				<TinyText>-{formatDuration(duration - position)}</TinyText>
+				<TinyText style={{marginLeft: '15px'}}>{formatDuration(position)}</TinyText>
+				<TinyText style={{marginRight: '15px'}}>-{formatDuration(duration - position)}</TinyText>
 			</Box>
 			<Box
 				sx={{

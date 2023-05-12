@@ -74,7 +74,7 @@ export default function AssignNewHostDialog({
             maxWidth='sm'
             PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}>
             <div className={styles.dialogHeader}>
-                <ExitToAppRoundedIcon style={{ color: '#757575', fontSize: '30px' }} />
+                <ExitToAppRoundedIcon style={{ color: 'var(--iconColor)', fontSize: '30px' }} />
                 <h1 className={styles.heading}>Assign a New Host</h1>
             </div>
 
