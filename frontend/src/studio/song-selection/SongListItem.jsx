@@ -20,7 +20,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param type - The type of the track e.g. song
  * @param snapshotId - Id to determine the current song
  * @param setResults - Function to set the search results
- * @returns
+ * @returns {JSX.Element} - JSX creating the song list item component
  */
 function SongListItem(props) {
 	const { song, studio, socket, type, snapshotId = null, setResults } = props;

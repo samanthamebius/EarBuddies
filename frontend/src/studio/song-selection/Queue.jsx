@@ -15,6 +15,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param studio - The current studio
  * @param socket - Communication channel between client and server
  * @param setQueueIsEmpty - Function to determine if the current queue is empty
+ * @returns {JSX.Element} - JSX creating the queue component
  */
 function Queue(props) {
 	const { studio, socket, setQueueIsEmpty } = props;

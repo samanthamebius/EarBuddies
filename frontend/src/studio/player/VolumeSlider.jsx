@@ -12,6 +12,7 @@ import { StyledSlider } from './StyledSlider';
  * Volume slider component within the now playing section in the studio
  * @param player - The current player in the browser
  * @param isHost - Boolean to check if the current user is the host
+ * @returns {JSX.Element} - JSX creating the volume slider component
  */
 function VolumeSlider({ player, isHost }) {
 	const [value, setValue] = useState(30);

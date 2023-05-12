@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
  * @param token - The access token for the current user
  * @param queueIsEmpty - Boolean to check if the queue is empty
  * @param messages - Array of the current messages in the studio
- * @returns
+ * @returns {JSX.Element} - JSX creating the web playback component
  */
 
 function WebPlayback(props) {

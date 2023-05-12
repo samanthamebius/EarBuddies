@@ -21,6 +21,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param socket - Communication channel between client and server
  * @param queueIsEmpty - Boolean to check if the queue is empty
  * @param isHost - Boolean to check if the current user is the host
+ * @returns {JSX.Element} - JSX creating the control panel component
  */
 function ControlPanel(props) {
 	const { studio, player, socket, queueIsEmpty, isHost } = props;
