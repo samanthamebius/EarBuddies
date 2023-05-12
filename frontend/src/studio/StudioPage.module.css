@@ -86,8 +86,8 @@
 
 .bannerlisteners {
 	position: absolute;
-	bottom: 0;
-	right: 0;
+	right: 30px;
+	top: 0;
 	padding: 10px;
 }
 
@@ -225,16 +225,12 @@
 
 @media only screen and (max-width: 800px), (max-height: 600px) {
 	.bannerStudioName {
-		font-size: 20px;
-		transform: translateX(10px);
+		/* font-size: 20px; */
+		/* transform: translateX(10px); */
 	}
 
 	.kebabIcon {
-		height: 20px;
-	}
-
-	.bannerlisteners {
-		transform: translateX(-25px);
+		/* height: 20px; */
 	}
 }
 
