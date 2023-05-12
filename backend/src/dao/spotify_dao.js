@@ -198,10 +198,12 @@ async function addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotify
 	thisSpotifyApi
 		.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
 		.then(
-			function (data) {
-				api.addToQueue('spotify:' + type + ':' + track_id).then(function (err) {
-					console.log('Something went wrong!', err);
-				});
+			function () {
+				thisSpotifyApi
+					.addToQueue('spotify:' + type + ':' + track_id)
+					.then(function (err) {
+						console.log('Something went wrong!', err);
+					});
 			},
 			function (err) {
 				console.log('Something went wrong!', err);
@@ -228,14 +230,16 @@ async function removePlaylistTrack(
 }
 
 async function getPlaylist(playlist_id, thisSpotifyApi) {
-	thisSpotifyApi.getPlaylist(playlist_id).then(
-		function (data) {
-			return data.body;
-		},
-		function (err) {
-			console.log('Something went wrong!', err);
-		}
-	);
+	return new Promise((resolve, reject) => {
+		thisSpotifyApi.getPlaylist(playlist_id).then(
+			function (data) {
+				resolve(data.body);
+			},
+			function (err) {
+				console.log('Something went wrong!', err);
+			}
+		);
+	});
 }
 
 async function resumeSpotify(thisSpotifyApi, deviceId) {
