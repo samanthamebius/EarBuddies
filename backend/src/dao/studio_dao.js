@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
-import { getUser } from "./user_dao.js";
+import { getStudiosId, getUser, updateStudios } from "./user_dao.js";
 
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
@@ -97,6 +97,9 @@ async function updateStudioNames(id, newNames) {
 
 async function setStudioStatus(studio_id) {
 	const studio = await getStudio(studio_id);
+	if (!studio) {
+		return;
+	}
 	const users = studio[0].studioUsers;
 	let numActive = 0;
 	const promises = users.map(async (user) => {
@@ -119,6 +122,40 @@ async function updateStudioPlaylist(id, playlist) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioPlaylist: playlist }, { new: true });
 }
 
+async function removeStudioFromUsers(studio) {
+	const listeners = studio[0].studioUsers;
+
+	listeners.forEach(async (listener) => {
+		const studios = await getStudiosId(listener);
+		const newStudios = studios.filter(
+			(this_studio) => {
+				JSON.parse(JSON.stringify(this_studio._id)) !== studio[0]._id}
+		);
+		await updateStudios(listener, newStudios);
+	});
+}
+
+async function setNickname(studio_id, username, nickname) {
+	const studio = await getStudio(studio_id);
+	const users = studio[0].studioUsers;
+	const nicknames = studio[0].studioNames;
+	
+	const userPos = users.indexOf(username);
+	nicknames[userPos] = nickname;
+	await updateStudioNames(studio_id, nicknames);
+}
+
+async function removeNickname(studio, username) {
+	const listeners = studio[0].studioUsers;
+	const indexToRemove = listeners.indexOf(username);
+	const nicknames = studio[0].studioNames;
+	const newArray = [
+		...nicknames.slice(0, indexToRemove),
+		...nicknames.slice(indexToRemove + 1),
+	];
+	updateStudioNames(studio._id, newArray);
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -132,4 +169,7 @@ export {
 	deleteUserFromStudio,
 	setStudioStatus,
 	updateStudioPlaylist,
+	removeStudioFromUsers,
+	setNickname,
+	removeNickname,
 };

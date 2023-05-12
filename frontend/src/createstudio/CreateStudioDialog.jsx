@@ -145,6 +145,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 
     const handleSwitchToggle = (isChecked) => {
         setIsHostOnly(isChecked);
+        axios.put(`${BASE_URL}/api/studio/${studioId}/isHostOnly`);
     };
 
     function toggleGenre(genre) {

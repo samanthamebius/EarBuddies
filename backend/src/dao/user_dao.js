@@ -154,6 +154,16 @@ async function searchStudioUsers(studioId, query, username) {
 	return users;
 }
 
+async function addStudio(username, studioId) {
+	const thisListener = await getUser(username);
+	if (!thisListener) {
+		return res.status(404).json({ msg: 'Listener not found' });
+	}
+	const studios = await getStudiosId(username);
+	studios.push(studioId);
+	await updateStudios(username, studios);
+}
+
 async function updateStudios(username, studios) {
 	return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
 }
@@ -187,4 +197,5 @@ export {
 	updateUserProfilePic,
 	updateUserSpotifyPic,
 	getActiveStudios,
+	addStudio,
 };
