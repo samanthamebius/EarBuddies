@@ -23,9 +23,4 @@ router.use('/studio', studio);
 import home from './home';
 router.use('/home', home);
 
-//tester api call
-router.get("/hello", (req, res) => {
-	res.send("Hello, World");
-});
-
 export default router;
