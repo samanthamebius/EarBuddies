@@ -1,27 +1,28 @@
-import { useEffect } from "react";
-import axios from "axios";
-import { useLocalStorage } from "./useLocalStorage";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useLocalStorage } from './useLocalStorage';
 
 /**
  * Login to Spotify and get access token
- * @param {*} code
- * @returns {string} - The access token
+ * @param {string} accessToken - The access token for the current user.
+ * @param {string} code - The authorisation code for the current user.
+ * @param {string} current_user - The ID of the current user.
+ * @returns {string} - The access token for the current user.
  */
 export default function useAuth(accessToken, code, current_user) {
-	const [access_token, setaccess_token] = useLocalStorage(
-		"access_token",
-		accessToken
+	const [access_token, setaccess_token] = useLocalStorage('access_token', accessToken);
+	const [refresh_token, setrefresh_token] = useLocalStorage('refresh_token', '');
+	const [expires_in, setexpires_in] = useLocalStorage('expires_in', '');
+	const [current_user_id, setcurrent_user_id] = useLocalStorage(
+		'current_user_id',
+		current_user
 	);
-	const [refresh_token, setrefresh_token] = useLocalStorage(
-		"refresh_token", "");
-	const [expires_in, setexpires_in] = useLocalStorage("expires_in", "");
-	const [current_user_id, setcurrent_user_id] = useLocalStorage("current_user_id", current_user);
 
 	useEffect(() => {
 		if (!access_token && code) {
 			const fetchData = async () => {
 				try {
-					const response = await axios.post("http://localhost:3000/api/login", {
+					const response = await axios.post('http://localhost:3000/api/login', {
 						code,
 					});
 					const { access_token, refresh_token, expires_in, user_id } =
@@ -29,25 +30,24 @@ export default function useAuth(accessToken, code, current_user) {
 					setaccess_token(access_token);
 					setrefresh_token(refresh_token);
 					setexpires_in(expires_in);
-					console.log("user_id: " + user_id)
+					console.log('user_id: ' + user_id);
 					setcurrent_user_id(user_id);
-					window.history.pushState({}, null, "/");
+					window.history.pushState({}, null, '/');
 				} catch (error) {
 					console.error(error);
-					window.location = "/";
+					window.location = '/';
 				}
 			};
 			fetchData();
 		}
 	}, [access_token, code, current_user]);
 
-
 	useEffect(() => {
 		if (!access_token || !code) return;
 
 		const fetchData = async () => {
 			try {
-				const response = await axios.post("http://localhost:3000/api/refresh", {
+				const response = await axios.post('http://localhost:3000/api/refresh', {
 					refresh_token,
 				});
 				const { access_token, expires_in } = response.data;
@@ -55,19 +55,14 @@ export default function useAuth(accessToken, code, current_user) {
 				setexpires_in(expires_in);
 			} catch (error) {
 				console.error(error);
-				window.location = "/";
+				window.location = '/';
 			}
 		};
 
 		const interval = setInterval(fetchData, (expires_in - 60) * 1000);
 
 		return () => clearInterval(interval);
-	}, [
-		access_token,
-		code,
-		refresh_token,
-		expires_in,
-	]);
+	}, [access_token, code, refresh_token, expires_in]);
 
 	return access_token;
 }

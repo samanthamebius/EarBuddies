@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styles from './StudioPage.module.css';
+import Banner from './Banner';
+import Chat from './chat/Chat';
+import WebPlayback from './player/WebPlayback';
+import SongSelection from './song-selection/SongSelection';
+import useGet from '../hooks/useGet';
+import axios from 'axios';
 
-import styles from "./StudioPage.module.css";
-
-import Banner from "./Banner";
-import Chat from "./chat/Chat";
-import WebPlayback from "./player/WebPlayback";
-import SongSelection from "./song-selection/SongSelection";
-import useGet from "../hooks/useGet";
-import axios from "axios";
-import { AppContext } from "../AppContextProvider";
-
-function StudioPage({ socket }) {
-	const accessToken = localStorage.getItem("access_token");
+/**
+ * Function to render the StudioPage component and set various states, connect to the socket and establish the chat if it doesn't exist.
+ * @param {object} socket - Used for real time communicaiton between the client and the backend.
+ * @returns {JSX.Element} - Returns a JSX element that represents the the StudioPage component.
+ */
+export default function StudioPage({ socket }) {
+	const accessToken = localStorage.getItem('access_token');
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
 	const [messages, setMessages] = useState([]);
-	const { username } = useContext(AppContext);
 
 	const {
 		data: studio,
@@ -26,14 +27,14 @@ function StudioPage({ socket }) {
 	} = useGet(`/api/studio/${id}`);
 
 	useEffect(() => {
-		socket.connect("http://localhost:3000");
-		socket.emit("join_room", { id });
+		socket.connect('http://localhost:3000');
+		socket.emit('join_room', { id });
 		// create the chat in the DB if it doesn't already exist
 		axios.post(`http://localhost:3000/api/chat/${id}`);
 	}, []);
 
 	if (studioError) {
-		navigate("/404");
+		navigate('/404');
 		return;
 	}
 	if (studioIsLoading) {
@@ -43,12 +44,16 @@ function StudioPage({ socket }) {
 	} else {
 		return (
 			<div className={styles.studio}>
-				<Banner id={id} studio={studio[0]} socket={socket} />
+				<Banner
+					id={id}
+					studio={studio[0]}
+					socket={socket}
+				/>
 				<div className={styles.webPlayback}>
 					<WebPlayback
 						studio={studio[0]}
 						socket={socket}
-						token={accessToken.replace(/['"]+/g, "")}
+						token={accessToken.replace(/['"]+/g, '')}
 						queueIsEmpty={queueIsEmpty}
 						messages={messages}
 					/>
@@ -68,5 +73,3 @@ function StudioPage({ socket }) {
 		);
 	}
 }
-
-export default StudioPage;
