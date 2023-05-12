@@ -8,7 +8,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [16.x]
+                node-version: [14.x]
 
         steps:
             - uses: actions/checkout@v2
@@ -16,9 +16,12 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
-            - name: Install dependencies
+            - name: Install dependencies (frontend)
               run: npm install
               working-directory: frontend
+            - name: Install dependencies (backend)
+              run: npm install
+              working-directory: backend
             - name: Run backend
               run: npm start
               working-directory: backend
