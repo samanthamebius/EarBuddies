@@ -19,6 +19,10 @@ import ConfirmationDialog from './shared/ConfirmationDialog';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Defines layout of every page with nav menu at the top and rest of the content below.
+ * @returns {JSX.Element} - Returns a React Fragment for the page structure.
+ */
 export default function PageLayout() {
 	return (
 		<React.Fragment>
@@ -30,6 +34,10 @@ export default function PageLayout() {
 	);
 }
 
+/**
+ * Navigation menu for the application.
+ * @return {JSX.Element} - Returns the header element containing logo and a DropdownMenu component.
+ */
 function NavMenu() {
 	return (
 		<header className={styles.navmenu}>
@@ -48,8 +56,14 @@ function NavMenu() {
 	);
 }
 
+/**
+ * Fetches user data and displaying the user profile picture and username.
+ * @return {JSX.Element} - Returns element containing the user profile picture and username.
+ */
 function UserInfo() {
 	const { setUsername, setDisplayName } = useContext(AppContext);
+
+	// Get user information
 	const current_user_id = localStorage.getItem('current_user_id');
 	const id = JSON.parse(current_user_id);
 
@@ -66,6 +80,7 @@ function UserInfo() {
 		}
 	}, [user, userIsLoading]);
 
+	// Initialise user information
 	if (userIsLoading) {
 		return <p>Loading...</p>;
 	} else if (!user) {
@@ -103,16 +118,17 @@ function UserInfo() {
 }
 
 /**
- * Checks if user is logged in, if not, redirects to login page
+ * Checks if user is logged in, if not, redirects them to login page.
+ * @returns {void}
  */
 function login() {
 	const access_token = localStorage.getItem('access_token');
 	const code = new URLSearchParams(window.location.search).get('code');
 	const current_user_id = localStorage.getItem('current_user_id');
 	if (access_token == null) {
-		//check for code
+		// Check for access token or code
 		if (code == null) {
-			//reroute to login page
+			// Reroute to login page if they don't have either.
 			window.location.href = '/login';
 			return;
 		}
@@ -120,6 +136,10 @@ function login() {
 	useAuth(access_token, code, current_user_id);
 }
 
+/**
+ * Renders a dropdown menu containing options for view profile, dark mode, and log out.
+ * @return {JSX.Element} The JSX code to render the dropdown menu.
+ */
 export function DropdownMenu() {
 	const [isViewProfileOpen, setIsViewProfileOpen] = useState(false);
 	const [isOpen, setOpen] = useState(null);
@@ -144,6 +164,7 @@ export function DropdownMenu() {
 
 	const handleLogout = () => {
 		handleClose;
+
 		const username = JSON.parse(localStorage.getItem('current_user_id'));
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('refresh_token');
@@ -155,23 +176,21 @@ export function DropdownMenu() {
 		navigate('/login');
 	};
 
+	login();
+
+	// Nav Menu Dropdown functions
+	// Profile Functions
+	const toggleProfile = () => {
+		setInProfile(!isInProfle);
+	};
+
 	const handleViewProfileOpen = () => {
 		setIsViewProfileOpen(true);
 	};
 
-	const handleConfirmLogoutOpen = () => {
-		setConfirmLogoutOpen(true);
-	};
-
-	login();
-	const toggleProfile = () => {
-		setInProfile(!isInProfle);
-	};
+	// Dark Mode Functions
 	const toggleDarkMode = () => {
 		setInDarkMode(!isInDarkMode);
-	};
-	const toggleLogOut = () => {
-		setInLogOut(!isInLogOut);
 	};
 
 	const colorModePref = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -202,6 +221,15 @@ export function DropdownMenu() {
 			updateToDarkMode();
 			setIsDarkMode(true);
 		}
+	};
+
+	// Log out functions
+	const toggleLogOut = () => {
+		setInLogOut(!isInLogOut);
+	};
+
+	const handleConfirmLogoutOpen = () => {
+		setConfirmLogoutOpen(true);
 	};
 
 	return (
@@ -274,6 +302,7 @@ export function DropdownMenu() {
 							{isDarkMode ? 'Light Mode' : 'Dark Mode'}{' '}
 						</p>
 					</MenuItem>
+
 					<MenuItem
 						className={styles.menu_item}
 						onClick={handleConfirmLogoutOpen}
