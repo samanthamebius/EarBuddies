@@ -10,6 +10,7 @@ import {
 	updateStudioUsers,
 	updateStudioHost,
 	deleteStudio,
+  removeStudioFromUsers,
   setStudioStatus} from "../studio_dao.js";
 import { setUserInactive } from "../user_dao.js";
 

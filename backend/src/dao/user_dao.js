@@ -159,9 +159,9 @@ async function addStudio(username, studioId) {
 	if (!thisListener) {
 		return res.status(404).json({ msg: 'Listener not found' });
 	}
-	const studios = await getStudiosId(listener);
+	const studios = await getStudiosId(username);
 	studios.push(studioId);
-	await updateStudios(listener, studios);
+	await updateStudios(username, studios);
 }
 
 async function updateStudios(username, studios) {

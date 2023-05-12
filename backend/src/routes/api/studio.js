@@ -259,7 +259,7 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
 	if (!studio) {
 		return res.status(404).json({ msg: "Studio not found" });
 	}
-	const user = await getUser(JSON.parse(username));
+	const user = await getUser(username);
 	if (!user) {
 		return res.status(404).json({ msg: "User not found" });
 	}
@@ -269,14 +269,14 @@ router.put("/:studio_id/leave/:username", async (req, res) => {
 
     //remove user from studio
     const newListeners = studio[0].studioUsers.filter(
-		(listener) => listener !== JSON.parse(username)
+		(listener) => listener !== username
 	);
     await updateStudioUsers(studio_id, newListeners);
 
     //remove studio from user
-    const studios = await getStudiosId(JSON.parse(username));
-    const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
-    updateStudios(JSON.parse(username), newStudios);
+    const studios = await getStudiosId(username);
+    const newStudios = studios.filter((studio) => studio._id !== studio_id);
+    updateStudios(username, newStudios);
 
     res.status(200).json({ msg: "User left studio" });
   } catch (err) {
@@ -335,7 +335,7 @@ router.get("/:studio_id/host", async (req, res) => {
 });
 
 /**
- * @route GET api/studio/:studio_id/:username
+ * @route DELETE api/studio/:studio_id/:username
  * @desc Remove a user from a studio
  * @param studio_id: String (Studio ID)
  * @param username: String (User ID)
@@ -357,7 +357,7 @@ router.delete("/:studio_id/:username", async (req, res) => {
 
 		// remove the studio from the user
 		const studios = await getStudiosId(username);
-		const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studio_id);
+		const newStudios = studios.filter((studio) => studio._id !== studio_id);
 		updateStudios(username, newStudios);
 		
 		// remove the user from the studio

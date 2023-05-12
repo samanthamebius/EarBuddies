@@ -69,7 +69,7 @@ router.put("/:username", async (req, res) => {
 
     return res.status(204).json({ msg: "User updated" });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -193,7 +193,7 @@ router.get("/users/:username/:query/:studioId", async (req, res) => {
  * @param query - search query
  * @return studios - array of studios
  * @throws 500 if Internal server error
- * @throws 404 if no user found
+ * @throws 404 if no user or studios found
  */
 router.get("/:username/studios/:query", async (req, res) => {
   const { username, query } = req.params;
@@ -202,8 +202,12 @@ router.get("/:username/studios/:query", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     const studios = await searchStudios(username, query);
-    return res.json(studios);
+		if (!studios) {
+			return res.status(404).json({ msg: 'No studios found' });
+		}
+		return res.json(studios);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
@@ -217,7 +221,7 @@ router.get("/:username/studios/:query", async (req, res) => {
  * @param query - search query
  * @return studios - array of studios
  * @throws 500 if Internal server error
- * @throws 404 if no user found
+ * @throws 404 if no user or studios found
  */
 router.get("/:username/active/:query", async (req, res) => {
   const { username, query } = req.params;
@@ -228,11 +232,40 @@ router.get("/:username/active/:query", async (req, res) => {
     }
 
     const studios = await searchActiveStudios(username, query);
+    if (!studios) {
+      return res.status(404).json({ msg: "No studios found" });
+    }
     return res.json(studios);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+/**
+ * @route GET api/user/:username/active
+ * @desc Get all active studios
+ * @param username - username of user
+ * @return studios - array of studios
+ * @throws 500 if Internal server error
+ * @throws 404 if no user or studios found
+ */
+router.get('/:username/active', async (req, res) => {
+	const { username, query } = req.params;
+	try {
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: 'No user found' });
+		}
+		const studios = await getActiveStudios(username);
+		if (!studios) {
+			return res.status(404).json({ msg: 'No active studios found' });
+		}
+		return res.json(studios);
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ message: 'Internal server error' });
+	}
 });
 
 export default router;
