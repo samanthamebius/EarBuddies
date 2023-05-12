@@ -1,6 +1,6 @@
 # Burgundy Badgers EarBuddies application!
 
-A fullstack MERN application for listening to music with your buddies!
+A full-stack MERN application for listening to music with your buddies!
 
 ## Authors
 Softeng750 Burgundy Badgers
@@ -13,20 +13,20 @@ Softeng750 Burgundy Badgers
 
 # How to run
 1. Clone this repository 
-2. Open a terminal in the cloned folder and run 
+2. Open a terminal in the cloned folder and run:
 ``` 
 cd ./backend/
 npm install 
 npm start
 ```
-3. Open a second terminal and run
+3. Open a second terminal and run:
 ```
 cd ./frontend/
 npm install
 npm run dev
 ```
-5. open [localhost](http://127.0.0.1:5173/) in your browser. Please use google chrome, as the system has not been fully tested on other browsers and you may encounter unexpected errors. 
-7. log in with spotify. Please use one of the following accounts:  
+5. Open [localhost](http://127.0.0.1:5173/) in your browser. Please use Google Chrome, as the system has not been comprehensively tested on other browsers, and you may encounter unexpected errors. 
+7. Log in with a Spotify account. Please use one of the following accounts:  
 
 Testing account 1  (Taylor Swift)  
 
@@ -39,85 +39,104 @@ Testing account 2  (Florence Welch)
 > password: softeng750  
 
 ## Database
-If you want to have some initialised data, run
+To generate some initialised data, run the following:
 ```
 cd ./backend/
 npm run init_db
 ```
 
 ## Testing
-We have two testing suites set up.
+### Backend Testing Suite
 To run the backend suite:
 ```
 cd ./backend/
 npm test
 ```
-To run an individual test (e.g. studio.test.js)
+To run an individual test (e.g. studio.test.js):
 ``` 
 cd ./backend/
 npm test -t studio.test.js
 ```
+### Frontend Testing Suite
 To run the frontend suite:
-ADD HERE
+1. In one terminal, run the backend:
+```
+cd ./backend/
+npm start
+```
+2. In another terminal, run frontend tests:
+```
+cd ./frontend/
+npm test
+```
+To run an individual test (e.g. create-studio.test.js):
+``` 
+cd ./frontend/
+npm test -t create-studio.test.js
+```
 
 # Features
 ## Login
-Log in using your spotify account (no account creation required!)  
+Log in using your Spotify account with no account creation required  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/8f21a616-534e-401a-b583-5d2e8c1e350b)
 
 
 ## Home
-View your studios - with active studios seperated to easily find your friends 🧑‍🤝‍🧑  
+View your studios - with active studios separated to find your friends easily 🧑‍🤝‍🧑  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/0468cd7d-4204-4e24-9e67-29d11419fda3)  
+
 Search your studios  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/fb46c77e-b4a5-40fc-a2af-10a275b30203)  
 
 Create a studio. Customisable with:  
-- name
-- banner photo
-- genres (choose from our pre-set list, or add your own)
-- control settings
-- listeners  
+- Name
+- Banner photo
+- Genres (choose from our pre-set list, or add your own)
+- Control settings
+- Listeners  
+
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/6e1d4c7f-a819-4cf3-ade9-43be8432773b)
 
 
 ## Profile
-Switch to dark mode! 🌑🌃🌠 perfect for late night listening sessions  
+Switch to dark mode! 🌑🌃🌠 perfect for late-night listening sessions  
+![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79784993/89afb879-c010-4be2-a939-3e3c2eb5781e)
+
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/e0d3f66e-f787-4c6f-9a1c-08403a207a3b)
 
 Change your display name and photo  
-Quick access to your spotify dashboard  
+Quick access to your Ppotify dashboard  
 Log out or delete your account ☹️👋  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/81abec40-b188-4177-9497-d8aaed9946d4)
 
 
 ## Studio
-### now playing 🎵
+### Now Playing 🎵
 View the song playing  
-Control the volume in studio  
+Control the volume in the studio  
 Play, pause, skip and seek songs  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/92f958f7-fc07-40b4-b48f-bf2a117f194d)
 
 
-### search and queue songs 🎼
-Search all songs (and podcasts!) in the spotify library  
-Add them to queue  
+### Search and Queue Songs 🎼
+Search all songs (and podcasts!) in the Spotify library  
+Add them to the queue  
 Remove from queue  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/7db95d2c-5001-4b2e-8d38-4bdaeeb8afd9)
 
 
-### chat 💬
+### Chat 💬
 Send messages to everyone in the studio in a real-time chat  
-Easily mention details about the song playing with quick add buttons  
+Quickly and easily mention details about the song playing with quick add buttons  
 Reply and react to messages  
 Pin messages  
-See the song that was playing at that point in time  
+See the song or podcast that was playing at that point in time  
 See people's custom nicknames  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/d3bf4815-70de-4817-9442-d66f15bddf99)
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/4bcfcbbb-9e97-4edd-8a4c-a96c16051c10)
 
 
-### manage studio 🖊️
+### Manage Studio 🖊️
 Leave studio  
 Edit nickname (specific to this studio)  
 Add listeners (if the host has enabled control)  
@@ -130,7 +149,7 @@ And if you're the host:
 - delete studio  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/f69adfa5-e130-48b9-acea-a6a35234418b)
 
-## Error pages
+## Error Pages
 Handle any errors gracefully
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/1336b2ec-57b4-4a7e-94eb-f687068e7bbc)
 
