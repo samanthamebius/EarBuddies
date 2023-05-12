@@ -288,7 +288,7 @@ router.get('/songinfo', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		const currentTrack = await getCurrentTrack(thisSpotifyApi);
-		res.status(200).json(currentTrack);
+		return res.status(200).json(currentTrack);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
@@ -298,13 +298,29 @@ router.get('/songinfo', async (req, res) => {
 	}
 });
 
+/**
+ * @route   GET api/spotify/artist/:artist_id
+ * @desc    Get info about the artist whose song is currently playing
+ * @params	artist_id: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/artist/:artist_id', async (req, res) => {
 	try {
 		const { artist_id } = req.params;
 		const thisSpotifyApi = getSpotifyApi();
+		if (!thisSpotifyApi) {
+			return res.status(403).json({ msg: 'No Spotify API connection' });
+		}
 		const artist = await getArtist(artist_id, thisSpotifyApi);
-		res.status(200).json(artist);
+		return res.status(200).json(artist);
 	} catch (err) {
+		console.log(err);
+		if (err.statusCode === 401) {
+			return res.status(401).json({ msg: 'Unauthorized' });
+		}
 		res.status(500).json(err);
 	}
 });
