@@ -1,10 +1,16 @@
-// Code credit to https://react-dropzone.org/#!/Examples
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './FileDropZone.module.css';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 
+/**
+ * Component with a file drop zone with upload functionality and file preview.
+ * useDropZone hook used to handle file dropping and selection.
+ * Credit to https://react-dropzone.org/#!/Examples.
+ * @param {Funciton} onFileChange - A callback fucntion that will be called when a file is dropped or uploaded inthe dropzone.
+ * @returns {JSX.Element} - A JSX element that contains the FileDropZone component used to drop image files.
+ */
 export default function FileDropZone(props) {
 	const [files, setFiles] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -22,6 +28,7 @@ export default function FileDropZone(props) {
 		},
 	});
 
+	// thumbnail preview of uploaded image
 	const thumbs = files.map((file) => (
 		<div key={file.name}>
 			<div>
@@ -48,6 +55,7 @@ export default function FileDropZone(props) {
 		<section className='container'>
 			<div {...getRootProps({ className: 'dropzone' })}>
 				<div className={styles.dropBox}>
+					{/* Display drop zone if no file has been uploaded */}
 					<div
 						style={{ display: acceptedFiles.length == 0 ? '' : 'none' }}
 						className={styles.uploadView}>
@@ -64,6 +72,7 @@ export default function FileDropZone(props) {
 							(Only 1 *.jpeg or *.png image will be accepted)
 						</p>
 					</div>
+					{/* Display preview if a file has been uploaded */}
 					<div
 						style={{ display: acceptedFiles.length == 0 ? 'none' : '' }}
 						className={styles.uploadedView}>
