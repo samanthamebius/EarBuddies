@@ -1,6 +1,4 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import path from 'path';
 import mongoose from 'mongoose';
@@ -8,6 +6,7 @@ import * as url from 'url';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
+dotenv.config();
 
 // setup express
 const app = express();
@@ -37,17 +36,18 @@ const io = new Server(server, {
 	},
 });
 
-// Setup socket connection
+/**
+ * Setup socket connection
+ * has all the socket.on then emit code from chat and studio
+ * */
 io.on('connection', (socket) => {
-	console.log(`⚡: ${socket.id} user just connected!`);
-
 	// add a user to a studio chat
 	socket.on('join_room', (data) => {
 		const { id } = data;
 		socket.join(id); // let the user join the room
 	});
 
-	// send message to users
+	// send message to users with room id
 	socket.on('send_message', (data) => {
 		const { room } = data;
 		io.in(room).emit('receive_message', data);
@@ -98,7 +98,6 @@ io.on('connection', (socket) => {
 	// play a song from the playlist in studio
 	socket.on('send_play_song', (data) => {
 		const { room } = data;
-		console.log(room);
 		io.in(room).emit('receive_play_song', data);
 	});
 
@@ -114,10 +113,9 @@ io.on('connection', (socket) => {
 		io.in(room).emit('receive_user_currently_playing_song', data);
 	});
 
-	// send new host to users
+	// send new host to users so they can see if they are new host
 	socket.on('send_new_host', (data) => {
 		const { room } = data;
-		console.log('room ' + room);
 		io.in(room).emit('receive_new_host', data.newHost);
 	});
 
@@ -125,18 +123,11 @@ io.on('connection', (socket) => {
 	socket.on('leave_room', (data) => {
 		const { nickname: displayName, room } = data;
 		socket.leave(room);
-		console.log(`${displayName} has left the chat`);
-	});
-
-	socket.on('disconnect', () => {
-		console.log('🔥: A user disconnected');
 	});
 });
 
 // Serve up the frontend's "dist" directory, if we're running in production mode.
 if (process.env.NODE_ENV === 'production') {
-	console.log('Running in production!');
-
 	// Make all files in that folder public
 	app.use(express.static(path.join(dirname, '../../frontend/dist')));
 
