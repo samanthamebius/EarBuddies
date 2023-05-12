@@ -1,82 +1,105 @@
 .navmenu {
-	font-size: 10;
-	background-color: var(--menuColor);
+/*Display stuff*/
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 	align-items: center;
+	justify-content: space-between;
+/*Box model stuff*/
 	height: 50px;
 	padding: 3px 20px;
+	background-color: var(--menuColor);
+/*Typography stuff*/
+	font-size: 10;
 }
 
 .navLink {
+/*Display stuff*/
 	display: flex;
 	align-items: center;
 }
 
 .logo {
+/*Box model stuff*/
 	height: 28px;
+/*Miscellaneous*/
 	pointer-events: none;
 }
 
 .brandName {
+/*Box model stuff*/
 	margin-left: 15px;
+	background: -webkit-linear-gradient(#b03eee, #e640f8);
+/*Typography stuff*/
 	font-family: 'Secular One';
 	font-size: 26px;
-	background: -webkit-linear-gradient(#b03eee, #e640f8);
+/*Miscellaneous*/
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
 
 .button {
-	border-radius: 4px !important;
-	height: 40px;
-	flex-direction: row;
+/*Display stuff*/
 	display: flex;
-	justify-content: space-between;
+	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
+/*Box model stuff*/
+	height: 40px;
+	border-radius: 4px !important;
 }
 
 .profile_layout {
+/*Display stuff*/
 	display: flex;
 	align-items: center;
 }
 
 .profilePic {
-	object-fit: cover;
-	height: 28px;
+/*Box model stuff*/
 	width: 28px;
-	border-radius: 50%;
+	height: 28px;
 	border: 1px solid #ffffff;
+	border-radius: 50%;
+/*Miscellaneous*/
+	object-fit: cover;
 	pointer-events: none;
 }
 
 .arrow {
+/*Box model stuff*/
 	height: 15px;
 }
 
 .username {
-	color: #ffffff;
-	font-weight: 600;
+/*Box model stuff*/
 	padding-left: 15px;
+/*Typography stuff*/
+	font-weight: 600;
+	color: #ffffff;
 }
 
 .icon {
+/*Box model stuff*/
 	height: 30px;
 	padding-right: 15px;
+/*Miscellaneous*/
 	pointer-events: none;
 }
 
 .menu_item {
+/*Typography stuff*/
 	color: var(--headingColor);
 }
 
 .menu_title {
-	color: var(--headingColor);
+/*Box model stuff*/
 	margin: 5px 0px 5px 10px;
+/*Typography stuff*/
 	font-size: 16px;
+	color: var(--headingColor);
 }
 
 .menu_item:hover .menu_title {
+/*Typography stuff*/
 	color: #b03eee;
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import styles from '../StudioPage.module.css';
+import styles from './SongListItem.module.css';
 import axios from 'axios';
 import QueueMusicRoundedIcon from '@mui/icons-material/QueueMusicRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';

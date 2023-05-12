@@ -1,54 +1,71 @@
 .containerChild {
+/*Display stuff*/
     flex: 1;
 }
 
 .container {
+/*Display stuff*/
     display: flex;
-    padding: 0px 25px 0px 25px;
+/*Box model stuff*/
     height: calc(100vh - 16px);
-    overflow: hidden;
+    padding: 0px 25px 0px 25px;
     background-color: var(--backgroundColor);
+/*Miscellaneous*/
+    overflow: hidden;
 }
 
 .headings {
+/*Positioning stuff*/
+    position: relative;
+/*Typography stuff*/
+    font-size: 32px;
     font-weight: 800;
     color: var(--headingColor);
-    font-size: 32px;
-    position: relative;
 }
 
 .button {
-    height: fit-content;
-    margin-left: auto;
+/*Display stuff*/
     display: flex;
     align-items: center;
+/*Box model stuff*/
+    height: fit-content;
+    margin-left: auto;
 }
 
 .header {
+/*Display stuff*/
     display: flex;
 }
 
 .headerChild {
+/*Display stuff*/
     display: flex;
     align-items: center;
-    float: right;
+/*Box model stuff*/
     margin-left: auto;
+/*Miscellaneous*/
+    float: right;
 }
 
 .cardContainer {
+/*Box model stuff*/
 	height: calc(80vh - 60px);
+/*Miscellaneous*/
 	overflow-y: scroll;
 }
 
 .cardContainer::-webkit-scrollbar {
+/*Display stuff*/
     display: none;
 }
 
 .cardContainer {
+/*Miscellaneous*/
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
 .soundWaves {
+/*Box model stuff*/
     height: 45px;
 }

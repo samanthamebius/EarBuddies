@@ -1,4 +1,4 @@
-import styles from './StudioPage.module.css';
+import styles from './Banner.module.css';
 import React, { useState, useEffect } from 'react';
 import LeaveStudioDialog from './LeaveStudioDialog';
 import NicknameDialog from './NicknameDialog';

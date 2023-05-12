@@ -1,78 +1,99 @@
 .chatBotMessage {
-    background-color: var(--chatBackgroundColor);
-    border-radius: 50px;
+/*Box model stuff*/
     margin-bottom: 16px;
-    color: var(--headingColor);
-    font-size: 14px;
     padding: 4px;
+    border-radius: 50px;
+    background-color: var(--chatBackgroundColor);
+/*Typography stuff*/
+    font-size: 14px;
+    color: var(--headingColor);
 }
 
 .chatMessage {
+/*Display stuff*/
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+/*Box model stuff*/
     max-width: 50%;
     margin-bottom: 16px;
 }
 
 .username {
-    color: var(--headingColor);
-    font-size: 14px;
+/*Box model stuff*/
     margin: 0 0 4px 0;
+/*Typography stuff*/
+    font-size: 14px;
+    color: var(--headingColor);
 }
 
 .body {
+/*Box model stuff*/
     margin: 0;
-    color: white;
-    font-weight: 400;
+/*Typography stuff*/
     font-size: 14px;
+    font-weight: 400;
+    color: white;
 }
 
 .messageReply {
-    background-color: var(--replyBackgroundColor);
+/*Box model stuff*/
+    max-width: calc(0.2 * 100vw);
+    margin-bottom: -10px;
     padding: 12px;
     border-radius: 16px 16px 0 16px;
-    margin-bottom: -10px;
-    max-width: calc(0.2 * 100vw);
+    background-color: var(--replyBackgroundColor);
 }
 
 .messageReplyContent {
+/*Box model stuff*/
     margin: 0;
+/*Typography stuff*/
     font-size: 12px;
+    text-overflow: ellipsis;
     color: var(--replyTextColor);
+/*Miscellaneous*/
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .messageDecoration {
-    margin: -17px 0 0 -1px;
+/*Positioning stuff*/
     z-index: 0;
+/*Box model stuff*/
+    margin: -17px 0 0 -1px;
 }
 
 .reactionCounter {
-    background-color: var(--replyBackgroundColor);
-    align-self: end;
-    border-radius: 80px;
-    font-size: 12px;
-    padding: 2px 3px 2px 2px;
-    margin: 0 -10px 0 -10px;
-    border: 1px solid var(--fieldBorderColor);
+/*Display stuff*/
     display: flex;
     align-items: center;
-    color: var(--replyTextColor);
+    align-self: end;
+/*Positioning stuff*/
     z-index: 1;
+/*Box model stuff*/
+    margin: 0 -10px 0 -10px;
+    padding: 2px 3px 2px 2px;
+    border: 1px solid var(--fieldBorderColor);
+    border-radius: 80px;
+    background-color: var(--replyBackgroundColor);
+/*Typography stuff*/
+    font-size: 12px;
+    color: var(--replyTextColor);
 }
 
 .reply,
 .pin,
 .reaction {
+/*Manipulations stuff*/
     opacity: 0.4;
 }
 
 .pin:hover,
 .reply:hover,
 .reaction:hover {
-    cursor: pointer;
+/*Manipulations stuff*/
     opacity: 0.8;
+/*Miscellaneous*/
+    cursor: pointer;
 }
