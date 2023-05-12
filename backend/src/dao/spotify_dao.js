@@ -208,17 +208,6 @@ async function transferPlaylist(studio_id, host) {
 	return updated_studio.studioHost;
 }
 
-async function removeStudioFromUsers(studio) {
-	const listeners = studio[0].studioUsers;
-	listeners.forEach(async (listener) => {
-		const studios = await getStudiosId(listener);
-		const newStudios = studios.filter(
-			(studio) => JSON.parse(JSON.stringify(studio._id)) !== id
-		);
-		await updateStudios(listener, newStudios);
-	});
-}
-
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -232,5 +221,4 @@ export {
 	copyPlaylist,
 	transferPlaylist,
 	createStudioPlaylist,
-	removeStudioFromUsers,
 };

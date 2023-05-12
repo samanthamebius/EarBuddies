@@ -119,6 +119,17 @@ async function updateStudioPlaylist(id, playlist) {
 	return await Studio.findOneAndUpdate({ _id: id }, { studioPlaylist: playlist }, { new: true });
 }
 
+async function removeStudioFromUsers(studio) {
+	const listeners = studio[0].studioUsers;
+	listeners.forEach(async (listener) => {
+		const studios = await getStudiosId(listener);
+		const newStudios = studios.filter(
+			(studio) => JSON.parse(JSON.stringify(studio._id)) !== id
+		);
+		await updateStudios(listener, newStudios);
+	});
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -132,4 +143,5 @@ export {
 	deleteUserFromStudio,
 	setStudioStatus,
 	updateStudioPlaylist,
+	removeStudioFromUsers,
 };

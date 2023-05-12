@@ -2,9 +2,20 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
-import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost, updateStudioPlaylist } from "../../dao/studio_dao.js";
+import {
+	createStudio,
+	getStudio,
+	deleteStudio,
+	updateStudioUsers,
+	updateStudioNames,
+	updateStudioControlHostOnly,
+	updateStudioHost,
+	updateStudioPlaylist,
+	removeStudioFromUsers,
+	setNickname,
+} from '../../dao/studio_dao.js';
 import { getUser, getStudiosId, updateStudios, addStudio } from "../../dao/user_dao.js";
-import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist, createStudioPlaylist, removeStudioFromUsers } from "../../dao/spotify_dao.js";
+import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist, createStudioPlaylist } from "../../dao/spotify_dao.js";
 import { Types as mongooseTypes } from "mongoose";
 import {
 	deleteChat,
@@ -135,25 +146,37 @@ router.delete("/:id", async (req, res) => {
 	}
 });
 
-//toggle control
-router.post("/:id/toggle", async (req, res) => {
+/**
+ * @route PUT api/studio/:id/isHostOnly
+ * @desc Update the isHostOnly field of a studio
+ * @param id: String (Studio ID)
+ * @returns 200
+ * @throws 404 if studio not found
+ * @throws 500 if server error
+ */
+router.put("/:id/isHostOnly", async (req, res) => {
 	try {
 		const { id } = req.params;
 		const studio = await getStudio(id);
 		if (!studio) {
-		return res.status(404).json({ msg: "Studio not found" });
+			return res.status(404).json({ msg: "Studio not found" });
 		}
 		const control = studio[0].studioControlHostOnly;
-		const newControl = !control;
-		const updated_studio = await updateStudioControlHostOnly(id, newControl);
-		res.status(200).json(updated_studio);
+		await updateStudioControlHostOnly(id, !control);
+
+		res.status(200).json({msg: "control updated"});
 	} catch (err) {
 		console.log(err);
     	res.status(500).json({ msg: "Server error" });
 	}
 });
 
-// upload the image for the studio banner
+/**
+ * @route POST api/studio/upload-image
+ * @desc Upload an image to the server
+ * @body image: File
+ * @returns 201 The location of the newly created image
+ */
 router.post("/upload-image", upload.single("image"), (req, res) => {
 	const oldPath = req.file.path;
 	const extension = req.file.originalname.substring(
@@ -171,20 +194,21 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 		.send();
 });
 
-// update nickname for user in studio
+/**
+ * @route PUT api/studio/:studioId/:userId/nickname
+ * @desc Update the nickname of a user in a studio
+ * @param studioId: String (Studio ID)
+ * @param userId: String (User ID)
+ * @body nickname: String
+ * @returns 200 The updated messages and nickname
+ * @throws 500 if server error
+ */
 router.put("/:studioId/:userId/nickname", async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const nickname = req.body.nickname;
-		const studio = await getStudio(studioId);
-		const users = studio[0].studioUsers;
-		const userPos = users.indexOf(userId);
 
-		const nicknames = studio[0].studioNames;
-		nicknames[userPos] = nickname;
-		await updateStudioNames(studioId, nicknames);
-
-		// update the nickname for chat messages
+		await setNickname(studioId, userId, nickname);
 		const updatedMessages = await updateChatMessageDisplayName(
 			userId,
 			studioId,
@@ -199,13 +223,19 @@ router.put("/:studioId/:userId/nickname", async (req, res) => {
 	}
 });
 
-// get nickname for user in studio
+/**
+ * @route GET api/studio/:studioId/:userId/nickname
+ * @desc Get the nickname of a user in a studio
+ * @param studioId: String (Studio ID)
+ * @param userId: String (User ID)
+ * @returns 200 The nickname
+ * @throws 500 if server error
+ */
 router.get("/:studioId/:userId/nickname", async (req, res) => {
 	try {
 		const { studioId, userId } = req.params;
 		const studio = await getStudio(studioId);
-		const users = studio[0].studioUsers;
-		const userPos = users.indexOf(userId);
+		const userPos = studio[0].studioUsers.indexOf(userId);
 		const nickname = studio[0].studioNames[userPos];
 
 		res.status(200).json(nickname);
