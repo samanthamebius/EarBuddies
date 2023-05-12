@@ -1,0 +1,21 @@
+.selectedGenreButton {
+	/*Box model stuff*/
+	background: linear-gradient(#e640f8, #b03eee);
+}
+
+.unSelectedGenreButton {
+	background: linear-gradient(#ededed, #bebebe);
+}
+
+.genreLabel {
+	/*Box model stuff*/
+	margin: 0px;
+	/*Typography stuff*/
+	font-weight: 600;
+}
+
+.genreIcon {
+	/*Box model stuff*/
+	height: 20px;
+	padding-left: 10px;
+}

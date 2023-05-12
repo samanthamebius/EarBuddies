@@ -7,9 +7,13 @@ import SearchBar from '../shared/SearchBar';
 import CreateStudioDialog from '../createstudio/CreateStudioDialog';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import axios from 'axios';
-import { accordionActionsClasses } from '@mui/material';
 
-function HomePage(props) {
+/**
+ * Home page shown when user successfully logs in
+ * @param {Object} socket - Communication channel between client and server
+ * @returns {JSX.Element} - A JSX element that diaplays the home page.
+ */
+function HomePage({ socket }) {
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 	const current_user = localStorage.getItem('current_user_id');
 	const id = JSON.parse(current_user);
@@ -20,6 +24,7 @@ function HomePage(props) {
 	const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
 	const [activeStudioSearchTerm, setActiveStudioSearchTerm] = useState('');
 
+	// Get Studios
 	useEffect(() => {
 		const fetchStudios = async () => {
 			const response = await axios.get(`${BASE_URL}/api/home/${id}/studios`);
@@ -28,6 +33,7 @@ function HomePage(props) {
 		fetchStudios();
 	}, []);
 
+	// Get Active Studios
 	useEffect(() => {
 		const fetchActiveStudios = async () => {
 			const response = await axios.get(`${BASE_URL}/api/user/${id}/active`);
@@ -36,16 +42,11 @@ function HomePage(props) {
 		fetchActiveStudios();
 	}, []);
 
-	console.log(activeStudios);
-
-	const { socket } = props;
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
 	};
-
-	console.log(studioSearchResults.length === 0);
 
 	return (
 		<div className={styles.container}>
@@ -81,14 +82,12 @@ function HomePage(props) {
 						? studios.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))
 						: studioSearchResults.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))}
@@ -101,7 +100,7 @@ function HomePage(props) {
 						<img
 							src={SoundWavesGradient}
 							className={styles.soundWaves}
-							alt='Pink Sound Waves'></img>
+							alt='Pink sound waves'></img>
 					</div>
 				</div>
 				<SearchBar
@@ -116,14 +115,12 @@ function HomePage(props) {
 						? activeStudios.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))
 						: activeStudioSearchResults.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))}
