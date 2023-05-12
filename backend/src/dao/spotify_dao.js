@@ -123,39 +123,15 @@ async function getLastPlaylistTrackId(thisSpotifyApi, playlist_id) {
 	});
 }
 
-async function getPlaybackState(thisSpotifyApi, deviceId, playlist_id) {
+async function getPlaybackState(thisSpotifyApi, deviceId) {
 	return new Promise((resolve, reject) => {
 		thisSpotifyApi.getMyCurrentPlaybackState({ additional_types: 'episode' }).then(
 			function (data) {
-				if (
-					data.statusCode == 200 &&
-					data.body.device.id == deviceId &&
-					isCurrentInPlaylist(thisSpotifyApi, playlist_id)
-				) {
+				if (data.statusCode == 200 && data.body.device.id == deviceId) {
 					resolve(true);
 				} else {
 					resolve(false);
 				}
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-				reject(err);
-			}
-		);
-	});
-}
-
-async function isCurrentInPlaylist(thisSpotifyApi, playlist_id) {
-	const currentTrackId = await getCurrentTrackId(thisSpotifyApi);
-	return new Promise((resolve, reject) => {
-		thisSpotifyApi.getPlaylistTracks(playlist_id).then(
-			function (data) {
-				for (var i = 0; i < data.body.items.length; i++) {
-					if (data.body.items[i].track.id == currentTrackId) {
-						resolve(true);
-					}
-				}
-				resolve(false);
 			},
 			function (err) {
 				console.log('Something went wrong!', err);
@@ -174,5 +150,4 @@ export {
 	getArtist,
 	getLastPlaylistTrackId,
 	getPlaybackState,
-	isCurrentInPlaylist,
 };
