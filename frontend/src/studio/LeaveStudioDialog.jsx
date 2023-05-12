@@ -14,7 +14,6 @@ import NewHostSelection from './NewHostSelection';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function LeaveStudioDialog({
-    isHost,
     isLeaveDialogOpened,
     handleCloseLeaveDialog,
     studioUsers,

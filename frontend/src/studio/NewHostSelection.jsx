@@ -11,7 +11,6 @@ export default function NewHostSelection({
     setNewHost,
     isHostErrorMessage,
     studioUsers,
-    studio_id,
 }) {
     const [listeners, setListeners] = useState([]);
 
@@ -31,7 +30,9 @@ export default function NewHostSelection({
                 .map((response) => response.data)
                 .filter((listener) => listener.username !== currentUser);
             //only show active users
-            const activeHosts = potentialHosts.filter((listener) => listener.userIsActive);
+            const activeHosts = potentialHosts.filter(
+                (listener) => listener.userIsActive
+            );
             setListeners(activeHosts);
         }
         fetchUserData();
@@ -65,7 +66,10 @@ function ListenerListItem({ listener, isNewHost, setNewHost }) {
         <div
             className={styles.listenerListItem}
             onClick={handleClick}>
-            <img src={listener.profilePic} />
+            <img
+                src={listener.profilePic}
+                alt={'Profile picture of ' + listener.userDisplayName}
+            />
             <p style={{ color: 'var(--headingColor)' }}>{listener.userDisplayName}</p>
             {isNewHost ? (
                 <StarRoundedIcon

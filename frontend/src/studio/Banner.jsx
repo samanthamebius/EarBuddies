@@ -1,10 +1,9 @@
 import styles from './Banner.module.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LeaveStudioDialog from './LeaveStudioDialog';
 import NicknameDialog from './NicknameDialog';
 import ManageListenersDialog from './ManageListenersDialog';
 import AssignNewHostDialog from './AssignNewHostDialog';
-import ProfilePicImg from '../assets/home/defaultprofilepic.png';
 import ListenerIcons from '../shared/ListenerIcons';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,10 +19,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 
-// TO DO: get if user is host or not
-// const isHost = false;
-
-const hostImage = ProfilePicImg;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? '';
@@ -42,9 +37,7 @@ export default function Banner({ id, studio, socket }) {
 		studio.studioHost === localStorage.getItem('current_user_id').replace(/"/g, '');
 
 	const handleDelete = () => {
-		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
-			console.log(res);
-		});
+		axios.delete(`${BASE_URL}/api/studio/${id}`);
 		navigate('/');
 		window.location.reload(false);
 	};
