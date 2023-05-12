@@ -161,10 +161,10 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 		setFile(selectedFile);
 	};
 
-    const handleSwitchToggle = (isChecked) => {
-        setIsHostOnly(isChecked);
-        axios.put(`${BASE_URL}/api/studio/${studioId}/isHostOnly`);
-    };
+	const handleSwitchToggle = (isChecked) => {
+		setIsHostOnly(isChecked);
+		axios.put(`${BASE_URL}/api/studio/${studioId}/isHostOnly`);
+	};
 
 	function toggleGenre(genre) {
 		const newGenres = genres.map((obj, i) => {
@@ -302,7 +302,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 							<TextField
 								color='secondary'
 								margin='dense'
-								id='name'
+								id='genres'
 								label='Add your own genres ...'
 								type='text'
 								fullWidth

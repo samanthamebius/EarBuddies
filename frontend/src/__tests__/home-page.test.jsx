@@ -46,7 +46,7 @@ it('renders home page correctly', () => {
 	expect(getByText('My Studios')).toBeInTheDocument();
 	expect(getByText('Listening Now')).toBeInTheDocument();
 	expect(getByRole('button', { name: 'Create Studio' })).toBeInTheDocument();
-	expect(getByAltText('Pink Sound Waves')).toBeInTheDocument();
+	expect(getByAltText('Pink sound waves')).toBeInTheDocument();
 });
 
 /**
