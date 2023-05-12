@@ -38,33 +38,31 @@ export default function Banner({ id, studio, socket }) {
     const studioName = studio.studioName;
     const backgroundImage = IMAGE_BASE_URL + studio.studioPicture;
 
-	const isHost =
-		studio.studioHost === localStorage.getItem('current_user_id').replace(/"/g, '');
+    const isHost =
+        studio.studioHost === localStorage.getItem('current_user_id').replace(/"/g, '');
 
-	const handleDelete = () => {
-		axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
-			console.log(res);
-		});
-		navigate('/');
-		window.location.reload(false);
-	};
+    const handleDelete = () => {
+        axios.delete(`${BASE_URL}/api/studio/${id}`).then((res) => {
+            console.log(res);
+        });
+        navigate('/');
+        window.location.reload(false);
+    };
 
-	const [controlEnabled, toggleControl] = useState(
-		studio.studioControlHostOnly
-	);
-	const handleControlToggle = () => {
-		toggleControl((current) => !current);
-		studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
-	};
-	const users = studio.studioUsers;
-	const isAlone = users.length <= 1 ? true : false;
-	const isListening = studio.studioIsActive;
+    const [controlEnabled, toggleControl] = useState(studio.studioControlHostOnly);
+    const handleControlToggle = () => {
+        toggleControl((current) => !current);
+        studio = axios.post(`${BASE_URL}/api/studio/${id}/toggle`);
+    };
+    const users = studio.studioUsers;
+    const isAlone = users.length <= 1 ? true : false;
+    const isListening = studio.studioIsActive;
 
-	return (
-		<div
-			className={styles.banner}
-			style={{ backgroundImage: `url(${backgroundImage})` }}>
-			<h1 className={styles.bannerStudioName}>{studioName}</h1>
+    return (
+        <div
+            className={styles.banner}
+            style={{ backgroundImage: `url(${backgroundImage})` }}>
+            <h1 className={styles.bannerStudioName}>{studioName}</h1>
 
             <div className={styles.bannerlisteners}>
                 <ListenerIcons
@@ -91,15 +89,15 @@ export default function Banner({ id, studio, socket }) {
 }
 
 export function DropdownKebab({
-	controlEnabled,
-	handleControlToggle,
-	handleDelete,
-	isHost,
-	id,
-	studio,
-	studioUsers,
-	isAloneInStudio,
-	socket,
+    controlEnabled,
+    handleControlToggle,
+    handleDelete,
+    isHost,
+    id,
+    studio,
+    studioUsers,
+    isAloneInStudio,
+    socket,
 }) {
     const [isOpen, setOpen] = useState(null);
     const open = Boolean(isOpen);
@@ -122,24 +120,24 @@ export function DropdownKebab({
         setOpen(event.currentTarget);
     };
 
-	const enterLeave = () => {
-		setInLeave(true);
-	};
-	const enterEdit = () => {
-		setInEdit(true);
-	};
-	const enterManList = () => {
-		setInManList(true);
-	};
-	const enterDelete = () => {
-		setInDelete(true);
-	};
-	const enterAssign = () => {
-		setIsInAssign(true);
-	};
-	const enterEnable = () => {
-		setIsInEnable(true);
-	};
+    const enterLeave = () => {
+        setInLeave(true);
+    };
+    const enterEdit = () => {
+        setInEdit(true);
+    };
+    const enterManList = () => {
+        setInManList(true);
+    };
+    const enterDelete = () => {
+        setInDelete(true);
+    };
+    const enterAssign = () => {
+        setIsInAssign(true);
+    };
+    const enterEnable = () => {
+        setIsInEnable(true);
+    };
 
     const leaveLeave = () => {
         setInLeave(false);
@@ -168,95 +166,100 @@ export function DropdownKebab({
         setInDelete(false);
     };
 
-	const handleLeaveOpen = () => {
-		setIsLeaveOpen(true);
-	};
-	const handleConfirmDeleteOpen = () => {
-		setConfirmDeleteOpen(true);
-	};
-	const handleLeaveConfirmation = () => {
-		setConfirmleaveOpen(true);
-	};
-	const handleNicknameOpen = () => {
-		setIsNicknameOpen(true);
-	};
-	const handleAssignOpen = () => {
-		setIsAssignOpen(true);
-	};
-	const handleManListOpen = () => {
-		setIsManListOpen(true);
-	};
+    const handleLeaveOpen = () => {
+        setIsLeaveOpen(true);
+    };
+    const handleConfirmDeleteOpen = () => {
+        setConfirmDeleteOpen(true);
+    };
+    const handleLeaveConfirmation = () => {
+        setConfirmleaveOpen(true);
+    };
+    const handleNicknameOpen = () => {
+        setIsNicknameOpen(true);
+    };
+    const handleAssignOpen = () => {
+        setIsAssignOpen(true);
+    };
+    const handleManListOpen = () => {
+        setIsManListOpen(true);
+    };
 
-	const handleLeaveStudio = () => {
-		const user_id = localStorage.getItem('current_user_id');
-		axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
-		navigate('/', { replace: true });
-	};
+    const handleLeaveStudio = () => {
+        const user_id = localStorage.getItem('current_user_id');
+        axios.put(`${BASE_URL}/api/studio/${id}/leave/${user_id}`);
+        navigate('/', { replace: true });
+    };
 
-	return (
-		<div>
-			<LeaveStudioDialog
-				isHost={isHost}
-				isLeaveDialogOpened={isLeaveOpen}
-				handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
-				studioUsers={studioUsers}
-				studio_id={id}
-			/>
-			<AssignNewHostDialog
-				isAssignDialogOpened={isAssignOpen}
-				handleCloseAssignDialog={() => setIsAssignOpen(false)}
-				studioUsers={studioUsers}
-				studio_id={id}
-				socket={socket}
-			/>
-			<ConfirmationDialog
-				isOpen={isConfirmDeleteOpen}
-				handleClose={() => setConfirmDeleteOpen(false)}
-				handleAction={() => {
-					handleClose;
-					handleDelete();
-				}} //TO DO: replace with delete functionality
-				message={'Are you sure you want to delete this studio?'}
-				actionText={'Delete'}
-			/>
-			<ConfirmationDialog
-				isOpen={isConfirmLeaveOpen}
-				handleClose={() => setConfirmleaveOpen(false)}
-				handleAction={() => {
-					handleClose;
-					handleLeaveStudio();
-				}} //TO DO: replace with leave functionality
-				message={'Are you sure you want to leave this studio?'}
-				actionText={'Leave'}
-			/>
-			<NicknameDialog
-				isNicknameDialogOpened={isNicknameOpen}
-				handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
-				studioId={id}
-				socket={socket}
-			/>
-			<ManageListenersDialog
-				isManListDialogOpened={isManListOpen}
-				handleCloseManListDialog={() => setIsManListOpen(false)}
-				studio={studio}
-			/>
-			<div onClick={handleClick} className={styles.dropdownButton}>
-				<MoreVertRoundedIcon
-					style={{ color: 'white', fontSize: '30px' }}
-				/>
-			</div>
-			<Menu autoFocus={false} anchorEl={isOpen} open={open} onClose={handleClose}>
-				<MenuItem
-					className={styles.menu_item}
-					onClick={handleNicknameOpen}
-					onMouseEnter={enterEdit}
-					onMouseLeave={leaveEdit}>
-					<DriveFileRenameOutlineRoundedIcon
-						className={styles.icon}
-						style={{ color: isInEdit ? '#B03EEE' : '#757575' }}
-					/>
-					<p className={styles.menu_title}>Edit Nickname</p>
-				</MenuItem>
+    return (
+        <div>
+            <LeaveStudioDialog
+                isHost={isHost}
+                isLeaveDialogOpened={isLeaveOpen}
+                handleCloseLeaveDialog={() => setIsLeaveOpen(false)}
+                studioUsers={studioUsers}
+                studio_id={id}
+            />
+            <AssignNewHostDialog
+                isAssignDialogOpened={isAssignOpen}
+                handleCloseAssignDialog={() => setIsAssignOpen(false)}
+                studioUsers={studioUsers}
+                studio_id={id}
+                socket={socket}
+            />
+            <ConfirmationDialog
+                isOpen={isConfirmDeleteOpen}
+                handleClose={() => setConfirmDeleteOpen(false)}
+                handleAction={() => {
+                    handleClose;
+                    handleDelete();
+                }} //TO DO: replace with delete functionality
+                message={'Are you sure you want to delete this studio?'}
+                actionText={'Delete'}
+            />
+            <ConfirmationDialog
+                isOpen={isConfirmLeaveOpen}
+                handleClose={() => setConfirmleaveOpen(false)}
+                handleAction={() => {
+                    handleClose;
+                    handleLeaveStudio();
+                }} //TO DO: replace with leave functionality
+                message={'Are you sure you want to leave this studio?'}
+                actionText={'Leave'}
+            />
+            <NicknameDialog
+                isNicknameDialogOpened={isNicknameOpen}
+                handleCloseNicknameDialog={() => setIsNicknameOpen(false)}
+                studioId={id}
+                socket={socket}
+            />
+            <ManageListenersDialog
+                isManListDialogOpened={isManListOpen}
+                handleCloseManListDialog={() => setIsManListOpen(false)}
+                studio={studio}
+            />
+            <div
+                onClick={handleClick}
+                className={styles.dropdownButton}>
+                <MoreVertRoundedIcon style={{ color: 'white', fontSize: '30px' }} />
+            </div>
+            <Menu
+                autoFocus={false}
+                anchorEl={isOpen}
+                open={open}
+                onClose={handleClose}
+                PaperProps={{ style: { backgroundColor: 'var(--dialogColor)' } }}>
+                <MenuItem
+                    className={styles.menu_item}
+                    onClick={handleNicknameOpen}
+                    onMouseEnter={enterEdit}
+                    onMouseLeave={leaveEdit}>
+                    <DriveFileRenameOutlineRoundedIcon
+                        className={styles.icon}
+                        style={{ color: isInEdit ? '#B03EEE' : 'var(--iconColor)' }}
+                    />
+                    <p className={styles.menu_title}>Edit Nickname</p>
+                </MenuItem>
 
                 <MenuItem
                     style={{
