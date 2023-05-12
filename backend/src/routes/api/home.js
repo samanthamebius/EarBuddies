@@ -8,7 +8,7 @@ const router = express.Router();
  * @route   GET api/home/:id/studios
  * @desc    Get all studios that a user is in
  * @params  id: String
- * @returns 200 if successful
+ * @returns 200 if successful along with the array of user studios
  * @throws  500 if unsuccessful
  */
 router.get('/:id/studios', async (req, res) => {
