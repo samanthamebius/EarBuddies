@@ -87,8 +87,8 @@ function SwitchWithTooltip({ checked, onChange }) {
   }));
 
   const title = checked
-    ? 'Only you can queue, skip, and pause songs.'
-    : 'Other users can queue, skip, and pause songs.';
+    ? 'Only you can manage listeners'
+    : 'Other users can add listeners to the studio';
 
   return (
     <ToolTip title={title} placement="right-end" arrow>
@@ -225,7 +225,7 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
               <TextField
                 color="secondary"
                 margin="dense"
-                id="name"
+                id="genres"
                 label="Add your own genres ..."
                 type="text"
                 fullWidth
