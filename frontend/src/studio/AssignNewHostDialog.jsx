@@ -78,21 +78,24 @@ export default function AssignNewHostDialog({
                 <h1 className={styles.heading}>Assign a New Host</h1>
             </div>
 
-            <DialogContent className={styles.dialogContent}>
-                <h2 className={styles.subHeading}>
-                    Choose another listener to be a host
-                </h2>
-                <h2 className={styles.subsubHeading}>
-                    Note: the user must be currently active in this studio to successfully
-                    be set as host
-                </h2>
-                <NewHostSelection
-                    newHost={newHost}
-                    setNewHost={setNewHost}
-                    isHostErrorMessage={isHostErrorMessage}
-                    studioUsers={studioUsers}
-                    studio_id={studio_id}
-                />
+			<DialogContent className={styles.dialogContent}>
+				<div className={styles.newHostText}>
+					<h2 className={styles.subHeading}>
+						Choose another listener to be a host
+					</h2>
+					<h2 className={styles.subsubHeading}>
+						Note: the user must be currently active in this studio to
+						successfully be set as host
+					</h2>
+				</div>
+				<NewHostSelection
+					newHost={newHost}
+					setNewHost={setNewHost}
+					isHostErrorMessage={isHostErrorMessage}
+					studioUsers={studioUsers}
+					studio_id={studio_id}
+				/>
+
 
                 <DialogActions
                     sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
