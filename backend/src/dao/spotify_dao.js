@@ -198,12 +198,13 @@ async function addPlaylistTrackAndQueue(playlist_id, track_id, type, thisSpotify
 	thisSpotifyApi
 		.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
 		.then(
-			function () {
-				thisSpotifyApi
-					.addToQueue('spotify:' + type + ':' + track_id)
-					.then(function (err) {
+			function (data) {
+				thisSpotifyApi.addToQueue('spotify:' + type + ':' + track_id).then(
+					function (data) {},
+					function (err) {
 						console.log('Something went wrong!', err);
-					});
+					}
+				);
 			},
 			function (err) {
 				console.log('Something went wrong!', err);
@@ -224,9 +225,12 @@ async function removePlaylistTrack(
 			[{ uri: 'spotify:' + type + ':' + track_id }],
 			{ snapshot_id: snapshot_id }
 		)
-		.then(function (err) {
-			console.log('Something went wrong!', err);
-		});
+		.then(
+			function (data) {},
+			function (err) {
+				console.log('Something went wrong!', err);
+			}
+		);
 }
 
 async function getPlaylist(playlist_id, thisSpotifyApi) {
@@ -291,15 +295,21 @@ async function pauseSpotify(deviceId, thisSpotifyApi) {
 }
 
 async function skipNext(thisSpotifyApi, deviceId) {
-	thisSpotifyApi.skipToNext({ device_id: deviceId }).then(function (err) {
-		console.log('Something went wrong!', err);
-	});
+	thisSpotifyApi.skipToNext({ device_id: deviceId }).then(
+		function () {},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
 }
 
 async function skipPrevious(thisSpotifyApi, deviceId) {
-	thisSpotifyApi.skipToPrevious({ device_id: deviceId }).then(function (err) {
-		console.log('Something went wrong!', err);
-	});
+	thisSpotifyApi.skipToPrevious({ device_id: deviceId }).then(
+		function () {},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
 }
 
 export {
