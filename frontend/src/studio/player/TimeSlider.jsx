@@ -4,35 +4,37 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import styles from '../StudioPage.module.css';
 import { StyledSlider } from './StyledSlider';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export function TimeSlider(props) {
 	const { player, queueIsEmpty, isHost } = props;
 	const [duration, setDuration] = useState(0);
 	const [position, setPosition] = useState(0);
+	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-	// PUT THIS BACK IN
-	// useEffect(() => {
-	// 	const fetchDuration = async () => {
-	// 		const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-	// 		setDuration(Math.round(track.data.item.duration_ms / 1000));
-	// 	};
-	// 	fetchDuration();
-	// }, []);
+	useEffect(() => {
+		const fetchDuration = async () => {
+			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
+			setDuration(Math.round(track.data.item.duration_ms / 1000));
+		};
+		fetchDuration();
+	}, []);
 
-	// useEffect(() => {
-	// 	const fetchPosition = async () => {
-	// 		axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
-	// 			setPosition(Math.round(response.data.progress_ms / 1000));
-	// 		});
-	// 	};
-	// 	fetchPosition();
+	useEffect(() => {
+		const fetchPosition = async () => {
+			axios.get(`${BASE_URL}/api/spotify/songinfo`).then((response) => {
+				setPosition(Math.round(response.data.progress_ms / 1000));
+			});
+		};
+		fetchPosition();
 
-	// 	// Polling mechanism to continuously update position
-	// 	const interval = setInterval(fetchPosition, 1000);
+		// Polling mechanism to continuously update position
+		const interval = setInterval(fetchPosition, 1000);
 
-	// 	// Cleanup interval on component unmount
-	// 	return () => clearInterval(interval);
-	// }, []);
+		// Cleanup interval on component unmount
+		return () => clearInterval(interval);
+	}, []);
 
 	const TinyText = styled(Typography)({
 		fontSize: '0.75rem',
@@ -65,9 +67,7 @@ export function TimeSlider(props) {
 				step={1}
 				max={duration}
 				color='secondary'
-				onChange={isHost ? () => handleChange : undefined}
-				style={{ pointerEvents: queueIsEmpty ? 'none' : 'auto' }}
-				disabled={!isHost}
+				onChange={handleChange}
 			/>
 			<Box
 				sx={{
