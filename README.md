@@ -42,7 +42,7 @@ Testing account 2  (Florence Welch)
 To generate some initialised data, run the following:
 ```
 cd ./backend/
-npm run init_db
+npm run init-db
 ```
 
 ## Testing
