@@ -17,9 +17,9 @@ import axios from 'axios';
  * @returns {JSX.Element} - JSX creating the time slider component
  */
 export function TimeSlider(props) {
-	const { player, queueIsEmpty, isHost } = props;
-	const [duration, setDuration] = useState(0);
-	const [position, setPosition] = useState(0);
+    const { player, queueIsEmpty, isHost } = props;
+    const [duration, setDuration] = useState(0);
+    const [position, setPosition] = useState(0);
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 	// set the duration of the current song
@@ -48,13 +48,13 @@ export function TimeSlider(props) {
 		return () => clearInterval(interval);
 	}, []);
 
-	const TinyText = styled(Typography)({
-		fontSize: '0.75rem',
-		opacity: 0.38,
-		fontWeight: 500,
-		letterSpacing: 0.2,
-		color: 'white',
-	});
+    const TinyText = styled(Typography)({
+        fontSize: '0.75rem',
+        opacity: 0.38,
+        fontWeight: 500,
+        letterSpacing: 0.2,
+        color: 'white',
+    });
 
 	// format the duration of the song into readable values
 	function formatDuration(value) {
