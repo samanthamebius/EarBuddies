@@ -13,6 +13,7 @@ import {
 	updateStudioPlaylist,
 	removeStudioFromUsers,
 	setNickname,
+	updateStudioListeners,
 } from '../../dao/studio_dao.js';
 import { getUser, getStudiosId, updateStudios, addStudio } from "../../dao/user_dao.js";
 import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist, createStudioPlaylist } from "../../dao/spotify_dao.js";
@@ -244,7 +245,15 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 	}
 });
 
-//update studio listeners HERE THIS ONE HERE
+/**
+ * @route PUT api/studio/:studioId/updateListeners
+ * @desc Update the listeners of a studio
+ * @param studioId: String (Studio ID)
+ * @body listeners: Array of Strings (User IDs)
+ * @returns 200 The updated studio
+ * @throws 404 if studio not found
+ * @throws 500 if server error
+ */
 router.put("/:studioId/updateListeners", async (req, res) => {
 	try {
 		const { studioId } = req.params;
@@ -254,65 +263,10 @@ router.put("/:studioId/updateListeners", async (req, res) => {
 		if (!studio) {
 			return res.status(404).json({ msg: "Studio not found" });
 		}
-		const oldListeners = studio[0].studioUsers; // TODO: check that this is IDs not objects
 
-		const listenersDeleted = oldListeners.filter(listener => !listeners.includes(listener));
-		const listenersAdded = listeners.filter(listener => !oldListeners.includes(listener));
+		const updatedStudio = await updateStudioListeners(studioId, listeners);
 
-		// Add new listeners
-		// Add studios to user and add nicknames to studio
-		const studioNamesUpdated = studio[0].studioNames;
-
-		const promises = listenersAdded.map(async (listener) => {
-			const thisListener = await getUser(listener);
-			if (!thisListener) {
-				return res.status(404).json({ msg: "Listener not found" });
-			}
-			const studios = await getStudiosId(listener);
-			studios.push(studioId);
-			await updateStudios(listener, studios);
-
-			// Add user to nickname list
-			const displayName = thisListener.userDisplayName;
-			studioNamesUpdated.unshift(displayName);
-		});
-		await Promise.all(promises);
-
-		// Add user to studio
-		oldListeners.unshift(...listenersAdded);
-		await updateStudioUsers(studioId, oldListeners);
-		await updateStudioNames(studioId, studioNamesUpdated);
-
-		let updatedStudio = studio[0];
-
-		// Delete studio from users
-		for(const username of listenersDeleted) {
-			const user = await getUser(username);
-			if (!user) {
-				return res.status(404).json({ msg: "User not found" });
-			}	
-			//remove user from nickname list
-			const indexToRemove = updatedStudio.studioUsers.indexOf(username);
-			const nicknames = updatedStudio.studioNames;
-			const newArray = [
-				...nicknames.slice(0, indexToRemove),
-				...nicknames.slice(indexToRemove + 1),
-			];
-
-			updatedStudio = await updateStudioNames(studioId, newArray);
-
-			//remove user from studio
-			const newListeners = updatedStudio.studioUsers.filter((listener) => listener !== username);
-			updatedStudio = await updateStudioUsers(studioId, newListeners);
-
-			//remove studio from user
-			const studios = await getStudiosId(username);
-			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studioId);
-			await updateStudios(username, newStudios);
-
-		}
-		const finalStudio = await getStudio(studioId);
-		res.status(200).json(finalStudio);
+		res.status(200).json(updatedStudio);
 	} catch (err) {
 		res.status(500).json(err);
 	}

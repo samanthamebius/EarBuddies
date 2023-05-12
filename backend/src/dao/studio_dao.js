@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { Studio } from "../database/schema.js";
-import { getUser } from "./user_dao.js";
+import { getStudiosId, getUser, updateStudios } from "./user_dao.js";
 
 
 async function createStudio(name, listeners, host, genres, photo, isHostOnly, playlist) {
@@ -130,6 +130,79 @@ async function removeStudioFromUsers(studio) {
 	});
 }
 
+async function setNickname(studio_id, username, nickname) {
+	const studio = await getStudio(studio_id);
+	const users = studio[0].studioUsers;
+	const nicknames = studio[0].studioNames;
+	
+	const userPos = users.indexOf(username);
+	nicknames[userPos] = nickname;
+	await updateStudioNames(studio_id, nicknames);
+}
+
+async function updateStudioListeners(studio, listeners) {
+	const oldListeners = studio[0].studioUsers;
+	
+	const listenersAdded = listeners.filter(
+		(listener) => !oldListeners.includes(listener)
+	);
+	await addListeners(listenersAdded, studio);
+	oldListeners.unshift(...listenersAdded);
+	const updatedStudio = await updateStudioUsers(studio._id, oldListeners);
+	
+	const listenersDeleted = oldListeners.filter(
+		(listener) => !listeners.includes(listener)
+	);
+	await removeListeners(listenersDeleted, studio, updatedStudio);
+	return await getStudio(studio._id);
+}
+
+async function addListeners(listenersAdded, studio) {
+	const studioNamesUpdated = studio[0].studioNames;
+	const promises = listenersAdded.map(async (listener) => {
+		const thisListener = await getUser(listener);
+		if (!thisListener) {
+			return res.status(404).json({ msg: 'Listener not found' });
+		}
+		const studios = await getStudiosId(listener);
+		studios.push(studio._id);
+		await updateStudios(listener, studios);
+
+		// Add user to nickname list
+		const displayName = thisListener.userDisplayName;
+		studioNamesUpdated.unshift(displayName);
+	});
+	await Promise.all(promises);
+	await updateStudioNames(studio._id, studioNamesUpdated);
+}
+
+async function removeListeners(listenersDeleted, studio, updatedStudio) {
+	for(const username of listenersDeleted) {
+		const user = await getUser(username);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}	
+		//remove user from nickname list
+		const indexToRemove = updatedStudio.studioUsers.indexOf(username);
+		const nicknames = updatedStudio.studioNames;
+		const newArray = [
+			...nicknames.slice(0, indexToRemove),
+			...nicknames.slice(indexToRemove + 1),
+		];
+
+		updatedStudio = await updateStudioNames(studio._id, newArray);
+
+		//remove user from studio
+		const newListeners = updatedStudio.studioUsers.filter((listener) => listener !== username);
+		updatedStudio = await updateStudioUsers(studio._id, newListeners);
+
+		//remove studio from user
+		const studios = await getStudiosId(username);
+		const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== studioId);
+		await updateStudios(username, newStudios);
+	}
+}
+
 export {
 	createStudio,
 	getStudio,
@@ -144,4 +217,6 @@ export {
 	setStudioStatus,
 	updateStudioPlaylist,
 	removeStudioFromUsers,
+	setNickname,
+	updateStudioListeners,
 };
