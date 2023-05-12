@@ -1,57 +1,57 @@
-import React, { useState, useEffect, useContext } from "react";
-import Slider from "@mui/material/Slider";
-import styles from "./StudioPage.module.css";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import PlayCircleFilledRoundedIcon from "@mui/icons-material/PlayCircleFilledRounded";
-import PauseCircleRoundedIcon from "@mui/icons-material/PauseCircleRounded";
-import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
-import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
-import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
-import VolumeOffRoundedIcon from "@mui/icons-material/VolumeOffRounded";
-import placeholder_album from "../assets/now_playing/placeholder_album.png";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../AppContextProvider";
+import React, { useState, useEffect, useContext } from 'react';
+import Slider from '@mui/material/Slider';
+import styles from './StudioPage.module.css';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
+import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
+import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
+import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
+import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
+import placeholder_album from '../assets/now_playing/placeholder_album.png';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../AppContextProvider';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 let navigate;
 let songNumber = 0;
 
 const StyledSlider = styled(Slider)({
-	color: "#ffffff",
+	color: '#ffffff',
 	height: 4,
-	"& .MuiSlider-thumb": {
+	'& .MuiSlider-thumb': {
 		width: 8,
 		height: 8,
-		transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
-		"&:before": {
-			boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+		transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+		'&:before': {
+			boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
 		},
-		"&:hover, &.Mui-focusVisible": {},
-		"&.Mui-active": {
+		'&:hover, &.Mui-focusVisible': {},
+		'&.Mui-active': {
 			width: 20,
 			height: 20,
 		},
 	},
-	"& .MuiSlider-rail": {
+	'& .MuiSlider-rail': {
 		opacity: 0.28,
 	},
 });
 
 function SongInfo({ socket, studio, queueIsEmpty }) {
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-	const [songTitle, setSongTitle] = useState("");
-	const [artistName, setArtistName] = useState("");
-	const [artistImg, setArtistImg] = useState("");
-	const [albumArtwork, setAlbumArtwork] = useState("");
+	const [songTitle, setSongTitle] = useState('');
+	const [artistName, setArtistName] = useState('');
+	const [artistImg, setArtistImg] = useState('');
+	const [albumArtwork, setAlbumArtwork] = useState('');
 
 	useEffect(() => {
 		const fetchSongInfo = async () => {
 			const track = await axios.get(`${BASE_URL}/api/spotify/songinfo`);
-			if (track.data?.item?.type === "episode") {
+			if (track.data?.item?.type === 'episode') {
 				setSongTitle(track.data.item.name);
 				setAlbumArtwork(track.data.item.images[0].url);
 				setArtistName(track.data.item.show.name);
@@ -69,7 +69,7 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 				// }
 			}
 
-			socket.emit("send_currently_playing", {
+			socket.emit('send_currently_playing', {
 				room: studio._id,
 				track: track.data.item,
 			});
@@ -86,8 +86,8 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 
 	// send the now playing song to chat only when it changes
 	useEffect(() => {
-		if (songTitle !== "") {
-			socket.emit("send_to_chat_currently_playing", {
+		if (songTitle !== '') {
+			socket.emit('send_to_chat_currently_playing', {
 				room: studio._id,
 				trackTitle: songTitle,
 			});
@@ -98,26 +98,24 @@ function SongInfo({ socket, studio, queueIsEmpty }) {
 		<div className={styles.songSection}>
 			<h3
 				className={styles.song}
-				style={{ display: songTitle && !queueIsEmpty ? "flex" : "none" }}
-			>
+				style={{ display: songTitle && !queueIsEmpty ? 'flex' : 'none' }}>
 				{songTitle}
 			</h3>
 			<div className={styles.artist}>
 				<img
-					style={{ display: artistImg  && !queueIsEmpty ? "flex" : "none" }}
+					style={{ display: artistImg && !queueIsEmpty ? 'flex' : 'none' }}
 					className={styles.artistImg}
 					src={artistImg}
 				/>
 				<div
-					style={{ display: artistName  && !queueIsEmpty ? "flex" : "none" }}
-					className={styles.artistName}
-				>
+					style={{ display: artistName && !queueIsEmpty ? 'flex' : 'none' }}
+					className={styles.artistName}>
 					{artistName ? artistName : null}
 				</div>
 			</div>
 			<img
 				className={styles.albumArtwork}
-				src={albumArtwork  && !queueIsEmpty ? albumArtwork  : placeholder_album}
+				src={albumArtwork && !queueIsEmpty ? albumArtwork : placeholder_album}
 			/>
 		</div>
 	);
@@ -151,29 +149,29 @@ export function VolumeSlider({ player }) {
 	return (
 		<div className={styles.volume}>
 			<Box fullwidth>
-				<Stack spacing={2} direction="row" sx={{ m: 1 }} alignItems="center">
+				<Stack spacing={2} direction='row' sx={{ m: 1 }} alignItems='center'>
 					{isMute ? (
 						<VolumeOffRoundedIcon
-							sx={{ "&:hover": { cursor: "pointer" } }}
-							style={{ color: "white", fontSize: "25px" }}
+							sx={{ '&:hover': { cursor: 'pointer' } }}
+							style={{ color: 'white', fontSize: '25px' }}
 							className={styles.controlBtn}
 							onClick={handleUnmute}
 						/>
 					) : (
 						<VolumeUpRoundedIcon
-							sx={{ "&:hover": { cursor: "pointer" } }}
-							style={{ color: "white", fontSize: "25px" }}
+							sx={{ '&:hover': { cursor: 'pointer' } }}
+							style={{ color: 'white', fontSize: '25px' }}
 							className={styles.controlBtn}
 							onClick={handleMute}
 						/>
 					)}
 					<StyledSlider
-						size="small"
+						size='small'
 						disabled={isMute}
 						className={styles.slider}
-						aria-label="Volume"
+						aria-label='Volume'
 						value={value}
-						color="secondary"
+						color='secondary'
 						onChange={handleChange}
 					/>
 				</Stack>
@@ -211,11 +209,11 @@ export function TimeSlider({ player, queueIsEmpty }) {
 	// }, []);
 
 	const TinyText = styled(Typography)({
-		fontSize: "0.75rem",
+		fontSize: '0.75rem',
 		opacity: 0.38,
 		fontWeight: 500,
 		letterSpacing: 0.2,
-		color: "white",
+		color: 'white',
 	});
 
 	function formatDuration(value) {
@@ -234,35 +232,33 @@ export function TimeSlider({ player, queueIsEmpty }) {
 	return (
 		<div className={styles.time}>
 			<StyledSlider
-				aria-label="time-indicator"
-				size="small"
+				aria-label='time-indicator'
+				size='small'
 				value={position}
 				min={0}
 				step={1}
 				max={duration}
-				color="secondary"
+				color='secondary'
 				onChange={handleChange}
-				style={{ pointerEvents: queueIsEmpty ? "none" : "auto" }}
+				style={{ pointerEvents: queueIsEmpty ? 'none' : 'auto' }}
 			/>
 			<Box
 				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
 					mt: -2,
-				}}
-			>
+				}}>
 				<TinyText>{formatDuration(position)}</TinyText>
 				<TinyText>-{formatDuration(duration - position)}</TinyText>
 			</Box>
 			<Box
 				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
 					mt: -1,
-				}}
-			></Box>
+				}}></Box>
 		</div>
 	);
 }
@@ -281,18 +277,19 @@ function ControlPanel(props) {
 		try {
 			axios
 				.put(`${BASE_URL}/api/spotify/play`, {
-					uri: "spotify:playlist:" + studio?.studioPlaylist,
+					uri: 'spotify:playlist:' + studio?.studioPlaylist,
 					deviceId: myDeviceId,
+					playlist_id: studio?.studioPlaylist,
 				})
 				.then((response) => {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -306,11 +303,11 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -325,11 +322,11 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -343,11 +340,11 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -356,7 +353,7 @@ function ControlPanel(props) {
 	function playButton(studio) {
 		songNumber++;
 
-		socket.emit("send_play_song", {
+		socket.emit('send_play_song', {
 			room: studio._id,
 			isPlaying: true,
 			studio: studio,
@@ -366,7 +363,7 @@ function ControlPanel(props) {
 	function pauseButton(studio) {
 		songNumber++;
 
-		socket.emit("send_pause_song", {
+		socket.emit('send_pause_song', {
 			room: studio._id,
 			isPlaying: false,
 		});
@@ -375,7 +372,7 @@ function ControlPanel(props) {
 	function previousButton(studio) {
 		songNumber++;
 
-		socket.emit("send_previous_song", {
+		socket.emit('send_previous_song', {
 			room: studio._id,
 		});
 	}
@@ -383,7 +380,7 @@ function ControlPanel(props) {
 	function skipButton(studio) {
 		songNumber++;
 
-		socket.emit("send_skip_song", {
+		socket.emit('send_skip_song', {
 			room: studio._id,
 			studio: studio,
 		});
@@ -391,46 +388,46 @@ function ControlPanel(props) {
 
 	// socket is listening to when a song should be played
 	useEffect(() => {
-		socket.on("receive_play_song", (data) => {
+		socket.on('receive_play_song', (data) => {
 			const { isPlaying, studio } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 				spotifyPlayer(studio, myDeviceId);
 			}
-			console.log("received play");
+			console.log('received play');
 		});
 	}, [socket, myDeviceId]);
 
 	// socket is listening to when a song should be paused
 	useEffect(() => {
-		socket.on("receive_pause_song", (data) => {
+		socket.on('receive_pause_song', (data) => {
 			const { isPlaying } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 				spotifyPauser(myDeviceId);
 			}
-			console.log("received pause");
+			console.log('received pause');
 		});
 	}, [socket, myDeviceId]);
 
 	// socket is listening to when a song should be skipped
 	useEffect(() => {
-		socket.on("receive_previous_song", () => {
+		socket.on('receive_previous_song', () => {
 			if (Object.keys(myDeviceId).length !== 0) {
 				spotifyPrevious(myDeviceId);
 			}
-			console.log("received previous");
+			console.log('received previous');
 		});
 	}, [socket, myDeviceId]);
 
 	// socket is listening to when a song should go back to the previous song
 	useEffect(() => {
-		socket.on("receive_skip_song", (data) => {
+		socket.on('receive_skip_song', (data) => {
 			const { studio } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				spotifyNext(myDeviceId, studio);
 			}
-			console.log("received skip");
+			console.log('received skip');
 		});
 	}, [socket, myDeviceId]);
 
@@ -470,11 +467,11 @@ function ControlPanel(props) {
 		<div className={styles.controlPanel}>
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
-					sx={{ "&:hover": { cursor: "pointer" } }}
+					sx={{ '&:hover': { cursor: 'pointer' } }}
 					style={{
-						fontSize: "40px",
-						color: queueIsEmpty || isInPrevious ? "#e7bcf7" : "white",
-						pointerEvents: queueIsEmpty ? "none" : "auto",
+						fontSize: '40px',
+						color: queueIsEmpty || isInPrevious ? '#e7bcf7' : 'white',
+						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
 					onClick={() => previousButton(studio)}
 					onMouseEnter={enterPrevious}
@@ -483,11 +480,11 @@ function ControlPanel(props) {
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
-						sx={{ "&:hover": { cursor: "pointer" } }}
+						sx={{ '&:hover': { cursor: 'pointer' } }}
 						style={{
-							fontSize: "40px",
-							color: queueIsEmpty || isInPlay ? "#e7bcf7" : "white",
-							pointerEvents: queueIsEmpty ? "none" : "auto",
+							fontSize: '40px',
+							color: queueIsEmpty || isInPlay ? '#e7bcf7' : 'white',
+							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
 						onClick={() => playButton(studio)}
 						onMouseEnter={enterPlay}
@@ -496,11 +493,11 @@ function ControlPanel(props) {
 					/>
 				) : (
 					<PauseCircleRoundedIcon
-						sx={{ "&:hover": { cursor: "pointer" } }}
+						sx={{ '&:hover': { cursor: 'pointer' } }}
 						style={{
-							fontSize: "40px",
-							color: queueIsEmpty || isInPause ? "#e7bcf7" : "white",
-							pointerEvents: queueIsEmpty ? "none" : "auto",
+							fontSize: '40px',
+							color: queueIsEmpty || isInPause ? '#e7bcf7' : 'white',
+							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
 						onClick={() => pauseButton(studio)}
 						onMouseEnter={enterPause}
@@ -509,11 +506,11 @@ function ControlPanel(props) {
 					/>
 				)}
 				<SkipNextRoundedIcon
-					sx={{ "&:hover": { cursor: "pointer" } }}
+					sx={{ '&:hover': { cursor: 'pointer' } }}
 					style={{
-						fontSize: "40px",
-						color: queueIsEmpty || isInNext ? "#e7bcf7" : "white",
-						pointerEvents: queueIsEmpty ? "none" : "auto",
+						fontSize: '40px',
+						color: queueIsEmpty || isInNext ? '#e7bcf7' : 'white',
+						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
 					onClick={() => skipButton(studio)}
 					onMouseEnter={enterNext}
@@ -534,8 +531,8 @@ function WebPlayback(props) {
 	navigate = useNavigate();
 
 	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://sdk.scdn.co/spotify-player.js";
+		const script = document.createElement('script');
+		script.src = 'https://sdk.scdn.co/spotify-player.js';
 		script.async = true;
 
 		document.body.appendChild(script);
@@ -544,7 +541,7 @@ function WebPlayback(props) {
 		try {
 			window.onSpotifyWebPlaybackSDKReady = () => {
 				const player = new window.Spotify.Player({
-					name: "EarBuddies",
+					name: 'EarBuddies',
 					getOAuthToken: (cb) => {
 						cb(token);
 					},
@@ -553,20 +550,20 @@ function WebPlayback(props) {
 
 				setPlayer(player);
 
-				player.addListener("ready", ({ device_id }) => {
-					console.log("Ready with Device ID", device_id);
+				player.addListener('ready', ({ device_id }) => {
+					console.log('Ready with Device ID', device_id);
 					setMyDeviceId(device_id);
 				});
 
-				player.addListener("not_ready", ({ device_id }) => {
-					console.log("Device ID has gone offline", device_id);
+				player.addListener('not_ready', ({ device_id }) => {
+					console.log('Device ID has gone offline', device_id);
 				});
 
 				player.connect();
 			};
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}, []);
 
@@ -580,9 +577,13 @@ function WebPlayback(props) {
 
 	return (
 		<>
-			<div className="container">
-				<div className="main-wrapper">
-					<SongInfo socket={socket} studio={studio} queueIsEmpty={queueIsEmpty} />
+			<div className='container'>
+				<div className='main-wrapper'>
+					<SongInfo
+						socket={socket}
+						studio={studio}
+						queueIsEmpty={queueIsEmpty}
+					/>
 					<ControlPanel
 						deviceId={myDeviceId}
 						studio={studio}
