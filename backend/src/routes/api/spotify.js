@@ -7,6 +7,7 @@ import {
 	getArtist,
 	getLastPlaylistTrackId,
 	getPlaybackState,
+	addPlaylistTrackAndQueue,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -58,20 +59,7 @@ router.put('/queue', async (req, res) => {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
 		// Add tracks to a playlist
-		thisSpotifyApi
-			.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
-			.then(
-				function (data) {
-					thisSpotifyApi
-						.addToQueue('spotify:' + type + ':' + track_id)
-						.then(function (err) {
-							console.log('Something went wrong!', err);
-						});
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+		await addPlaylistTrackAndQueue(playlist_id, track_id, type);
 		return res.status(200).json({ msg: 'Added track to playlist' });
 	} catch (err) {
 		console.log(err);
@@ -82,6 +70,15 @@ router.put('/queue', async (req, res) => {
 	}
 });
 
+/**
+ * @route   GET api/spotify/queue/:playlist_id
+ * @desc	Get the tracks in the playlist
+ * @params  playlist_id: String
+ * @returns 200 if successful with playlist tracks
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.get('/queue/:playlist_id', async (req, res) => {
 	try {
 		const { playlist_id } = req.params;

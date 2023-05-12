@@ -194,6 +194,23 @@ async function transferPlaylist(studio_id, host) {
 	return updated_studio.studioHost;
 }
 
+async function addPlaylistTrackAndQueue(playlist_id, track_id, type) {
+	const api = getSpotifyApi();
+	if (!api) {
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	api.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id]).then(
+		function (data) {
+			api.addToQueue('spotify:' + type + ':' + track_id).then(function (err) {
+				console.log('Something went wrong!', err);
+			});
+		},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -206,4 +223,5 @@ export {
 	createNewStudioPlaylist,
 	copyPlaylist,
 	transferPlaylist,
+	addPlaylistTrackAndQueue,
 };
