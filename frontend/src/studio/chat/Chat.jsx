@@ -119,15 +119,6 @@ export default function Chat(props) {
 						replyMessage: '',
 					},
 				]);
-				// save the message to DB
-				axios.put(`http://localhost:3000/api/chat/new-message/${id}`, {
-					id: messageId,
-					username: 'chat_bot',
-					displayName: 'chat_bot',
-					message: `Now playing: ${trackTitle}`,
-					isReply: false,
-					replyMessage: '',
-				});
 			}
 		});
 	}, [socket]);
