@@ -9,7 +9,6 @@ import {
 	updateStudioUsers,
 	updateStudioNames,
 	updateStudioControlHostOnly,
-	removeStudioFromUsers,
 	setNickname,
 	removeNickname,
 } from '../../dao/studio_dao.js';
@@ -134,11 +133,19 @@ router.delete('/:id', async (req, res) => {
 		if (!studio) {
 			return res.status(404).json({ msg: 'Studio not found' });
 		}
-		await removeStudioFromUsers(studio);
+		//remove studio from users
+		const listeners = studio[0].studioUsers;
+		listeners.forEach(async (listener) => {
+			const studios = await getStudiosId(listener);
+			const newStudios = studios.filter(
+				(studio) => JSON.parse(JSON.stringify(studio._id)) !== id
+			);
+			await updateStudios(listener, newStudios);
+		});
 		await deleteChat(id);
 		await deleteStudio(id);
 
-		res.status(204).json({msg: 'studio deleted'});
+		res.status(204).json({ msg: 'studio deleted' });
 	} catch (err) {
 		console.log(err);
     	res.status(500).json({ msg: 'Server error' });

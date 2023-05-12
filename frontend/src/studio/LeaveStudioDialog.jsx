@@ -70,6 +70,10 @@ export default function LeaveStudioDialog({
 
 			<DialogContent className={styles.dialogContent}>
 				<h2 className={styles.subHeading}>Assign a new host before leaving</h2>
+				<h2 className={styles.subsubHeading}>
+					Note: the user must be currently active in this studio to successfully
+					be set as host
+				</h2>
 				<NewHostSelection
 					newHost={newHost}
 					setNewHost={setNewHost}
