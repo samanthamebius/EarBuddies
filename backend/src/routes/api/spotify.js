@@ -1,5 +1,5 @@
 import express from 'express';
-import { getSpotifyApi } from '../../dao/spotify_dao';
+import { getSpotifyApi, playSpotify, resumeSpotify } from '../../dao/spotify_dao';
 import {
 	searchSpotify,
 	getCurrentTrack,
@@ -135,6 +135,16 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/play
+ * @desc    Play a track on a device - either starts from beginning of playlist or resumes
+ * @body	uri: String
+ * 			deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/play', async (req, res) => {
 	try {
 		const { uri, deviceId } = req.body;
@@ -142,46 +152,13 @@ router.put('/play', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		console.log('PLAYING ON ' + deviceId);
-		// Play a track if not playing already
-		// will need an if statement to check where it finished to pick it up at correct point
-		// ooh or just called with no uri and it will resume
-		console.log(await getPlaybackState(thisSpotifyApi, deviceId));
+		// check if spotify is active - if yes then resume playing if no then play playlist
 		if (await getPlaybackState(thisSpotifyApi, deviceId)) {
-			thisSpotifyApi.play({ device_id: deviceId }).then(
-				function () {
-					thisSpotifyApi.setRepeat('context', { device_id: deviceId }).then(
-						function () {},
-						function (err) {
-							console.log('Something went wrong!', err);
-						}
-					);
-				},
-				function (err) {
-					console.log('Something went wrong!', err);
-				}
-			);
+			await resumeSpotify(thisSpotifyApi, deviceId);
 			return res.status(200).json({ msg: 'Resuming track' });
 		} else {
-			thisSpotifyApi
-				.play({
-					context_uri: uri,
-					device_id: deviceId,
-					offset: { position: 0 },
-				})
-				.then(
-					function () {
-						thisSpotifyApi.setRepeat('context', { device_id: deviceId }).then(
-							function () {},
-							function (err) {
-								console.log('Something went wrong!', err);
-							}
-						);
-					},
-					function (err) {
-						console.log('Something went wrong!', err);
-					}
-				);
+			await playSpotify(thisSpotifyApi, uri, deviceId);
+			return res.status(200).json({ msg: 'Playing Playlist' });
 		}
 	} catch (err) {
 		console.log(err);

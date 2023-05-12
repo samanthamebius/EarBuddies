@@ -243,6 +243,43 @@ async function getPlaylist(playlist_id, thisSpotifyApi) {
 	);
 }
 
+async function resumeSpotify(thisSpotifyApi, deviceId) {
+	thisSpotifyApi.play({ device_id: deviceId }).then(
+		function () {
+			thisSpotifyApi
+				.setRepeat('context', { device_id: deviceId })
+				.then(function (err) {
+					console.log('Something went wrong!', err);
+				});
+		},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
+}
+
+async function playSpotify(thisSpotifyApi, uri, deviceId) {
+	thisSpotifyApi
+		.play({
+			context_uri: uri,
+			device_id: deviceId,
+			offset: { position: 0 },
+		})
+		.then(
+			function () {
+				thisSpotifyApi.setRepeat('context', { device_id: deviceId }).then(
+					function () {},
+					function (err) {
+						console.log('Something went wrong!', err);
+					}
+				);
+			},
+			function (err) {
+				console.log('Something went wrong!', err);
+			}
+		);
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -258,4 +295,6 @@ export {
 	addPlaylistTrackAndQueue,
 	getPlaylist,
 	removePlaylistTrack,
+	resumeSpotify,
+	playSpotify,
 };
