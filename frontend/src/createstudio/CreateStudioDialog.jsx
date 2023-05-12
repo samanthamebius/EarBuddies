@@ -161,9 +161,10 @@ export default function CreateStudioDialog({ isDialogOpened, handleCloseDialog }
 		setFile(selectedFile);
 	};
 
-	const handleSwitchToggle = (isChecked) => {
-		setIsHostOnly(isChecked);
-	};
+    const handleSwitchToggle = (isChecked) => {
+        setIsHostOnly(isChecked);
+        axios.put(`${BASE_URL}/api/studio/${studioId}/isHostOnly`);
+    };
 
 	function toggleGenre(genre) {
 		const newGenres = genres.map((obj, i) => {

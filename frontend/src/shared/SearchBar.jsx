@@ -8,6 +8,16 @@ import axios from 'axios';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * A component that renders a search bar used throughout web application.
+ * @param {string} label - The label for the search bar.
+ * @param {string} searchType - The type of content to search (e.g. "artists", "songs", "playlists").
+ * @param {*studioId} studioId - The ID of the studio to search in (optional).
+ * @param {Function} setResults - A function to set the search results.
+ * @param {Function} onInputChange - A function to handle input changes in the search bar.
+ * @param {string|null} playlist_id - The ID of the playlist to search in (optional for search bar in other use cases).
+ * @returns {JSX.Element} - A JSX element representing the search bar component.
+ */
 function SearchBar({
 	label,
 	searchType,
@@ -139,6 +149,7 @@ function SearchBar({
 		}
 	};
 
+	// Determines what to search depending on searchType param
 	useEffect(() => {
 		if (searchTerm.trim().length > 0) {
 			if (searchType === 'users') {
