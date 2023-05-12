@@ -1,35 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import cors from "cors";
-import bodyParser from "body-parser";
 import SpotifyWebApi from "spotify-web-api-node";
 
 const router = express.Router();
-router.use(cors())
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: true }))
-
-
-async function refreshAccessToken(thisSpotifyApi, refresh_tokenSet) {
-  thisSpotifyApi.refreshAccessToken()
-    .then(function (data) {
-      var access_token = data.body['access_token']
-      var expires_in = data.body['expires_in']
-      thisSpotifyApi.setAccessToken(access_token)
-      console.log('The access token has been refreshed!')
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}
 
 /**
  * @route POST api/refresh
  * @desc Refresh the access token
- * @access Public
  * @param {string} refresh_token - The refresh token
  * @returns {object} - The access token and expiration time
+ * @throws {400} - If there is an error refreshing the token
  */
 router.post("/", (req, res) => {
   const refresh_token = req.body.refresh_token
@@ -43,9 +24,8 @@ router.post("/", (req, res) => {
   spotifyApi
     .refreshAccessToken()
     .then(function (data) {
-      var access_token = data.body['access_token']
-      var expires_in = data.body['expires_in']
-      spotifyApi.setAccessToken(access_token)
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.setExpiresIn(data.body['expires_in']);
     })
     .catch(err => {
       console.log(err)
@@ -54,6 +34,4 @@ router.post("/", (req, res) => {
 
 })
 
-
 export default router;
-export { refreshAccessToken }
