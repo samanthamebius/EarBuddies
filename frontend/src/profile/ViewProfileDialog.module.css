@@ -1,111 +1,143 @@
 .heading {
-	font-weight: 800;
-	color: var(--headingColor);
-	font-size: 32px;
+/*Positioning stuff*/
 	position: relative;
+/*Box model stuff*/
 	margin: 0px;
 	padding: 20px 24px 0px 24px;
+/*Typography stuff*/
+	font-size: 32px;
+	font-weight: 800;
+	color: var(--headingColor);
 }
 
 .sectionHeading {
-	font-weight: 800;
-	color: var(--headingColor);
-	font-size: 16px;
+/*Positioning stuff*/
 	position: relative;
+/*Box model stuff*/
 	margin: 0px;
 	padding: 20px 0px 10px 0px;
+/*Typography stuff*/
+	font-size: 16px;
+	font-weight: 800;
+	color: var(--headingColor);
 }
 
 .createButton {
+/*Typography stuff*/
 	font-weight: 700;
 }
 
 .cancelButton {
+/*Box model stuff*/
 	background: linear-gradient(#bebebe, #ededed);
+/*Typography stuff*/
 	font-weight: 700;
 }
 
 .linkButton {
-	background: linear-gradient(#bebebe, #ededed);
-	font-weight: 700;
+/*Box model stuff*/
 	width: 100%;
+	background: linear-gradient(#bebebe, #ededed);
+/*Typography stuff*/
+	font-weight: 700;
 }
 
 .buttons {
-	padding: 20px 0px 20px 0px;
+/*Display stuff*/
 	display: flex;
 	justify-content: center;
+/*Box model stuff*/
+	padding: 20px 0px 20px 0px;
 }
 
 .displayPhoto {
-	height: 150px;
-	border-radius: 4px;
-	margin: auto;
+/*Display stuff*/
 	display: block;
+/*Box model stuff*/
+	height: 150px;
+	margin: auto;
+	border-radius: 4px;
 }
 
 .editIconContainer {
+/*Box model stuff*/
 	width: fit-content;
 	height: fit-content;
 	padding-right: 14px;
 }
 
 .clearIcon {
+/*Typography stuff*/
 	color: var(--iconColor);
 }
 
 .clearIcon:hover {
+/*Typography stuff*/
 	color: #b03eee;
 }
 
 .displayPhotoContainer {
+/*Display stuff*/
 	display: flex;
-	border: solid 1px var(--fieldBorderColor);
-	background-color: var(--fieldColor);
-	border-radius: 4px;
 	flex-direction: column;
+/*Box model stuff*/
 	padding: 16px 0px 16px 0px;
+	border: solid 1px var(--fieldBorderColor);
+	border-radius: 4px;
+	background-color: var(--fieldColor);
 }
 
 .displayPhotoContainer:hover {
+/*Box model stuff*/
 	border: solid 1px #212121;
 }
 
 .currentDisplayPhotoContainter {
+/*Display stuff*/
 	display: flex;
 	align-items: center;
 }
 
 .currentDisplayPhotoContainter:hover {
+/*Miscellaneous*/
 	cursor: pointer;
 }
 
 .avatars {
+/*Display stuff*/
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	border-radius: 4px;
-	padding: 5px 5px 0px 5px;
+/*Box model stuff*/
 	width: fit-content;
+	padding: 5px 5px 0px 5px;
+	border-radius: 4px;
 	background-color: var(--fieldColor);
 }
 
 .avatarOption {
+/*Box model stuff*/
 	width: 11%;
 	margin: 4px;
-	border-radius: 4px;
 	border: solid 2px var(--backgroundColor);
+	border-radius: 4px;
+/*Miscellaneous*/
 	object-fit: cover;
 }
 
 .avatarOption:hover {
-	cursor: pointer;
+/*Box model stuff*/
 	border: solid 2px var(--iconColor);
+/*Miscellaneous*/
+	cursor: pointer;
 }
 
 .buttonIcon {
+/*Box model stuff*/
 	height: 30px;
-	color: #757575;
-	float: right;
 	padding-right: 10px;
+/*Typography stuff*/
+	color: #757575;
+/*Miscellaneous*/
+	float: right;
 }

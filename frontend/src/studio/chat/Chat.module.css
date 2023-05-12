@@ -1,137 +1,178 @@
 .chat {
-    background-color: var(--chatBackgroundColor);
-    grid-row-start: 1;
-    grid-row-end: 3; /* TODO: Fix Later, should be 2 and working but it doesn't work unless its 3*/
-    grid-column: 3 / 3;
-    border-radius: 10px;
-    padding: 24px;
+/*Display stuff*/
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    grid-column: 3 / 3;
+    grid-row-start: 1;
+    grid-row-end: 3; 
+/*Box model stuff*/
     max-width: 100%;
+    padding: 24px;
+    border-radius: 10px;
+    background-color: var(--chatBackgroundColor);
+/*Miscellaneous*/
+    gap: 24px;
 }
 
 .chatContent {
-    background-color: var(--fieldColor);
-    padding: 24px;
-    border-radius: 10px;
-    height: 75%;
+/*Display stuff*/
     display: flex;
     flex-direction: column;
+/*Box model stuff*/
+    height: 75%;
+    padding: 24px;
+    border-radius: 10px;
+    background-color: var(--fieldColor);
 }
 
 .chatInputContainer {
-    background-color: var(--fieldColor);
-    height: 16%;
-    border-radius: 10px;
-    width: calc(0.4 * 100vw);
+/*Display stuff*/
     display: flex;
     flex-direction: column;
+/*Box model stuff*/
+    width: calc(0.4 * 100vw);
+    height: 16%;
+    border-radius: 10px;
+    background-color: var(--fieldColor);
 }
 
 .chatInput {
-    background-color: var(--fieldColor);
-    border-radius: 10px;
-    height: 80%;
-    width: calc(0.4 * 100vw);
+/*Display stuff*/
     display: flex;
     justify-content: space-between;
+/*Box model stuff*/
+    width: calc(0.4 * 100vw);
+    height: 80%;
+    border-radius: 10px;
+    background-color: var(--fieldColor);
+/*Miscellaneous*/
     overflow-y: auto;
 }
 
 .input {
-    padding: 8px 0 0 12px;
+/*Box model stuff*/
     width: 80%;
+    padding: 8px 0 0 12px;
 }
 
 .pinnedMessages {
-    position: sticky;
-    top: 0;
+/*Display stuff*/
     display: flex;
     flex-direction: column;
+/*Positioning stuff*/
+    position: sticky;
+    top: 0;
+/*Box model stuff*/
     max-height: 40%;
 }
 
 .pinnedMessagesContent {
+/*Miscellaneous*/
     overflow-y: auto;
 }
 
 .expandPinnedMessages {
-    opacity: 0.5;
-    font-size: 14px;
+/*Box model stuff*/
     margin: 0;
     margin-bottom: 8px;
+/*Typography stuff*/
+    font-size: 14px;
+/*Manipulations stuff*/
+    opacity: 0.5;
 }
 
 .expandPinnedMessages:hover {
-    cursor: pointer;
+/*Manipulations stuff*/
     opacity: 0.8;
+/*Miscellaneous*/
+    cursor: pointer;
 }
 
 .expandMessagesContent {
+/*Display stuff*/
     display: flex;
     align-items: center;
+/*Miscellaneous*/
     float: right;
 }
 
 .messagesContainer {
+/*Miscellaneous*/
     overflow-y: auto;
 }
 
 .inputContent {
-    width: 88%;
+/*Display stuff*/
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+/*Box model stuff*/
+    width: 88%;
     padding: 12px 0 0 10px;
 }
 
 .replyMessage {
+/*Display stuff*/
+    display: flex;
+    justify-content: space-between;
+/*Box model stuff*/
+    width: calc(100%);
     margin: 0;
-    font-size: 13px;
-    background-color: var(--replyBackgroundColor);
     padding: 4px;
     border-radius: 10px;
-    width: calc(100%);
-    display: flex;
+    background-color: var(--replyBackgroundColor);
+/*Typography stuff*/
+    font-size: 13px;
     color: #a49da5;
-    justify-content: space-between;
+/*Miscellaneous*/
     box-sizing: border-box;
 }
 
 .replyMessageText {
+/*Box model stuff*/
+    margin: 0;
+/*Typography stuff*/
+    text-align: left;
+    text-overflow: ellipsis;
+    color: var(--replyTextColor);
+/*Miscellaneous*/
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-    margin: 0;
-    color: var(--replyTextColor);
 }
 
 .dismissReply {
+/*Manipulations stuff*/
     opacity: 0.5;
 }
 
 .dismissReply:hover {
+/*Manipulations stuff*/
     opacity: 1;
+/*Miscellaneous*/
     cursor: pointer;
 }
 
 .pillContainer {
-    position: relative;
-    height: 20%;
-    background-color: var(--pillContainerBackgroundColor);
-    border-radius: 0 0 10px 10px;
-    padding: 6px;
+/*Display stuff*/
     display: flex;
     flex-direction: row;
-    gap: 12px;
     align-items: center;
+/*Positioning stuff*/
+    position: relative;
+/*Box model stuff*/
+    height: 20%;
+    padding: 6px;
+    border-radius: 0 0 10px 10px;
+    background-color: var(--pillContainerBackgroundColor);
+/*Miscellaneous*/
+    gap: 12px;
 }
 
 .quickAddText {
-    text-align: left;
+/*Box model stuff*/
     margin: 0;
+/*Typography stuff*/
     font-size: 12px;
+    text-align: left;
     color: var(--pillTextColor);
 }

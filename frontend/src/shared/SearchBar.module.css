@@ -1,13 +1,16 @@
 .searchBar {
-    border-color: none;
+/*Box model stuff*/
     padding: 0px;
+    border-color: none;
 }
 
 .searchIcon {
+/*Box model stuff*/
     padding-right: 10px;
 }
 
 .image {
+/*Box model stuff*/
     max-width: 100%;
     max-height: 100%;
 }

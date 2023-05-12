@@ -1,88 +1,114 @@
 .heading {
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 32px;
+/*Positioning stuff*/
     position: relative;
+/*Box model stuff*/
     margin: 0px;
     padding: 20px 24px 0px 24px;
+/*Typography stuff*/
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--headingColor);
 }
 
 .sectionHeading {
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 16px;
+/*Positioning stuff*/
     position: relative;
+/*Box model stuff*/
     margin: 0px;
     padding: 20px 0px 10px 0px;
+/*Typography stuff*/
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--headingColor);
 }
 
 .focusText {
-    font-weight: 800;
-    color: var(--focusText);
-    font-size: 16px;
+/*Positioning stuff*/
     position: relative;
+/*Box model stuff*/
     margin: 0px;
     padding: 10px 0px 10px 0px;
+/*Typography stuff*/
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--focusText);
 }
 
 .controlSection {
+/*Display stuff*/
     display: flex;
 }
 
 .switchContainer {
-    padding: 0px 20px 0px 20px;
+/*Display stuff*/
     display: flex;
     align-items: flex-end;
+/*Box model stuff*/
+    padding: 0px 20px 0px 20px;
 }
 
 .createButton {
+/*Typography stuff*/
     font-weight: 700;
 }
 
 .cancelButton {
+/*Box model stuff*/
     background: linear-gradient(#ededed, #bebebe);
+/*Typography stuff*/
     font-weight: 700;
 }
 
 .buttons {
-    padding: 20px 0px 20px 0px;
+/*Display stuff*/
     display: flex;
     justify-content: center;
+/*Box model stuff*/
+    padding: 20px 0px 20px 0px;
 }
 
 .addGenreSection {
+/*Display stuff*/
     display: flex;
     align-items: center;
 }
 
 .spacing {
+/*Box model stuff*/
     width: 10px;
 }
 
 .searchResults {
+/*Box model stuff*/
     max-height: 400px;
-    overflow: auto;
     border: 1px solid #c4c4c4;
     border-radius: 0px 0px 4px 4px;
     background-color: var(--fieldColor);
+/*Miscellaneous*/
+    overflow: auto;
 }
 
 .clearIcon:hover {
+/*Miscellaneous*/
     cursor: pointer;
 }
 
 .listeners {
+/*Box model stuff*/
     max-height: 400px;
-    overflow: auto;
     border: 1px solid #c4c4c4;
     border-radius: 4px;
     background-color: var(--fieldColor);
+/*Miscellaneous*/
+    overflow: auto;
 }
 
 .image {
-    object-fit: cover;
-    height: 40px;
+/*Box model stuff*/
     width: 40px;
+    height: 40px;
     border-radius: 50%;
+/*Miscellaneous*/
+    object-fit: cover;
     pointer-events: none;
 }

@@ -1,10 +1,54 @@
 .albumArtwork {
-	border-radius: 4px;
-	height: -webkit-fill-available;
+/*Box model stuff*/
 	max-width: 100%;
+	height: -webkit-fill-available;
 	height: auto;
-	object-fit: cover;
 	padding: 15px 0px 15px 0px;
+	border-radius: 4px;
+/*Miscellaneous*/
+	object-fit: cover;
+}
+
+.song {
+/*Display stuff*/
+	display: flex;
+/*Box model stuff*/
+	margin: 10px 0px 10px 0px;
+/*Typography stuff*/
+	font-size: 24px;
+	font-weight: bold;
+	text-align: left;
+	color: #606060;
+}
+
+.artistImg {
+/*Box model stuff*/
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+/*Miscellaneous*/
+	object-fit: cover;
+	pointer-events: none;
+}
+
+.artist {
+/*Display stuff*/
+	display: flex;
+/*Box model stuff*/
+	margin: 10px 0px 10px 0px;
+/*Typography stuff*/
+	text-align: left;
+}
+
+.artistName {
+/*Box model stuff*/
+	padding: 6px 0px 0px 6px;
+/*Typography stuff*/
+	font-size: 18px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: left;
+	color: #606060;
 }
 
 @media screen and (max-height: 780px) {
@@ -25,34 +69,3 @@
 	}
 }
 
-.song {
-	text-align: left;
-	color: #606060;
-	font-size: 24px;
-	font-weight: bold;
-	display: flex;
-	margin: 10px 0px 10px 0px;
-}
-
-.artistImg {
-	object-fit: cover;
-	height: 40px;
-	width: 40px;
-	border-radius: 50%;
-	pointer-events: none;
-}
-
-.artist {
-	text-align: left;
-	display: flex;
-	margin: 10px 0px 10px 0px;
-}
-
-.artistName {
-	font-size: 18px;
-	text-align: left;
-	color: #606060;
-	font-size: 18px;
-	font-weight: bold;
-	padding: 6px 0px 0px 6px;
-}
