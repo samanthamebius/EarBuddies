@@ -97,7 +97,7 @@ function SongInfo(props) {
 			<div className={styles.artist}>
 				<img
 					style={{
-						visibility: artistImg && !queueIsEmpty ? 'visible' : 'hidden',
+						display: artistImg && !queueIsEmpty ? 'block' : 'none',
 					}}
 					className={styles.artistImg}
 					src={artistImg}
