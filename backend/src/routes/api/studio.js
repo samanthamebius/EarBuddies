@@ -9,15 +9,12 @@ import {
 	updateStudioUsers,
 	updateStudioNames,
 	updateStudioControlHostOnly,
-	updateStudioHost,
-	updateStudioPlaylist,
 	removeStudioFromUsers,
 	setNickname,
-	updateStudioListeners,
 	removeNickname,
 } from '../../dao/studio_dao.js';
 import { getUser, getStudiosId, updateStudios, addStudio } from "../../dao/user_dao.js";
-import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist, createStudioPlaylist } from "../../dao/spotify_dao.js";
+import { getSpotifyApi, transferPlaylist, createStudioPlaylist } from "../../dao/spotify_dao.js";
 import { Types as mongooseTypes } from "mongoose";
 import {
 	deleteChat,
@@ -241,33 +238,6 @@ router.get("/:studioId/:userId/nickname", async (req, res) => {
 		const nickname = studio[0].studioNames[userPos];
 
 		res.status(200).json(nickname);
-	} catch (err) {
-		res.status(500).json(err);
-	}
-});
-
-/**
- * @route PUT api/studio/:studioId/updateListeners
- * @desc Update the listeners of a studio
- * @param studioId: String (Studio ID)
- * @body listeners: Array of Strings (User IDs)
- * @returns 200 The updated studio
- * @throws 404 if studio not found
- * @throws 500 if server error
- */
-router.put("/:studioId/updateListeners", async (req, res) => {
-	try {
-		const { studioId } = req.params;
-		const listeners = req.body.listeners;
-
-		const studio = await getStudio(studioId);
-		if (!studio) {
-			return res.status(404).json({ msg: "Studio not found" });
-		}
-
-		const updatedStudio = await updateStudioListeners(studio, listeners);
-
-		res.status(200).json(updatedStudio);
 	} catch (err) {
 		res.status(500).json(err);
 	}
