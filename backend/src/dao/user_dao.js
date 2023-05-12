@@ -1,15 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { User } from "../database/schema.js";
-import mongoose from "mongoose";
+import { User, Studio } from "../database/schema.js";
 
-await mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
-
-async function createUser(username, userDisplayName, profilePic) {
+async function createUser(username, userDisplayName, spotifyPic) {
 	const newUser = new User({
 		username: username,
 		userDisplayName: userDisplayName,
-		profilePic: profilePic,
+		spotifyPic: spotifyPic,
+		profilePic: spotifyPic,
 		userIsActive: true,
 		userStudios: [],
 	});
@@ -30,7 +28,7 @@ async function loginUser(spotifyApi, data) {
 						`${data.body.images.length === 0 ? "" : data.body.images[0].url}`
 					);
 				} else {
-					await updateUser(data.body.id);
+					await setUserActive(data.body.id);
 				}
 				resolve(data.body.id);
 			})
@@ -41,17 +39,48 @@ async function loginUser(spotifyApi, data) {
 	});
 }
 
-async function updateUser(username) {
+async function setUserActive(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userIsActive: true }
+		{ userIsActive: true },
+		{ new: true }
 	);
 }
 
-async function updateUserInfo(username, userDisplayName, profilePic) {
+async function setUserInactive(username) {
 	return await User.findOneAndUpdate(
 		{ username: username },
-		{ userDisplayName: userDisplayName, profilePic: profilePic }
+		{ userIsActive: false },
+		{ new: true }
+	);
+}
+
+async function getUsers() {
+	const users = await User.find();
+	return users;
+}
+
+async function updateUserDisplayName(username, userDisplayName) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ userDisplayName: userDisplayName },
+		{ new: true }
+	);
+}
+
+async function updateUserProfilePic(username, profilePic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ profilePic: profilePic },
+		{ new: true }
+	);
+}
+
+async function updateUserSpotifyPic(username, spotifyPic) {
+	return await User.findOneAndUpdate(
+		{ username: username },
+		{ spotifyPic: spotifyPic },
+		{ new: true }
 	);
 }
 
@@ -60,32 +89,95 @@ async function getUser(username) {
 	return user;
 }
 
-async function getUserId(username) {
-  const user = await getUser(username);
-  return user._id;
-}
-
-async function getUserbyId(id) {
-	const user = await User.findOne({ _id: id });
-	return user;
-}
-
 async function getStudios(username) {
-  const user = await getUserbyId(username);
-  return user.userStudios;
+	const user = await getUserbyId(username);
+	return user.userStudios;
+}
+
+async function getStudiosId(username) {
+	const user = await getUser(username);
+	return user.userStudios;
+}
+
+async function searchStudios(username, query) {
+	const regex = new RegExp(`^${query}`, 'i');
+	const studiosId = await getStudiosId(username);
+	let studios;
+	if (query !== "") {
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioName: regex
+		});
+	} else {
+		studios = await Studio.find({
+			_id: { $in: studiosId }
+		});
+	}
+	return studios;
+}
+
+async function searchActiveStudios(username, query) {
+	const regex = new RegExp(`^${query}`, 'i');
+	const studiosId = await getStudiosId(username);
+	let studios;
+	if (query.length !== 0) {
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioName: regex,
+			studioIsActive: true
+		});
+	} else {	
+		studios = await Studio.find({
+			_id: { $in: studiosId },
+			studioIsActive: true
+		});
+	}
+	return studios;
+}
+
+async function searchUsers(query, username) {
+	const regex = new RegExp(`^${query}`, 'i');
+	const users = await User.find({
+		userDisplayName: regex,
+		username: { $ne: username },
+	});
+	return users;
+}
+
+async function searchStudioUsers(studioId, query, username) {
+	const regex = new RegExp(`^${query}`, 'i');
+	const users = await User.find({
+		userStudios: { $in: studioId },
+		userDisplayName: regex,
+		username: { $ne: username }
+	});
+	return users;
 }
 
 async function updateStudios(username, studios) {
-  return await User.findOneAndUpdate(
-    { username: username },
-    { userStudios: studios }
-  );
+	return await User.findOneAndUpdate({ username: username }, { userStudios: studios }, { new: true });
 }
 
 async function deleteUser(username) {
 	return await User.deleteOne({ username: username });
-} 
+}
 
-await mongoose.disconnect;
-
-export { createUser, updateUser, getUser, loginUser, getStudios, updateStudios, getUserId, deleteUser, getUserbyId, updateUserInfo };
+export {
+	createUser,
+	setUserActive,
+	setUserInactive,
+	getUser,
+	getStudios,
+	loginUser,
+	getStudiosId,
+	updateStudios,
+	deleteUser,
+	searchStudios,
+	searchActiveStudios,
+	searchUsers,
+	getUsers,
+	searchStudioUsers,
+	updateUserDisplayName,
+	updateUserProfilePic,
+	updateUserSpotifyPic
+};

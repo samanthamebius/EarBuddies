@@ -1,18 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./StudioPage.module.css";
 
 import Banner from "./Banner";
 import Chat from "./chat/Chat";
-import NowPlaying from "./NowPlaying";
-import SongSelection from "./SongSelection";
+import WebPlayback from "./WebPlayback";
+import SongSelection from "./song-selection/SongSelection";
 import useGet from "../hooks/useGet";
 import axios from "axios";
 
 function StudioPage({ socket }) {
+	const accessToken = localStorage.getItem("access_token");
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const [queueIsEmpty, setQueueIsEmpty] = useState(true);
+
 	const {
 		data: studio,
 		isLoading: studioIsLoading,
@@ -27,12 +30,8 @@ function StudioPage({ socket }) {
 	}, []);
 
 	if (studioError) {
-		localStorage.removeItem("access_token");
-		localStorage.removeItem("refresh_token");
-		localStorage.removeItem("expires_in");
-		localStorage.removeItem("current_user_id");
-		navigate("/login");
-		return <p>Could not load studio</p>;
+		navigate("/404");
+		return;
 	}
 	if (studioIsLoading) {
 		return <p>Loading...</p>;
@@ -41,9 +40,20 @@ function StudioPage({ socket }) {
 	} else {
 		return (
 			<div className={styles.studio}>
-				<Banner id={id} studio={studio[0]} />
-				<NowPlaying />
-				<SongSelection studio={studio[0]}/>
+				<Banner id={id} studio={studio[0]} socket={socket} />
+				<div className={styles.webPlayback}>
+					<WebPlayback
+						studio={studio[0]}
+						socket={socket}
+						token={accessToken.replace(/['"]+/g, "")}
+						queueIsEmpty={queueIsEmpty}
+					/>
+				</div>
+				<SongSelection
+					studio={studio[0]}
+					socket={socket}
+					setQueueIsEmpty={setQueueIsEmpty}
+				/>
 				<Chat socket={socket} />
 			</div>
 		);
