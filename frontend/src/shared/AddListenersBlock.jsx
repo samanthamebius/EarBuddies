@@ -103,6 +103,10 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
                                     <img
                                         className={styles.image}
                                         src={listener.profilePic}
+                                        alt={
+                                            'Profile picture of ' +
+                                            listener.userDisplayName
+                                        }
                                     />
                                 </Avatar>
                             </ListItemAvatar>
@@ -152,6 +156,10 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
                                         <img
                                             className={styles.image}
                                             src={listener.profilePic}
+                                            alt={
+                                                'Profile picture of ' +
+                                                listener.userDisplayName
+                                            }
                                         />
                                     </Avatar>
                                 </ListItemAvatar>
