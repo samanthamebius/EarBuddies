@@ -1,34 +1,43 @@
 .icon {
-    background-color: #e2bff6;
-    width: 40px;
-    height: 40px;
-    padding: 4px;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
+	background-color: #e2bff6;
+	width: 40px;
+	height: 40px;
+	padding: 4px;
+	border-radius: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: auto;
 }
 
 .sectionHeading {
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 16px;
-    position: relative;
-    margin: 0px;
-    padding: 20px 0px 10px 0px;
+	font-weight: 800;
+	color: var(--headingColor);
+	font-size: 16px;
+	position: relative;
+	margin: 0px;
+	padding: 20px 0px 10px 0px;
 }
 
 .buttons {
-    padding: 20px 0px 20px 0px;
-    display: flex;
-    justify-content: center;
+	padding: 20px 0px 20px 0px;
+	display: flex;
+	justify-content: center;
 }
 
 .secondaryButton {
-    background: linear-gradient(#bebebe, #ededed);
+	background: linear-gradient(#bebebe, #ededed);
 }
 
 .spacing {
-    margin-top: 100px;
+	margin-top: 100px;
+}
+
+.errorPage {
+	padding-top: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	padding-bottom: 100%;
 }
