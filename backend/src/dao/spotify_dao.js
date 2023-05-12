@@ -280,6 +280,17 @@ async function playSpotify(thisSpotifyApi, uri, deviceId) {
 		);
 }
 
+async function pauseSpotify(deviceId, thisSpotifyApi) {
+	thisSpotifyApi.pause({ device_id: deviceId }).then(
+		function () {
+			console.log('Paused track!');
+		},
+		function (err) {
+			console.log('Something went wrong!', err);
+		}
+	);
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -297,4 +308,5 @@ export {
 	removePlaylistTrack,
 	resumeSpotify,
 	playSpotify,
+	pauseSpotify,
 };

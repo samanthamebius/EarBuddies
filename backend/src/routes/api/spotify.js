@@ -1,6 +1,6 @@
 import express from 'express';
-import { getSpotifyApi, playSpotify, resumeSpotify } from '../../dao/spotify_dao';
 import {
+	getSpotifyApi,
 	searchSpotify,
 	getCurrentTrack,
 	getCurrentTrackId,
@@ -10,6 +10,9 @@ import {
 	addPlaylistTrackAndQueue,
 	getPlaylist,
 	removePlaylistTrack,
+	playSpotify,
+	resumeSpotify,
+	pauseSpotify,
 } from '../../dao/spotify_dao';
 
 const router = express.Router();
@@ -137,7 +140,7 @@ router.delete('/queue/:playlist_id/:track_id', async (req, res) => {
 
 /**
  * @route   PUT api/spotify/play
- * @desc    Play a track on a device - either starts from beginning of playlist or resumes
+ * @desc    Play a playlist on a device - either starts from beginning of playlist or resumes
  * @body	uri: String
  * 			deviceId: String
  * @returns 200 if successful
@@ -169,23 +172,25 @@ router.put('/play', async (req, res) => {
 	}
 });
 
+/**
+ * @route   PUT api/spotify/pause
+ * @desc    Pause a playlist on a device
+ * @body	deviceId: String
+ * @returns 200 if successful
+ * @throws  401 if unauthorized i.e access token has expired
+ * @throws  403 if no Spotify API connection
+ * @throws  500 if server error
+ */
 router.put('/pause', async (req, res) => {
 	try {
 		const { deviceId } = req.body;
-		console.log(deviceId);
 		const thisSpotifyApi = getSpotifyApi();
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		// Pause a track if not paused already
-		thisSpotifyApi.pause({ device_id: deviceId }).then(
-			function () {
-				console.log('Paused track!');
-			},
-			function (err) {
-				console.log('Something went wrong!', err);
-			}
-		);
+		// Pause whatever the device is playing
+		await pauseSpotify(deviceId, thisSpotifyApi);
+		return res.status(200).json({ msg: 'Pausing Spotify' });
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
