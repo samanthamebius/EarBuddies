@@ -12,6 +12,15 @@ import NewHostSelection from './NewHostSelection';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+* AssignNewHostDialog component for assigning a new host in a studio.
+* @param {boolean} isAssignDialogOpened - Boolean value to check if the assign dialog is opened.
+* @param {function} handleCloseAssignDialog - Function to close the assign dialog.
+* @param {Array} studioUsers - Array of users in the studio.
+* @param {string} studio_id - Id of the studio.
+* @param {object} socket - Socket object for handling real-time communication.
+* @return {JSX.Element} - JSX element containing the AssignNewHostDialog component.
+*/
 export default function AssignNewHostDialog({
     isAssignDialogOpened,
     handleCloseAssignDialog,
@@ -43,9 +52,7 @@ export default function AssignNewHostDialog({
     };
 
     const handleSubmitConfirm = async () => {
-        // axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${newHost}`);
         socket.emit('send_new_host', { room: studio_id, newHost: newHost });
-        const current_user_id = JSON.parse(localStorage.getItem('current_user_id'));
     };
 
     useEffect(() => {
@@ -54,7 +61,6 @@ export default function AssignNewHostDialog({
             if (data === current_user_id) {
                 await axios.put(`${BASE_URL}/api/studio/${studio_id}/newHost/${data}`);
             }
-            const studio = await axios.get(`${BASE_URL}/api/studio/${studio_id}`);
             setIsConfirmOpen(false);
             handleClose();
         });
