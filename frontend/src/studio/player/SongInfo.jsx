@@ -26,14 +26,13 @@ function SongInfo(props) {
 				setAlbumArtwork(track.data?.item?.album.images[0].url);
 				setArtistName(track.data?.item?.artists[0].name);
 
-				// TODO: Put this back in when tidyups are done
-				// const artist_id = track.data?.item?.artists[0].id;
-				// if (artist_id) {
-				// 	const artist = await axios.get(
-				// 		`${BASE_URL}/api/spotify/artist/${artist_id}`
-				// 	);
-				// 	setArtistImg(artist.data.images[0].url);
-				// }
+				const artist_id = track.data?.item?.artists[0].id;
+				if (artist_id) {
+					const artist = await axios.get(
+						`${BASE_URL}/api/spotify/artist/${artist_id}`
+					);
+					setArtistImg(artist.data.images[0].url);
+				}
 			}
 
 			socket.emit('send_currently_playing', {
