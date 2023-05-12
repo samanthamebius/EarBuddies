@@ -15,10 +15,9 @@ import axios from 'axios';
  * @param isHost - Boolean to check if the current user is the host
  * @returns {JSX.Element} - JSX creating the time slider component
  */
-export function TimeSlider(props) {
-    const { player, queueIsEmpty, isHost } = props;
-    const [duration, setDuration] = useState(0);
-    const [position, setPosition] = useState(0);
+export function TimeSlider({ player }) {
+	const [duration, setDuration] = useState(0);
+	const [position, setPosition] = useState(0);
 	const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 	// set the duration of the current song
@@ -61,53 +60,37 @@ export function TimeSlider(props) {
 		return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
 	}
 
-	// change the position of the slider and update the playing position
-	const handleChange = (event, newValue) => {
-		setPosition(newValue);
-		if (player) {
-			player.seek(newValue * 1000);
-		}
-	};
-
-    return (
-        <div className={styles.time}>
-            <StyledSlider
-                aria-label='time-indicator'
-                size='small'
-                value={position}
-                min={0}
-                step={1}
-                max={duration}
-                color='secondary'
-                onChange={isHost ? () => handleChange : undefined}
-                style={{
-                    pointerEvents: queueIsEmpty ? 'none' : 'auto',
-                    marginLeft: 15,
-                    width: '334px',
-                }}
-                disabled={!isHost}
-            />
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    mt: -2,
-                }}>
-                <TinyText style={{ marginLeft: 10 }}>{formatDuration(position)}</TinyText>
-                <TinyText style={{ marginRight: 10 }}>
-                    -{formatDuration(duration - position)}
-                </TinyText>
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mt: -1,
-                }}></Box>
-        </div>
-    );
+	return (
+		<div className={styles.time}>
+			<StyledSlider
+				aria-label='time-indicator'
+				size='small'
+				value={position}
+				min={0}
+				step={1}
+				max={duration}
+				color='secondary'
+				style={{ pointerEvents: 'none' }}
+			/>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					mt: -2,
+				}}>
+				<TinyText>{formatDuration(position)}</TinyText>
+				<TinyText>-{formatDuration(duration - position)}</TinyText>
+			</Box>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					mt: -1,
+				}}></Box>
+		</div>
+	);
 }
 
 export default TimeSlider;
