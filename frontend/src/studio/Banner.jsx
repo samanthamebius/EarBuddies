@@ -8,28 +8,14 @@ import ProfilePicImg1 from '../assets/profilepic1.png';
 import ListenerIcons from '../shared/ListenerIcons';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import styles from './StudioPage.module.css';
-import React, { useState, useEffect } from 'react';
-import LeaveStudioDialog from './LeaveStudioDialog';
-import NicknameDialog from './NicknameDialog';
-import ManageListenersDialog from './ManageListenersDialog';
-import AssignNewHostDialog from './AssignNewHostDialog';
-import ProfilePicImg1 from '../assets/profilepic1.png';
-import ListenerIcons from '../shared/ListenerIcons';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import GroupsIcon from '@mui/icons-material/Groups';
 import VideogameAssetRoundedIcon from '@mui/icons-material/VideogameAssetRounded';
 import VideogameAssetOffRoundedIcon from '@mui/icons-material/VideogameAssetOffRounded';
 import GroupRemoveRoundedIcon from '@mui/icons-material/GroupRemoveRounded';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import ConfirmationDialog from '../shared/ConfirmationDialog';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
@@ -40,7 +26,6 @@ import ConfirmationDialog from '../shared/ConfirmationDialog';
 const hostImage = ProfilePicImg1;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? '';
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL ?? '';
 
 export default function Banner({ id, studio, socket }) {
