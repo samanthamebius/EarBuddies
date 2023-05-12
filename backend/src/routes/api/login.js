@@ -10,9 +10,9 @@ const router = express.Router();
 /**
  * @route POST api/login
  * @desc Login to Spotify and add user to database if not already in it
- * @param {string} code - The code returned from Spotify's auth server
- * @returns {object} - The access token, refresh token, and expiration time
- * @throws {400} - If there is an error logging in
+ * @param code: String (The code returned from Spotify's auth server)
+ * @returns object: The access token, refresh token, and expiration time
+ * @throws 400 If there is an error logging in
  */
 router.post("/", async (req, res) => {
   const code = req.body.code;

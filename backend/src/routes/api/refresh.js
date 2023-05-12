@@ -8,9 +8,9 @@ const router = express.Router();
 /**
  * @route POST api/refresh
  * @desc Refresh the access token
- * @param {string} refresh_token - The refresh token
- * @returns {object} - The access token and expiration time
- * @throws {400} - If there is an error refreshing the token
+ * @param refresh_token: String (the refresh token)
+ * @returns object: The access token and expiration time
+ * @throws 400 If there is an error refreshing the token
  */
 router.post("/", (req, res) => {
   const refresh_token = req.body.refresh_token

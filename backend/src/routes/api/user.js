@@ -15,9 +15,14 @@ import { deleteUserFromStudio, setStudioStatus } from "../../dao/studio_dao";
 
 const router = express.Router();
 
-// User methods
-
-//Get a single user
+/**
+ * @route GET api/user/:username
+ * @desc Get a user by username
+ * @param username: String (the username of the user)
+ * @returns The user object
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.get("/:username", async (req, res) => {
   const { username } = req.params;
   try {
@@ -32,7 +37,17 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-//update a user
+/**
+ * @route PUT api/user/:username
+ * @desc Update a user's display name, profile pic, or spotify pic
+ * @param username: String (the username of the user)
+ * @body userDisplayName: String (the new display name of the user)
+ * @body profilePic: String (the new profile pic of the user)
+ * @body spotifyPic: String (the new spotify pic of the user)
+ * @returns 204
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.put("/:username", async (req, res) => {
   const { username } = req.params;
   const { userDisplayName, profilePic, spotifyPic } = req.body;
@@ -57,7 +72,14 @@ router.put("/:username", async (req, res) => {
   }
 });
 
-//delete a user
+/**
+ * @route DELETE api/user/:username
+ * @desc Delete a user
+ * @param username: String (the username of the user)
+ * @returns 204
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.delete("/:username", async (req, res) => {
   const { username } = req.params;
   try {
@@ -65,12 +87,14 @@ router.delete("/:username", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
+    //delete user from all studios
     const studios = user.userStudios;
     for (var i = 0; i < studios.length; i++) {
-      console.log("deleting user from studio " + studios[i])
       await deleteUserFromStudio(studios[i], username);
     }
     await deleteUser(username);
+
     return res.status(204).json({ msg: "User deleted" });
   } catch (err) {
     console.log(err);
@@ -78,7 +102,14 @@ router.delete("/:username", async (req, res) => {
   }
 });
 
-//log out a user
+/**
+ * @route PUT api/user/:username/logout
+ * @desc Log a user out
+ * @param username: String (the username of the user)
+ * @returns 204
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.put("/:username/logout", async (req, res) => {
   const { username } = req.params;
   try {
@@ -86,10 +117,12 @@ router.put("/:username/logout", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     await setUserInactive(username);
     user.userStudios.forEach(async (studio) => {
       await setStudioStatus(studio);
     });
+
     return res.status(204).json({ msg: "User logged out" });
   } catch (err) {
     console.log(err);
@@ -97,11 +130,17 @@ router.put("/:username/logout", async (req, res) => {
   }
 });
 
-
-
 // Search methods
 
-//serch for users
+/**
+ * @route GET api/user/:username/:query
+ * @desc Search for users
+ * @param username: String (the username of the user)
+ * @param query: String (the query to search for)
+ * @returns array of users
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.get("/users/:username/:query", async (req, res) => {
   const { username, query } = req.params;
   try {
@@ -109,6 +148,7 @@ router.get("/users/:username/:query", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     const users = await searchUsers(query, username);
     return res.status(200).json(users);
   } catch (err) {
@@ -117,7 +157,16 @@ router.get("/users/:username/:query", async (req, res) => {
   }
 });
 
-//search for users in a studio
+/**
+ * @route GET api/user/:username/:query/:studioId
+ * @desc Search for users in a studio
+ * @param username
+ * @param query
+ * @param studioId
+ * @returns array of the users
+ * @throws 404 If the user is not found
+ * @throws 500 If there is an internal server error
+ */
 router.get("/users/:username/:query/:studioId", async (req, res) => {
   const { username, query, studioId } = req.params;
   try {
@@ -125,6 +174,7 @@ router.get("/users/:username/:query/:studioId", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     const users = await searchStudioUsers(studioId, query, username);
     return res.status(200).json(users);
   } catch (err) {
@@ -133,7 +183,15 @@ router.get("/users/:username/:query/:studioId", async (req, res) => {
   }
 });
 
-//search for studios
+/**
+ * @route GET api/user/:username/studios/:query
+ * @desc Search all studios
+ * @param username - username of user
+ * @param query - search query
+ * @return studios - array of studios
+ * @throws 500 if Internal server error
+ * @throws 404 if no user found
+ */
 router.get("/:username/studios/:query", async (req, res) => {
   const { username, query } = req.params;
   try {
@@ -142,9 +200,6 @@ router.get("/:username/studios/:query", async (req, res) => {
       return res.status(404).json({ msg: "No user found" });
     }
     const studios = await searchStudios(username, query);
-    if (!studios) {
-      return res.status(404).json({ msg: "No studios found" });
-    }
     return res.json(studios);
   } catch (err) {
     console.log(err);
@@ -152,7 +207,15 @@ router.get("/:username/studios/:query", async (req, res) => {
   }
 });
 
-//search for active studios
+/**
+ * @route GET api/user/:username/active/:query
+ * @desc Search all active studios
+ * @param username - username of user
+ * @param query - search query
+ * @return studios - array of studios
+ * @throws 500 if Internal server error
+ * @throws 404 if no user found
+ */
 router.get("/:username/active/:query", async (req, res) => {
   const { username, query } = req.params;
   try {
@@ -160,10 +223,8 @@ router.get("/:username/active/:query", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     const studios = await searchActiveStudios(username, query);
-    if (!studios) {
-      return res.status(404).json({ msg: "No active studios found" });
-    }
     return res.json(studios);
   } catch (err) {
     console.log(err);
