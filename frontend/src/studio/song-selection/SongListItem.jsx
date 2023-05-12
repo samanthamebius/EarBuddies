@@ -12,17 +12,19 @@ import { Box, Icon, ListItem, ListItemText } from '@mui/material';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function SongListItem(props) {
-    const { song, studio, socket, type, snapshotId = null } = props;
-    const [isHover, setHover] = useState(false);
-    const [isIconHover, setIconHover] = useState(false);
-    const [nowPlayingSong, setNowPlayingSong] = useState('');
+	const { song, studio, socket, type, snapshotId = null, setResults } = props;
+	const [isHover, setHover] = useState(false);
+	const [isIconHover, setIconHover] = useState(false);
+	const [nowPlayingSong, setNowPlayingSong] = useState("");
 
-    // continously get the currently playing song
-    useEffect(() => {
-        socket.on('receive_currently_playing', (data) => {
-            setNowPlayingSong(data?.name);
-        });
-    }, [socket]);
+	const isHost = studio.studioHost === JSON.parse(localStorage.getItem("current_user_id"));
+
+	// continously get the currently playing song
+	useEffect(() => {
+		socket.on("receive_currently_playing", (data) => {
+			setNowPlayingSong(data?.name);
+		});
+	}, [socket]);
 
     const handleItemMouseEnter = () => {
         setHover(true);
@@ -37,13 +39,14 @@ function SongListItem(props) {
         setIconHover(false);
     };
 
-    // add the song to queue and emit to all sockets in the studio
-    const handleAddToQueue = async () => {
-        await axios.put(`${BASE_URL}/api/spotify/queue`, {
-            playlist_id: studio.studioPlaylist,
-            track_id: song.id,
-            type: song.type,
-        });
+	// add the song to queue and emit to all sockets in the studio
+	const handleAddToQueue = async () => {
+		setResults([]);
+		await axios.put(`${BASE_URL}/api/spotify/queue`, {
+			playlist_id: studio.studioPlaylist,
+			track_id: song.id,
+			type: song.type,
+		});
 
         // reload the studio queue
         socket.emit('send_new_song', {

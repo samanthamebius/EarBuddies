@@ -20,9 +20,9 @@ export default function AddListenersBlock({ studio, setNewStudioListeners }) {
 
     useEffect(() => {
         async function fetchStudioData() {
-            const existingListenerId = studio.studioUsers;
+            const existingListenerId = studio?.studioUsers;
             const existingListeners = [];
-            for (let i = 0; i < existingListenerId.length; i++) {
+            for (let i = 0; i < existingListenerId?.length; i++) {
                 const listener = await axios.get(
                     `${BASE_URL}/api/user/${existingListenerId[i]}`
                 );

@@ -36,8 +36,8 @@
 }
 
 .cardContainer {
-    height: calc(0.8 * 100vh);
-    overflow-y: scroll;
+	height: calc(80vh - 60px);
+	overflow-y: scroll;
 }
 
 .cardContainer::-webkit-scrollbar {

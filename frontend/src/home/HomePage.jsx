@@ -18,7 +18,7 @@ function HomePage(props) {
     const [activeStudioSearchResults, setActiveStudioSearchResults] = useState([]);
     const [activeStudioSearchTerm, setActiveStudioSearchTerm] = useState('');
 
-    console.log('studio search term - ', studioSearchTerm);
+
 
     useEffect(() => {
         const fetchStudios = async () => {
@@ -90,7 +90,8 @@ function HomePage(props) {
                     <div className={styles.headerChild}>
                         <img
                             src={SoundWavesGradient}
-                            className={styles.soundWaves}></img>
+                            className={styles.soundWaves}
+                            alt="Pink Sound Waves"></img>
                     </div>
                 </div>
                 <SearchBar

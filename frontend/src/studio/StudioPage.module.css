@@ -7,6 +7,7 @@
     padding: 20px;
     box-sizing: border-box;
     background-color: var(--backgroundColor);
+    overflow-y: auto;
 }
 
 .greyheading {
@@ -122,10 +123,21 @@
     border-radius: 4px;
 }
 
+.webPlayback {
+	height: 100%;
+	position: relative;
+	margin: 15px;
+}
+
 .controlPanel {
-    background-image: linear-gradient(180deg, #b03eee, #e640f8);
-    border-radius: 4px;
-    padding: 5px;
+	background-image: linear-gradient(180deg, #b03eee, #e640f8);
+	border-radius: 4px;
+	padding: 5px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin-top: 15px;
 }
 
 .playbackCntrls {
@@ -133,11 +145,30 @@
 }
 
 .albumArtwork {
-    border-radius: 4px;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    padding: 15px 0px 15px 0px;
+	border-radius: 4px;
+	height: -webkit-fill-available;
+	max-width: 100%;
+	height: auto;
+	object-fit: cover;
+	padding: 15px 0px 15px 0px;
+}
+
+@media screen and (max-height: 780px) {
+	.albumArtwork {
+		height: 25vh;
+	}
+}
+
+@media screen and (min-height: 781px) and (max-height: 870px) {
+	.albumArtwork {
+		height: 30vh;
+	}
+}
+
+@media screen and (min-height: 871px) {
+	.albumArtwork {
+		width: 100%;
+	}
 }
 
 .song {
@@ -182,10 +213,6 @@
 
 .volIcon {
     height: 16px;
-}
-
-.songSection {
-    flex-grow: 1;
 }
 
 .slider:disabled {

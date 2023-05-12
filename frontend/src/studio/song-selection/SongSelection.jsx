@@ -16,18 +16,20 @@ export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 		<div className={styles.songselection}>
 			{isHost && (
 				<SearchBar
-				searchType={"songs"}
-				label={"Search Spotify..."}
-				studioId={""}
-				setResults={setSongSearchResults}
-				studio={studio}
-				onInputChange={() => {}}
-			/>
+					searchType={'songs'}
+					label={'Search Spotify...'}
+					studioId={''}
+					setResults={setSongSearchResults}
+					studio={studio}
+					onInputChange={() => {}}
+					playlist_id={studio.studioPlaylist}
+				/>
 			)}
 			{songSearchResults.length > 0 ? (
 				<List className={styles.searchResults}>
 					{songSearchResults.map((result) => (
 						<SongListItem
+							setResults={setSongSearchResults}
 							key={result.id}
 							song={result}
 							socket={socket}
@@ -37,7 +39,11 @@ export default function SongSelection({ studio, socket, setQueueIsEmpty }) {
 					))}
 				</List>
 			) : null}
-			<Queue studio={studio} socket={socket} setQueueIsEmpty={setQueueIsEmpty} />
+			<Queue
+				studio={studio}
+				socket={socket}
+				setQueueIsEmpty={setQueueIsEmpty}
+			/>
 		</div>
 	);
 }

@@ -38,6 +38,7 @@ function NavMenu() {
                     <img
                         src={logo}
                         className={styles.logo}
+                        alt='Ear Buddies Logo'
                     />
                     <h1 className={styles.brandName}>EAR BUDDIES</h1>
                 </div>
