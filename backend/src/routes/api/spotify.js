@@ -41,6 +41,14 @@ router.put('/queue', async (req, res) => {
 			.addTracksToPlaylist(playlist_id, ['spotify:' + type + ':' + track_id])
 			.then(
 				function (data) {
+					thisSpotifyApi.addToQueue('spotify:' + type + ':' + track_id).then(
+						function (data) {
+							console.log('Added track to queue!');
+						},
+						function (err) {
+							console.log('Something went wrong!', err);
+						}
+					);
 					console.log('Added tracks to playlist!');
 				},
 				function (err) {
