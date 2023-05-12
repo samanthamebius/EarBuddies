@@ -1,0 +1,40 @@
+.controlPanel {
+	background-image: linear-gradient(180deg, #b03eee, #e640f8);
+	border-radius: 4px;
+	padding: 5px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 15px;
+}
+
+.playbackCntrls {
+	padding: 5px 0px 5px 0px;
+}
+
+.time {
+	padding: 0px 15px 0px 15px;
+}
+
+.volume {
+	padding: 0px 5px 0px 5px;
+}
+
+.volIcon {
+	height: 16px;
+}
+
+.slider:disabled {
+	background: red;
+}
+
+.MuiSlider-root.Mui-disabled {
+	opacity: 50%;
+}
+
+.icon {
+	height: 30px;
+	pointer-events: none;
+}
+

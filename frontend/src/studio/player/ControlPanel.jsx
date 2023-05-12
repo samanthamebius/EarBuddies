@@ -5,7 +5,7 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 import { useNavigate } from 'react-router';
-import styles from '../StudioPage.module.css';
+import styles from './ControlPanel.module.css';
 import TimeSlider from './TimeSlider';
 import VolumeSlider from './VolumeSlider';
 import { AppContext } from '../../AppContextProvider';
