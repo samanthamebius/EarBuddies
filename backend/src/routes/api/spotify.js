@@ -93,7 +93,8 @@ router.get('/queue/:playlist_id', async (req, res) => {
 		if (!thisSpotifyApi) {
 			return res.status(403).json({ msg: 'No Spotify API connection' });
 		}
-		return res.status(200).json(await getPlaylist(playlist_id, thisSpotifyApi));
+		const playlist = await getPlaylist(playlist_id, thisSpotifyApi);
+		return res.status(200).json(playlist);
 	} catch (err) {
 		console.log(err);
 		if (err.statusCode === 401) {
