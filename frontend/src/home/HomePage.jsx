@@ -82,14 +82,12 @@ function HomePage({ socket }) {
 						? studios.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))
 						: studioSearchResults.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))}
@@ -117,14 +115,12 @@ function HomePage({ socket }) {
 						? activeStudios.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))
 						: activeStudioSearchResults.map((studio) => (
 								<StudioCard
 									key={studio.studioName}
-									socket={socket}
 									studio={studio}
 								/>
 						  ))}

@@ -9,11 +9,10 @@ import React, { useState, useEffect } from 'react';
 
 /**
  * Card displayed on homepage for each of the user's studios.
- * @param {Object} socket - Communication channel between client and server.
  * @param {Object} studio - Studio that the card is associated with.
  * @returns {JSX.Element} - JSX creating the StudioCard component.
  */
-export default function StudioCard({ socket, studio }) {
+export default function StudioCard({ studio }) {
 	const navigate = useNavigate();
 	const [hostImage, setHostImage] = useState(ProfilePicImg1);
 
