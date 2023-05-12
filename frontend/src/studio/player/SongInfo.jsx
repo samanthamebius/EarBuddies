@@ -25,6 +25,8 @@ function SongInfo(props) {
 				setSongTitle(track.data?.item?.name);
 				setAlbumArtwork(track.data?.item?.album.images[0].url);
 				setArtistName(track.data?.item?.artists[0].name);
+
+				// TODO: Put this back in when tidyups are done
 				// const artist_id = track.data?.item?.artists[0].id;
 				// if (artist_id) {
 				// 	const artist = await axios.get(
@@ -62,7 +64,7 @@ function SongInfo(props) {
 				messages: messages,
 				isHost: isHost,
 			});
-			console.log('ere');
+
 			// save the message to DB
 			axios.put(`http://localhost:3000/api/chat/new-message/${studio._id}`, {
 				id: messageId,
@@ -79,17 +81,21 @@ function SongInfo(props) {
 		<div className={styles.songSection}>
 			<h3
 				className={styles.song}
-				style={{ display: songTitle && !queueIsEmpty ? 'flex' : 'none' }}>
+				style={{ visibility: songTitle && !queueIsEmpty ? 'visible' : 'hidden' }}>
 				{songTitle}
 			</h3>
 			<div className={styles.artist}>
 				<img
-					style={{ display: artistImg && !queueIsEmpty ? 'flex' : 'none' }}
+					style={{
+						visibility: artistImg && !queueIsEmpty ? 'visible' : 'hidden',
+					}}
 					className={styles.artistImg}
 					src={artistImg}
 				/>
 				<div
-					style={{ display: artistName && !queueIsEmpty ? 'flex' : 'none' }}
+					style={{
+						visibility: artistName && !queueIsEmpty ? 'visible' : 'hidden',
+					}}
 					className={styles.artistName}>
 					{artistName ? artistName : null}
 				</div>

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
-import styles from "../StudioPage.module.css";
-import { StyledSlider } from "./StyledSlider";
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import styles from '../StudioPage.module.css';
+import { StyledSlider } from './StyledSlider';
 
 export function TimeSlider(props) {
 	const { player, queueIsEmpty, isHost } = props;
@@ -35,11 +35,11 @@ export function TimeSlider(props) {
 	// }, []);
 
 	const TinyText = styled(Typography)({
-		fontSize: "0.75rem",
+		fontSize: '0.75rem',
 		opacity: 0.38,
 		fontWeight: 500,
 		letterSpacing: 0.2,
-		color: "white",
+		color: 'white',
 	});
 
 	function formatDuration(value) {
@@ -58,36 +58,33 @@ export function TimeSlider(props) {
 	return (
 		<div className={styles.time}>
 			<StyledSlider
-				aria-label="time-indicator"
-				size="small"
+				aria-label='time-indicator'
+				size='small'
 				value={position}
 				min={0}
 				step={1}
 				max={duration}
-				color="secondary"
-				onChange={isHost ? () => handleChange() : undefined}
-				style={{ pointerEvents: queueIsEmpty ? "none" : "auto" }}
-				disabled={!isHost}
+				color='secondary'
+				onChange={handleChange}
+				style={{ pointerEvents: queueIsEmpty ? 'none' : 'auto' }}
 			/>
 			<Box
 				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
 					mt: -2,
-				}}
-			>
+				}}>
 				<TinyText>{formatDuration(position)}</TinyText>
 				<TinyText>-{formatDuration(duration - position)}</TinyText>
 			</Box>
 			<Box
 				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
 					mt: -1,
-				}}
-			></Box>
+				}}></Box>
 		</div>
 	);
 }

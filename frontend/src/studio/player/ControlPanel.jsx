@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import PauseCircleRoundedIcon from "@mui/icons-material/PauseCircleRounded";
-import PlayCircleFilledRoundedIcon from "@mui/icons-material/PlayCircleFilledRounded";
-import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
-import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
-import { useNavigate } from "react-router";
-import styles from "../StudioPage.module.css";
-import TimeSlider from "./TimeSlider";
-import VolumeSlider from "./VolumeSlider";
-import { AppContext } from "../../AppContextProvider";
+import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
+import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
+import { useNavigate } from 'react-router';
+import styles from '../StudioPage.module.css';
+import TimeSlider from './TimeSlider';
+import VolumeSlider from './VolumeSlider';
+import { AppContext } from '../../AppContextProvider';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -26,18 +26,18 @@ function ControlPanel(props) {
 		try {
 			axios
 				.put(`${BASE_URL}/api/spotify/play`, {
-					uri: "spotify:playlist:" + studio?.studioPlaylist,
+					uri: 'spotify:playlist:' + studio?.studioPlaylist,
 					deviceId: myDeviceId,
 				})
 				.then((response) => {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -51,11 +51,11 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -70,11 +70,11 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
@@ -88,21 +88,21 @@ function ControlPanel(props) {
 					console.log(response);
 				})
 				.catch((error) => {
-					navigate("/400");
+					navigate('/400');
 				});
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}
 
 	function playButton(studio) {
 		// only play if host
 		if (isHost) {
-			console.log("playing");
+			console.log('playing');
 			spotifyPlayer(studio, myDeviceId);
 		}
-		socket.emit("send_play_song", {
+		socket.emit('send_play_song', {
 			room: studio._id,
 			isPlaying: true,
 		});
@@ -113,7 +113,7 @@ function ControlPanel(props) {
 		if (isHost) {
 			spotifyPauser(myDeviceId);
 		}
-		socket.emit("send_pause_song", {
+		socket.emit('send_pause_song', {
 			room: studio._id,
 			isPlaying: false,
 		});
@@ -133,23 +133,23 @@ function ControlPanel(props) {
 
 	// socket is listening to when a song should be played
 	useEffect(() => {
-		socket.on("receive_play_song", (data) => {
+		socket.on('receive_play_song', (data) => {
 			const { isPlaying } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 			}
-			console.log("received play");
+			console.log('received play');
 		});
 	}, [socket, myDeviceId]);
 
 	// socket is listening to when a song should be paused
 	useEffect(() => {
-		socket.on("receive_pause_song", (data) => {
+		socket.on('receive_pause_song', (data) => {
 			const { isPlaying } = data;
 			if (Object.keys(myDeviceId).length !== 0) {
 				setPlaying(isPlaying);
 			}
-			console.log("received pause");
+			console.log('received pause');
 		});
 	}, [socket, myDeviceId]);
 
@@ -189,60 +189,66 @@ function ControlPanel(props) {
 		<div className={styles.controlPanel}>
 			<div className={styles.playbackCntrls}>
 				<SkipPreviousRoundedIcon
-					sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+					sx={{ '&:hover': { cursor: 'pointer' } }}
 					style={{
-						fontSize: "40px",
-						color:
-							queueIsEmpty || isInPrevious || !isHost ? "#e7bcf7" : "white",
-						pointerEvents: queueIsEmpty ? "none" : "auto",
+						fontSize: '40px',
+						color: queueIsEmpty || isInPrevious ? '#e7bcf7' : 'white',
+						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
-					onClick={isHost ? () => previousButton() : undefined}
+					onClick={() => previousButton()}
 					onMouseEnter={enterPrevious}
 					onMouseLeave={leavePrevious}
-					disabled={queueIsEmpty || !isHost}
+					disabled={queueIsEmpty}
 				/>
 				{!isPlaying ? (
 					<PlayCircleFilledRoundedIcon
-						sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+						sx={{ '&:hover': { cursor: 'pointer' } }}
 						style={{
-							fontSize: "40px",
-							color: queueIsEmpty || isInPlay || !isHost ? "#e7bcf7" : "white",
-							pointerEvents: queueIsEmpty ? "none" : "auto",
+							fontSize: '40px',
+							color: queueIsEmpty || isInPlay ? '#e7bcf7' : 'white',
+							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
-						onClick={isHost ? () => playButton(studio) : undefined}
+						onClick={() => playButton(studio)}
 						onMouseEnter={enterPlay}
 						onMouseLeave={leavePlay}
-						disabled={queueIsEmpty || !isHost}
+						disabled={queueIsEmpty}
 					/>
 				) : (
 					<PauseCircleRoundedIcon
-						sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+						sx={{ '&:hover': { cursor: 'pointer' } }}
 						style={{
-							fontSize: "40px",
-							color: queueIsEmpty || isInPause || !isHost ? "#e7bcf7" : "white",
-							pointerEvents: queueIsEmpty ? "none" : "auto",
+							fontSize: '40px',
+							color: queueIsEmpty || isInPause ? '#e7bcf7' : 'white',
+							pointerEvents: queueIsEmpty ? 'none' : 'auto',
 						}}
-						onClick={isHost ? () => pauseButton(studio) : undefined}
+						onClick={() => pauseButton(studio)}
 						onMouseEnter={enterPause}
 						onMouseLeave={leavePause}
-						disabled={queueIsEmpty || !isHost}
+						disabled={queueIsEmpty}
 					/>
 				)}
 				<SkipNextRoundedIcon
-					sx={{ "&:hover": { cursor: isHost && "pointer" } }}
+					sx={{ '&:hover': { cursor: 'pointer' } }}
 					style={{
-						fontSize: "40px",
-						color: queueIsEmpty || isInNext || !isHost ? "#e7bcf7" : "white",
-						pointerEvents: queueIsEmpty ? "none" : "auto",
+						fontSize: '40px',
+						color: queueIsEmpty || isInNext ? '#e7bcf7' : 'white',
+						pointerEvents: queueIsEmpty ? 'none' : 'auto',
 					}}
-					onClick={isHost ? () => skipButton(studio) : undefined}
+					onClick={() => skipButton(studio)}
 					onMouseEnter={enterNext}
 					onMouseLeave={leaveNext}
-					disabled={queueIsEmpty || !isHost}
+					disabled={queueIsEmpty}
 				/>
 			</div>
-			<TimeSlider player={player} queueIsEmpty={queueIsEmpty} isHost={isHost} />
-			<VolumeSlider player={player} isHost={isHost} />
+			<TimeSlider
+				player={player}
+				queueIsEmpty={queueIsEmpty}
+				isHost={isHost}
+			/>
+			<VolumeSlider
+				player={player}
+				isHost={isHost}
+			/>
 		</div>
 	);
 }
