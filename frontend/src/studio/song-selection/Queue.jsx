@@ -1,18 +1,28 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import styles from "./Queue.module.css";
-import useGet from "../../hooks/useGet";
-import { List } from "@mui/material";
-import SongListItem from "./SongListItem";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+
+import { List } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
+import styles from './Queue.module.css';
+import useGet from '../../hooks/useGet';
+import SongListItem from './SongListItem';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Component to display the current queue inside the studio
+ * @param studio - The current studio
+ * @param socket - Communication channel between client and server
+ * @param setQueueIsEmpty - Function to determine if the current queue is empty
+ * @returns {JSX.Element} - JSX creating the queue component
+ */
 function Queue(props) {
 	const { studio, socket, setQueueIsEmpty } = props;
 	const [playlistSongs, setPlaylistSongs] = useState([]);
 	const navigate = useNavigate();
 
+	// get the current queue
 	const {
 		data: playlist,
 		isLoading: songsIsLoading,
@@ -21,8 +31,7 @@ function Queue(props) {
 
 	// continously set the new songs added to the queue
 	useEffect(() => {
-		socket.on("receive_new_song", (data) => {
-			console.log(data.newSong);
+		socket.on('receive_new_song', (data) => {
 			setPlaylistSongs((playlistSongs) => [...playlistSongs, data.newSong]);
 		});
 		updateQueueStatus(playlistSongs.length);
@@ -30,14 +39,13 @@ function Queue(props) {
 
 	// remove the song from the queue
 	useEffect(() => {
-		socket.on("receive_remove_from_studio_queue", (data) => {
-			setPlaylistSongs(
-				playlistSongs.filter((songs) => songs.id !== data.songId)
-			);
+		socket.on('receive_remove_from_studio_queue', (data) => {
+			setPlaylistSongs(playlistSongs.filter((songs) => songs.id !== data.songId));
 		});
 		updateQueueStatus(playlistSongs.length);
 	});
 
+	// update the status of the queue
 	function updateQueueStatus(queueLength) {
 		if (queueLength > 0) {
 			setQueueIsEmpty(false);
@@ -68,7 +76,7 @@ function Queue(props) {
 			})
 			.catch((error) => {
 				console.log(error);
-				navigate("/500");
+				navigate('/500');
 			});
 	}, []);
 
@@ -82,7 +90,7 @@ function Queue(props) {
 	} else {
 		const snapshot_id = playlist.snapshot_id;
 		return (
-			<div style={{ maxHeight: "100%", overflowY: "auto" }}>
+			<div style={{ maxHeight: '100%', overflowY: 'auto' }}>
 				<label className={styles.queueGreyHeading}>Playlist:</label>
 				{playlistSongs?.length > 0 && (
 					<List className={styles.listContainer}>
@@ -92,7 +100,7 @@ function Queue(props) {
 								song={result}
 								socket={socket}
 								studio={studio}
-								type="queue"
+								type='queue'
 								snapshotId={snapshot_id}
 							/>
 						))}

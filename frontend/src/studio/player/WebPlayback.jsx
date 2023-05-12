@@ -1,28 +1,42 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../AppContextProvider";
-import ControlPanel from "./ControlPanel";
-import SongInfo from "./SongInfo";
+import React, { useState, useEffect, useContext } from 'react';
+
+import ControlPanel from './ControlPanel';
+import SongInfo from './SongInfo';
+import { AppContext } from '../../AppContextProvider';
+import { useNavigate } from 'react-router-dom';
+
+/**
+ * Component to determine the now playing section
+ * @param studio - The current studio
+ * @param socket - Communication channel between client and server
+ * @param token - The access token for the current user
+ * @param queueIsEmpty - Boolean to check if the queue is empty
+ * @param messages - Array of the current messages in the studio
+ * @returns {JSX.Element} - JSX creating the web playback component
+ */
 
 function WebPlayback(props) {
 	const { studio, socket, token, queueIsEmpty, messages } = props;
 	const [player, setPlayer] = useState({});
 	const { myDeviceId, setMyDeviceId, username } = useContext(AppContext);
 	const navigate = useNavigate();
+
 	const isHost = username === studio.studioHost;
 
+	// Create the player and add a new device for the browser
 	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://sdk.scdn.co/spotify-player.js";
+		const script = document.createElement('script');
+		script.src = 'https://sdk.scdn.co/spotify-player.js';
 		script.async = true;
 
 		document.body.appendChild(script);
 
-		//add try catch around here for access token expiry check
+		//Check for access token expiry check
 		try {
 			window.onSpotifyWebPlaybackSDKReady = () => {
+				// Create the player
 				const player = new window.Spotify.Player({
-					name: "EarBuddies",
+					name: 'EarBuddies',
 					getOAuthToken: (cb) => {
 						cb(token);
 					},
@@ -31,24 +45,18 @@ function WebPlayback(props) {
 
 				setPlayer(player);
 
-				player.addListener("ready", ({ device_id }) => {
-					console.log("Ready with Device ID", device_id);
+				// Set the new device id
+				player.addListener('ready', ({ device_id }) => {
 					setMyDeviceId(device_id);
-				});
-
-				player.addListener("not_ready", ({ device_id }) => {
-					console.log("Device ID has gone offline", device_id);
 				});
 
 				player.connect();
 			};
 		} catch (error) {
 			console.log(error);
-			navigate("/400");
+			navigate('/400');
 		}
 	}, []);
-
-	console.log(myDeviceId);
 
 	// disconnect the player when the component dismounts
 	useEffect(() => {
@@ -59,8 +67,8 @@ function WebPlayback(props) {
 
 	return (
 		<>
-			<div className="container">
-				<div className="main-wrapper">
+			<div className='container'>
+				<div className='main-wrapper'>
 					<SongInfo
 						socket={socket}
 						studio={studio}
