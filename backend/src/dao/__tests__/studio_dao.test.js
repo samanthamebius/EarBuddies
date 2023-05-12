@@ -10,6 +10,7 @@ import {
 	updateStudioUsers,
 	updateStudioHost,
 	deleteStudio,
+  removeStudioFromUsers,
   setStudioStatus} from "../studio_dao.js";
 import { setUserInactive } from "../user_dao.js";
 
@@ -283,4 +284,3 @@ test("set studio status is successful with zero active users", async () => {
   const studio = await setStudioStatus(mockStudio2._id);
   expectStudio(studio, updatedStudio);
 });
-
