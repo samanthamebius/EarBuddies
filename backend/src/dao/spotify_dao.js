@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { getStudio, updateStudioHost, updateStudioPlaylist } from './studio_dao';
+import { getStudiosId, updateStudios } from './user_dao';
 dotenv.config();
 
 var spotifyApi = null;
@@ -155,6 +156,19 @@ async function createNewStudioPlaylist(studio) {
 	return createPlaylistRes.body.id;
 }
 
+async function createStudioPlaylist(name) {
+	const playlist_name = 'Earbuddies - ' + name;
+	const api = getSpotifyApi();
+	if (!api) {
+		console.log('No Spotify API connection');
+		return res.status(403).json({ msg: 'No Spotify API connection' });
+	}
+	const createPlaylistRes = await api.createPlaylist(playlist_name, {
+		public: true,
+	});
+	return createPlaylistRes.body.id;
+}
+
 async function copyPlaylist(old_playlist, new_playlist) {
 	const api = getSpotifyApi();
 	if (!api) {
@@ -194,6 +208,17 @@ async function transferPlaylist(studio_id, host) {
 	return updated_studio.studioHost;
 }
 
+async function removeStudioFromUsers(studio) {
+	const listeners = studio[0].studioUsers;
+	listeners.forEach(async (listener) => {
+		const studios = await getStudiosId(listener);
+		const newStudios = studios.filter(
+			(studio) => JSON.parse(JSON.stringify(studio._id)) !== id
+		);
+		await updateStudios(listener, newStudios);
+	});
+}
+
 export {
 	searchSpotify,
 	setSpotifyApi,
@@ -206,4 +231,6 @@ export {
 	createNewStudioPlaylist,
 	copyPlaylist,
 	transferPlaylist,
+	createStudioPlaylist,
+	removeStudioFromUsers,
 };

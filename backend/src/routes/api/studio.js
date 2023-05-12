@@ -3,8 +3,8 @@ import fs from "fs";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
 import { createStudio, getStudio, deleteStudio, updateStudioUsers, updateStudioNames, updateStudioControlHostOnly, updateStudioHost, updateStudioPlaylist } from "../../dao/studio_dao.js";
-import { getUser, getStudiosId, updateStudios } from "../../dao/user_dao.js";
-import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist } from "../../dao/spotify_dao.js";
+import { getUser, getStudiosId, updateStudios, addStudio } from "../../dao/user_dao.js";
+import { getSpotifyApi, createNewStudioPlaylist, copyPlaylist, transferPlaylist, createStudioPlaylist, removeStudioFromUsers } from "../../dao/spotify_dao.js";
 import { Types as mongooseTypes } from "mongoose";
 import {
 	deleteChat,
@@ -17,7 +17,21 @@ const upload = multer({
 	dest: "./uploads",
 });
 
-//create studio
+/**
+ * @route POST api/studio/new
+ * @desc Create a new studio
+ * @body 
+ * 		name: String
+ * 		listeners: [String]
+ * 		host: String
+ * 		genres: [String]
+ * 		studioBannerImageUrl: String
+ * 		isHostOnly: Boolean
+ * @returns 201 The location of the newly created studio
+ * @throws 400 if required fields are missing
+ * @throws 403 if no Spotify API connection
+ * @throws 500 if server error
+ */
 router.post("/new", async (req, res) => {
   try {
     const {
@@ -36,19 +50,8 @@ router.post("/new", async (req, res) => {
         .json({ msg: "Please provide all required fields" });
     }
 
-    // Create studio playlist on Spotify
-    const playlist_name = "Earbuddies - " + name;
-    const api = getSpotifyApi();
-    if (!api) {
-      console.log("No Spotify API connection");
-      return res.status(403).json({ msg: "No Spotify API connection" });
-    }
-    const createPlaylistRes = await api.createPlaylist(playlist_name, {
-      public: true,
-    });
-    const playlist_id = createPlaylistRes.body.id;
-
-    // Create the new studio
+	//create studio 
+	const playlist_id = await createStudioPlaylist(name);
     const newStudio = await createStudio(
       name,
       listeners,
@@ -61,17 +64,10 @@ router.post("/new", async (req, res) => {
 
     // Add studios to user
     const promises = listeners.map(async (listener) => {
-		const thisListener = await getUser(listener);
-		if (!thisListener) {
-			return res.status(404).json({ msg: "Listener not found" });
-		}
-      const studios = await getStudiosId(listener);
-      studios.push(newStudio._id);
-      await updateStudios(listener, studios);
+		await addStudio(listener, newStudio._id);
     });
     await Promise.all(promises);
 
-    // Respond with the newly created studio
     res.status(201).location(`/api/studio/${newStudio._id}`).json(newStudio);
   } catch (err) {
     console.log(err);
@@ -79,23 +75,33 @@ router.post("/new", async (req, res) => {
   }
 });
 
-//get studio by id
+/**
+ * @route GET api/studio/:id
+ * @desc Get a studio by id
+ * @param id: String (Studio ID)
+ * @returns 200 The studio
+ * @throws 400 if invalid ID
+ * @throws 403 if no Spotify API connection
+ * @throws 404 if studio not found
+ * @throws 500 if server error
+ */
 router.get("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
 		if (!mongooseTypes.ObjectId.isValid(id)) {
-		// Invalid ID, return an error response
 			return res.status(400).json({ error: "Invalid ID" });
 		}
-		//check for spotify api connection
+
 		const api = getSpotifyApi();
 		if (!api) {
 			return res.status(403).json({ msg: "No Spotify API connection" });
 		}
+
 		const studio = await getStudio(id);
 		if (!studio) {
 			return res.status(404).json({ msg: "Studio not found" });
 		}
+
 		res.status(200).json(studio);
 	} catch (err) {
 		console.log(err);
@@ -103,7 +109,14 @@ router.get("/:id", async (req, res) => {
 	}
 });
 
-//delete studio by id
+/**
+ * @route DELETE api/studio/:id
+ * @desc Delete a studio by id
+ * @param id: String (Studio ID)
+ * @returns 204
+ * @throws 404 if studio not found
+ * @throws 500 if server error
+ */
 router.delete("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -111,16 +124,10 @@ router.delete("/:id", async (req, res) => {
 		if (!studio) {
 			return res.status(404).json({ msg: "Studio not found" });
 		}
-		//remove studio from users
-		const listeners = studio[0].studioUsers;
-		listeners.forEach(async (listener) => {
-			const studios = await getStudiosId(listener);
-			const newStudios = studios.filter((studio) => JSON.parse(JSON.stringify(studio._id)) !== id);
-			await updateStudios(listener, newStudios);
-		});
-		//delete all chats
+		await removeStudioFromUsers(studio);
 		await deleteChat(id);
 		await deleteStudio(id);
+
 		res.status(204).json({msg: "studio deleted"});
 	} catch (err) {
 		console.log(err);
@@ -423,25 +430,5 @@ router.put("/:studio_id/:username", async (req, res) => {
 		res.status(500).json({ msg: "Server error" });
 	}
 });
-
-// router.put('/:studio_id/new_host/:host', async (req, res) => {
-// 	//requires you to be logged in as the new host
-// 	try {
-// 		const { studio_id, host } = req.params;
-// 		await transferPlaylist(studio_id, host);
-// 		// const studio = await getStudio(studio_id);
-// 		// const old_playlist = studio[0].studioPlaylist;
-// 		// const new_playlist = await createNewStudioPlaylist(studio);
-// 		// console.log(new_playlist)
-// 		// await copyPlaylist(old_playlist, new_playlist);
-// 		// await updateStudioPlaylist(studio_id, new_playlist);
-// 		// await updateStudioHost(studio_id, host);
-
-// 		res.status(200).json({ msg: "New playlist created" });
-// 	} catch (err) {
-// 		console.log(err);
-// 		res.status(500).json({ msg: "Server error" });
-// 	}
-// })
 
 export default router;
