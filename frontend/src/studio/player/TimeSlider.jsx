@@ -70,7 +70,7 @@ export function TimeSlider({ player }) {
 				step={1}
 				max={duration}
 				color='secondary'
-				style={{ pointerEvents: 'none', width: 350 }}
+				style={{ pointerEvents: 'none', width: '92%' }}
 			/>
 			<Box
 				sx={{
