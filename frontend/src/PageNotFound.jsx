@@ -4,9 +4,15 @@ import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Displays custom error pages and instructions depending on error code
+ * @param errorType - Error code indicating what page to display
+ * @returns
+ */
 function PageNotFound({ errorType }) {
 	const navigate = useNavigate();
 
+	// Handle log out button for 400 and 500 errors
 	const logout = () => {
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('refresh_token');
@@ -57,5 +63,4 @@ function PageNotFound({ errorType }) {
 		</div>
 	);
 }
-
 export default PageNotFound;

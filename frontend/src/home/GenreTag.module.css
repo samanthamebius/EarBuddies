@@ -1,20 +1,25 @@
 .genreTag {
-	background-color: white;
-	border-radius: 50px;
+/*Box model stuff*/
 	width: fit-content;
 	height: fit-content;
 	margin-right: 10px;
+	border-radius: 50px;
+	background-color: white;
+/*Miscellaneous*/
 	box-shadow: inset 0 0 5px grey;
 }
 
 .genreLabel {
+/*Box model stuff*/
+	margin: 0px;
+	padding: 5px 10px 5px 10px;
 	background: -webkit-linear-gradient(#b03eee, #e640f8);
+/*Typography stuff*/
+	font-family: 'Open Sans';
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: capitalize;
+/*Miscellaneous*/
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	font-family: 'Open Sans';
-	font-weight: bold;
-	padding: 5px 10px 5px 10px;
-	font-size: 14px;
-	margin: 0px;
-	text-transform: capitalize;
 }

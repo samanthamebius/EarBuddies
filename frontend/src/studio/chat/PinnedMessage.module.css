@@ -1,43 +1,55 @@
 .pinnedMessage {
-    background-color: var(--pinnedBackgroundColor);
-    border-radius: 10px;
-    padding: 12px;
+/*Display stuff*/
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
     align-items: center;
+    justify-content: space-between;
+/*Box model stuff*/
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: var(--pinnedBackgroundColor);
 }
 
 .content {
+/*Display stuff*/
     display: flex;
     flex-direction: row;
-    width: 100%;
     align-items: center;
+/*Box model stuff*/
+    width: 100%;
 }
 
 .message {
+/*Box model stuff*/
     margin: 0 0 0 10px;
-    color: var(--headingColor);
+/*Typography stuff*/
     font-size: 14px;
+    color: var(--headingColor);
 }
 
 .pin {
+/*Manipulations stuff*/
     opacity: 0.5;
 }
 
 .profileImage {
-    object-fit: cover;
+/*Box model stuff*/
     width: 30px;
     height: 30px;
-    border-radius: 50%;
     margin-right: 4px;
+    border-radius: 50%;
+/*Miscellaneous*/
+    object-fit: cover;
 }
 
 .delete {
+/*Manipulations stuff*/
     opacity: 0.5;
 }
 
 .delete:hover {
+/*Manipulations stuff*/
     opacity: 0.7;
+/*Miscellaneous*/
     cursor: pointer;
 }

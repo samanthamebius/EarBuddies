@@ -1,6 +1,7 @@
 import { Slider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+// Common styling for slider within control panel
 export const StyledSlider = styled(Slider)({
 	color: '#ffffff',
 	height: 4,

@@ -1,81 +1,101 @@
 .studioCard {
-	margin: 20px 0px 20px 0px;
+/*Box model stuff*/
 	width: 100%;
 	height: auto;
+	margin: 20px 0px 20px 0px;
 	border-radius: 4px;
-	background-size: cover;
 	background-repeat: no-repeat;
+	background-size: cover;
+/*Miscellaneous*/
 	box-shadow: 0px 5px 5px var(--shadowColor);
 }
 
 .darkLayer {
-	background-color: rgba(0, 0, 0, 0.5);
+/*Box model stuff*/
 	width: 100%;
-	border-radius: 4px;
 	margin: 0px;
+	border-radius: 4px;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .darkLayer:hover {
-	cursor: pointer;
+/*Box model stuff*/
 	background-color: rgba(0, 0, 0, 0.3);
+/*Miscellaneous*/
+	cursor: pointer;
 }
 
 .cardContent {
+/*Box model stuff*/
 	padding: 20px 25px 20px 25px;
 }
 
 .studioNameSection {
+/*Display stuff*/
 	display: flex;
 }
 
 .soundWaves {
-	margin-left: auto;
-	height: 32px;
+/*Positioning stuff*/
 	bottom: 0;
+/*Box model stuff*/
+	height: 32px;
+	margin-left: auto;
 }
 
 .studioName {
-	font-family: 'Open Sans';
-	color: white;
-	font-weight: bold;
-	margin: 0px;
-	padding-right: 0px;
-	font-size: 28px;
-	padding-bottom: 5px;
+/*Positioning stuff*/
 	position: relative;
+/*Box model stuff*/
+	margin: 0px;
+	padding-bottom: 5px;
+	padding-right: 0px;
+/*Typography stuff*/
+	font-family: 'Open Sans';
+	font-size: 28px;
+	font-weight: bold;
+	color: white;
 }
 
 .genreTags {
+/*Display stuff*/
 	display: flex;
+/*Box model stuff*/
 	height: fit-content;
 	height: 30px;
 	padding-bottom: 25px;
 }
 
 .listeners {
+/*Display stuff*/
 	display: flex;
 	align-items: end;
 }
 
 .hostImage {
-	margin-left: auto;
-	object-fit: cover;
-	height: 30px;
+/*Box model stuff*/
 	width: 30px;
-	border-radius: 50%;
+	height: 30px;
+	margin-left: auto;
 	border: 2px solid #ffffff;
+	border-radius: 50%;
+/*Miscellaneous*/
+	object-fit: cover;
 	pointer-events: none;
 }
 
 .greyOutImage {
+/*Manipulations stuff*/
+	filter: grayscale(100%);
+/*Miscellaneous*/
 	-webkit-filter: grayscale(100%);
 	-moz-filter: grayscale(100%);
 	-o-filter: grayscale(100%);
 	-ms-filter: grayscale(100%);
-	filter: grayscale(100%);
 }
 
 img {
+/*Miscellaneous*/
 	user-drag: none;
 	-webkit-user-drag: none;
 	user-select: none;

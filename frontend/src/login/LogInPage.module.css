@@ -1,39 +1,51 @@
 .page {
+/*Display stuff*/
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+/*Positioning stuff*/
     position: absolute;
-    top: 50%;
     left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    background-color: var(--backgroundColor);
+    top: 50%;
+/*Box model stuff*/
     width: 100%;
     height: 100%;
+    background-color: var(--backgroundColor);
+/*Manipulations stuff*/
+    transform: translate(-50%, -50%);
+/*Miscellaneous*/
+    -ms-transform: translate(-50%, -50%);
 }
 
 .logo {
+/*Box model stuff*/
     width: 13em;
 }
 
 .brandName {
+/*Display stuff*/
+    display: block;
+/*Box model stuff*/
     margin: 0.5em;
+    background: -webkit-linear-gradient(#b03eee, #e640f8);
+/*Typography stuff*/
     font-family: 'Secular One';
     font-size: 4em;
-    background: -webkit-linear-gradient(#b03eee, #e640f8);
+/*Miscellaneous*/
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: block;
 }
 
 .button {
+/*Box model stuff*/
     background: linear-gradient(#b03eee, #e640f8);
 }
 
 .link {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
+/*Typography stuff*/
     font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
 }

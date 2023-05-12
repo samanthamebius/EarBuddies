@@ -105,7 +105,7 @@ Switch to dark mode! 🌑🌃🌠 perfect for late-night listening sessions
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/e0d3f66e-f787-4c6f-9a1c-08403a207a3b)
 
 Change your display name and photo  
-Quick access to your Ppotify dashboard  
+Quick access to your Spotify dashboard  
 Log out or delete your account ☹️👋  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/81abec40-b188-4177-9497-d8aaed9946d4)
 
@@ -113,15 +113,16 @@ Log out or delete your account ☹️👋
 ## Studio
 ### Now Playing 🎵
 View the song playing  
-Control the volume in the studio  
-Play, pause, skip and seek songs  
+Control the volume in the studio (host only)  
+Play, pause, skip and seek songs (host only)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/92f958f7-fc07-40b4-b48f-bf2a117f194d)
 
 
 ### Search and Queue Songs 🎼
-Search all songs (and podcasts!) in the Spotify library  
-Add them to the queue  
-Remove from queue  
+View queue
+Search all songs (and podcasts!) in the Spotify library (host only)  
+Add them to the queue (host only)  
+Remove from queue (host only)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/7db95d2c-5001-4b2e-8d38-4bdaeeb8afd9)
 
 
@@ -153,3 +154,10 @@ And if you're the host:
 Handle any errors gracefully
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/1336b2ec-57b4-4a7e-94eb-f687068e7bbc)
 
+# Notes
+If studios don't show on the home page, try refreshing the page  
+If everything breaks, please log out and log in again
+
+If a 429 error occurs, the webpage has exceeded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
+
+Happy Listening!

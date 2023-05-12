@@ -1,1 +1,0 @@
-This is a placeholder and should get deleted when mock data in the DB is created. The image can be named anything as long as it matches with what's iin the DB e.g. sampleImage.png will be "/images/sampleImage.png" in the DB.

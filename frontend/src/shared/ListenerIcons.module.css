@@ -1,15 +1,20 @@
 .listenersImages {
+/*Positioning stuff*/
 	position: relative;
+/*Manipulations stuff*/
 	transform: translateX(-10px);
 }
 .listenerImage {
-	object-fit: cover;
-	margin-left: 10px;
-	height: 30px;
-	width: 30px;
-	border-radius: 50%;
-	border: 2px solid #ffffff;
+/*Positioning stuff*/
 	position: relative;
+/*Box model stuff*/
+	width: 30px;
+	height: 30px;
+	margin-left: 10px;
+	border: 2px solid #ffffff;
+	border-radius: 50%;
+/*Miscellaneous*/
+	object-fit: cover;
 	-webkit-user-drag: none;
 	-webkit-user-select: none;
 }

@@ -1,130 +1,177 @@
 .heading {
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 32px;
-    position: relative;
-    margin: 0px;
-    padding: 0px 24px 0px 24px;
+	/*Positioning stuff*/
+	position: relative;
+	/*Box model stuff*/
+	margin: 0px;
+	padding: 0px 24px 0px 24px;
+	/*Typography stuff*/
+	font-size: 32px;
+	font-weight: 800;
+	color: var(--headingColor);
 }
 
 .subHeading {
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 16px;
-    margin: 0px 0px 0px 24px;
-    padding: 0px 0px 20px 0px;
-    display: flex;
+	/*Display stuff*/
+	display: flex;
+	/*Box model stuff*/
+	margin: 0px 0px 0px 24px;
+	padding: 0px 0px 20px 0px;
+	/*Typography stuff*/
+	font-size: 16px;
+	font-weight: 800;
+	color: var(--headingColor);
 }
 
 .subsubHeading {
-  font-weight: 400;
-  color: #757575;
-  font-size: 15px;
-  margin: 0px 0px 0px 24px;
-  padding: 0px 0px 20px 0px;
-  display: flex;
+	/*Display stuff*/
+	display: flex;
+	/*Box model stuff*/
+	margin: 0px 0px 0px 24px;
+	padding: 0px 0px 20px 0px;
+	/*Typography stuff*/
+	font-size: 15px;
+	font-weight: 400;
+	color: #757575;
 }
 
 .dialogHeader {
-    margin: 20px 20px 0px 20px;
-    display: flex;
-    align-items: center;
+	/*Display stuff*/
+	display: flex;
+	align-items: center;
+	/*Box model stuff*/
+	margin: 20px 20px 0px 20px;
 }
 
 .helperText {
-    color: rgb(218, 0, 0);
-    font-size: 16px;
+	/*Typography stuff*/
+	font-size: 16px;
+	color: rgb(218, 0, 0);
 }
 
 .secondaryButton {
-    background: linear-gradient(#bebebe, #ededed);
+	/*Box model stuff*/
+	background: linear-gradient(#bebebe, #ededed);
 }
 
 .dialogContent {
-    text-align: center;
-    font-weight: 800;
-    color: var(--headingColor);
-    font-size: 32px;
-    position: relative;
-    margin: 0px;
-    padding: 0px 24px 0px 24px;
+	/*Positioning stuff*/
+	position: relative;
+	/*Box model stuff*/
+	margin: 0px;
+	padding: 0px 24px 0px 24px;
+	/*Typography stuff*/
+	font-size: 32px;
+	font-weight: 800;
+	text-align: center;
+	color: var(--headingColor);
 }
 
 .listenerList {
-    display: flex;
-    flex-wrap: wrap;
-    border: #ababab solid 1px;
-    border-radius: 10px;
-    max-height: calc(100vh - 460px);
-    overflow: scroll;
-    margin: 0 20px 20px 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    overflow-x: hidden;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+	/*Display stuff*/
+	display: flex;
+	flex-wrap: wrap;
+	/*Box model stuff*/
+	max-height: calc(100vh - 460px);
+	margin: 0 20px 20px 20px;
+	border: #ababab solid 1px;
+	border-radius: 10px;
+	/*Miscellaneous*/
+	overflow: scroll;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+	overflow-x: hidden;
+	-ms-overflow-style: none; /* IE and Edge */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+	scrollbar-width: none; /* Firefox */
 }
 
 .listenerList::-webkit-scrollbar {
-    display: none;
+	/*Display stuff*/
+	display: none;
 }
 
 .listenerListItem {
-    display: flex;
-    align-items: center;
-    border-top: var(--fieldBorderColor) solid 1px;
-    width: 100%;
-    padding: 10px;
-    background-color: var(--fieldColor);
-    cursor: pointer;
+	/*Display stuff*/
+	display: flex;
+	align-items: center;
+	/*Box model stuff*/
+	width: 100%;
+	padding: 10px;
+	border-top: var(--fieldBorderColor) solid 1px;
+	background-color: var(--fieldColor);
+	/*Miscellaneous*/
+	cursor: pointer;
 }
 
 .listenerListItem:hover {
-    background-color: var(--fieldHoverColor);
+	/*Box model stuff*/
+	background-color: var(--fieldHoverColor);
 }
 
 .listenerListItem:hover p {
-    color: #b03eee;
+	/*Typography stuff*/
+	color: #b03eee;
 }
 
 .listenerListItem img {
-    object-fit: cover;
-    height: 35px;
-    width: 35px;
-    margin-right: 10px;
-    border-radius: 50%;
+	/*Box model stuff*/
+	width: 35px;
+	height: 35px;
+	margin-right: 10px;
+	border-radius: 50%;
+	/*Miscellaneous*/
+	object-fit: cover;
 }
 
 .listenerListItem p {
-    margin: 0;
-    font-size: 16px;
+	/*Box model stuff*/
+	margin: 0;
+	/*Typography stuff*/
+	font-size: 16px;
 }
 
 .hostIcon {
-    margin-left: auto;
+	/*Box model stuff*/
+	margin-left: auto;
 }
 
 .purpleButton {
-    background: linear-gradient(#b03eee, #e640f8);
-    font-weight: 700;
-    width: 200px;
+	/*Box model stuff*/
+	width: 200px;
+	background: linear-gradient(#b03eee, #e640f8);
+	/*Typography stuff*/
+	font-weight: 700;
 }
 
 .greyButton {
-    background: linear-gradient(#bebebe, #ededed);
-    font-weight: 700;
-    text-align: center;
-    width: 200px;
+	/*Box model stuff*/
+	width: 200px;
+	background: linear-gradient(#bebebe, #ededed);
+	/*Typography stuff*/
+	font-weight: 700;
+	text-align: center;
 }
 
 .secondaryButton {
-    background: linear-gradient(#bebebe, #ededed);
+	/*Box model stuff*/
+	background: linear-gradient(#bebebe, #ededed);
 }
 
 .createButton {
-    font-weight: 700;
+	/*Typography stuff*/
+	font-weight: 700;
 }
 
 .cancelButton {
-    background: linear-gradient(#ededed, #bebebe);
-    font-weight: 700;
+	/*Box model stuff*/
+	background: linear-gradient(#ededed, #bebebe);
+	/*Typography stuff*/
+	font-weight: 700;
+}
+
+.newHostText {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 15px 0px 15px 0px;
 }

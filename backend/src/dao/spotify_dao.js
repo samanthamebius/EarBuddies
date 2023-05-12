@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { getStudio, updateStudioHost, updateStudioPlaylist } from './studio_dao';
+import { getStudiosId, updateStudios } from './user_dao';
 dotenv.config();
 
 var spotifyApi = null;
@@ -203,8 +204,8 @@ async function getPlaybackState(thisSpotifyApi, deviceId) {
  * @param studio
  * @returns the new playlist id
  */
-async function createNewStudioPlaylist(studio) {
-	const playlist_name = 'Earbuddies - ' + studio[0].studioName;
+async function createStudioPlaylist(name) {
+	const playlist_name = 'Earbuddies - ' + name;
 	const api = getSpotifyApi();
 	if (!api) {
 		console.log('No Spotify API connection');
@@ -425,7 +426,6 @@ export {
 	getArtist,
 	getLastPlaylistTrackId,
 	getPlaybackState,
-	createNewStudioPlaylist,
 	copyPlaylist,
 	transferPlaylist,
 	addPlaylistTrackAndQueue,
@@ -436,4 +436,5 @@ export {
 	pauseSpotify,
 	skipNext,
 	skipPrevious,
+	createStudioPlaylist,
 };

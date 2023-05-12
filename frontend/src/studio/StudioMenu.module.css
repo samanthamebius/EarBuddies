@@ -1,0 +1,30 @@
+   .menuButton {
+    /*Box model stuff*/
+        margin: 0;
+        padding: 10px 10px 5px 10px;
+    /*Miscellaneous*/
+        cursor: pointer;
+    }
+    
+    .icon {
+    /*Box model stuff*/
+        width: 20px;
+        height: 20px;
+        padding-right: 15px;
+    /*Miscellaneous*/
+        pointer-events: none;
+    }
+    
+    .menu_item:hover .menu_title {
+    /*Typography stuff*/
+        color: #b03eee;
+    }
+    
+    .menu_title {
+    /*Box model stuff*/
+        margin: 5px 0px 5px 10px;
+    /*Typography stuff*/
+        font-size: 16px;
+        color: var(--headingColor);
+    }
+    
