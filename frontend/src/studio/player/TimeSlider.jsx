@@ -45,13 +45,13 @@ export function TimeSlider({ player }) {
 		return () => clearInterval(interval);
 	}, []);
 
-	const TinyText = styled(Typography)({
-		fontSize: '0.75rem',
-		opacity: 0.38,
-		fontWeight: 500,
-		letterSpacing: 0.2,
-		color: 'white',
-	});
+    const TinyText = styled(Typography)({
+        fontSize: '0.75rem',
+        opacity: 0.38,
+        fontWeight: 500,
+        letterSpacing: 0.2,
+        color: 'white',
+    });
 
 	// format the duration of the song into readable values
 	function formatDuration(value) {

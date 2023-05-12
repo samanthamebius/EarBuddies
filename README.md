@@ -155,5 +155,9 @@ Handle any errors gracefully
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/1336b2ec-57b4-4a7e-94eb-f687068e7bbc)
 
 # Notes
-If studios don't show in the home page, try refreshing the page  
+If studios don't show on the home page, try refreshing the page  
 If everything breaks, please log out and log in again
+
+If a 429 error occurs, the webpage has exceeded the polling limits for the Spotify API. Please refrain from using Ear Buddies and try again later 😊
+
+Happy Listening!
