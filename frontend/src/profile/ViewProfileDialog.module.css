@@ -1,111 +1,111 @@
 .heading {
-    font-weight: 800;
-    color: #757575;
-    font-size: 32px;
-    position: relative;
-    margin: 0px;
-    padding: 20px 24px 0px 24px
+	font-weight: 800;
+	color: var(--headingColor);
+	font-size: 32px;
+	position: relative;
+	margin: 0px;
+	padding: 20px 24px 0px 24px;
 }
 
 .sectionHeading {
-    font-weight: 800;
-    color: #757575;
-    font-size: 16px;
-    position: relative;
-    margin: 0px;
-    padding: 20px 0px 10px 0px
+	font-weight: 800;
+	color: var(--headingColor);
+	font-size: 16px;
+	position: relative;
+	margin: 0px;
+	padding: 20px 0px 10px 0px;
 }
 
 .createButton {
-    font-weight: 700;
+	font-weight: 700;
 }
 
 .cancelButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
-    font-weight: 700;
+	background: linear-gradient(#bebebe, #ededed);
+	font-weight: 700;
 }
 
 .linkButton {
-    background: linear-gradient(#BEBEBE, #EDEDED);
-    font-weight: 700;
-    width: 100%;
+	background: linear-gradient(#bebebe, #ededed);
+	font-weight: 700;
+	width: 100%;
 }
 
 .buttons {
-    padding: 20px 0px 20px 0px;
-    display: flex;
-    justify-content: center;
+	padding: 20px 0px 20px 0px;
+	display: flex;
+	justify-content: center;
 }
 
 .displayPhoto {
-    height: 150px;
-    border-radius: 4px;
-    margin: auto;
-    display: block;
+	height: 150px;
+	border-radius: 4px;
+	margin: auto;
+	display: block;
 }
 
 .editIconContainer {
-    width: fit-content;
-    height: fit-content;
-    padding-right: 14px;
+	width: fit-content;
+	height: fit-content;
+	padding-right: 14px;
 }
 
 .clearIcon {
-    color: #757575;
+	color: var(--iconColor);
 }
 
 .clearIcon:hover {
-    color: #B03EEE;
+	color: #b03eee;
 }
 
 .displayPhotoContainer {
-    display: flex;
-    border: solid 1px #C4C4C4;
-    background-color: white;
-    border-radius: 4px;
-    flex-direction: column;
-    padding: 16px 0px 16px 0px;
+	display: flex;
+	border: solid 1px var(--fieldBorderColor);
+	background-color: var(--fieldColor);
+	border-radius: 4px;
+	flex-direction: column;
+	padding: 16px 0px 16px 0px;
 }
 
 .displayPhotoContainer:hover {
-    border: solid 1px #212121;
+	border: solid 1px #212121;
 }
 
 .currentDisplayPhotoContainter {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .currentDisplayPhotoContainter:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .avatars {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    border-radius: 4px;
-    padding: 5px 5px 0px 5px;
-    width: fit-content;
-    background-color: white;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	border-radius: 4px;
+	padding: 5px 5px 0px 5px;
+	width: fit-content;
+	background-color: var(--fieldColor);
 }
 
 .avatarOption {
-    width: 11%;
-    margin: 4px;
-    border-radius: 4px;
-    border: solid 2px white;
-    object-fit: cover;
+	width: 11%;
+	margin: 4px;
+	border-radius: 4px;
+	border: solid 2px var(--backgroundColor);
+	object-fit: cover;
 }
 
 .avatarOption:hover {
-    cursor: pointer;
-    border: solid 2px #C4C4C4;
+	cursor: pointer;
+	border: solid 2px var(--iconColor);
 }
 
 .buttonIcon {
-    height: 30px;
-    color: #757575;
-    float: right;
-    padding-right: 10px;
+	height: 30px;
+	color: #757575;
+	float: right;
+	padding-right: 10px;
 }

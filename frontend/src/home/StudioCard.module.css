@@ -5,7 +5,7 @@
     border-radius: 4px;
     background-size: cover;
     background-repeat: no-repeat;
-    box-shadow: 0px 5px 5px grey;
+    box-shadow: 0px 5px 5px var(--shadowColor);
 }
 
 .darkLayer {
@@ -62,7 +62,7 @@
     height: 30px;
     width: 30px;
     border-radius: 50%;
-    border: 2px solid #FFFFFF;
+    border: 2px solid #ffffff;
     pointer-events: none;
 }
 
