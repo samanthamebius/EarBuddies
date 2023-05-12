@@ -114,7 +114,7 @@ Log out or delete your account ☹️👋
 ### Now Playing 🎵
 View the song playing  
 Control the volume in the studio (host only)  
-Play, pause, skip and seek songs (host only)  
+Play, pause and skip songs (host only)  
 ![image](https://github.com/UOA-CS732-SE750-Students-2023/project-group-burgundy-badgers/assets/79810883/92f958f7-fc07-40b4-b48f-bf2a117f194d)
 
 

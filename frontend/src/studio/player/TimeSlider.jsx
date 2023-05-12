@@ -60,14 +60,6 @@ export function TimeSlider({ player }) {
 		return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
 	}
 
-	// change the position of the slider and update the playing position
-	const handleChange = (event, newValue) => {
-		setPosition(newValue);
-		if (player) {
-			player.seek(newValue * 1000);
-		}
-	};
-
 	return (
 		<div className={styles.time}>
 			<StyledSlider
@@ -78,7 +70,7 @@ export function TimeSlider({ player }) {
 				step={1}
 				max={duration}
 				color='secondary'
-				onChange={handleChange}
+				style={{ pointerEvents: 'none' }}
 			/>
 			<Box
 				sx={{
