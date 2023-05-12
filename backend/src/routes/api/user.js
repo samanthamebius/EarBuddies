@@ -56,6 +56,7 @@ router.put("/:username", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
+
     if (userDisplayName) {
       await updateUserDisplayName(username, userDisplayName);
     }
@@ -65,6 +66,7 @@ router.put("/:username", async (req, res) => {
     if (spotifyPic) {
       await updateUserSpotifyPic(username, spotifyPic);
     }
+
     return res.status(204).json({ msg: "User updated" });
   } catch (err) {
     console.log(err)
@@ -117,7 +119,8 @@ router.put("/:username/logout", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "No user found" });
     }
-
+    
+    //set user to inactive
     await setUserInactive(username);
     user.userStudios.forEach(async (studio) => {
       await setStudioStatus(studio);
