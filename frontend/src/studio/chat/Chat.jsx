@@ -284,7 +284,7 @@ export default function Chat(props) {
 							}}
 							InputProps={{
 								disableUnderline: true,
-								style: { color: '#797979' },
+								style: { color: 'var(--replyTextColor)' },
 							}}
 						/>
 					</div>
@@ -298,20 +298,22 @@ export default function Chat(props) {
 							position: 'sticky',
 							top: '0',
 							justifySelf: 'end',
+							color: 'var(--iconColor)',
 						}}
 						fontSize='small'
 					/>
 				</div>
-				<div className={styles.pillContainer}>
-					<b className={styles.quickAddText}>Quick Add:</b>
-					{Object.keys(nowPlaying).length > 0 && (
+				{Object.keys(nowPlaying).length > 0 && (
+					<div className={styles.pillContainer}>
+						<b className={styles.quickAddText}>Quick Add:</b>
+
 						<QuickAddPill
 							nowPlaying={nowPlaying}
 							message={message}
 							setMessage={setMessage}
 						/>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
