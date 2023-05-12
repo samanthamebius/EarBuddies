@@ -284,4 +284,3 @@ test("set studio status is successful with zero active users", async () => {
   const studio = await setStudioStatus(mockStudio2._id);
   expectStudio(studio, updatedStudio);
 });
-
