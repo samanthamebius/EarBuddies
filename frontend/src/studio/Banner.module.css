@@ -1,0 +1,68 @@
+.banner {
+	grid-row: 1 / 1;
+	grid-column: 1 / 3;
+	border-radius: 10px;
+	min-height: 50px;
+	overflow: hidden;
+	height: auto;
+	position: relative;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.bannerDropdownKebab {
+	padding: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.dropdownButton {
+	margin: 0;
+	padding: 10px 10px 5px 10px;
+	cursor: pointer;
+}
+
+.icon {
+	height: 20px;
+	width: 20px;
+	padding-right: 15px;
+	pointer-events: none;
+}
+
+.menu_item:hover .menu_title {
+	color: #b03eee;
+}
+
+.menu_title {
+	color: var(--headingColor);
+	margin: 5px 0px 5px 10px;
+	font-size: 16px;
+}
+
+.bannerStudioName {
+	color: white;
+	text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 2px 2px 7px rgba(0, 0, 0, 0.5),
+		0 0 8px rgba(255, 255, 255, 0.7);
+	font-weight: bold;
+	margin: 0px;
+	font-size: 28px;
+	padding: 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.bannerlisteners {
+	position: absolute;
+	right: 30px;
+	top: 0;
+	padding: 10px;
+}
+
+.greyOutImage {
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
